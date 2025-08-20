@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Ergo Raffle",
-  description: "Ergo raffle is a crowdfunding system based on ergo contracts",
+  title: 'Ergo Raffle',
+  description: 'Ergo raffle is a crowdfunding system based on ergo contracts',
 };
 
 export default function RootLayout({
