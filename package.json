@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "prettify": "prettier --write ."
   },
   "dependencies": {
     "next": "15.4.7",
