@@ -10,7 +10,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "next": "15.4.7",
