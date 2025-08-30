@@ -10,7 +10,8 @@
     "lint": "next lint",
     "prettify": "prettier --write .",
     "prepare": "husky",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "orval": "orval --config ./orval.config.js"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.5.0",
@@ -33,6 +34,7 @@
     "install": "^0.13.0",
     "lint-staged": "^16.1.5",
     "npm": "^11.5.2",
+    "orval": "^7.11.2",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
