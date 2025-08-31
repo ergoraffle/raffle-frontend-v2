@@ -11,7 +11,7 @@
     "prettify": "prettier --write .",
     "prepare": "husky",
     "type-check": "tsc --noEmit",
-    "orval": "orval --config ./orval.config.js"
+    "orval": "orval"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.5.0",
