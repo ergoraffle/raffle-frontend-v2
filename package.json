@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettify": "prettier --write ."
+    "prettify": "prettier --write .",
+    "prepare": "husky",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "next": "15.4.7",
@@ -26,7 +28,9 @@
     "eslint-config-next": "15.4.7",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
     "install": "^0.13.0",
+    "lint-staged": "^16.1.5",
     "npm": "^11.5.2",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
