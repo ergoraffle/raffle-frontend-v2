@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from 'orval'
+
+export default defineConfig({
   raffle: {
     input: './raffle.yaml',
     output: {
@@ -8,4 +10,4 @@ module.exports = {
       mode: 'split',
     },
   },
-};
+})
