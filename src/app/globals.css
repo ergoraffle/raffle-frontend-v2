@@ -1,16 +1,77 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* base colors */
+  --color-*: initial;
+  --color-black: #000000;
+  --color-white: #fff;
+
+  /* color palette */
+  --color-orange: #ff4c29;
+  --color-red: #dc3545;
+  --color-yellow: #ffc107;
+  --color-green: #28a745;
+
+  /* semantic colors */
+  --color-error: var(--color-red);
+  --color-success: var(--color-yellow);
+  --color-alert: var(--color-green);
+
+  /* primary */
+  --color-primary: var(--color-black);
+  --color-primary-contrast: var(--color-white);
+  --color-primary-text: var(--color-primary-contrast);
+
+  /* secondary */
+  --color-secondary: var(--color-orange);
+  --color-secondary-contrast: var(--color-white);
+  --color-secondary-text: var(--color-secondary-contrast);
+
+  /* typography */
+  --font-main: 'Poppins', sans-serif;
+  --font-secondary: 'Fraunces', serif;
+
+  --text-*: initial;
+  --text-base: 1rem;
+  --text-13: calc(0.8125 * var(--text-base));
+  --text-14: calc(0.875 * var(--text-base));
+  --text-16: calc(1 * var(--text-base));
+  --text-18: calc(1.125 * var(--text-base));
+  --text-20: calc(1.25 * var(--text-base));
+  --text-22: calc(1.375 * var(--text-base));
+  --text-24: calc(1.5 * var(--text-base));
+  --text-28: calc(1.75 * var(--text-base));
+  --text-48: calc(3 * var(--text-base));
+
+  /* spacing */
+  --spacing: 0.25rem;
+
+  /* radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {
+  /* default background foreground */
+  --background: var(--color-primary);
+  --foreground: var(--color-primary-contrast);
+
+  /* radius */
+  --radius: 8px;
+}
+
+body {
 }
 
 .dark {
 }
 
 @layer base {
+}
+
+@layer components {
 }
