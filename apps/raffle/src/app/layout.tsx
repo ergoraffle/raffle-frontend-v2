@@ -4,11 +4,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Ergo Raffle',
-  description: 'Ergo raffle is a crowdfunding system based on ergo contracts',
+  description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
