@@ -1,5 +1,0 @@
-{
-  "*": "prettier --ignore-unknown --write",
-  "*.{js,jsx,ts,tsx}": "next lint --fix --file",
-  "*.{ts,tsx}": "npm run type-check"
-}
