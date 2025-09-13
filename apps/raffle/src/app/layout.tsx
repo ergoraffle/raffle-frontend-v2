@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import './globals.css';
+import '@ergo-raffle/ui-kit/index.css';
 
 export const metadata: Metadata = {
   title: 'Ergo Raffle',
