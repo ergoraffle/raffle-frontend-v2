@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import './globals.css';
-
+import '@ergo-raffle/ui/styles.css';
 export const metadata: Metadata = {
   title: 'Ergo Raffle',
   description: 'Ergo raffle is a crowdfunding system based on ergo contracts'

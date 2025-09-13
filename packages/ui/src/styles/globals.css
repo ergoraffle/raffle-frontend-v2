@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  /* base colors */
+  --color-black: #000000;
+  --color-white: #fff;
+
+  /* color palette */
+  --color-orange: #ff4c29;
+  --color-red: #dc3545;
+  --color-yellow: #ffc107;
+  --color-green: #28a745;
+}
+
+:root {
+  /* semantic colors */
+  --color-error: var(--color-red);
+  --color-success: var(--color-yellow);
+  --color-alert: var(--color-green);
+
+  /* primary */
+  --color-primary: var(--color-black);
+  --color-primary-contrast: var(--color-white);
+  --color-primary-text: var(--color-primary-contrast);
+
+  /* secondary */
+  --color-secondary: var(--color-orange);
+  --color-secondary-contrast: var(--color-white);
+  --color-secondary-text: var(--color-secondary-contrast);
+
+  /* spacing */
+  --spacing: 0.25rem;
+}
+
+:root {
+  /* default background foreground */
+  --background: var(--color-primary);
+  --foreground: var(--color-primary-contrast);
+
+  /* radius */
+  --radius: 8px;
+}
