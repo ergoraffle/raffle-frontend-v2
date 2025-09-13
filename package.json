@@ -1,7 +1,9 @@
 {
-  "name": "raffle-frontend-monorepo",
+  "name": "ergo-raffle",
+  "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "prepare": "husky"

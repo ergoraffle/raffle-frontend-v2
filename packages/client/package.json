@@ -1,0 +1,22 @@
+{
+  "name": "@ergo-raffle/client",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "generate": "orval"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "orval": "^7.11.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.generated.js",
+      "types": "./dist/index.generated.d.ts"
+    }
+  }
+}
