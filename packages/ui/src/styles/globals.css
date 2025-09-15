@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/suspicious/noUnknownAtRules: We are using a PostCSS feature. */
 @import "tailwindcss";
 
 :root {
@@ -39,4 +40,30 @@
 
   /* radius */
   --radius: 8px;
+}
+
+@layer components {
+  .btn {
+    @apply flex items-center justify-center w-fit;
+    @apply bg-[var(--background)] p-2.5 h-12 text-[var(--foreground)] rounded-lg;
+    @apply cursor-pointer;
+  }
+  .btn:hover {
+    background-color: rgb(from var(--background) r g b / 0.8);
+  }
+  .btn-primary {
+    --background: var(--color-primary);
+    --foreground: var(--color-primary-contrast);
+  }
+  .btn-secondary {
+    --background: var(--color-secondary);
+    --foreground: var(--color-secondary-contrast);
+  }
+
+  .btn-outline {
+    @apply bg-white border border-[var(--background)] text-[var(--background)];
+  }
+  .btn-outline:hover {
+    background-color: rgb(from var(--background) r g b / 0.1);
+  }
 }
