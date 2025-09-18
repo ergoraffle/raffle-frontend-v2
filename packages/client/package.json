@@ -7,7 +7,11 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "generate": "orval"
+    "prebuild": "orval",
+    "prettify": "biome format --write",
+    "lint": "biome lint",
+    "pretype-check": "orval",
+    "type-check": "tsc --noEmit"
   },
   "license": "MIT",
   "devDependencies": {
