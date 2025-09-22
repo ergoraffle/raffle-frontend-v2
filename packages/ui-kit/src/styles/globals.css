@@ -1,7 +1,7 @@
 @import "tailwindcss";
+@import "./typography.css";
 
-:root {
-  /* base colors */
+@theme {
   --color-black: #000000;
   --color-white: #fff;
 

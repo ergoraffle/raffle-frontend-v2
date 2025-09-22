@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  --font-main: "Ppo", sans-serif;
+  --font-secondary: "Fraunces", serif;
+  /* display */
+  --text-title-1: 4.5rem;
+  /* subtitle */
+  --text-subtitle-1: 2.25rem;
+  /* headings*/
+  --text-heading-1: 1.5rem;
+  --text-heading-2: 1.375rem;
+  --text-heading-3: 1.25rem;
+  --text-heading-4: 1.25rem;
+  --text-heading-5: 1.125rem;
+  /* body */
+  --text-label: 1rem;
+  --text-input: 1rem;
+  --text-button-1: 1.375;
+  --text-button-2: 0.875rem;
+  /* subtext */
+  --text-subtext-1: 1rem;
+  --text-subtext-2: 0.875rem;
+  --text-subtext-3: calc(var(--text-subtext-2) - 1px);
+  --text-subtext-4: calc(var(--text-subtext-2) - 2px);
+}
+
+@layer components {
+  .title-1 {
+    @apply text-title-1 font-secondary font-normal;
+  }
+
+  .subtitle-1 {
+    @apply text-subtitle-1 font-secondary font-normal;
+  }
+
+  .heading-1 {
+    @apply text-heading-1 font-secondary font-normal;
+  }
+
+  .heading-2 {
+    @apply text-heading-2 font-secondary font-normal;
+  }
+
+  .heading-3 {
+    @apply text-heading-3 font-secondary font-normal;
+  }
+
+  .heading-4 {
+    @apply text-heading-4 font-secondary font-normal;
+  }
+
+  .heading-5 {
+    @apply text-heading-5 font-secondary font-normal;
+  }
+
+  .label-1 {
+    @apply text-label font-main font-normal;
+  }
+
+  .input-1 {
+    @apply text-input font-main font-normal;
+  }
+
+  .button-1 {
+    @apply text-button-1 font-main font-normal;
+  }
+
+  .button-2 {
+    @apply text-button-2 font-main font-normal;
+  }
+
+  .subtext-1 {
+    @apply text-subtext-1 font-main font-normal;
+  }
+
+  .subtext-2 {
+    @apply text-subtext-2 font-main font-normal;
+  }
+
+  .subtext-3 {
+    @apply text-subtext-3 font-main font-normal;
+  }
+
+  .subtext-4 {
+    @apply text-subtext-4 font-main font-normal;
+  }
+}
