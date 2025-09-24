@@ -1,0 +1,118 @@
+image: node:22.18.0
+
+stages:
+  - installation
+  - build
+  - type_check
+  - prettify
+  - lint
+  - coverage
+  - changeset
+  - depcheck
+
+installation:
+  stage: installation
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: push
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  script:
+    - npm ci
+
+build:
+  stage: build
+  cache:
+    - key: $CI_COMMIT_REF_NAME
+      policy: pull-push
+      paths:
+        - node_modules
+        - apps/*/node_modules
+        - packages/*/node_modules
+        - packages/*/dist
+
+  script:
+    - npm run build
+
+type_check:
+  stage: type_check
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - packages/*/dist
+
+  script:
+    - npm run type-check 
+
+lint:
+  stage: lint
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run lint:check
+
+prettify:
+  stage: prettify
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run prettify:check
+
+coverage:
+  stage: coverage
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  script:
+    - npm run coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: 'coverage/cobertura-coverage.xml'
+
+changeset:
+  stage: changeset
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
+  script:
+    - npx @changesets/cli status --since=origin/dev
+
+depcheck:
+  stage: depcheck
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
+  script:
+    - npx depcheck
+

@@ -6,8 +6,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "generate": "orval"
+    "build": "npm run generate && tsc --build",
+    "generate": "orval",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
+    "lint": "biome lint --write",
+    "lint:check": "biome lint",
+    "type-check": "npm run generate && tsc --noEmit"
   },
   "license": "MIT",
   "devDependencies": {

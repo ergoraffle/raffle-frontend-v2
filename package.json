@@ -6,11 +6,20 @@
     "packages/*"
   ],
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "npm run build --workspaces --if-present",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
+    "prettify": "npm run prettify --workspaces",
+    "prettify:check": "npm run prettify:check --workspaces",
+    "coverage": "npm run coverage --workspaces --if-present"
   },
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "2.2.3",
+    "@changesets/cli": "^2.29.7",
+    "@rosen-bridge/changeset-formatter": "^1.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6"
   }

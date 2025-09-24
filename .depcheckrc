@@ -1,0 +1,8 @@
+{
+  "ignores": [
+    "@rosen-bridge/changeset-formatter",
+    "@biomejs/biome",
+    "@changesets/cli",
+    "lint-staged"
+  ]
+}
