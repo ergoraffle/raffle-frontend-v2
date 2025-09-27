@@ -7,13 +7,13 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "build": "npm run build --workspaces --if-present",
-    "type-check": "npm run type-check --workspaces --if-present",
+    "build": "npm run build --workspaces",
+    "type-check": "npm run type-check --workspaces",
     "lint": "npm run lint --workspaces",
     "lint:check": "npm run lint:check --workspaces",
     "prettify": "npm run prettify --workspaces",
     "prettify:check": "npm run prettify:check --workspaces",
-    "coverage": "npm run coverage --workspaces --if-present"
+    "coverage": "npm run coverage --workspaces"
   },
   "license": "MIT",
   "devDependencies": {
