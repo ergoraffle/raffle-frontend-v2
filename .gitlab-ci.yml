@@ -1,0 +1,45 @@
+image: $GITLAB_CI_IMAGE
+
+default:
+  interruptible: true
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE =~ /push|web/'
+      when: always
+    - when: never
+
+stages:
+  - installation
+  - build
+  - triggers
+
+installation:
+  stage: installation
+  cache:
+    key: ${CI_COMMIT_REF_NAME}
+    policy: push
+    paths:
+      - node_modules
+      - '**/node_modules'
+  script:
+    - npm ci
+
+build:
+  stage: build
+  cache:
+    key: ${CI_COMMIT_REF_NAME}
+    policy: pull-push
+    paths:
+      - node_modules
+      - '**/node_modules'
+      - '**/dist'
+  script:
+    - npm run build
+
+run_ci:
+  stage: triggers
+  trigger:
+    include:
+      - local: .gitlab/workflows/ci.yml
+    strategy: mirror

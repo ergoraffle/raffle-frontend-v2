@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -18,7 +18,85 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "complexity": {
+        "noUselessCatch": "error",
+        "noUselessFragments": "error",
+        "noUselessRename": "error",
+        "noUselessStringConcat": "error",
+        "noUselessSwitchCase": "error",
+        "noUselessTernary": "error",
+        "noUselessUndefinedInitialization": "error",
+        "useArrowFunction": "error"
+      },
+      "correctness": {
+        "noGlobalDirnameFilename": "error",
+        "noNestedComponentDefinitions": "error",
+        "noReactPropAssignments": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "performance": {
+        "noBarrelFile": "error",
+        "noDelete": "error",
+        "noImgElement": "error"
+      },
+      "nursery": {
+        "noDeprecatedImports": "error",
+        "noEqualsToNull": "error",
+        "noLeakedRender": "error",
+        "noMisusedPromises": "error",
+        "noNextAsyncClientComponent": "error",
+        "noReactForwardRef": "error",
+        "noUnknownAttribute": "error",
+        "noUnnecessaryConditions": "error",
+        "noUselessCatchBinding": "error",
+        "noUselessUndefined": "error",
+        "useArraySortCompare": "error",
+        "useConsistentArrowReturn": "error",
+        "useExhaustiveSwitchCases": "error",
+        "useFind": "error",
+        "useSortedClasses": "error"
+      },
+      "style": {
+        "noCommonJs": "error",
+        "noExportedImports": "error",
+        "noNegationElse": "error",
+        "noNonNullAssertion": "error",
+        "noUselessElse": "error",
+        "useAtIndex": "error",
+        "useCollapsedElseIf": "error",
+        "useCollapsedIf": "error",
+        "useConsistentCurlyBraces": "error",
+        "useConsistentObjectDefinitions": "error",
+        "useConst": "error",
+        "useDefaultParameterLast": "error",
+        "useExponentiationOperator": "error",
+        "useExportType": "error",
+        "useForOf": "error",
+        "useGroupedAccessorPairs": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "error",
+        "useReactFunctionComponents": "error",
+        "useSelfClosingElements": "error",
+        "useShorthandAssign": "error",
+        "useShorthandFunctionType": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error",
+        "useThrowNewError": "error",
+        "useThrowOnlyError": "error"
+      },
+      "suspicious": {
+        "noAlert": "error",
+        "noCatchAssign": "error",
+        "noConsole": "error",
+        "noEmptyBlockStatements": "error",
+        "noEvolvingTypes": "error",
+        "noExplicitAny": "error",
+        "noVar": "error",
+        "useGuardForIn": "error",
+        "useIsArray": "error"
+      }
     },
     "domains": {
       "next": "recommended",
