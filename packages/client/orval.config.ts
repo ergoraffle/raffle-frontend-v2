@@ -4,7 +4,7 @@ export default defineConfig({
   raffle: {
     input: './raffle.yaml',
     output: {
-      target: './src/index.generated.ts',
+      target: './lib/index.ts',
       client: 'fetch',
       prettier: false,
       biome: true,

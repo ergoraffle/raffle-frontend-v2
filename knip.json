@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "workspaces": {
+    "packages/*": {
+      "entry": ["{lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
+    },
+    "apps/*": {
+      "entry": ["{app,lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
+    }
+  },
+  "ignoreBinaries": [],
+  "ignore": ["**/node_modules/", "**/dist/", "**/.next/"],
+  "ignoreDependencies": ["@changesets/cli"]
+}

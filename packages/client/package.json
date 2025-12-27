@@ -1,22 +1,35 @@
 {
   "name": "@ergo-raffle/client",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc --build",
-    "generate": "orval"
+  "description": "Internal package responsible for generating and maintaining type-safe API clients using Orval for shared use across applications",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/raffle.git"
   },
   "license": "MIT",
-  "devDependencies": {
-    "orval": "^7.11.2"
+  "author": "Rosen Team",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "npm run generate && tsc --build",
+    "clean": "rimraf dist && rimraf tsconfig.build.tsbuildinfo",
+    "generate": "orval",
+    "lint": "biome check --write",
+    "lint:check": "biome check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
+    "type-check": "npm run generate && tsc --noEmit"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.generated.js",
-      "types": "./dist/index.generated.d.ts"
-    }
+  "devDependencies": {
+    "orval": "^7.17.0"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }
