@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-
+import '@ergo-raffle/ui-kit/index.css';
 import './globals.css';
 
 import type { PropsWithChildren } from 'react';

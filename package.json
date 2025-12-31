@@ -9,8 +9,8 @@
   "author": "Rosen Team",
   "type": "module",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
