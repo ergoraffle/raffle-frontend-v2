@@ -8,7 +8,7 @@
       "entry": ["{app,lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
     }
   },
-  "ignoreBinaries": [],
+  "ignoreBinaries": ["rollup"],
   "ignore": ["**/node_modules/", "**/dist/", "**/.next/"],
-  "ignoreDependencies": ["@changesets/cli"]
+  "ignoreDependencies": ["tailwindcss", "@rollup/plugin-typescript"]
 }
