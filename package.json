@@ -23,12 +23,12 @@
     "type-check": "npm run type-check --workspaces"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.10",
+    "@biomejs/biome": "^2.3.11",
     "@changesets/cli": "^2.29.8",
     "@rosen-bridge/changeset-formatter": "^2.0.1",
     "@types/node": "^22.18.0",
     "husky": "^9.1.7",
-    "knip": "^5.76.1",
+    "knip": "^5.80.0",
     "lint-staged": "^16.2.7",
     "rimraf": "^6.1.2",
     "typescript": "^5.9.3"
