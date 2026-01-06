@@ -1,0 +1,9 @@
+<svg viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.8252 13.1132V24.8916M11.8252 13.1132L21.4006 7.5M11.8252 13.1132L2.25 7.5M2.25 6.14156L10.5753 1.33494C11.3488 0.888355 12.3018 0.888354 13.0753 1.33494L21.4006 6.14156C22.1741 6.58814 22.6506 7.41346 22.6506 8.30662V17.9199C22.6506 18.813 22.1741 19.6384 21.4006 20.0849L13.0753 24.8916C12.3018 25.3381 11.3488 25.3381 10.5753 24.8916L2.25 20.0849C1.4765 19.6384 1 18.813 1 17.9199V8.30662C1 7.41346 1.4765 6.58814 2.25 6.14156Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<circle cx="11.8252" cy="6.11328" r="1" fill="currentColor"/>
+<circle cx="19.4134" cy="12.4134" r="1" transform="rotate(46.984 19.4134 12.4134)" fill="currentColor"/>
+<circle cx="14.4134" cy="20.4134" r="1" transform="rotate(46.984 14.4134 20.4134)" fill="currentColor"/>
+<circle cx="17.1188" cy="16.1188" r="1" transform="rotate(82.7108 17.1188 16.1188)" fill="currentColor"/>
+<circle cx="4.22328" cy="17.224" r="1" transform="rotate(-104.883 4.22328 17.224)" fill="currentColor"/>
+<circle cx="8.22328" cy="15.224" r="1" transform="rotate(-104.883 8.22328 15.224)" fill="currentColor"/>
+</svg>
