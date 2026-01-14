@@ -6,6 +6,81 @@
 ========================= */
 
 @theme {
-  --color-primary: #ff4c29;
-  --color-primary-foreground: #ffffff;
+  /*Font Families*/
+  --font-fraunces: "Fraunces", serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-karla: "Karla", serif;
+  /*Primary Scale*/
+  --color-primary-1: oklch(66.83% 0.221 32.95);
+  --color-primary-1-foreground: oklch(1 0 0);
+  --color-primary-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-primary-2-foreground: oklch(1 0 0);
+  --color-primary-3: oklch(66.83% 0.221 32.95 / 25%);
+  --color-primary-3-foreground: oklch(0.3211 0 0);
+  --color-primary-4: oklch(66.83% 0.221 32.95 / 10%);
+  --color-primary-4-foreground: oklch(0.3211 0 0);
+  /*Secondary Scale*/
+  --color-secondary-1: oklch(0.4879 0.2586 277.58);
+  --color-secondary-1-foreground: oklch(1 0 0);
+  --color-secondary-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-secondary-2-foreground: oklch(1 0 0);
+  --color-secondary-3: oklch(0.4879 0.2586 277.58 / 25%);
+  --color-secondary-3-foreground: oklch(1 0 0);
+  --color-secondary-4: oklch(0.4879 0.2586 277.58 / 10%);
+  --color-secondary-4-foreground: oklch(1 0 0);
+  --color-secondary-5: oklch(0.4879 0.2586 277.58 / 5%);
+  --color-secondary-5-foreground: oklch(0.3211 0 0);
+  /*Gray Scale*/
+  --color-gray-1: oklch(0.3211 0 0);
+  --color-gray-1-foreground: oklch(1 0 0);
+  --color-gray-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-gray-2-foreground: oklch(1 0 0);
+  --color-gray-3: oklch(0.7187 0 0);
+  --color-gray-3-foreground: oklch(0 0 0);
+  --color-gray-4: oklch(0.9233 0.0067 286.27);
+  --color-gray-4-foreground: oklch(0 0 0);
+  --color-gray-5: oklch(0.9672 0 0);
+  --color-gray-5-foreground: oklch(0 0 0);
+  /*White Scale*/
+  --color-white-1: oklch(1 0 0);
+  --color-white-2: oklch(1 0 0 / 80%);
+  --color-white-3: oklch(1 0 0 / 20%);
+  --color-white-4: oklch(1 0 0 / 15%);
+  --color-white-foreground: oklch(0 0 0);
+  /*Black Scale*/
+  --color-black-1: oklch(0 0 0);
+  --color-black-1-foreground: oklch(1 0 0);
+  --color-black-2: oklch(0.3211 0 0);
+  --color-black-2-foreground: oklch(1 0 0);
+  --color-black-3: oklch(0 0 0 / 20%);
+  --color-black-3-foreground: oklch(1 0 0);
+  --color-black-4: oklch(0 0 0 / 5%);
+  --color-black-4-foreground: oklch(0 0 0);
+  /*Status Colors*/
+  --color-error: oklch(59.15% 0.202 21.24);
+  --color-error-foreground: oklch(1 0 0);
+  --color-success: oklch(64.01% 0.175 146.74);
+  --color-success-foreground: oklch(1 0 0);
+  --color-success-light: oklch(97.54% 0.015 151.78);
+  --color-success-light-foreground: oklch(0.6401 0.1751 146.74);
+  --color-warning: oklch(84.42% 0.172 84.93);
+  --color-warning-foreground: oklch(0 0 0);
+  /*Shadows*/
+  --shadow-1: 0px 17px 27px 17px oklch(0.7187 0 0 / 14%);
+  --shadow-2: 0px 4px 24px 8px oklch(0 0 0 / 5%);
+  --shadow-3: 0px 0px 9px 4px oklch(0.6683 0.2205 32.95 / 10%);
+  --shadow-4: 0px 1px 3px 1px oklch(0 0 0 / 15%);
+  --shadow-5: 0px 1px 3px 1px oklch(0.3063 0.1961 272.74 / 25%);
+  /*Radius*/
+  --radius-sm: 4pt;
+  --radius-md: 8pt;
+  --radius-lg: 12pt;
+  --radius-xlg: 16pt;
+  --radius-2xlg: 20pt;
+}
+
+@layer utilities {
+  .bg-blur {
+    backdrop-filter: blur(27px);
+  }
 }
