@@ -7,13 +7,43 @@
 
 @theme {
   /*Font Families*/
+  --font-*: initial;
   --font-fraunces: "Fraunces", serif;
   --font-poppins: "Poppins", sans-serif;
-  --font-karla: "Karla", serif;
+  --font-karla: "Karla", sans-serif;
+  /*Font Weight*/
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /*Font Size*/
+  --text-*: initial;
+  --text-xs: 12px; /*not-ready*/
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px; /*not-ready*/
+  --text-xl: 20px;
+  --text-2xl: 22px;
+  --text-3xl: 24px;
+  --text-5xl: 28px;
+  --text-7xl: 72px;
+  /*Line Height*/
+  --line-height: 100%;
+  --text-xs--line-height: 100%;
+  --text-sm--line-height: 100%;
+  --text-md--line-height: 100%;
+  --text-lg--line-height: 100%;
+  --text-xl--line-height: 100%;
+  --text-2xl--line-height: 100%;
+  --text-3xl--line-height: 100%;
   /*Primary Scale*/
+  --color-*: initial;
   --color-primary-1: oklch(66.83% 0.221 32.95);
   --color-primary-1-foreground: oklch(1 0 0);
-  --color-primary-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-primary-2: color-mix(in oklch, var(--color-white-4) 20%, var(--color-primary-1));
   --color-primary-2-foreground: oklch(1 0 0);
   --color-primary-3: oklch(66.83% 0.221 32.95 / 25%);
   --color-primary-3-foreground: oklch(0.3211 0 0);
@@ -22,7 +52,7 @@
   /*Secondary Scale*/
   --color-secondary-1: oklch(0.4879 0.2586 277.58);
   --color-secondary-1-foreground: oklch(1 0 0);
-  --color-secondary-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-secondary-2: color-mix(in oklch, var(--color-white-4) 20%, var(--color-secondary-1));
   --color-secondary-2-foreground: oklch(1 0 0);
   --color-secondary-3: oklch(0.4879 0.2586 277.58 / 25%);
   --color-secondary-3-foreground: oklch(1 0 0);
@@ -30,10 +60,12 @@
   --color-secondary-4-foreground: oklch(1 0 0);
   --color-secondary-5: oklch(0.4879 0.2586 277.58 / 5%);
   --color-secondary-5-foreground: oklch(0.3211 0 0);
+  --color-secondary-6: oklch(0.4879 0.2586 277.58 / 5%);
+  --color-secondary-6-foreground: oklch(0.3211 0 0);
   /*Gray Scale*/
   --color-gray-1: oklch(0.3211 0 0);
   --color-gray-1-foreground: oklch(1 0 0);
-  --color-gray-2: oklch(66.83% 0.221 32.95 / 20%); /*not-ready*/
+  --color-gray-2: color-mix(in oklch, var(--color-white-4) 20%, var(--color-gray-1));
   --color-gray-2-foreground: oklch(1 0 0);
   --color-gray-3: oklch(0.7187 0 0);
   --color-gray-3-foreground: oklch(0 0 0);
@@ -59,24 +91,31 @@
   /*Status Colors*/
   --color-error: oklch(59.15% 0.202 21.24);
   --color-error-foreground: oklch(1 0 0);
+  --color-error-light: oklch(0.9604 0.0152 12.43);
+  --color-error-light-foreground: oklch(0.5915 0.202 21.24);
   --color-success: oklch(64.01% 0.175 146.74);
   --color-success-foreground: oklch(1 0 0);
   --color-success-light: oklch(97.54% 0.015 151.78);
   --color-success-light-foreground: oklch(0.6401 0.1751 146.74);
-  --color-warning: oklch(84.42% 0.172 84.93);
-  --color-warning-foreground: oklch(0 0 0);
+  --color-alert: oklch(84.42% 0.172 84.93);
+  --color-alert-foreground: oklch(0 0 0);
   /*Shadows*/
+  --shadow-*: initial;
   --shadow-1: 0px 17px 27px 17px oklch(0.7187 0 0 / 14%);
   --shadow-2: 0px 4px 24px 8px oklch(0 0 0 / 5%);
   --shadow-3: 0px 0px 9px 4px oklch(0.6683 0.2205 32.95 / 10%);
   --shadow-4: 0px 1px 3px 1px oklch(0 0 0 / 15%);
   --shadow-5: 0px 1px 3px 1px oklch(0.3063 0.1961 272.74 / 25%);
   /*Radius*/
+  --radius-*: initial;
   --radius-sm: 4pt;
   --radius-md: 8pt;
   --radius-lg: 12pt;
   --radius-xlg: 16pt;
   --radius-2xlg: 20pt;
+}
+body {
+  color: var(--color-gray-1);
 }
 
 @layer utilities {

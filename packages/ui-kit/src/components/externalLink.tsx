@@ -14,8 +14,7 @@ function ExternalLink({ className, children, ...props }: ComponentProps<'a'>) {
       )}
       {...props}
     >
-      icon
-      {children}
+      i {children}
     </a>
   );
 }
