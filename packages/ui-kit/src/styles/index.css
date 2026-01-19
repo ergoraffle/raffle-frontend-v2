@@ -1,0 +1,35 @@
+/* Tailwind v4 imports */
+@import "tailwindcss";
+@import "./colors.css";
+@import "./typography.css";
+
+/* =========================
+   Design Tokens
+========================= */
+
+@theme {
+  /*Shadows*/
+  --shadow-*: initial;
+  --shadow-1: 0px 17px 27px 17px oklch(0.7187 0 0 / 14%);
+  --shadow-2: 0px 4px 24px 8px oklch(0 0 0 / 5%);
+  --shadow-3: 0px 0px 9px 4px oklch(0.6683 0.2205 32.95 / 10%);
+  --shadow-4: 0px 1px 3px 1px oklch(0 0 0 / 15%);
+  --shadow-5: 0px 1px 3px 1px oklch(0.3063 0.1961 272.74 / 25%);
+  /*Radius*/
+  --radius-*: initial;
+  --radius-xs: 2pt;
+  --radius-sm: 4pt;
+  --radius-md: 8pt;
+  --radius-lg: 12pt;
+  --radius-xlg: 16pt;
+  --radius-2xlg: 20pt;
+}
+body {
+  @apply text-gray-1 font-poppins leading-none;
+}
+
+@layer utilities {
+  .bg-blur {
+    @apply backdrop-blur-[27px];
+  }
+}

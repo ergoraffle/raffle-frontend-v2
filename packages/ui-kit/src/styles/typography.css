@@ -1,0 +1,95 @@
+@theme {
+  /*Font Families*/
+  --font-*: initial;
+  --font-fraunces: "Fraunces", serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-karla: "Karla", sans-serif;
+  /*Font Weight*/
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /*Font Size*/
+  --text-*: initial;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  --text-2xl: 22px;
+  --text-3xl: 24px;
+  --text-5xl: 28px;
+  --text-7xl: 72px;
+  /*Line Height*/
+  --line-height: 1;
+  --text-xs--line-height: 1;
+  --text-sm--line-height: 1;
+  --text-md--line-height: 1;
+  --text-lg--line-height: 1;
+  --text-xl--line-height: 1;
+  --text-2xl--line-height: 1;
+  --text-3xl--line-height: 1;
+  --text-5xl--line-height: 1;
+  --text-7xl--line-height: 1;
+}
+
+@layer utilities {
+  .typo-heading-1 {
+    @apply font-semibold text-5xl;
+  }
+
+  .typo-heading-2 {
+    @apply font-medium text-3xl;
+  }
+
+  .typo-heading-3 {
+    @apply font-medium text-2xl;
+  }
+
+  .typo-heading-4 {
+    @apply font-karla font-medium text-xl;
+  }
+
+  .typo-heading-5 {
+    @apply font-normal text-lg;
+  }
+
+  .typo-display-md {
+    @apply font-fraunces font-normal text-7xl;
+  }
+
+  .typo-body-sm {
+    @apply font-light text-md;
+  }
+
+  .typo-body-md {
+    @apply font-medium text-md;
+  }
+
+  .typo-body-lg {
+    @apply font-karla font-medium text-2xl;
+  }
+
+  .typo-body-button {
+    @apply font-medium text-lg;
+  }
+
+  .typo-body-button-bold {
+    @apply font-semibold text-2xl;
+  }
+
+  .typo-subtitle-sm {
+    @apply font-karla font-normal text-xs;
+  }
+
+  .typo-subtitle-md {
+    @apply font-karla font-normal text-sm;
+  }
+
+  .typo-subtitle-lg {
+    @apply font-karla font-medium text-md;
+  }
+}
