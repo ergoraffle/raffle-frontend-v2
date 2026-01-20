@@ -1,6 +1,8 @@
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
+
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@/lib/utils';
 
 export const typographyVariants = cva('', {
@@ -27,7 +29,7 @@ export const typographyVariants = cva('', {
   }
 });
 
-export type TypographyProps = HTMLAttributes<HTMLParagraphElement> &
+export type TypographyProps = ComponentProps<'p'> &
   VariantProps<typeof typographyVariants> & {
     asChild?: boolean;
   };

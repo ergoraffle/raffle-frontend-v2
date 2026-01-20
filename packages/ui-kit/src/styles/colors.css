@@ -10,7 +10,9 @@
   --color-primary-4: oklch(66.83% 0.221 32.95 / 25%);
   --color-primary-4-foreground: oklch(0.3211 0 0);
   --color-primary-5: oklch(66.83% 0.221 32.95 / 10%);
-  --color-primary-5-foreground: oklch(0.3211 0 0);
+  --color-primary-5-foreground: oklch(66.83% 0.221 32.95);
+  --color-primary-6: oklch(66.83% 0.221 32.95 / 10%);
+  --color-primary-6-foreground: oklch(0.3211 0 0);
   /*Secondary Scale*/
   --color-secondary-1: oklch(0.4879 0.2586 277.58);
   --color-secondary-1-foreground: oklch(1 0 0);

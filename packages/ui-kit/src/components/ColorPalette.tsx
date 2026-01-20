@@ -21,11 +21,13 @@ function ColorPalette() {
         <div className="bg-black-3 text-black-3-foreground p-6">black-3</div>
         <div className="bg-black-4 text-black-4-foreground p-6 ">black-4</div>
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-6 gap-3">
         <div className="bg-primary-1 text-primary-1-foreground p-6">primary-1</div>
         <div className="bg-primary-2 text-primary-2-foreground p-6">primary-2</div>
         <div className="bg-primary-3 text-primary-3-foreground p-6">primary-3</div>
         <div className="bg-primary-4 text-primary-4-foreground p-6 ">primary-4</div>
+        <div className="bg-primary-5 text-primary-5-foreground p-6 ">primary-5</div>
+        <div className="bg-primary-6 text-primary-6-foreground p-6 ">primary-6</div>
       </div>
       <div className="grid grid-cols-6 gap-3">
         <div className="bg-secondary-1 text-secondary-1-foreground p-6">secondary-1</div>

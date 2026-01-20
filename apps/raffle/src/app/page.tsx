@@ -23,6 +23,18 @@ const Home = () => (
         <Button size="sm">Next</Button>
         <Button>Next</Button>
         <Button size="lg">Next</Button>
+        <Button size="icon">-</Button>
+        <Button size="icon-lg">-</Button>
+        <Button size="icon-sm">-</Button>
+      </div>
+      <div className="space-x-2">
+        <Button variant="primary">Next</Button>
+        <Button variant="primary-soft">Next</Button>
+        <Button variant="outline">Next</Button>
+        <Button variant="outline-soft" className="w-full">
+          Next
+        </Button>
+        <Button variant="ghost">Next</Button>
       </div>
     </div>
     <div className="space-x-2 space-y-2">
@@ -34,51 +46,6 @@ const Home = () => (
       <Badge variant="secondary">secondary</Badge>
       <Badge variant="error">error</Badge>
       <Badge variant="success">success</Badge>
-      <div>
-        <p>------has-hover</p>
-        <Badge variant="outline" asChild size="lg">
-          <a>outline</a>
-        </Badge>
-        <Badge variant="elevated" asChild>
-          <a href="/">elevated</a>
-        </Badge>
-        <Badge variant="primary" asChild>
-          <a>primary</a>
-        </Badge>
-        <Badge variant="secondary" asChild>
-          <a>secondary</a>
-        </Badge>
-      </div>
-      <div>
-        <p>------focus</p>
-        <Badge variant="outline" asChild size="lg">
-          <a>outline</a>
-        </Badge>
-        <Badge variant="elevated" asChild>
-          <a href="/">elevated</a>
-        </Badge>
-        <Badge variant="primary" asChild>
-          <a>primary</a>
-        </Badge>
-        <Badge variant="secondary" asChild>
-          <a>secondary</a>
-        </Badge>
-      </div>
-      <div>
-        <p>--------disabled</p>
-        <Badge variant="outline" asChild size="md">
-          <button disabled>outline</button>
-        </Badge>
-        <Badge variant="elevated" asChild>
-          <button disabled>elevated</button>
-        </Badge>
-        <Badge variant="primary" asChild>
-          <button disabled>primary</button>
-        </Badge>
-        <Badge variant="secondary" asChild>
-          <button disabled>secondary</button>
-        </Badge>
-      </div>
     </div>
 
     <ColorPalette />
