@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from 'react';
 
+import { Check } from '@ergo-raffle/icons';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 
 import { cn } from '@/lib/utils';
@@ -21,7 +22,7 @@ export const Checkbox = ({ className, ...props }: CheckboxProps) => (
       data-slot="checkbox-indicator"
       className="grid place-content-center text-current transition-none"
     >
-      -
+      <Check className="size-3" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 );
