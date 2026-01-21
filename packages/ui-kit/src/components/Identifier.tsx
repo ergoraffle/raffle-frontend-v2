@@ -29,7 +29,7 @@ export type IdentifierProps = VariantProps<typeof identifierVariants> & {
 export const Identifier = ({ className, value, size, link }: IdentifierProps) => (
   <div data-slot="id-holder" className={cn(identifierVariants({ size, className }))}>
     <div className="overflow-hidden inline-flex">
-      <span className="text-ellipsis overflow-hidden inline-block grow">{value}</span>
+      <span className="text-ellipsis overflow-hidden max-w-full inline-block grow">{value}</span>
       <span className="inline-block">{(value ?? '').slice(value.length - 5, value.length)}</span>
     </div>
     {link ? (

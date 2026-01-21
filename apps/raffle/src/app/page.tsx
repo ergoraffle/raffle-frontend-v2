@@ -8,6 +8,9 @@ import {
   FilledBasket,
   Identifier,
   Switch,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
   Typography
 } from '@ergo-raffle/ui-kit';
 
@@ -25,6 +28,18 @@ const Home = () => (
         value="sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
         size="lg"
       />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Identifier
+            link="https://google.com"
+            value="sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
+            size="lg"
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs
+        </TooltipContent>
+      </Tooltip>
     </div>
     <div className="space-y-2">
       <div className="space-x-2">
@@ -40,7 +55,10 @@ const Home = () => (
         <Button size="icon-lg">
           <Check />
         </Button>
-        <Button size="icon-lg" className="rounded-full">
+        <Button size="icon-lg" variant="rounded">
+          <Check />
+        </Button>
+        <Button size="icon-lg" disabled>
           <Check />
         </Button>
       </div>

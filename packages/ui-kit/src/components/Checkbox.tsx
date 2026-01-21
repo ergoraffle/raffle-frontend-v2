@@ -1,14 +1,14 @@
 'use client';
 
 import type { ComponentProps } from 'react';
+
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 
 import { cn } from '@/lib/utils';
 
-export const Checkbox = ({
-  className,
-  ...props
-}: ComponentProps<typeof CheckboxPrimitive.Root>) => (
+export type CheckboxProps = ComponentProps<typeof CheckboxPrimitive.Root>;
+
+export const Checkbox = ({ className, ...props }: CheckboxProps) => (
   <CheckboxPrimitive.Root
     data-slot="checkbox"
     className={cn(
