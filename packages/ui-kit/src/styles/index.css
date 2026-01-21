@@ -1,11 +1,11 @@
 /* Tailwind v4 imports */
 @import "tailwindcss";
+@import "./typography.css";
 
 /* =========================
    Design Tokens
 ========================= */
 
-@theme {
-  --color-primary: #ff4c29;
-  --color-primary-foreground: #ffffff;
+body {
+  @apply font-poppins leading-none;
 }
