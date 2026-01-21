@@ -1,11 +1,12 @@
+import { Check } from '@ergo-raffle/icons';
 import {
   Badge,
   Button,
   Checkbox,
   ColorPalette,
   EmptyState,
-  ExternalLink,
   FilledBasket,
+  Identifier,
   Switch,
   Typography
 } from '@ergo-raffle/ui-kit';
@@ -18,22 +19,36 @@ const Home = () => (
       <Checkbox />
       <Checkbox disabled />
     </div>
+    <div className="w-2xs">
+      <Identifier
+        link="https://google.com"
+        value="sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
+        size="lg"
+      />
+    </div>
     <div className="space-y-2">
       <div className="space-x-2">
         <Button size="sm">Next</Button>
         <Button>Next</Button>
         <Button size="lg">Next</Button>
-        <Button size="icon">-</Button>
-        <Button size="icon-lg">-</Button>
-        <Button size="icon-sm">-</Button>
+        <Button size="icon-sm">
+          <Check />
+        </Button>
+        <Button size="icon">
+          <Check />
+        </Button>
+        <Button size="icon-lg">
+          <Check />
+        </Button>
+        <Button size="icon-lg" className="rounded-full">
+          <Check />
+        </Button>
       </div>
       <div className="space-x-2">
         <Button variant="primary">Next</Button>
         <Button variant="primary-soft">Next</Button>
         <Button variant="outline">Next</Button>
-        <Button variant="outline-soft" className="w-full">
-          Next
-        </Button>
+        <Button variant="outline-soft">Next</Button>
         <Button variant="ghost">Next</Button>
       </div>
     </div>
@@ -70,7 +85,6 @@ const Home = () => (
       <Switch />
       <Switch disabled />
     </div>
-    <ExternalLink href="https://google.com">Link Text</ExternalLink>
     <FilledBasket hasGift className="w-12 h-12" />
     <EmptyState />
   </div>
