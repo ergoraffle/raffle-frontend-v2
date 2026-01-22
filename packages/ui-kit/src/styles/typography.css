@@ -1,10 +1,11 @@
 @theme {
-  /*Font Families*/
+  /* Font Families */
   --font-*: initial;
   --font-fraunces: "Fraunces", serif;
   --font-poppins: "Poppins", sans-serif;
   --font-karla: "Karla", sans-serif;
-  /*Font Weight*/
+
+  /* Font Weight */
   --font-weight-*: initial;
   --font-weight-light: 300;
   --font-weight-normal: 400;
@@ -12,7 +13,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /*Font Size*/
+  /* Font Size */
   --text-*: initial;
   --text-xs: 13px;
   --text-sm: 14px;
@@ -23,7 +24,8 @@
   --text-3xl: 24px;
   --text-5xl: 28px;
   --text-7xl: 72px;
-  /*Line Height*/
+
+  /* Line Height */
   --line-height: 1;
   --text-xs--line-height: 1;
   --text-sm--line-height: 1;
