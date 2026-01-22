@@ -55,7 +55,12 @@
         "useConsistentArrowReturn": "error",
         "useExhaustiveSwitchCases": "error",
         "useFind": "error",
-        "useSortedClasses": "error"
+        "useSortedClasses": {
+          "options": {
+            "attributes": ["classList"],
+            "functions": ["clsx", "cva", "tw", "tw.*"]
+          }
+        }
       },
       "style": {
         "noCommonJs": "error",
@@ -145,6 +150,11 @@
           }
         }
       }
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }

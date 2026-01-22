@@ -19,7 +19,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm run build:ts && npm run build:css",
-    "build:css": "tailwindcss -c -i ./src/styles.css -o ./dist/index.css",
+    "build:css": "tailwindcss -c -i ./src/styles/index.css -o ./dist/index.css",
     "build:ts": "rollup -c",
     "clean": "rimraf dist",
     "dev": "tsc -p tsconfig.json",
