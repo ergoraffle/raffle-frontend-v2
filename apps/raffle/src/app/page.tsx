@@ -22,23 +22,17 @@ const Home = () => (
       <Checkbox />
       <Checkbox disabled />
     </div>
-    <div className="w-2xs">
+    <div className="w-3xs">
       <Identifier
-        link="https://google.com"
-        value="sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
+        href="https://google.com"
+        value="sfdsdfsdsfsdsdfsddeweopdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdyuuufsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
         size="lg"
       />
       <Tooltip>
         <TooltipTrigger asChild>
-          <Identifier
-            link="https://google.com"
-            value="sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs"
-            size="lg"
-          />
+          <Button>Trigger</Button>
         </TooltipTrigger>
-        <TooltipContent>
-          sfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfssfdsdfsdsfsdsdfsdfsdfsdfsdfsdfsdfs
-        </TooltipContent>
+        <TooltipContent>The Tip</TooltipContent>
       </Tooltip>
     </div>
     <div className="space-y-2">

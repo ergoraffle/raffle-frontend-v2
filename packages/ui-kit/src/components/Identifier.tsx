@@ -1,12 +1,13 @@
 'use client';
 
 import { ExternalLink } from '@ergo-raffle/icons';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@ergo-raffle/ui-kit';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
 export const identifierVariants = cva(
-  'inline-flex items-center p-2 gap-2 transition-all ease-in delay-100 text-black-2 hover:text-gray-2 hover:[&_span]:underline max-w-full',
+  'inline-flex items-center transition-all ease-in delay-100 text-black-2 hover:text-gray-2 hover:[&_span]:border-b-1 max-w-full',
   {
     variants: {
       size: {
@@ -21,21 +22,35 @@ export const identifierVariants = cva(
 );
 
 export type IdentifierProps = VariantProps<typeof identifierVariants> & {
-  link?: string;
+  href?: string;
   value: string;
   className?: string;
+  trailingLength?: number;
 };
 
-export const Identifier = ({ className, value, size, link }: IdentifierProps) => (
-  <div data-slot="id-holder" className={cn(identifierVariants({ size, className }))}>
-    <div className="overflow-hidden inline-flex">
-      <span className="text-ellipsis overflow-hidden max-w-full inline-block grow">{value}</span>
-      <span className="inline-block">{(value ?? '').slice(value.length - 5, value.length)}</span>
-    </div>
-    {link ? (
-      <a href={link}>
-        <ExternalLink />
-      </a>
-    ) : null}
-  </div>
+export const Identifier = ({
+  className,
+  value,
+  size,
+  href,
+  trailingLength = 5
+}: IdentifierProps) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <div data-slot="identifier" className={cn(identifierVariants({ size, className }))}>
+        <div className="overflow-hidden inline-flex grow">
+          <span className="shrink min-w-0 text-nowrap overflow-hidden text-ellipsis">
+            {(value ?? '').slice(0, -trailingLength)}
+          </span>
+          <span className="shrink-0">{(value ?? '').slice(-trailingLength)}</span>
+        </div>
+        {href ? (
+          <a href={href} target="_blank">
+            <ExternalLink />
+          </a>
+        ) : null}
+      </div>
+    </TooltipTrigger>
+    <TooltipContent>{value}</TooltipContent>
+  </Tooltip>
 );
