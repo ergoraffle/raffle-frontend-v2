@@ -1,22 +1,43 @@
 import { Check } from '@ergo-raffle/icons';
-import {
-  Badge,
-  Button,
-  Checkbox,
-  ColorPalette,
-  EmptyState,
-  FilledBasket,
-  Identifier,
-  Switch,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  Typography
-} from '@ergo-raffle/ui-kit';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ergo-raffle/ui-kit';
+
+// import {
+//   Badge,
+//   Button,
+//   Checkbox,
+//   ColorPalette,
+//   EmptyState,
+//   FilledBasket,
+//   Identifier,
+//   Switch,
+//   Tabs,
+//   TabsContent,
+//   TabsList,
+//   TabsTrigger,
+//   Tooltip,
+//   TooltipContent,
+//   TooltipTrigger,
+//   Typography
+// } from '@ergo-raffle/ui-kit';
 
 const Home = () => (
   <div className="p-4 space-y-4">
-    <div className="space-x-2">
+    <div>
+      <Tabs defaultValue="overview">
+        <TabsList variant="primary">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">Overview</TabsContent>
+        <TabsContent value="analytics">Analytics</TabsContent>
+        <TabsContent value="reports">Reports</TabsContent>
+        <TabsContent value="settings">Settings</TabsContent>
+      </Tabs>
+    </div>
+    <Check />
+    {/* <div className="space-x-2">
       <Checkbox checked />
       <Checkbox checked disabled />
       <Checkbox />
@@ -98,7 +119,7 @@ const Home = () => (
       <Switch disabled />
     </div>
     <FilledBasket hasGift className="w-12 h-12" />
-    <EmptyState />
+    <EmptyState /> */}
   </div>
 );
 
