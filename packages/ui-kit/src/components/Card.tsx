@@ -75,7 +75,7 @@ export type CardActionProps = ComponentProps<'div'>;
 export const CardAction = ({ className, ...props }: CardActionProps) => (
   <div
     data-slot="card-action"
-    className={cn('absolute right-2.5 top-2.5 z-10', className)}
+    className={cn('absolute right-2.5 top-2.5 z-100', className)}
     {...props}
   />
 );
@@ -83,7 +83,11 @@ export const CardAction = ({ className, ...props }: CardActionProps) => (
 export type CardContentProps = ComponentProps<'div'>;
 
 export const CardContent = ({ className, ...props }: CardContentProps) => (
-  <div data-slot="card-content" className={cn('p-3 relative z-0', className)} {...props} />
+  <div
+    data-slot="card-content"
+    className={cn('px-4 pt-2 pb-3 relative z-0', className)}
+    {...props}
+  />
 );
 
 export type CardFooterProps = ComponentProps<'div'>;

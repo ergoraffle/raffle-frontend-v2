@@ -7,11 +7,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
+  CardTitle
 } from '@ergo-raffle/ui-kit';
 
 // import {
@@ -37,16 +33,16 @@ const Home = () => (
   <div className="p-4 space-y-4">
     <div>
       <Card className="relative mx-auto w-full max-w-sm pt-0">
-        {/* <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
-              <img
+        <div className="absolute inset-0 z-30 aspect-video bg-black/1" />
+        {/* <img
                 src="https://avatar.vercel.sh/shadcn1"
                 alt="Event cover"
                 className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
               /> */}
+        <CardAction>
+          <Badge variant="success">Featured</Badge>
+        </CardAction>
         <CardHeader>
-          <CardAction>
-            <Badge variant="secondary">Featured</Badge>
-          </CardAction>
           <CardTitle>Design systems meetup</CardTitle>
 
           <CardDescription>
@@ -57,7 +53,7 @@ const Home = () => (
           <Button className="w-full">View Event</Button>
         </CardFooter>
       </Card>
-      <Tabs defaultValue="overview">
+      {/* <Tabs defaultValue="overview">
         <TabsList variant="primary">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -68,9 +64,9 @@ const Home = () => (
         <TabsContent value="analytics">Analytics</TabsContent>
         <TabsContent value="reports">Reports</TabsContent>
         <TabsContent value="settings">Settings</TabsContent>
-      </Tabs>
+      </Tabs> */}
     </div>
-    <Check />
+    <Check className="size-4" />
     {/* <div className="space-x-2">
       <Checkbox checked />
       <Checkbox checked disabled />
