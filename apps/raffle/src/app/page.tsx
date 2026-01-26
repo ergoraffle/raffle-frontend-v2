@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -49,6 +50,10 @@ const Home = () => (
             A practical talk on component APIs, accessibility, and shipping faster.
           </CardDescription>
         </CardHeader>
+        <CardContent>
+          A practical talk on component APIs, accessibility, and shipping faster.A practical talk on
+          component APIs, accessibility, and shipping faster.
+        </CardContent>
         <CardFooter>
           <Button className="w-full">View Event</Button>
         </CardFooter>
