@@ -16,6 +16,7 @@ export const buttonVariants = cva(
           'border-2 border-primary-1 text-primary-1 hover:bg-primary-5 hover:text-primary-5-foreground typo-body-button-bold',
         'outline-soft':
           'relative overflow-hidden border-2 border-primary-1 typo-heading-5 px-6 py-3 rounded-lg text-white-1-foreground before:absolute before:inset-0 before:right-0 before:left-auto before:bg-primary-4 before:w-[0] before:transition-width before:duration-300 before:ease-[cubic-bezier(0.7,-0.4,0.4,1.4)] hover:before:w-full hover:[&]:z-8 hover:before:z-10',
+        plain: 'text-gray-1 hover:bg-gray-5 hover:text-gray-5-foreground typo-body-lg',
         ghost:
           'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground typo-body-lg',
         primary:

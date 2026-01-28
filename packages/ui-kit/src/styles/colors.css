@@ -1,6 +1,8 @@
 @theme {
-  /*Primary Scale*/
   --color-*: initial;
+  /* body background */
+  --color-body-background: oklch(0.9507 0.0022 17.2);
+  /*Primary Scale*/
   --color-primary-1: oklch(66.83% 0.221 32.95);
   --color-primary-1-foreground: oklch(1 0 0);
   --color-primary-2: color-mix(in oklch, var(--color-white-4) 20%, var(--color-primary-1));
