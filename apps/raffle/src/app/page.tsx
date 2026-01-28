@@ -8,44 +8,38 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
+  Checkbox,
+  ColorPalette,
+  EmptyState,
+  FilledBasket,
+  Identifier,
+  Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  Typography
 } from '@ergo-raffle/ui-kit';
-
-// import {
-//   Badge,
-//   Button,
-//   Checkbox,
-//   ColorPalette,
-//   EmptyState,
-//   FilledBasket,
-//   Identifier,
-//   Switch,
-//   Tabs,
-//   TabsContent,
-//   TabsList,
-//   TabsTrigger,
-//   Tooltip,
-//   TooltipContent,
-//   TooltipTrigger,
-//   Typography
-// } from '@ergo-raffle/ui-kit';
 
 const Home = () => (
   <div className="p-4 space-y-4">
     <div>
-      <Card className="relative mx-auto w-full max-w-sm pt-0">
-        <div className="absolute inset-0 z-30 aspect-video bg-black/1" />
+      <Card className="relative mx-auto w-full max-w-sm" padding="xs" hover>
         {/* <img
-                src="https://avatar.vercel.sh/shadcn1"
-                alt="Event cover"
-                className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-              /> */}
+          src="https://avatar.vercel.sh/shadcn1"
+          alt="Event cover"
+          className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+        /> */}
+        <div className="absolute inset-0 z-30 aspect-video bg-black/1" />
         <CardAction>
           <Badge variant="success">Featured</Badge>
         </CardAction>
         <CardHeader>
           <CardTitle>Design systems meetup</CardTitle>
-
           <CardDescription>
             A practical talk on component APIs, accessibility, and shipping faster.
           </CardDescription>
@@ -58,7 +52,7 @@ const Home = () => (
           <Button className="w-full">View Event</Button>
         </CardFooter>
       </Card>
-      {/* <Tabs defaultValue="overview">
+      <Tabs defaultValue="overview">
         <TabsList variant="primary">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -69,10 +63,10 @@ const Home = () => (
         <TabsContent value="analytics">Analytics</TabsContent>
         <TabsContent value="reports">Reports</TabsContent>
         <TabsContent value="settings">Settings</TabsContent>
-      </Tabs> */}
+      </Tabs>
     </div>
     <Check className="size-4" />
-    {/* <div className="space-x-2">
+    <div className="space-x-2">
       <Checkbox checked />
       <Checkbox checked disabled />
       <Checkbox />
@@ -154,7 +148,7 @@ const Home = () => (
       <Switch disabled />
     </div>
     <FilledBasket hasGift className="w-12 h-12" />
-    <EmptyState /> */}
+    <EmptyState />
   </div>
 );
 
