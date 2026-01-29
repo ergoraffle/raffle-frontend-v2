@@ -23,6 +23,10 @@ export const buttonVariants = cva(
           'bg-primary-1 text-primary-1-foreground hover:bg-primary-2 hover:text-primary-2-foreground typo-body-button-bold',
         'primary-soft':
           'bg-primary-6 text-primary-6-foreground hover:bg-primary-4 hover:text-primary-4-foreground typo-heading-5',
+        success:
+          'bg-success-light text-success-light-foreground hover:bg-success-light-hover hover:text-success-light-hover-foreground typo-body-lg',
+        error:
+          'bg-error-light text-error-light-foreground hover:bg-error-light-hover hover:text-error-light-hover-foreground typo-body-lg',
         rounded:
           'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground shadow-6 rounded-full'
       },
