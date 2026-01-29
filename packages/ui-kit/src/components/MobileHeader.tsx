@@ -13,7 +13,7 @@ export const MobileHeader = () => (
             <Menu />
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" title="title">
+        <SheetContent side="right">
           <div className="no-scrollbar overflow-y-auto">
             <ul className="flex flex-col gap-y-4.5 typo-heading-5">
               <li>All raffles</li>
@@ -29,7 +29,7 @@ export const MobileHeader = () => (
             <DotMenuVertical />
           </Button>
         </SheetTrigger>
-        <SheetContent side="bottom" title="title">
+        <SheetContent side="bottom">
           <div className="no-scrollbar overflow-y-auto">
             <ul className="flex flex-col gap-y-4.5 typo-heading-5">
               <li>All raffles</li>

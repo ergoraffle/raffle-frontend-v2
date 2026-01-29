@@ -101,7 +101,7 @@ const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
   <div
     data-slot="sheet-header"
     className={cn(
-      'gap-2 flex items-center group-data-[side=right]/content:flex-row-reverse has-data-[slot=sheet-title]:justify-between',
+      'gap-2 flex items-center flex-row-reverse group-data-[side=right]/content:flex-row has-data-[slot=sheet-title]:justify-between has-data-[slot=sheet-title]:flex-row has-data-[slot=sheet-title]:group-data-[side=right]/content:flex-row-reverse',
       className
     )}
     {...props}
