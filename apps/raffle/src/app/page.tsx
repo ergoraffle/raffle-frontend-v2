@@ -1,4 +1,4 @@
-import { Check } from '@ergo-raffle/icons';
+import { Basket, Check } from '@ergo-raffle/icons';
 import {
   Badge,
   Button,
@@ -11,6 +11,14 @@ import {
   CardTitle,
   Checkbox,
   ColorPalette,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   EmptyState,
   FilledBasket,
   Identifier,
@@ -27,6 +35,58 @@ import {
 
 const Home = () => (
   <div className="p-4 space-y-4">
+    <div className="space-x-2 space-y-2 min-h-dvw">
+      <Badge variant="outline" size="sm">
+        <Basket />
+        outline
+      </Badge>
+      <Badge variant="white-outline">
+        white outline
+        <Basket />
+      </Badge>
+      <Badge variant="elevated">elevated</Badge>
+      <Badge variant="primary">primary</Badge>
+      <Badge variant="secondary">secondary</Badge>
+      <Badge variant="error">error</Badge>
+      <Badge variant="success">success</Badge>
+    </div>
+    <div>
+      <Dialog>
+        <form>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open Dialog</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+              <DialogDescription>
+                Make changes to your profile here. Click save when you&apos;re done.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4">
+              <div className="grid gap-3">
+                A practical talk on component APIs, accessibility, and shipping faster.A practical
+                talk on component APIs, accessibility, and shipping faster.
+              </div>
+              <div className="grid gap-3">
+                A practical talk on component APIs, accessibility, and shipping faster.A practical
+                talk on component APIs, accessibility, and shipping faster.
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline" size="sm">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type="submit" size="sm">
+                Save changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </form>
+      </Dialog>
+    </div>
     <div>
       <Card className="relative mx-auto w-full max-w-sm" padding="xs" hover>
         {/* <img
@@ -113,16 +173,6 @@ const Home = () => (
         <Button variant="outline-soft">Next</Button>
         <Button variant="ghost">Next</Button>
       </div>
-    </div>
-    <div className="space-x-2 space-y-2">
-      <Badge variant="outline" size="sm">
-        outline
-      </Badge>
-      <Badge variant="elevated">elevated</Badge>
-      <Badge variant="primary">primary</Badge>
-      <Badge variant="secondary">secondary</Badge>
-      <Badge variant="error">error</Badge>
-      <Badge variant="success">success</Badge>
     </div>
 
     <ColorPalette />

@@ -4,6 +4,7 @@ export * from './Card';
 export * from './Checkbox';
 export * from './ColorPalette';
 export * from './DesktopHeader';
+export * from './Dialog';
 export * from './EmptyState';
 export * from './FilledBasket';
 export * from './Identifier';
