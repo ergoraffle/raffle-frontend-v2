@@ -22,6 +22,7 @@ import {
   EmptyState,
   FilledBasket,
   Identifier,
+  Progress,
   Switch,
   Tabs,
   TabsContent,
@@ -36,21 +37,26 @@ import {
 const Home = () => (
   <div className="p-4 space-y-4">
     <div className="space-x-2 space-y-2 min-h-dvw">
-      <Badge variant="outline" size="sm">
-        <Basket />
-        outline
-      </Badge>
-      <Badge variant="white-outline">
-        white outline
-        <Basket />
-      </Badge>
-      <Badge variant="elevated">elevated</Badge>
-      <Badge variant="primary">primary</Badge>
-      <Badge variant="secondary">secondary</Badge>
-      <Badge variant="error">error</Badge>
-      <Badge variant="success">success</Badge>
+      <Progress value={40} />
+      <Progress variant="rounded" value={30} />
+      <Progress variant="box" value={65} />
     </div>
     <div>
+      <div className="space-x-2 space-y-2">
+        <Badge variant="outline" size="sm">
+          <Basket />
+          outline
+        </Badge>
+        <Badge variant="white-outline">
+          white outline
+          <Basket />
+        </Badge>
+        <Badge variant="elevated">elevated</Badge>
+        <Badge variant="primary">primary</Badge>
+        <Badge variant="secondary">secondary</Badge>
+        <Badge variant="error">error</Badge>
+        <Badge variant="success">success</Badge>
+      </div>
       <Dialog>
         <form>
           <DialogTrigger asChild>

@@ -10,6 +10,7 @@ export * from './FilledBasket';
 export * from './Identifier';
 export * from './Logo';
 export * from './MobileHeader';
+export * from './Progress';
 export * from './Sheet';
 export * from './Switch';
 export * from './Tabs';
