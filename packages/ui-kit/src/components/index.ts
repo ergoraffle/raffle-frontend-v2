@@ -1,3 +1,4 @@
+export * from './Button';
 export * from './Identifier';
 export * from './Tabs';
 export * from './Tooltip';
