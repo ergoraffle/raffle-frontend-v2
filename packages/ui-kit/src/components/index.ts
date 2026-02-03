@@ -2,6 +2,7 @@ export * from './Badge';
 export * from './Button';
 export * from './Dialog';
 export * from './Identifier';
+export * from './Progress';
 export * from './Skeleton';
 export * from './Tabs';
 export * from './Tooltip';
