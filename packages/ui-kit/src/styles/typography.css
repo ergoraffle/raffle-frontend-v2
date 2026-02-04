@@ -72,7 +72,7 @@
   }
 
   .typo-body-lg {
-    @apply font-normal text-lg leading-6;
+    @apply font-karla font-normal text-lg leading-6;
   }
 
   .typo-body-button {
