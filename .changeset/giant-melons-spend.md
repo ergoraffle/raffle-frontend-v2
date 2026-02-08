@@ -2,4 +2,4 @@
 "@ergo-raffle/ui-kit": minor
 ---
 
-Add `Switch` component.
+Add the `button` component.
