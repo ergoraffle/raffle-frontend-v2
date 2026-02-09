@@ -3,6 +3,7 @@ export * from './Button';
 export * from './Card';
 export * from './Checkbox';
 export * from './Dialog';
+export * from './Empty';
 export * from './Identifier';
 export * from './Progress';
 export * from './Sheet';
