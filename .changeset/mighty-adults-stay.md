@@ -2,4 +2,4 @@
 "@ergo-raffle/ui-kit": minor
 ---
 
-Add the `checkbox` component.
+Add the `Checkbox` component.
