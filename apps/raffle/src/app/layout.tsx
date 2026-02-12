@@ -5,6 +5,7 @@ import './globals.css';
 import type { PropsWithChildren } from 'react';
 
 import { fraunces, karla, poppins } from './fonts';
+import { AppProviders } from './(providers)';
 
 export const metadata: Metadata = {
   title: 'Ergo Raffle',
@@ -20,7 +21,9 @@ const RootLayout = ({ children }: PropsWithChildren) => (
         ${karla.variable}
       `}
   >
-    <body className="antialiased">{children}</body>
+    <body className="antialiased">
+      <AppProviders>{children}</AppProviders>
+    </body>
   </html>
 );
 
