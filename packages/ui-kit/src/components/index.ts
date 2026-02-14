@@ -1,7 +1,9 @@
 export * from './Badge';
 export * from './Button';
 export * from './Card';
+export * from './Checkbox';
 export * from './Dialog';
+export * from './Empty';
 export * from './Footer';
 export * from './Header';
 export * from './Identifier';
@@ -10,6 +12,7 @@ export * from './Logo';
 export * from './Progress';
 export * from './Sheet';
 export * from './Skeleton';
+export * from './Switch';
 export * from './Tabs';
 export * from './Tooltip';
 export * from './Typography';
