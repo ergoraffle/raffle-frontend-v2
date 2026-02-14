@@ -4,14 +4,23 @@ export default defineConfig({
   raffle: {
     input: './raffle.yaml',
     output: {
-      target: './lib/index.ts',
-      client: 'react-query',
-      httpClient: 'fetch',
-      baseUrl: '/api',
+      target: './lib/api.ts',
+      client: 'axios-functions',
+      httpClient: 'axios',
+      baseUrl: '',
       prettier: false,
       biome: true,
       mode: 'single',
-      clean: true
+      override: {
+        mutator: {
+          path: './lib/http.ts',
+          name: 'httpClient',
+        },
+      },
+      mock: {
+        delay: 1000,
+        type: 'msw'
+      }
     }
   }
 });
