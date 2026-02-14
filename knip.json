@@ -8,7 +8,10 @@
       "entry": ["{app,lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
     }
   },
+  "rollup": {
+    "entry": ["packages/ui-kit/rollup.config.{js,cjs,mjs,ts}"]
+  },
   "ignoreBinaries": ["rollup"],
   "ignore": ["**/node_modules/", "**/dist/", "**/.next/"],
-  "ignoreDependencies": ["tailwindcss", "@rollup/plugin-typescript"]
+  "ignoreDependencies": ["tailwindcss"]
 }

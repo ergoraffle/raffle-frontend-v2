@@ -1,14 +1,12 @@
-'use client';
-
 import type { ComponentProps } from 'react';
 
 import { ExternalLink } from '@ergo-raffle/icons';
-import { Tooltip } from '@ergo-raffle/ui-kit';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
 import { Skeleton } from './Skeleton';
+import { Tooltip } from './Tooltip';
 
 export const identifierSkeletonVariants = cva('w-full', {
   variants: {
