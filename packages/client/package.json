@@ -26,10 +26,15 @@
     "type-check": "npm run generate && tsc --noEmit"
   },
   "devDependencies": {
-    "orval": "^7.17.2"
+    "orval": "^7.21.0"
   },
   "engines": {
     "node": ">=22.18.0",
     "npm": "11.6.2"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "axios": "^1.13.5",
+    "msw": "^2.12.10"
   }
 }
