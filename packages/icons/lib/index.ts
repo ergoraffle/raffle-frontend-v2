@@ -1,5 +1,5 @@
-export { default as BasketGift } from './basket-gift.svg?react';
 export { default as Basket } from './basket.svg?react';
+export { default as BasketGift } from './basket-gift.svg?react';
 export { default as Check } from './check.svg?react';
 export { default as Close } from './close.svg?react';
 export { default as Dice } from './dice.svg?react';
@@ -10,8 +10,8 @@ export { default as Down } from './down.svg?react';
 export { default as Downvote } from './downvote.svg?react';
 export { default as Ergo } from './ergo.svg?react';
 export { default as ExternalLink } from './external-link.svg?react';
-export { default as GiftPlus } from './gift-plus.svg?react';
 export { default as Gift } from './gift.svg?react';
+export { default as GiftPlus } from './gift-plus.svg?react';
 export { default as HandCoin } from './hand-coin.svg?react';
 export { default as Info } from './info.svg?react';
 export { default as Left } from './left.svg?react';
@@ -40,5 +40,5 @@ export { default as Votes } from './votes.svg?react';
 export { default as Wallet } from './wallet.svg?react';
 export { default as X } from './x.svg?react';
 export const TOKENS = {
-  'erg': new URL(/* @vite-ignore */'tokens/erg.svg', import.meta.url).href,
-} as const
+  erg: new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href
+} as const;

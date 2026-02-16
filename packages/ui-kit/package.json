@@ -23,7 +23,10 @@
     "build:ts": "rollup -c",
     "clean": "rimraf dist",
     "dev": "tsc -p tsconfig.json",
-    "lint": "biome check --write",
+    "lint": "biome check --write && npm run prettify",
+    "lint:check": "biome check && npm run prettify:check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -33,6 +36,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "radix-ui": "^1.4.3",
+    "rollup-plugin-node-externals": "^8.1.2",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

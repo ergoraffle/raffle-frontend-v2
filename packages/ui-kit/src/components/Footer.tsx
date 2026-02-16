@@ -57,7 +57,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </div>
       </div>
       <Typography variant="subtitle-lg" asChild>
-        <div className="p-3.5 sm:p-6 text-center text-black-2">CopyRight © ErgoRaffle 2021</div>
+        <div className="p-3.5 sm:p-6 text-center text-black-2">CopyRight © ErgoRaffle</div>
       </Typography>
     </footer>
   );
