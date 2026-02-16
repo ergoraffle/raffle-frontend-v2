@@ -39,3 +39,6 @@ export { default as Verified } from './verified.svg?react';
 export { default as Votes } from './votes.svg?react';
 export { default as Wallet } from './wallet.svg?react';
 export { default as X } from './x.svg?react';
+export const TOKENS = {
+  erg: new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href
+} as const;
