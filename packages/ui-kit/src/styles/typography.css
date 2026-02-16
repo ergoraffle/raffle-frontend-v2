@@ -17,6 +17,7 @@
   --text-*: initial;
   --text-xs: 13px;
   --text-sm: 14px;
+  --text-base: 15px;
   --text-md: 16px;
   --text-lg: 18px;
   --text-xl: 20px;
@@ -48,7 +49,7 @@
   }
 
   .typo-heading-3 {
-    @apply font-medium text-2xl;
+    @apply font-medium text-sm sm:text-2xl;
   }
 
   .typo-heading-4 {
@@ -56,7 +57,7 @@
   }
 
   .typo-heading-5 {
-    @apply font-normal text-lg;
+    @apply font-normal text-sm sm:text-lg;
   }
 
   .typo-display-md {
@@ -72,7 +73,7 @@
   }
 
   .typo-body-lg {
-    @apply font-karla font-normal text-lg leading-6;
+    @apply font-karla font-normal text-base sm:text-lg leading-6;
   }
 
   .typo-body-button {
@@ -80,7 +81,7 @@
   }
 
   .typo-body-button-bold {
-    @apply font-semibold text-2xl;
+    @apply font-semibold text-md sm:text-2xl;
   }
 
   .typo-subtitle-sm {
@@ -92,6 +93,6 @@
   }
 
   .typo-subtitle-lg {
-    @apply font-karla font-medium text-md;
+    @apply font-karla font-medium text-xs sm:text-md;
   }
 }

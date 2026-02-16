@@ -1,9 +1,15 @@
-import type { Metadata } from 'next';
 import '@ergo-raffle/ui-kit/index.css';
 import './globals.css';
 
 import type { PropsWithChildren } from 'react';
 
+import type { Metadata } from 'next';
+
+import { LayoutBackground } from '@ergo-raffle/ui-kit';
+
+import { Footer, Header } from '@/components';
+
+import { AppProviders } from './(providers)';
 import { fraunces, karla, poppins } from './fonts';
 
 export const metadata: Metadata = {
@@ -20,8 +26,15 @@ const RootLayout = ({ children }: PropsWithChildren) => (
         ${karla.variable}
       `}
   >
-    <body className="antialiased">{children}</body>
+    <body className="antialiased">
+      <AppProviders>
+        <LayoutBackground>
+          <Header />
+          <div className="container min-h-dvh">{children}</div>
+          <Footer />
+        </LayoutBackground>
+      </AppProviders>
+    </body>
   </html>
 );
-
 export default RootLayout;
