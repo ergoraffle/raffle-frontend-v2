@@ -14,5 +14,6 @@ export * from './Sheet';
 export * from './Skeleton';
 export * from './Switch';
 export * from './Tabs';
+export * from './Token';
 export * from './Tooltip';
 export * from './Typography';
