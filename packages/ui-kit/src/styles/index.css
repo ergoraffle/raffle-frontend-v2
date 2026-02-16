@@ -21,6 +21,7 @@
   --radius-*: initial;
   --radius-xs: 2pt;
   --radius-sm: 4pt;
+  --radius-base: 6pt;
   --radius-md: 8pt;
   --radius-lg: 12pt;
   --radius-xlg: 16pt;
@@ -28,4 +29,14 @@
 }
 body {
   @apply text-gray-1 font-poppins leading-none;
+}
+
+@layer utilities {
+  .bg-blur {
+    @apply backdrop-blur-[27px];
+  }
+}
+
+@utility container {
+  @apply mx-auto px-4;
 }

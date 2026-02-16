@@ -3,19 +3,37 @@ import path from 'node:path';
 
 import { glob } from 'glob';
 
-const content = glob
-  .sync('**/*.svg', {
+const lines = [];
+
+glob
+  .sync('*.svg', {
     posix: true,
     cwd: path.resolve(import.meta.dirname, 'lib')
   })
   .sort((a, b) => a.localeCompare(b))
-  .flatMap((file) => {
+  .forEach((file) => {
     const componentName = path
       .basename(file, path.extname(file))
       .replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase());
 
-    return [`export { default as ${componentName} } from './${file}?react';`];
+    lines.push(`export { default as ${componentName} } from './${file}?react';`);
+  });
+
+lines.push('export const TOKENS = {');
+
+glob
+  .sync('tokens/*.*', {
+    posix: true,
+    cwd: path.resolve(import.meta.dirname, 'lib')
   })
-  .join('\n');
+  .forEach((file) => {
+    const filename = path.basename(file, path.extname(file));
+
+    lines.push(`  '${filename}': new URL(/* @vite-ignore */'${file}', import.meta.url).href,`);
+  });
+
+lines.push('} as const');
+
+const content = lines.join('\n');
 
 fs.writeFileSync(path.resolve(import.meta.dirname, 'lib', 'index.ts'), content, 'utf8');

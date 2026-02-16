@@ -11,8 +11,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack",
-    "lint": "biome check --write",
-    "lint:check": "biome check",
+    "lint": "biome check --write && npm run prettify",
+    "lint:check": "biome check && npm run prettify:check",
     "prettify": "biome format --write",
     "prettify:check": "biome format",
     "start": "next start",
@@ -22,7 +22,7 @@
     "@ergo-raffle/icons": "^0.0.0",
     "@ergo-raffle/ui-kit": "^0.0.0",
     "@sentry/nextjs": "^10.32.1",
-    "next": "^15.5.9",
+    "next": "^15.5.12",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
