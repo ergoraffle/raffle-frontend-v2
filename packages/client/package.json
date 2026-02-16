@@ -26,7 +26,7 @@
     "type-check": "npm run generate && tsc --noEmit"
   },
   "devDependencies": {
-    "orval": "^7.17.2"
+    "orval": "^7.21.0"
   },
   "engines": {
     "node": ">=22.18.0",

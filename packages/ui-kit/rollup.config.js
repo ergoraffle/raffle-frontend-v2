@@ -2,7 +2,8 @@ import typescript from '@rollup/plugin-typescript';
 export default {
   input: 'src/index.ts',
   output: {
-    file: 'dist/index.js'
+    file: 'dist/index.js',
+    banner: "'use client';"
   },
   plugins: [typescript()],
   external: ['react', 'react-dom']
