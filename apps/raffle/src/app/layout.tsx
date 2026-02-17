@@ -1,17 +1,16 @@
-import '@ergo-raffle/ui-kit/index.css';
 import './globals.css';
 
 import type { PropsWithChildren } from 'react';
 
 import type { Metadata } from 'next';
 
+import { configureClient, enableMock } from '@ergo-raffle/client';
 import { LayoutBackground } from '@ergo-raffle/ui-kit';
 
 import { Footer, Header } from '@/components';
 
 import { AppProviders } from './(providers)';
 import { fraunces, karla, poppins } from './fonts';
-import { configureClient, enableMock } from '@ergo-raffle/client';
 
 export const metadata: Metadata = {
   title: 'Ergo Raffle',
