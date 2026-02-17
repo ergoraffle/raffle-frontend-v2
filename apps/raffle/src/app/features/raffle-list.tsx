@@ -1,6 +1,7 @@
-import { Empty, Typography, SeeMoreLink } from '@ergo-raffle/ui-kit';
+import { type GetRafflesParams, getInfo, getRaffles } from '@ergo-raffle/client';
+import { Empty, SeeMoreLink, Typography } from '@ergo-raffle/ui-kit';
+
 import { RaffleCard } from './raffle-card';
-import { getRaffles, type GetRafflesParams } from '@ergo-raffle/client';
 
 interface Props {
   params?: GetRafflesParams;
@@ -10,12 +11,13 @@ interface Props {
 export const RaffleList = async ({ params, limit }: Props) => {
   const limitedParams = limit ? { pageSize: limit, page: 1 } : {};
   const { items, total } = await getRaffles({ ...params, ...limitedParams });
+  const infoData = await getInfo();
 
   if (items.length === 0) {
     return (
       <div className="flex justify-center items-center grow">
         <Empty>
-          <Typography variant="heading-3">No raffles found.</Typography>
+          <Typography variant="heading-3">No matching results found.</Typography>
         </Empty>
       </div>
     );
@@ -24,14 +26,14 @@ export const RaffleList = async ({ params, limit }: Props) => {
   return (
     <div className="flex flex-col w-full">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5 w-full">
-        {items.slice(0, limit).map((raffle) => {
+        {items.map((raffle) => {
           const raisedAmounts = {
             target: raffle.soldTicketCount * raffle.ticketPrice,
             current: raffle.goal,
             verified: true
           };
 
-          const deadline = 1778182145 * 1000 - Date.now();
+          const deadline = infoData.lastBlockHeight - Date.now();
 
           const trust = { value: 0, max: 100 };
           return (

@@ -5,13 +5,15 @@ import { Skeleton } from './Skeleton';
 import { Tooltip } from './Tooltip';
 import { Typography } from './Typography';
 
+export type RaisedAmounts = {
+  current: number;
+  target: number;
+  verified: boolean;
+};
+
 export type RaiseProgressProps = {
   loading?: boolean;
-  raisedAmounts?: {
-    current: number;
-    target: number;
-    verified: boolean;
-  };
+  raisedAmounts?: RaisedAmounts;
   tokenName?: string;
 };
 

@@ -12,6 +12,8 @@ import {
   CardHeader,
   CardImageWrapper,
   CardTitle,
+  type RaffleTrustBarProps,
+  type RaisedAmounts,
   RaiseProgress,
   Skeleton,
   Token,
@@ -23,12 +25,8 @@ export type RafflesContentProps = {
   raffle?: RaffleSummary;
   loading?: boolean;
   deadline?: string;
-  raisedAmounts?: {
-    current: number;
-    target: number;
-    verified: boolean;
-  };
-  trust?: { value: number; max: number };
+  raisedAmounts?: RaisedAmounts;
+  trust?: Omit<RaffleTrustBarProps, 'loading'>;
 };
 
 const raffleStatusMap: Record<

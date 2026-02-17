@@ -4,21 +4,21 @@ import Link from 'next/link';
 import { Button, Typography } from '@ergo-raffle/ui-kit';
 
 export const Hero = () => (
-  <div className="h-[calc(100vh-124px)] sm:h-[calc(100vh-134px)] flex flex-col sm:flex-row items-center gap-x-12 justify-stretch">
-    <div className="flex flex-col justify-center">
+  <div className="h-[calc(100vh-120px)] sm:h-[calc(100vh-164px)] mb-24 sm:mb-6 flex flex-col sm:flex-row items-center gap-x-12 justify-stretch gap-y-8">
+    <div className="flex flex-col justify-stretch ">
       <Typography variant="display-md" asChild className="text-black-1 mb-3">
         <h1>Incentivized Crowdfunding</h1>
       </Typography>
       <Typography variant="heading-2">Powered by Ergo, Beyond ERG!</Typography>
-      <div className="h-71.75 sm:hidden min-w-1/2 relative">
+      <div className="h-71.75 sm:hidden min-w-1/2 relative grow">
         <Image
           src="/illustrations/hero-section-illustration-mobile.svg"
           alt="Raffle"
           fill
-          className="object-contain"
+          className="object-right object-scale-down"
         />
       </div>
-      <div className="mt-9 sm:mt-12 w-full sm:w-64">
+      <div className="sm:mt-12 w-full sm:w-64">
         <Button variant="primary" className="mt-4 w-full" size="lg" asChild>
           <Link href="/raffles">Explore Raffles</Link>
         </Button>

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Skeleton } from './Skeleton';
 
 export const cardVariants = cva(
-  'relative bg-white-2 text-white-2-foreground transition-all ease-in delay-100 gap-3 typo-body-sm overflow-hidden rounded-lg text-sm has-data-[slot=card-image-wrapper]:pt-0 has-data-[slot=card-footer]:pb-0 group/card flex flex-col',
+  'relative bg-white-2 text-white-2-foreground transition-all ease-in delay-100 gap-2 sm:gap-3 typo-body-sm overflow-hidden rounded-lg text-sm has-data-[slot=card-image-wrapper]:pt-0 has-data-[slot=card-footer]:pb-0 group/card flex flex-col',
   {
     variants: {
       padding: {
@@ -102,15 +102,14 @@ export type CardImageWrapperProps = ComponentProps<'div'> & { loading?: boolean 
 
 export const CardImageWrapper = ({ className, loading, ...props }: CardImageWrapperProps) =>
   loading ? (
-    <Skeleton className="h-55.75 w-full rounded-none" data-slot="card-image-wrapper" />
+    <Skeleton className="h-41.75 sm:h-55.75 w-full rounded-none" data-slot="card-image-wrapper" />
   ) : (
     <div
-      className={cn('relative h-55.75 w-full bg-gray-3', className)}
+      className={cn('relative h-41.75 sm:h-55.75 w-full bg-gray-3', className)}
       data-slot="card-image-wrapper"
       {...props}
     />
   );
-
 
 export type CardFooterProps = ComponentProps<'div'>;
 

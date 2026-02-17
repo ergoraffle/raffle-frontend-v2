@@ -4,5 +4,10 @@ export type RaffleListSkeletonProps = {
   count?: number;
 };
 
-export const RaffleListSkeleton = ({ count = 3 }: RaffleListSkeletonProps) =>
-  Array.from({ length: count }).map((_) => <RaffleCard loading key={crypto.randomUUID()} />);
+export const RaffleListSkeleton = ({ count = 3 }: RaffleListSkeletonProps) => (
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5 w-full">
+    {Array.from({ length: count }).map((_) => (
+      <RaffleCard loading key={crypto.randomUUID()} />
+    ))}
+  </div>
+);

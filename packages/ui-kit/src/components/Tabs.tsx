@@ -16,12 +16,12 @@ export const Tabs = ({ className, ...props }: TabsProps) => (
 );
 
 export const tabsListVariants = cva(
-  'h-7.5 gap-1 sm:gap-40 group/tabs-list inline-flex w-full items-center justify-around sm:justify-center',
+  'h-6.5 sm:h-7.5 gap-1 sm:gap-40 group/tabs-list inline-flex w-full items-center justify-around sm:justify-center',
   {
     variants: {
       variant: {
         default: 'mb-8 typo-heading-5 text-black-1',
-        primary: 'mb-10 typo-heading-3 text-gray-1 tabs:h-8.5 h-9'
+        primary: 'mb-6.5 sm:mb-10 typo-heading-3 text-gray-1 tabs:h-8.5 h-9'
       }
     },
     defaultVariants: {
