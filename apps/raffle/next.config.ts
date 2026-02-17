@@ -5,7 +5,7 @@ import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ['@ergo-raffle/ui-kit']
 };
 
 export default withSentryConfig(nextConfig, {
