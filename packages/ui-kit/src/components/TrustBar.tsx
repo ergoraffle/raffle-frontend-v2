@@ -1,4 +1,5 @@
-import { Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import { Skeleton } from './Skeleton';
+import { Typography } from './Typography';
 
 export type RaffleTrustBarProps = {
   loading?: boolean;

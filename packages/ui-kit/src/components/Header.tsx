@@ -41,7 +41,7 @@ export const Header = ({ links, scrollThreshold = 10 }: HeaderProps) => {
 
   return (
     <header
-      className={`py-3 sm:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
+      className={`py-3 sm:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 mb-6.5 sm:mb-11 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
     >
       <div className="container flex items-center justify-between">
         <Logo className="h-12 hidden sm:flex" />

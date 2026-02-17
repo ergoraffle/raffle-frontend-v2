@@ -1,5 +1,8 @@
-import { RaffleSummaryStatus, type RaffleSummary } from '@ergo-raffle/client';
-import { GiftPlus, SandClock, Verified } from '@ergo-raffle/icons';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { type RaffleSummary, RaffleSummaryStatus } from '@ergo-raffle/client';
+import { GiftPlus, SandClock } from '@ergo-raffle/icons';
 import {
   Badge,
   Card,
@@ -9,14 +12,12 @@ import {
   CardHeader,
   CardImageWrapper,
   CardTitle,
-  Progress,
+  RaiseProgress,
   Skeleton,
   Token,
   TrustBar,
   Typography
 } from '@ergo-raffle/ui-kit';
-import Image from 'next/image';
-import Link from 'next/link';
 
 export type RafflesContentProps = {
   raffle?: RaffleSummary;
@@ -92,8 +93,7 @@ export const RaffleCard = ({
             <>
               {raffle?.collectingTokenId ? (
                 <Badge variant="primary">
-                  {/* <Token name={raffle?.collectingTokenName} tokenId={raffle?.collectingTokenId} /> */}
-                  <Token name="Erg" />
+                  <Token name={raffle?.collectingTokenName} tokenId={raffle?.collectingTokenId} />
                 </Badge>
               ) : null}
               {raffle?.winnersCount ? (
@@ -139,20 +139,11 @@ export const RaffleCard = ({
             ))
           )}
         </div>
-        <Progress
-          value={raisedAmounts?.current ? raisedAmounts.current : 0}
-          max={raisedAmounts?.target ? raisedAmounts.target : 100}
+        <RaiseProgress
+          raisedAmounts={raisedAmounts}
+          tokenName={raffle?.collectingTokenName}
           loading={loading}
         />
-        {loading ? (
-          <Skeleton className="w-2/5 h-4 mt-1" />
-        ) : (
-          <Typography variant="body-md" className="text-gray-2 flex items-center gap-x-1">
-            <span className="text-black-1">{raisedAmounts?.current}</span> ERG raised of{' '}
-            <span className="text-black-1">{raisedAmounts?.target}</span> ERG{' '}
-            {raisedAmounts?.verified ? <Verified className="size-6 text-primary-1" /> : null}
-          </Typography>
-        )}
       </CardContent>
       <CardFooter>
         <Typography variant="subtitle-md" className="flex items-center gap-x-1">

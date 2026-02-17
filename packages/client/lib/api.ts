@@ -50,14 +50,38 @@ export interface RaffleSummary {
   description?: string;
   image?: string;
   collectingTokenId: string;
+  /**
+   * @minLength 1
+   * @maxLength 5
+   */
   collectingTokenName?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
   winnersCount: number;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
   giftCount: number;
   tags?: string[];
   /** Unix timestamp (seconds) */
   deadline: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
   goal: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
   ticketPrice: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
   soldTicketCount: number;
   status: RaffleSummaryStatus;
 }
@@ -141,11 +165,11 @@ export const getGetRafflesResponseMock = (
     image: faker.helpers.arrayElement([faker.internet.url(), undefined]),
     collectingTokenId: faker.string.alpha({ length: { min: 10, max: 20 } }),
     collectingTokenName: faker.helpers.arrayElement([
-      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      faker.string.alpha({ length: { min: 1, max: 5 } }),
       undefined
     ]),
-    winnersCount: faker.number.int({ min: undefined, max: undefined }),
-    giftCount: faker.number.int({ min: undefined, max: undefined }),
+    winnersCount: faker.number.int({ min: 1, max: 5 }),
+    giftCount: faker.number.int({ min: 1, max: 5 }),
     tags: faker.helpers.arrayElement([
       Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
         faker.string.alpha({ length: { min: 10, max: 20 } })
@@ -153,9 +177,9 @@ export const getGetRafflesResponseMock = (
       undefined
     ]),
     deadline: faker.number.int({ min: undefined, max: undefined }),
-    goal: faker.number.int({ min: undefined, max: undefined }),
-    ticketPrice: faker.number.int({ min: undefined, max: undefined }),
-    soldTicketCount: faker.number.int({ min: undefined, max: undefined }),
+    goal: faker.number.int({ min: 1, max: 100 }),
+    ticketPrice: faker.number.int({ min: 1, max: 100 }),
+    soldTicketCount: faker.number.int({ min: 1, max: 100 }),
     status: faker.helpers.arrayElement(['active', 'successful', 'failed'] as const)
   })),
   ...overrideResponse

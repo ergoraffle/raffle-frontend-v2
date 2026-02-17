@@ -1,9 +1,10 @@
-import { Button, Typography } from '@ergo-raffle/ui-kit';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Button, Typography } from '@ergo-raffle/ui-kit';
+
 export const Hero = () => (
-  <div className="h-[calc(100vh-90px)] flex flex-col sm:flex-row items-center gap-x-12 justify-stretch">
+  <div className="h-[calc(100vh-124px)] sm:h-[calc(100vh-134px)] flex flex-col sm:flex-row items-center gap-x-12 justify-stretch">
     <div className="flex flex-col justify-center">
       <Typography variant="display-md" asChild className="text-black-1 mb-3">
         <h1>Incentivized Crowdfunding</h1>
