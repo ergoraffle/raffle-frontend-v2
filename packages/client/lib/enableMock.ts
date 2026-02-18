@@ -2,11 +2,13 @@ import { setupServer } from 'msw/node';
 
 import { getRaffleServiceAPIMock } from './api';
 
-let serverStarted = false;
+const server = setupServer(...getRaffleServiceAPIMock());
 
-export const enableMock = async () => {
-  if (serverStarted) return;
-  const server = setupServer(...getRaffleServiceAPIMock());
+export const withMock = async <T>(fn: () => Promise<T>) => {
   server.listen({ onUnhandledRequest: 'bypass' });
-  serverStarted = true;
+  try {
+    return await fn();
+  } finally {
+    server.close();
+  }
 };

@@ -1,5 +1,7 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ergo-raffle/ui-kit';
 import { Suspense } from 'react';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ergo-raffle/ui-kit';
+
 import { RaffleList } from './raffle-list';
 import { RaffleListSkeleton } from './raffle-list-skeleton';
 

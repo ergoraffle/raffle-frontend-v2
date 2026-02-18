@@ -43,7 +43,7 @@ export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenPro
   return (
     <span ref={ref} className="flex items-center">
       {!!url && isVisible && (
-        // biome-ignore lint/performance/noImgElement: <explanation>
+        // biome-ignore lint/performance/noImgElement: should replace with next image
         <img
           alt={`Token ${name}`}
           src={url}

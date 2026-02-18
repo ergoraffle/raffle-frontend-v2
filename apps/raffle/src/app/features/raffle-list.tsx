@@ -1,7 +1,20 @@
-import { type GetRafflesParams, getInfo, getRaffles } from '@ergo-raffle/client';
+import {
+  configureClient,
+  type GetRafflesParams,
+  getInfo,
+  getRaffles,
+  withMock
+} from '@ergo-raffle/client';
 import { Empty, SeeMoreLink, Typography } from '@ergo-raffle/ui-kit';
 
 import { RaffleCard } from './raffle-card';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+configureClient({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || `https://${process.env.VERCEL_URL}/api`
+});
 
 interface Props {
   params?: GetRafflesParams;
@@ -10,8 +23,12 @@ interface Props {
 
 export const RaffleList = async ({ params, limit }: Props) => {
   const limitedParams = limit ? { pageSize: limit, page: 1 } : {};
-  const { items, total } = await getRaffles({ ...params, ...limitedParams });
-  const infoData = await getInfo();
+
+  const { items, total } = await withMock(
+    async () => await getRaffles({ ...params, ...limitedParams })
+  );
+
+  const infoData = await withMock(async () => await getInfo());
 
   if (items.length === 0) {
     return (
