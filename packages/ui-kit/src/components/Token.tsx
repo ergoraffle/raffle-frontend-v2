@@ -2,6 +2,7 @@ import { type ComponentProps, useEffect, useRef, useState } from 'react';
 
 import { TOKENS } from '@ergo-raffle/icons';
 
+import { useFramework } from '../providers';
 import { Skeleton } from './Skeleton';
 
 export type TokenProps = ComponentProps<'span'> & {
@@ -11,6 +12,7 @@ export type TokenProps = ComponentProps<'span'> & {
 };
 
 export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenProps) => {
+  const Image = useFramework().components.Image;
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [isVisible, setIsVisible] = useState(false);
@@ -43,12 +45,13 @@ export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenPro
   return (
     <span ref={ref} className="flex items-center">
       {!!url && isVisible && (
-        // biome-ignore lint/performance/noImgElement: should replace with next image
-        <img
+        <Image
           alt={`Token ${name}`}
           src={url}
           loading="lazy"
-          className="mr-1 size-5"
+          className="mr-1"
+          width={20}
+          height={20}
           onLoad={() => setIsLoaded(true)}
           onError={() => setIsLoaded(true)}
         />

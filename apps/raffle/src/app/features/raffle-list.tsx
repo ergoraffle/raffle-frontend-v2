@@ -16,10 +16,10 @@ configureClient({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || `https://${process.env.VERCEL_URL}/api`
 });
 
-interface Props {
+type Props = {
   params?: GetRafflesParams;
   limit?: number;
-}
+};
 
 export const RaffleList = async ({ params, limit }: Props) => {
   const limitedParams = limit ? { pageSize: limit, page: 1 } : {};
@@ -42,7 +42,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full">
         {items.map((raffle) => {
           const raisedAmounts = {
             target: raffle.soldTicketCount * raffle.ticketPrice,
@@ -58,11 +58,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
               key={raffle.raffleId}
               raffle={raffle}
               raisedAmounts={raisedAmounts}
-              deadline={
-                deadline > 0
-                  ? `${Math.floor(deadline / (1000 * 60 * 60 * 24))} Days remaining`
-                  : `Ended ${Math.floor(Math.abs(deadline) / (1000 * 60 * 60 * 24))} Days ago`
-              }
+              deadline={deadline}
               trust={trust}
             />
           );

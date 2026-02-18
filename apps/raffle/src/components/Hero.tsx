@@ -4,21 +4,33 @@ import Link from 'next/link';
 import { Button, Typography } from '@ergo-raffle/ui-kit';
 
 export const Hero = () => (
-  <div className="h-[calc(100vh-120px)] sm:h-[calc(100vh-164px)] mb-24 sm:mb-6 flex flex-col sm:flex-row items-center gap-x-12 justify-stretch gap-y-8">
-    <div className="flex flex-col justify-stretch ">
-      <Typography variant="display-md" asChild className="text-black-1 mb-3">
-        <h1>Incentivized Crowdfunding</h1>
-      </Typography>
-      <Typography variant="heading-2">Powered by Ergo, Beyond ERG!</Typography>
-      <div className="h-71.75 sm:hidden min-w-1/2 relative grow">
-        <Image
-          src="/illustrations/hero-section-illustration-mobile.svg"
-          alt="Raffle"
-          fill
-          className="object-right object-scale-down"
-        />
+  <div className="min-h-[calc(100vh-120px)] lg:min-h-[calc(100vh-164px)] mb-24 lg:mb-6 flex flex-col lg:flex-row items-center gap-x-12 justify-stretch gap-y-8 @container">
+    <div className="flex flex-col lg:flex-row lg:flex-wrap justify-stretch grow 2xl:flex-col">
+      <div className="flex flex-col lg:w-1/2">
+        <Typography variant="display-md" asChild className="text-black-1 mb-3 mt-[5vh] lg:mt-0">
+          <h1>Incentivized Crowdfunding</h1>
+        </Typography>
+        <Typography variant="heading-2">Powered by Ergo, Beyond ERG!</Typography>
       </div>
-      <div className="sm:mt-12 w-full sm:w-64">
+      <div className="flex items-center grow lg:w-1/2 lg:mt-[10vh] xl:mt-0 2xl:hidden">
+        <div className="h-[40vh] max-h-87 sm:hidden w-full relative">
+          <Image
+            src="/illustrations/hero-section-illustration-mobile.svg"
+            alt="Raffle"
+            fill
+            className="object-contain object-right"
+          />
+        </div>
+        <div className="hidden sm:block h-[40vh] lg:h-87.5 2xl:h-133 grow min-w-1/2 relative md:-mt-[10vh] lg:mt-0">
+          <Image
+            src="/illustrations/hero-section-illustration.svg"
+            alt="Raffle"
+            fill
+            className="object-contain object-right"
+          />
+        </div>
+      </div>
+      <div className="xl:mt-12 w-full lg:w-64">
         <Button variant="primary" className="mt-4 w-full" size="lg" asChild>
           <Link href="/raffles">Explore Raffles</Link>
         </Button>
@@ -27,13 +39,15 @@ export const Hero = () => (
         </Button>
       </div>
     </div>
-    <div className="hidden sm:block sm:h-87.5 2xl:h-132.5 sm:grow min-w-1/2 relative">
-      <Image
-        src="/illustrations/hero-section-illustration.svg"
-        alt="Raffle"
-        fill
-        className="object-contain"
-      />
+    <div className="hidden items-center grow 2xl:flex min-w-1/2">
+      <div className="h-132.5 grow relative">
+        <Image
+          src="/illustrations/hero-section-illustration.svg"
+          alt="Raffle"
+          fill
+          className="object-contain object-right"
+        />
+      </div>
     </div>
   </div>
 );

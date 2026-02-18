@@ -24,7 +24,7 @@ import {
 export type RafflesContentProps = {
   raffle?: RaffleSummary;
   loading?: boolean;
-  deadline?: string;
+  deadline?: number;
   raisedAmounts?: RaisedAmounts;
   trust?: Omit<RaffleTrustBarProps, 'loading'>;
 };
@@ -146,7 +146,17 @@ export const RaffleCard = ({
       <CardFooter>
         <Typography variant="subtitle-md" className="flex items-center gap-x-1">
           <SandClock className="size-4" />
-          {loading ? <Skeleton className="w-24 h-3" /> : (deadline ?? '')}
+          {loading ? (
+            <Skeleton className="w-24 h-3" />
+          ) : deadline ? (
+            deadline > 0 ? (
+              `${Math.floor(deadline / (1000 * 60 * 60 * 24))} Days remaining`
+            ) : (
+              `Ended ${Math.floor(Math.abs(deadline) / (1000 * 60 * 60 * 24))} Days ago`
+            )
+          ) : (
+            ''
+          )}
         </Typography>
         <TrustBar value={trust?.value} max={trust?.max} loading={loading} />
       </CardFooter>

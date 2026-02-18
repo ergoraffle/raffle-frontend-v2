@@ -2,6 +2,7 @@ import {
   type AnchorHTMLAttributes,
   type ComponentType,
   createContext,
+  type ImgHTMLAttributes,
   type ReactNode,
   useContext,
   useMemo
@@ -20,12 +21,20 @@ export const useFramework = () => {
 export type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
 };
+export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
 
 export type AnchorComponent = ComponentType<AnchorProps>;
+export type ImageComponent = ComponentType<ImageProps>;
 
 export type FrameworkContextType = {
   components: {
     Anchor: AnchorComponent;
+    Image: ImageComponent;
   };
 };
 
@@ -35,6 +44,7 @@ export type FrameworkProviderProps = {
   children?: ReactNode;
   components: {
     Anchor: AnchorComponent;
+    Image: ImageComponent;
   };
 };
 
@@ -42,10 +52,11 @@ export const FrameworkProvider = ({ children, components }: FrameworkProviderPro
   const value = useMemo<FrameworkContextType>(
     () => ({
       components: {
-        Anchor: components.Anchor
+        Anchor: components.Anchor,
+        Image: components.Image
       }
     }),
-    [components.Anchor]
+    [components.Anchor, components.Image]
   );
 
   return <FrameworkContext.Provider value={value}>{children}</FrameworkContext.Provider>;

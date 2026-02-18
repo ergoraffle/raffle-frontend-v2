@@ -62,7 +62,7 @@ export type TabsContentProps = Omit<ComponentProps<typeof TabsPrimitive.Content>
 export const TabsContent = ({ className, ...props }: TabsContentProps) => (
   <TabsPrimitive.Content
     data-slot="tabs-content"
-    className={cn('text-sm flex-1 outline-none', className)}
+    className={cn('text-sm flex-1 outline-none ma-w-full', className)}
     {...props}
   />
 );

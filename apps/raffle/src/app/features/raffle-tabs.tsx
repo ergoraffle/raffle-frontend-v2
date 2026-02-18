@@ -24,7 +24,7 @@ export const RaffleTabs = () => (
         {RAFFLE_TABS.HISTORY}
       </TabsTrigger>
     </TabsList>
-    <TabsContent value={RAFFLE_TABS.ALL} className="flex gap-8 w-full">
+    <TabsContent value={RAFFLE_TABS.ALL}>
       <Suspense fallback={<RaffleListSkeleton />}>
         <RaffleList limit={3} />
       </Suspense>
