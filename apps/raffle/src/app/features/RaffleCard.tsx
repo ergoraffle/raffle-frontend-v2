@@ -144,20 +144,20 @@ export const RaffleCard = ({
         />
       </CardContent>
       <CardFooter>
-        <Typography variant="subtitle-md" className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-1">
           <SandClock className="size-4" />
           {loading ? (
             <Skeleton className="w-24 h-3" />
           ) : deadline ? (
-            deadline > 0 ? (
-              `${Math.floor(deadline / (1000 * 60 * 60 * 24))} Days remaining`
-            ) : (
-              `Ended ${Math.floor(Math.abs(deadline) / (1000 * 60 * 60 * 24))} Days ago`
-            )
+            <Typography variant="subtitle-md">
+              {deadline > 0
+                ? `${Math.floor(deadline / (1000 * 60 * 60 * 24))} Days remaining`
+                : `Ended ${Math.floor(Math.abs(deadline) / (1000 * 60 * 60 * 24))} Days ago`}
+            </Typography>
           ) : (
             ''
           )}
-        </Typography>
+        </div>
         <TrustBar value={trust?.value} max={trust?.max} loading={loading} />
       </CardFooter>
     </Card>
