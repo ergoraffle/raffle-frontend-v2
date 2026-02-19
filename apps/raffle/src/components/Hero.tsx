@@ -15,7 +15,7 @@ export const Hero = () => (
       <div className="flex items-center grow lg:w-1/2 lg:mt-[10vh] xl:mt-0 2xl:hidden">
         <div className="h-[40vh] max-h-87 sm:hidden w-full relative">
           <Image
-            src="/illustrations/hero-section-illustration-mobile.svg"
+            src="/illustrations/heroSectionIllustrationMobile.svg"
             alt="Raffle"
             fill
             className="object-contain object-right"
@@ -23,7 +23,7 @@ export const Hero = () => (
         </div>
         <div className="hidden sm:block h-[40vh] lg:h-87.5 2xl:h-133 grow min-w-1/2 relative md:-mt-[10vh] lg:mt-0">
           <Image
-            src="/illustrations/hero-section-illustration.svg"
+            src="/illustrations/heroSectionIllustration.svg"
             alt="Raffle"
             fill
             className="object-contain object-right"
@@ -42,7 +42,7 @@ export const Hero = () => (
     <div className="hidden items-center grow 2xl:flex min-w-1/2">
       <div className="h-132.5 grow relative">
         <Image
-          src="/illustrations/hero-section-illustration.svg"
+          src="/illustrations/heroSectionIllustration.svg"
           alt="Raffle"
           fill
           className="object-contain object-right"

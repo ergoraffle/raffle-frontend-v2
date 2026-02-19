@@ -2,8 +2,8 @@ import { Suspense } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ergo-raffle/ui-kit';
 
-import { RaffleList } from './raffleList';
-import { RaffleListSkeleton } from './raffleListSkeleton';
+import { RaffleList } from './RaffleList';
+import { RaffleListSkeleton } from './RaffleListSkeleton';
 
 enum RAFFLE_TABS {
   ALL = 'All',
