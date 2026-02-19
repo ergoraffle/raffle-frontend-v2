@@ -7,9 +7,9 @@ export const ConnectWallet = () => (
   <Dialog>
     <DialogTrigger asChild>
       <Button variant="outline-soft">
-        <Wallet className="hidden sm:inline-flex" />
-        <span className="hidden sm:inline-flex">Connect Wallet</span>
-        <span className="sm:hidden">Set Wallet</span>
+        <Wallet className="hidden lg:inline-flex" />
+        <span className="hidden lg:inline-flex">Connect Wallet</span>
+        <span className="lg:hidden">Set Wallet</span>
       </Button>
     </DialogTrigger>
     <DialogContent>Connecting Wallet Content</DialogContent>

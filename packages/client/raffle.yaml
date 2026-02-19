@@ -63,10 +63,10 @@ components:
       properties:
         txFee:
           type: integer
-          example: 150000
+          x-faker: 150000
         version:
           type: string
-          example: '1.0.0'
+          x-faker: '1.0.0'
         verifiedTokens:
           type: array
           items:
@@ -78,10 +78,10 @@ components:
       properties:
         tokenId:
           type: string
-          example: b2dcea48caf0e73309138d659f6eb69d7ec8793dee989670c72dd4ffde7ebeb3
+          x-faker: b2dcea48caf0e73309138d659f6eb69d7ec8793dee989670c72dd4ffde7ebeb3
         name:
           type: string
-          example: rsBTC
+          x-faker: rsBTC
       required: [tokenId, name]
 
     #######################
@@ -92,21 +92,21 @@ components:
       properties:
         lastBlockHeight:
           type: integer
-          example: 123456
+          x-faker: 123456
         health:
           type: string
-          example: healthy
+          x-faker: healthy
         serviceFee:
           type: integer
           description: Percentage * 10 (e.g. 30 = 3%)
-          example: 30
+          x-faker: 30
         implementerFee:
           type: integer
           description: Percentage * 10 (e.g. 20 = 2%)
-          example: 20
+          x-faker: 20
         creationFee:
           type: integer
-          example: 20000000000
+          x-faker: 20000000000
       required:
         - lastBlockHeight
         - health
@@ -122,7 +122,7 @@ components:
       properties:
         total:
           type: integer
-          example: 23
+          x-faker: 23
         items:
           type: array
           items:
@@ -134,28 +134,34 @@ components:
       properties:
         raffleId:
           type: string
-          example: 22211bdba82c0251fed0a1301be40ae379790db99d769f291dceacdbc6a2fa7c
+          x-faker: 22211bdba82c0251fed0a1301be40ae379790db99d769f291dceacdbc6a2fa7c
         name:
           type: string
-          example: Raffle 1
+          x-faker: Raffle 1
         description:
           type: string
-          example: Raffle 1 description
+          x-faker: Raffle 1 description
         image:
           type: string
           format: uri
-          example: https://example.com/image.png
+          x-faker: https://x-faker.com/image.png
         collectingTokenId:
           type: string
         collectingTokenName:
           type: string
-          example: rsBTC
+          minLength: 1
+          maxLength: 5
+          x-faker: rsBTC
         winnersCount:
           type: integer
-          example: 2
+          x-faker: 2
+          minimum: 1
+          maximum: 5
         giftCount:
           type: integer
-          example: 5
+          minimum: 1
+          maximum: 5
+          x-faker: 5
         tags:
           type: array
           items:
@@ -163,16 +169,22 @@ components:
         deadline:
           type: integer
           description: Unix timestamp (seconds)
-          example: 1718284800
+          x-faker: 1718284800
         goal:
           type: integer
-          example: 1234567890
+          minimum: 1
+          maximum: 100
+          x-faker: 1234567890
         ticketPrice:
           type: integer
-          example: 1000
+          minimum: 1
+          maximum: 100
+          x-faker: 1000
         soldTicketCount:
           type: integer
-          example: 56
+          minimum: 1
+          maximum: 100
+          x-faker: 56
         status:
           type: string
           enum: [active, successful, failed]

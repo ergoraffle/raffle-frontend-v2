@@ -15,15 +15,17 @@
 
   /* Font Size */
   --text-*: initial;
+  --text-3xs: 11px;
+  --text-2xs: 12px;
   --text-xs: 13px;
   --text-sm: 14px;
-  --text-base: 15px;
   --text-md: 16px;
   --text-lg: 18px;
   --text-xl: 20px;
   --text-2xl: 22px;
   --text-3xl: 24px;
   --text-5xl: 28px;
+  --text-6xl: 38px;
   --text-7xl: 72px;
 
   /* Line Height */
@@ -45,7 +47,7 @@
   }
 
   .typo-heading-2 {
-    @apply font-medium text-3xl;
+    @apply font-medium text-md sm:text-3xl;
   }
 
   .typo-heading-3 {
@@ -53,31 +55,31 @@
   }
 
   .typo-heading-4 {
-    @apply font-medium text-xl;
+    @apply font-medium text-sm sm:text-xl;
   }
 
   .typo-heading-5 {
-    @apply font-normal text-sm sm:text-lg;
+    @apply font-normal text-xs sm:text-lg;
   }
 
   .typo-display-md {
-    @apply font-fraunces font-normal text-7xl;
+    @apply font-fraunces font-normal text-6xl sm:text-7xl;
   }
 
   .typo-body-sm {
-    @apply font-light text-md;
+    @apply font-light text-xs sm:text-md;
   }
 
   .typo-body-md {
-    @apply font-normal text-md;
+    @apply font-normal text-xs sm:text-md;
   }
 
   .typo-body-lg {
-    @apply font-karla font-normal text-base sm:text-lg leading-6;
+    @apply font-karla font-normal text-lg leading-6;
   }
 
   .typo-body-button {
-    @apply font-medium text-lg;
+    @apply font-medium text-md sm:text-lg;
   }
 
   .typo-body-button-bold {
@@ -85,14 +87,14 @@
   }
 
   .typo-subtitle-sm {
-    @apply font-karla font-normal text-xs;
+    @apply font-karla font-normal text-3xs sm:text-xs;
   }
 
   .typo-subtitle-md {
-    @apply font-karla font-normal text-sm;
+    @apply font-karla font-normal text-2xs sm:text-sm;
   }
 
   .typo-subtitle-lg {
-    @apply font-karla font-medium text-xs sm:text-md;
+    @apply font-karla font-medium text-md;
   }
 }

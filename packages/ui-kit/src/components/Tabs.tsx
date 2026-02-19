@@ -16,12 +16,12 @@ export const Tabs = ({ className, ...props }: TabsProps) => (
 );
 
 export const tabsListVariants = cva(
-  'h-7.5 gap-40 group/tabs-list inline-flex w-full items-center justify-center',
+  'h-6.5 sm:h-7.5 gap-1 sm:gap-40 group/tabs-list inline-flex w-full items-center justify-around sm:justify-center',
   {
     variants: {
       variant: {
         default: 'mb-8 typo-heading-5 text-black-1',
-        primary: 'mb-10 typo-heading-3 text-gray-1 tabs:h-8.5 h-9'
+        primary: 'mb-6.5 sm:mb-10 typo-heading-3 text-gray-1 tabs:h-8.5 h-9'
       }
     },
     defaultVariants: {
@@ -48,7 +48,7 @@ export const TabsTrigger = ({ className, ...props }: TabsTriggerProps) => (
   <TabsPrimitive.Trigger
     data-slot="tabs-trigger"
     className={cn(
-      "gap-1.5 rounded-sm border-b-3 border-b-transparent px-5 py-0.5 [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-black-1 relative inline-flex h-[calc(100%-1px)] items-center justify-center whitespace-nowrap transition-all focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+      "gap-1.5 rounded-sm border-b-3 border-b-transparent px-2 sm:px-5 py-0.5 [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-black-1 relative inline-flex h-[calc(100%-1px)] items-center justify-center whitespace-nowrap transition-all focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
       'data-[state=active]:text-black-1',
       'group-data-[variant=default]/tabs-list:data-[state=active]:after:bg-black-1 after:rounded-b-md group-data-[variant=primary]/tabs-list:data-[state=active]:after:bg-primary-1 after:absolute after:h-1.25 after:w-full after:opacity-0 after:transition-opacity after:inset-x-0 after:-bottom-1.25 data-[state=active]:after:opacity-100',
       className
@@ -62,7 +62,7 @@ export type TabsContentProps = Omit<ComponentProps<typeof TabsPrimitive.Content>
 export const TabsContent = ({ className, ...props }: TabsContentProps) => (
   <TabsPrimitive.Content
     data-slot="tabs-content"
-    className={cn('text-sm flex-1 outline-none', className)}
+    className={cn('text-sm flex-1 outline-none ma-w-full', className)}
     {...props}
   />
 );

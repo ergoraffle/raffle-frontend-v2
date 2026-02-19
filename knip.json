@@ -12,6 +12,6 @@
     "entry": ["packages/ui-kit/rollup.config.{js,cjs,mjs,ts}"]
   },
   "ignoreBinaries": ["rollup"],
-  "ignore": ["**/node_modules/", "**/dist/", "**/.next/"],
-  "ignoreDependencies": ["tailwindcss"]
+  "ignore": ["**/node_modules/", "**/dist/", "**/.next/", "apps/raffle/src/app/globals.css"],
+  "ignoreDependencies": ["tailwindcss", "@tailwindcss/cli"]
 }

@@ -41,12 +41,12 @@ export const Header = ({ links, scrollThreshold = 10 }: HeaderProps) => {
 
   return (
     <header
-      className={`py-3 sm:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
+      className={`py-3 lg:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 mb-6.5 lg:mb-11 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
     >
       <div className="container flex items-center justify-between">
-        <Logo className="h-12 hidden sm:flex" />
-        <Logo className="h-9 sm:hidden" variant="icon" />
-        <ul className="items-center gap-x-10 hidden sm:flex">
+        <Logo className="h-12 hidden lg:flex" />
+        <Logo className="h-9 lg:hidden" variant="icon" />
+        <ul className="items-center gap-x-10 hidden lg:flex">
           {links.map((link) => (
             <li key={link.href}>
               <Typography variant="heading-5" asChild>
@@ -57,9 +57,9 @@ export const Header = ({ links, scrollThreshold = 10 }: HeaderProps) => {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-x-1 sm:gap-x-3">
-          <ThemeToggle className="hidden sm:flex" />
-          <Button variant="primary-soft" className="hidden sm:inline-flex" asChild>
+        <div className="flex items-center gap-x-1 lg:gap-x-3">
+          <ThemeToggle className="hidden lg:flex" />
+          <Button variant="primary-soft" className="hidden lg:inline-flex" asChild>
             <Link href="/activity">
               <Recent />
               Activity
@@ -68,7 +68,7 @@ export const Header = ({ links, scrollThreshold = 10 }: HeaderProps) => {
           <ConnectWallet />
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="sm:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden">
                 <DotMenuVertical />
               </Button>
             </SheetTrigger>

@@ -16,6 +16,8 @@ const breakpoints: Breakpoints = {
   '2xl': 1536
 };
 
+type BreakpointKey = keyof Breakpoints;
+
 export const useBreakpoint = () => {
   const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
 
@@ -26,13 +28,23 @@ export const useBreakpoint = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const up = (bp: BreakpointKey) => width >= breakpoints[bp];
+
+  const down = (bp: BreakpointKey) => width < breakpoints[bp];
+
+  const between = (min: BreakpointKey, max: BreakpointKey) =>
+    width >= breakpoints[min] && width < breakpoints[max];
+
   return {
+    up,
+    down,
+    between,
     width,
-    isSm: width >= breakpoints.sm && width < breakpoints.md,
-    isMd: width >= breakpoints.md && width < breakpoints.lg,
-    isLg: width >= breakpoints.lg && width < breakpoints.xl,
-    isXl: width >= breakpoints.xl && width < breakpoints['2xl'],
-    is2xl: width >= breakpoints['2xl'],
-    isMobile: width < breakpoints.md
+    isSm: between('sm', 'md'),
+    isMd: between('md', 'lg'),
+    isLg: between('lg', 'xl'),
+    isXl: between('xl', '2xl'),
+    is2xl: up('2xl'),
+    isMobile: down('md')
   };
 };

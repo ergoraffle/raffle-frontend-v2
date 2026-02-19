@@ -1,10 +1,11 @@
-import { Ergo } from '@ergo-raffle/icons';
-import { Typography } from '@ergo-raffle/ui-kit';
+import { Hero } from '@/components';
 
-const Home = () => (
+import { RaffleTabs } from './features';
+
+const Home = async () => (
   <>
-    <Ergo className="h-12 w-12" />
-    <Typography>Home Page</Typography>
+    <Hero />
+    <RaffleTabs />
   </>
 );
 

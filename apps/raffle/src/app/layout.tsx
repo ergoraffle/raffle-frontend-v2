@@ -1,4 +1,3 @@
-import '@ergo-raffle/ui-kit/index.css';
 import './globals.css';
 
 import type { PropsWithChildren } from 'react';
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
 };
 
-const RootLayout = ({ children }: PropsWithChildren) => (
+const RootLayout = async ({ children }: PropsWithChildren) => (
   <html
     lang="en"
     className={`
@@ -37,4 +36,5 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     </body>
   </html>
 );
+
 export default RootLayout;
