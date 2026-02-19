@@ -28,7 +28,7 @@
   --radius-2xlg: 20pt;
 }
 body {
-  @apply text-gray-1 font-poppins leading-none;
+  @apply font-poppins leading-none bg-background text-foreground;
 }
 
 @layer utilities {
