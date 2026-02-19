@@ -7,7 +7,7 @@ import {
 } from '@ergo-raffle/client';
 import { Empty, SeeMoreLink, Typography } from '@ergo-raffle/ui-kit';
 
-import { RaffleCard } from './raffle-card';
+import { RaffleCard } from './raffleCard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

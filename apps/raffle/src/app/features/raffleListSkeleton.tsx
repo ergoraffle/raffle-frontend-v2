@@ -1,4 +1,4 @@
-import { RaffleCard } from './raffle-card';
+import { RaffleCard } from './raffleCard';
 
 export type RaffleListSkeletonProps = {
   count?: number;

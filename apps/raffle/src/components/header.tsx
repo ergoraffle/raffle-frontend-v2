@@ -5,7 +5,9 @@ import { useMemo } from 'react';
 import { Header as HeaderPrimitive, useBreakpoint } from '@ergo-raffle/ui-kit';
 
 export const Header = () => {
-  const { isMobile } = useBreakpoint();
+  const { down } = useBreakpoint();
+
+  const isMobile = down('lg');
 
   const desktopMenuLinks = useMemo(
     () => [

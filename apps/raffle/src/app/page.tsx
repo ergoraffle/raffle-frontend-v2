@@ -1,6 +1,6 @@
-import { Hero } from '@/components/Hero';
+import { Hero } from '@/components';
 
-import { RaffleTabs } from './features/raffle-tabs';
+import { RaffleTabs } from './features/raffleTabs';
 
 const Home = async () => (
   <>
