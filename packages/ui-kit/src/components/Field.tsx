@@ -2,7 +2,7 @@ import { type ComponentProps, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { Label } from './Label';
+import { Label, type LabelProps } from './Label';
 
 export type FieldProps = ComponentProps<'div'>;
 
@@ -10,7 +10,7 @@ export const Field = ({ className, ...props }: FieldProps) => (
   <div data-slot="field" className={cn('group/field flex flex-col w-full', className)} {...props} />
 );
 
-export const FieldLabel = ({ className, ...props }: React.ComponentProps<typeof Label>) => (
+export const FieldLabel = ({ className, ...props }: LabelProps) => (
   <Label
     data-slot="field-label"
     className={cn(
@@ -22,7 +22,7 @@ export const FieldLabel = ({ className, ...props }: React.ComponentProps<typeof 
   />
 );
 
-export type FieldDescriptionProps = React.ComponentProps<'p'>;
+export type FieldDescriptionProps = ComponentProps<'p'>;
 
 export const FieldDescription = ({ className, ...props }: FieldDescriptionProps) => (
   <p
@@ -38,14 +38,11 @@ export const FieldDescription = ({ className, ...props }: FieldDescriptionProps)
   />
 );
 
-export const FieldError = ({
-  className,
-  children,
-  errors,
-  ...props
-}: React.ComponentProps<'div'> & {
+export type FieldErrorProps = ComponentProps<'div'> & {
   errors?: Array<{ message?: string } | undefined>;
-}) => {
+};
+
+export const FieldError = ({ className, children, errors, ...props }: FieldErrorProps) => {
   const content = useMemo(() => {
     if (children) {
       return children;
