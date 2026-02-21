@@ -16,6 +16,7 @@ export const buttonVariants = cva(
           'border-2 border-primary-1 text-primary-1 hover:bg-primary-5 hover:text-primary-5-foreground typo-body-button-bold',
         'outline-soft':
           'relative overflow-hidden border-2 border-primary-1 typo-heading-5 px-6 py-3 text-white-1-foreground before:absolute before:inset-0 before:right-0 before:left-auto before:bg-primary-4 before:w-[0] before:transition-width before:duration-300 before:ease-[cubic-bezier(0.7,-0.4,0.4,1.4)] hover:before:w-full hover:[&]:z-8 hover:before:z-10',
+        plain: 'text-foreground hover:bg-black-4 hover:text-black-4-foreground typo-body-lg',
         ghost:
           'bg-white-4 text-white-4-foreground hover:bg-black-4 hover:text-black-4-foreground typo-body-lg',
         white:
@@ -36,6 +37,7 @@ export const buttonVariants = cva(
         sm: 'h-7 sm:h-10 px-2.5 sm:px-3',
         lg: "h-10 sm:h-14 px-2.5 sm:px-3 [&_svg:not([class*='size-'])]:size-6 sm:[&_svg:not([class*='size-'])]:size-7",
         icon: 'size-9 sm:size-12',
+        'icon-xs': 'size-7 size-8',
         'icon-sm': 'size-7 sm:size-10',
         'icon-lg':
           "size-10 sm:size-14 [&_svg:not([class*='size-'])]:size-6 sm:[&_svg:not([class*='size-'])]:size-7"

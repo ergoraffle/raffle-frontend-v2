@@ -9,6 +9,7 @@ export * from './Footer';
 export * from './Header';
 export * from './Identifier';
 export * from './Input';
+export * from './InputGroup';
 export * from './Label';
 export * from './LayoutBackground';
 export * from './Logo';
