@@ -64,6 +64,7 @@ export const RaffleCard = ({
           <Image
             // src={raffle.image}
             src="/sample.png"
+            priority
             alt={raffle.name}
             className="h-55.75 w-full object-cover rounded-tl-md rounded-tr-md"
             fill
