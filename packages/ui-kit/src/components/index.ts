@@ -13,6 +13,7 @@ export * from './InputGroup';
 export * from './Label';
 export * from './LayoutBackground';
 export * from './Logo';
+export * from './MultiSelectCombobox';
 export * from './Progress';
 export * from './RaiseProgress';
 export * from './SeeMoreLink';
