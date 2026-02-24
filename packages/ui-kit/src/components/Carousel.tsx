@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils';
 
 import { Button, type ButtonProps } from './Button';
 
-type CarouselApi = UseEmblaCarouselType[1];
+export type CarouselApi = UseEmblaCarouselType[1];
 
-type CarouselContextProps = {
+export type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
   scrollPrev: () => void;
@@ -19,7 +19,7 @@ type CarouselContextProps = {
   canScrollNext: boolean;
 };
 
-const CarouselContext = createContext<CarouselContextProps | null>(null);
+export const CarouselContext = createContext<CarouselContextProps | null>(null);
 
 export const useCarousel = () => {
   const context = useContext(CarouselContext);
