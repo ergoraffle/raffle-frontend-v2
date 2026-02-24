@@ -12,8 +12,7 @@ import {
   MultiSelectCombobox
 } from '@ergo-raffle/ui-kit';
 
-import { useRafflesFilters } from '@/hooks/useRafflesFilters';
-import { useRafflesQuery } from '@/hooks/useRafflesQuery';
+import { useRafflesQuery } from '@/hooks/useRafflesParams';
 
 const statusFilterItems: { value: GetRafflesStatusItem; label: string }[] = [
   {
@@ -41,12 +40,11 @@ const categoryFilterItems = [
 ];
 
 export const RafflesFilters = () => {
-  const { params } = useRafflesQuery();
+  const { params, setParam } = useRafflesQuery();
   const [search, setSearch] = useState<string | undefined>(params.name);
-  const { setFilter } = useRafflesFilters();
 
   const onSearch = () => {
-    setFilter('name', search);
+    setParam('name', search);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -57,28 +55,34 @@ export const RafflesFilters = () => {
 
   return (
     <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
-      <div className="flex items-center gap-2 w-full">
+      <div className="flex items-center gap-2 w-full lg:w-fit flex-wrap">
         <MultiSelectCombobox
           items={statusFilterItems}
           selected={(params.status as string[]) ?? []}
-          onChange={(values) => setFilter('status', values as GetRafflesStatusItem[])}
+          onChange={(values) => setParam('status', values as GetRafflesStatusItem[])}
           placeholder="Status"
+          closeOnChange
+          className="flex-1 lg:flex-auto"
         />
         <MultiSelectCombobox
           items={tokenFilterItems}
           selected={params.token ?? []}
-          onChange={(values) => setFilter('token', values as string[])}
+          onChange={(values) => setParam('token', values as string[])}
           placeholder="Token"
+          closeOnChange
+          className="flex-1 lg:flex-auto"
         />
         <MultiSelectCombobox
           items={categoryFilterItems}
           selected={params.category ?? []}
-          onChange={(values) => setFilter('category', values as string[])}
+          onChange={(values) => setParam('category', values as string[])}
           placeholder="Category"
+          closeOnChange
+          className="flex-1 lg:flex-auto"
         />
       </div>
-      <div className="w-full">
-        <InputGroup>
+      <div className="w-full lg:w-auto">
+        <InputGroup className="max-w-full">
           <InputGroupInput
             placeholder="Search"
             value={search}

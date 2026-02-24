@@ -128,6 +128,8 @@ export const Pagination = ({
     }
   }
 
+  if (totalPages <= 1) return null;
+
   return (
     <div {...props} className={cn('mt-4 lg:mt-9 flex items-center', className)}>
       <div className="flex-1 hidden lg:block" />

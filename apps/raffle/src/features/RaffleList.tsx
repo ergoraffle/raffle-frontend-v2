@@ -27,7 +27,7 @@ type Props = {
 };
 
 export const RaffleList = async ({ params, limit }: Props) => {
-  const limitedParams = limit ? { pageSize: limit, page: 1 } : {};
+  const limitedParams = limit ? { limit, offset: 0 } : {};
 
   const { items, total } = await withMock(
     async () => await getRaffles({ ...params, ...limitedParams })

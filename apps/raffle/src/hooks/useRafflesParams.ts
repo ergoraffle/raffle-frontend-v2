@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import type {
   GetRafflesParams,
@@ -11,6 +11,9 @@ import type {
 
 export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) => {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
   const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 12);
@@ -25,6 +28,32 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
 
   const offset = (page - 1) * perPage;
 
+  const setParam = (key: string, value?: string | string[]) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (Array.isArray(value)) {
+      params.delete(key);
+      value.forEach((v) => {
+        params.append(key, v);
+      });
+    } else if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+
+    if (!doNotNeedResetPage.includes(key)) {
+      params.set('page', '1');
+    }
+    router.push(`?${params.toString()}`);
+  };
+
+  const getPageLink = (newPage: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', String(newPage));
+    return `?${params.toString()}`;
+  };
+
   const params: GetRafflesParams = {
     offset,
     limit: perPage,
@@ -36,5 +65,5 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     name: name || undefined
   };
 
-  return { page, perPage, params };
+  return { page, perPage, params, setParam, getPageLink };
 };

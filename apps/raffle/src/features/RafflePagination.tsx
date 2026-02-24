@@ -2,20 +2,20 @@
 
 import { Pagination } from '@ergo-raffle/ui-kit';
 
-import { useRafflesPagination } from '@/hooks/useRafflesPagination';
+import { useRafflesQuery } from '@/hooks/useRafflesParams';
 
 export type RafflesPaginationProps = {
   total: number;
 };
 
 export const RafflesPagination = ({ total }: RafflesPaginationProps) => {
-  const { page, setPerPage, perPage, getPageLink } = useRafflesPagination();
+  const { page, perPage, setParam, getPageLink } = useRafflesQuery();
 
   return (
     <Pagination
       page={page}
       perPage={perPage}
-      onChangePerPage={setPerPage}
+      onChangePerPage={(value) => setParam('perPage', value.toString())}
       getPageHref={getPageLink}
       showChangeLimitation
       total={total}
