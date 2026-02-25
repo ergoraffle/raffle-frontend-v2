@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import type {
@@ -9,11 +11,13 @@ import type {
   GetRafflesStatusItem
 } from '@ergo-raffle/client';
 
+const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
+
 export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
+  const name = searchParams.get('name') ?? undefined;
+  const [search, setSearch] = useState<string | undefined>(name);
 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
   const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 12);
@@ -24,7 +28,6 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   const status = searchParams.getAll('status') as GetRafflesStatusItem[];
   const token = searchParams.getAll('token');
   const category = searchParams.getAll('category');
-  const name = searchParams.get('name') ?? undefined;
 
   const offset = (page - 1) * perPage;
 
@@ -65,5 +68,5 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     name: name || undefined
   };
 
-  return { page, perPage, params, setParam, getPageLink };
+  return { page, perPage, params, search, setSearch, setParam, getPageLink };
 };

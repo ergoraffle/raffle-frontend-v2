@@ -1,6 +1,6 @@
 'use client';
 
-import { type KeyboardEvent, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 
 import type { GetRafflesStatusItem } from '@ergo-raffle/client';
 import { Search } from '@ergo-raffle/icons';
@@ -43,8 +43,7 @@ const categoryFilterItems = [
 ];
 
 export const RafflesFilters = () => {
-  const { params, setParam } = useRafflesQuery();
-  const [search, setSearch] = useState<string | undefined>(params.name);
+  const { search, params, setSearch, setParam } = useRafflesQuery();
 
   const onSearch = () => {
     setParam('name', search);
