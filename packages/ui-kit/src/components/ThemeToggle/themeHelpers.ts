@@ -3,7 +3,6 @@ const THEME_KEY = 'theme';
 export type Theme = 'light' | 'dark';
 
 export const getInitialTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'light';
   const html = document.documentElement;
   if (html.classList.contains('dark')) return 'dark';
   if (html.classList.contains('light')) return 'light';

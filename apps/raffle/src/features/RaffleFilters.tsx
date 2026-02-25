@@ -9,7 +9,10 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  MultiSelectCombobox
+  MultiSelectCombobox,
+  Tabs,
+  TabsList,
+  TabsTrigger
 } from '@ergo-raffle/ui-kit';
 
 import { useRafflesQuery } from '@/hooks/useRafflesParams';
@@ -52,50 +55,74 @@ export const RafflesFilters = () => {
       onSearch();
     }
   };
+  enum RAFFLE_LIST_TABS {
+    ALL = 'All',
+    ACTIVE = 'Active',
+    HISTORY = 'History',
+    PINED = 'Pined'
+  }
 
   return (
-    <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
-      <div className="flex items-center gap-2 w-full lg:w-fit flex-wrap">
-        <MultiSelectCombobox
-          items={statusFilterItems}
-          selected={(params.status as string[]) ?? []}
-          onChange={(values) => setParam('status', values as GetRafflesStatusItem[])}
-          placeholder="Status"
-          closeOnChange
-          className="flex-1 lg:flex-auto"
-        />
-        <MultiSelectCombobox
-          items={tokenFilterItems}
-          selected={params.token ?? []}
-          onChange={(values) => setParam('token', values as string[])}
-          placeholder="Token"
-          closeOnChange
-          className="flex-1 lg:flex-auto"
-        />
-        <MultiSelectCombobox
-          items={categoryFilterItems}
-          selected={params.category ?? []}
-          onChange={(values) => setParam('category', values as string[])}
-          placeholder="Category"
-          closeOnChange
-          className="flex-1 lg:flex-auto"
-        />
-      </div>
-      <div className="w-full lg:w-auto">
-        <InputGroup className="max-w-full">
-          <InputGroupInput
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
+    <>
+      <Tabs defaultValue={RAFFLE_LIST_TABS.ALL} className="w-full">
+        <TabsList>
+          <TabsTrigger key={RAFFLE_LIST_TABS.ALL} value={RAFFLE_LIST_TABS.ALL}>
+            {RAFFLE_LIST_TABS.ALL}
+          </TabsTrigger>
+          <TabsTrigger key={RAFFLE_LIST_TABS.ACTIVE} value={RAFFLE_LIST_TABS.ACTIVE}>
+            {RAFFLE_LIST_TABS.ACTIVE}
+          </TabsTrigger>
+          <TabsTrigger key={RAFFLE_LIST_TABS.HISTORY} value={RAFFLE_LIST_TABS.HISTORY}>
+            {RAFFLE_LIST_TABS.HISTORY}
+          </TabsTrigger>
+          <TabsTrigger key={RAFFLE_LIST_TABS.PINED} value={RAFFLE_LIST_TABS.PINED}>
+            {RAFFLE_LIST_TABS.PINED}
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
+        <div className="flex items-center gap-2 w-full lg:w-fit flex-wrap">
+          <MultiSelectCombobox
+            items={statusFilterItems}
+            selected={(params.status as string[]) ?? []}
+            onChange={(values) => setParam('status', values as GetRafflesStatusItem[])}
+            placeholder="Status"
+            closeOnChange
+            className="flex-1 lg:flex-auto"
           />
-          <InputGroupAddon align="inline-end">
-            <Button size="icon-xs" variant="ghost" onClick={onSearch}>
-              <Search />
-            </Button>
-          </InputGroupAddon>
-        </InputGroup>
+          <MultiSelectCombobox
+            items={tokenFilterItems}
+            selected={params.token ?? []}
+            onChange={(values) => setParam('token', values as string[])}
+            placeholder="Token"
+            closeOnChange
+            className="flex-1 lg:flex-auto"
+          />
+          <MultiSelectCombobox
+            items={categoryFilterItems}
+            selected={params.category ?? []}
+            onChange={(values) => setParam('category', values as string[])}
+            placeholder="Category"
+            closeOnChange
+            className="flex-1 lg:flex-auto"
+          />
+        </div>
+        <div className="w-full lg:w-auto">
+          <InputGroup className="max-w-full">
+            <InputGroupInput
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <InputGroupAddon align="inline-end">
+              <Button size="icon-xs" variant="ghost" onClick={onSearch}>
+                <Search />
+              </Button>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

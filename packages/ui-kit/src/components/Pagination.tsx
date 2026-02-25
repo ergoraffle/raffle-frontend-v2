@@ -140,8 +140,9 @@ export const Pagination = ({
           </PaginationItem>
           <li className="lg:inline-flex lg:items-center grow lg:grow-0">
             <ul className="w-full flex items-center justify-center">
-              {pages.map((p) => (
-                <PaginationItem key={crypto.randomUUID()}>
+              {pages.map((p, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: pages are static, order won't change
+                <PaginationItem key={index}>
                   {p === 'ellipsis' ? (
                     <PaginationEllipsis />
                   ) : (

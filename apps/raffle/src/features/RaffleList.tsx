@@ -10,7 +10,6 @@ import { Empty, SeeMoreLink, Typography } from '@ergo-raffle/ui-kit';
 import { toQueryString } from '@/lib/utils';
 
 import { RaffleCard } from './RaffleCard';
-import { RafflesFilters } from './RaffleFilters';
 import { RafflesPagination } from './RafflePagination';
 import { RafflesSort } from './RaffleSort';
 
@@ -48,19 +47,17 @@ export const RaffleList = async ({ params, limit }: Props) => {
   return (
     <div className="flex flex-col w-full mb-52">
       {!limit && (
-        <>
-          <RafflesFilters />
-          <div className="flex justify-end lg:justify-between items-center mb-2 lg:mb-5">
-            {total > items.length && (
-              <Typography variant="heading-5" className="mb-4 hidden lg:block">
-                Showing {items.length} of {total} Raffles:
-              </Typography>
-            )}
-            <RafflesSort />
-          </div>
-        </>
+        <div className="flex justify-end lg:justify-between items-center mb-2 lg:mb-5">
+          {total > items.length && (
+            <Typography variant="heading-5" className="hidden lg:block">
+              Showing {items.length} of {total} Raffles:
+            </Typography>
+          )}
+          <RafflesSort />
+        </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full clear-both">
         {items.map((raffle) => {
           const raisedAmounts = {
             target: raffle.soldTicketCount * raffle.ticketPrice,
@@ -68,7 +65,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
             verified: true
           };
 
-          const deadline = infoData.lastBlockHeight - Date.now();
+          const deadline = infoData.lastBlockHeight - 1416515375925;
 
           const trust = { value: 0, max: 100 };
           return (

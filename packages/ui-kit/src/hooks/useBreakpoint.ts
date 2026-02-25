@@ -19,7 +19,7 @@ const breakpoints: Breakpoints = {
 type BreakpointKey = keyof Breakpoints;
 
 export const useBreakpoint = () => {
-  const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);

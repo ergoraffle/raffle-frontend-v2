@@ -56,9 +56,8 @@ export const FieldError = ({ className, children, errors, ...props }: FieldError
     }
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
-        {uniqueErrors.map(
-          (error) => error?.message && <li key={crypto.randomUUID()}>{error.message}</li>
-        )}
+        {/* biome-ignore lint/suspicious/noArrayIndexKey: errors are static, order won't change */}
+        {uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
       </ul>
     );
   }, [children, errors]);

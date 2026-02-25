@@ -9,7 +9,7 @@ export const RafflesSort = () => {
   const { params, setParam } = useRafflesQuery();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 float-right">
       <Button
         variant="white"
         onClick={() => setParam('sortBy', params.sortBy === 'Creation' ? 'Deadline' : 'Creation')}

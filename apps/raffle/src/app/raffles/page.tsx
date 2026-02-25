@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { RaffleListSkeleton, RaffleListTabs } from '@/features';
+import { AllRafflesListSkeleton, RaffleList, RafflesFilters } from '@/features';
 import { getRafflesParamsTransformer } from '@/features/utils';
 
 const Raffles = async ({
@@ -10,9 +10,12 @@ const Raffles = async ({
 }) => {
   const params = await searchParams;
   return (
-    <Suspense fallback={<RaffleListSkeleton count={12} />}>
-      <RaffleListTabs params={getRafflesParamsTransformer(params)} />
-    </Suspense>
+    <>
+      <RafflesFilters />
+      <Suspense key={JSON.stringify(params)} fallback={<AllRafflesListSkeleton />}>
+        <RaffleList params={getRafflesParamsTransformer(params)} />
+      </Suspense>
+    </>
   );
 };
 
