@@ -31,6 +31,10 @@ export interface InfoResponse {
 }
 
 export interface RaffleSummaryResponse {
+  /**
+   * @minimum 1
+   * @maximum 1000
+   */
   total: number;
   items: RaffleSummary[];
 }
@@ -87,18 +91,45 @@ export interface RaffleSummary {
 }
 
 export type GetRafflesParams = {
-  page?: number;
-  pageSize?: number;
-  status?: GetRafflesStatus;
+  offset?: number;
+  limit?: number;
+  status?: GetRafflesStatusItem[];
+  token?: string[];
+  category?: string[];
+  name?: string;
+  /**
+   * Sort order, ascending or descending
+   */
+  sort?: GetRafflesSort;
+  /**
+   * Field to sort by
+   */
+  sortBy?: GetRafflesSortBy;
 };
 
-export type GetRafflesStatus = (typeof GetRafflesStatus)[keyof typeof GetRafflesStatus];
+export type GetRafflesStatusItem = (typeof GetRafflesStatusItem)[keyof typeof GetRafflesStatusItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetRafflesStatus = {
+export const GetRafflesStatusItem = {
   active: 'active',
   successful: 'successful',
   failed: 'failed'
+} as const;
+
+export type GetRafflesSort = (typeof GetRafflesSort)[keyof typeof GetRafflesSort];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRafflesSort = {
+  asc: 'asc',
+  desc: 'desc'
+} as const;
+
+export type GetRafflesSortBy = (typeof GetRafflesSortBy)[keyof typeof GetRafflesSortBy];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRafflesSortBy = {
+  Creation: 'Creation',
+  Deadline: 'Deadline'
 } as const;
 
 /**
@@ -154,7 +185,7 @@ export const getGetInfoResponseMock = (
 export const getGetRafflesResponseMock = (
   overrideResponse: Partial<RaffleSummaryResponse> = {}
 ): RaffleSummaryResponse => ({
-  total: faker.number.int({ min: undefined, max: undefined }),
+  total: faker.number.int({ min: 1, max: 1000 }),
   items: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     raffleId: faker.string.alpha({ length: { min: 10, max: 20 } }),
     name: faker.string.alpha({ length: { min: 10, max: 20 } }),

@@ -1,4 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import {
   Combobox,
@@ -20,6 +22,8 @@ export type MultiSelectComboboxProps = {
   onChange: (values: string[]) => void;
   placeholder?: string;
   searchable?: boolean;
+  closeOnChange?: boolean;
+  className?: string;
 };
 
 export const MultiSelectCombobox = ({
@@ -27,8 +31,11 @@ export const MultiSelectCombobox = ({
   selected,
   onChange,
   placeholder,
-  searchable
+  searchable,
+  closeOnChange,
+  className
 }: MultiSelectComboboxProps) => {
+  const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLDivElement>(null);
 
   const displayValue = selected
@@ -37,11 +44,31 @@ export const MultiSelectCombobox = ({
 
   const hasSelected = displayValue.length > 0;
 
+  const onValueChange = (value: string[]) => {
+    if (closeOnChange) {
+      onChange(value);
+      setOpen(false);
+    } else {
+      onChange(value);
+    }
+  };
+
+  const toggleOpen = () => {
+    setOpen((prev) => !prev);
+  };
+
   return (
-    <Combobox items={items} multiple value={selected} onValueChange={onChange}>
-      <div className="flex items-center w-full gap-1 relative lg:min-w-41" ref={anchorRef}>
+    <Combobox
+      items={items}
+      multiple
+      value={selected}
+      onValueChange={onValueChange}
+      open={closeOnChange ? open : undefined}
+      onOpenChange={closeOnChange ? toggleOpen : undefined}
+    >
+      <div className={cn('flex items-center gap-1 relative', className)} ref={anchorRef}>
         <ComboboxTrigger
-          className={`grow rounded-l-lg h-10.5 sm:h-13 flex items-center pl-3 pr-2.5 ${hasSelected ? 'bg-secondary-5' : 'bg-white-3 rounded-r-lg'}`}
+          className={`grow rounded-l-lg h-10.5 sm:h-13 flex items-center pl-3 pr-2.5 lg:min-w-40 ${hasSelected ? 'bg-secondary-5' : 'bg-white-3 rounded-r-lg'}`}
         >
           {hasSelected ? (
             <ComboboxValue>
