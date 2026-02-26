@@ -19,9 +19,12 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@ergo-raffle/base-wallet": "^0.0.0",
     "@ergo-raffle/client": "^0.0.0",
     "@ergo-raffle/icons": "^0.0.0",
+    "@ergo-raffle/nautilus-wallet": "^0.0.0",
     "@ergo-raffle/ui-kit": "^0.0.0",
+    "@ergo-raffle/xverse-wallet": "^0.0.0",
     "@sentry/nextjs": "^10.32.1",
     "next": "^15.5.12",
     "react": "^19.2.3",
