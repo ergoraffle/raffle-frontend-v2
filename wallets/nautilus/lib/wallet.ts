@@ -6,7 +6,7 @@ import type { NautilusWalletConfig } from './types';
 export class NautilusWallet extends Wallet<NautilusWalletConfig> {
   icon = ICON;
 
-  name = 'Nautilus';
+  name = 'Nautilus' as const;
 
   label = 'Nautilus';
 

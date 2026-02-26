@@ -1,5 +1,6 @@
 import { createElement, type ReactNode } from 'react';
-
+import { XverseWallet } from '@ergo-raffle/xverse-wallet';
+import { NautilusWallet } from '@ergo-raffle/nautilus-wallet';
 import { Wallet } from '@ergo-raffle/base-wallet';
 
 declare module '@ergo-raffle/base-wallet' {
@@ -36,3 +37,10 @@ Object.defineProperty(Wallet.prototype, 'iconReact', {
     };
   }
 });
+
+export type WalletName = typeof wallets[number]['name'];
+
+export const wallets = [
+  new XverseWallet({}),
+  new NautilusWallet({}),
+];

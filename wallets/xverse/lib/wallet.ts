@@ -11,7 +11,7 @@ import type { XverseWalletConfig } from './types';
 export class XverseWallet extends Wallet<XverseWalletConfig> {
   icon = ICON;
 
-  name = 'Xverse';
+  name = 'Xverse' as const;;
 
   label = 'Xverse';
 

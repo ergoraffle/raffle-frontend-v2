@@ -7,24 +7,23 @@ import {
   useMemo,
   useState
 } from 'react';
-
 import type { Wallet } from '@ergo-raffle/base-wallet';
-import { Wallet as WalletIcon } from '@ergo-raffle/icons';
-import { Button, Dialog, DialogClose, DialogContent } from '@ergo-raffle/ui-kit';
-
-import * as wallets from '@/wallets';
+import { WalletName, wallets } from './wallets';
 
 type WalletContextValue = {
   addresses?: string[];
   wallets: Wallet[];
   selected?: Wallet;
-  connecting?: string;
-  agreement?: boolean;
+  connecting?: boolean;
+  agreed?: boolean;
   error?: unknown;
-  select: (name?: string) => void;
-  deselect: () => void;
-  disconnect: () => void;
-  setAgreement: (value: boolean) => void;
+  ergoAddress?: string;
+  candidate?: WalletName;
+  setCandidate: (candidate: WalletName | undefined) => void;
+  setErgoAddress: (ergoAddress: string | undefined) => void;
+  connect: (name: WalletName | undefined) => Promise<void>;
+  disconnect: () => Promise<void>;
+  agree: () => void;
 };
 
 const WalletContext = createContext<WalletContextValue | null>(null);
@@ -32,7 +31,7 @@ const WalletContext = createContext<WalletContextValue | null>(null);
 export const useWallet = () => {
   const context = useContext(WalletContext);
 
-  if (!context) {
+  if (context === null) {
     throw new Error('useWallet must be used within WalletProvider');
   }
 
@@ -42,40 +41,43 @@ export const useWallet = () => {
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [addresses, setAddresses] = useState<string[]>();
   const [error, setError] = useState<unknown>();
-  const [connecting, setConnecting] = useState<string>();
-  const [agreement, setAgreement] = useState<boolean>();
+  const [connecting, setConnecting] = useState<boolean>();
+  const [ergoAddress, setErgoAddress] = useState<string>();
+  const [candidate, setCandidate] = useState<WalletName>();
+  const [agreed, setAgreed] = useState<boolean>();
   const [selected, setSelected] = useState<Wallet>();
 
-  const select = useCallback((name?: string) => {
+  const agree = useCallback(() => {
+    setAgreed(true);
+  }, [])
+
+  const connect = useCallback(async (name?: WalletName) => {
     setSelected(undefined);
 
-    const wallet = Object.values(wallets).find((wallet) => wallet.name === name);
+    const wallet = wallets.find((wallet) => wallet.name === name);
 
     if (!wallet) return;
 
-    setConnecting(name);
+    setConnecting(true);
 
-    wallet
-      .connect()
-      .then(async () => {
-        const addresses = await wallet.getAddresses();
+    try {
+      await wallet.connect();
 
-        setAddresses(addresses);
+      const addresses = await wallet.getAddresses();
 
-        setSelected(wallet);
+      setAddresses(addresses);
 
-        localStorage.setItem('raffle:wallet', wallet.name);
-      })
-      .catch(setError)
-      .finally(() => setConnecting(undefined));
+      setSelected(wallet);
+
+      localStorage.setItem('raffle:wallet', wallet.name);
+    } catch (error) {
+      setError(error);
+    }
+
+    setConnecting(false)
   }, []);
 
-  const deselect = useCallback(() => {
-    setConnecting(undefined);
-    setSelected(undefined);
-  }, []);
-
-  const disconnect = useCallback(() => {
+  const disconnect = useCallback(async () => {
     if (!selected) return;
 
     selected
@@ -85,22 +87,22 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('raffle:wallet');
       })
       .catch(setError);
-  }, [selected]);
+  }, [selected]); 
 
   useEffect(() => {
     (async () => {
       const name = localStorage.getItem('raffle:wallet');
 
-      const wallet = Object.values(wallets).find((wallet) => wallet.name === name);
+      const wallet = wallets.find((wallet) => wallet.name === name);
 
       if (!wallet) return;
 
       if (!wallet.isAvailable()) return;
 
-      setConnecting(wallet.name);
+      setConnecting(true);
 
       if (!(await wallet.isConnected())) {
-        setConnecting(undefined);
+        setConnecting(false);
 
         return;
       }
@@ -114,112 +116,31 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
         setSelected(wallet);
 
-        setAgreement(true);
+        setAgreed(true);
       } catch {
         //
       }
 
-      setConnecting(undefined);
+      setConnecting(false);
     })();
   }, []);
 
   const value = useMemo(
-    () => ({
+    () => ({ 
+      candidate, setCandidate,
+      ergoAddress, setErgoAddress,
       addresses,
-      agreement,
+      agreed,
       connecting,
       error,
       selected,
-      wallets: Object.values(wallets),
-      deselect,
+      wallets,
       disconnect,
-      select,
-      setAgreement
+      connect,
+      agree
     }),
-    [addresses, agreement, connecting, error, selected, deselect, disconnect, select]
+    [addresses,candidate, agreed, agree,  connecting, error, selected, ergoAddress, disconnect, connect]
   );
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
-};
-
-export const WalletButton = () => {
-  const wallet = useWallet();
-
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!wallet.error) return;
-
-    // biome-ignore lint/suspicious/noAlert: will remove
-    alert(wallet.error);
-
-    setOpen(false);
-  }, [wallet.error]);
-
-  useEffect(() => {
-    if (!wallet.connecting && !!wallet.selected) {
-      setOpen(false);
-    }
-  }, [wallet.connecting, wallet.selected]);
-
-  return (
-    <>
-      <Button disabled={!!wallet.connecting} variant="outline-soft" onClick={() => setOpen(true)}>
-        <WalletIcon className="hidden lg:inline-flex" />
-        {!!wallet.connecting && <div>connecting...</div>}
-        {!wallet.connecting && !!wallet.selected && <div>{wallet.addresses?.join(', ')}</div>}
-        {!wallet.connecting && !wallet.selected && (
-          <>
-            <span className="hidden lg:inline-flex">Connect Wallet</span>
-            <span className="lg:hidden">Set Wallet</span>
-          </>
-        )}
-      </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogClose />
-        <DialogContent>
-          {!!wallet.selected && (
-            <button type="button" onClick={() => wallet.deselect()}>
-              Back
-            </button>
-          )}
-          {!wallet.agreement && (
-            <>
-              Agreement
-              <button type="button" onClick={() => wallet.setAgreement(true)}>
-                Click
-              </button>
-            </>
-          )}
-          {!!wallet.agreement && !wallet.selected && (
-            <>
-              Connect Wallet
-              {wallet.wallets.map((item) => (
-                <button
-                  className="flex items-center gap-3"
-                  disabled={!!wallet.connecting}
-                  key={item.name}
-                  type="button"
-                  onClick={() => wallet.select(item.name)}
-                >
-                  <div className="w-12 h-12">
-                    <item.iconReact />
-                  </div>
-                  {item.name} {wallet.connecting === item.name ? 'connecting' : ''}
-                </button>
-              ))}
-            </>
-          )}
-          {!!wallet.agreement && !!wallet.selected && (
-            <>
-              {wallet.selected.label}
-              <button type="button" onClick={wallet.disconnect}>
-                disconnect
-              </button>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
-  );
 };
