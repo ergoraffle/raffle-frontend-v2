@@ -88,6 +88,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RaffleSummaryResponse'
+  /raffles/{raffleId}:
+    get:
+      summary: Get raffle details by ID
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Raffle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaffleDetailResponse'
+        '404':
+          description: Raffle not found
 
 components:
   schemas:
@@ -237,3 +255,95 @@ components:
         - ticketPrice
         - soldTicketCount
         - status
+    #######################
+    # Raffle Detail
+    #######################
+
+    RaffleDetailResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        collectingTokenId:
+          type: string
+        collectingTokenName:
+          type: string
+          minLength: 1
+          maxLength: 5
+          x-faker: rsBTC
+        winnersCount:
+          type: integer
+          x-faker: 2
+          minimum: 1
+          maximum: 5
+        giftCount:
+          type: integer
+          minimum: 1
+          maximum: 5
+          x-faker: 5
+        tags:
+          type: array
+          items:
+            type: string
+        deadline:
+          type: integer
+          description: Unix timestamp (seconds)
+        goal:
+          type: integer
+          maximum: 100
+          x-faker: 1000
+        ticketPrice:
+          type: integer
+          minimum: 1
+          maximum: 100
+          x-faker: 1000
+        soldTicketCount:
+          type: integer
+          minimum: 1
+          maximum: 100
+          x-faker: 56
+        status:
+          type: string
+          enum: [active, successful, failed]
+        createdAt:
+          type: integer
+          description: Unix timestamp (seconds)
+        creator:
+          type: string
+        prizes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RafflePrize'
+      required:
+        - raffleId
+        - name
+        - collectingTokenId
+        - winnersCount
+        - giftCount
+        - deadline
+        - goal
+        - ticketPrice
+        - soldTicketCount
+        - status
+    RafflePrize:
+      type: object
+      properties:
+        prizeId:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+        amount:
+          type: integer
+      required:
+        - prizeId
+        - name

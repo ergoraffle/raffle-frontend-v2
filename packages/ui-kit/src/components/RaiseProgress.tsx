@@ -18,7 +18,7 @@ export type RaiseProgressProps = {
 };
 
 export const RaiseProgress = ({ loading, raisedAmounts, tokenName }: RaiseProgressProps) => (
-  <>
+  <div className="flex flex-col gap-y-1">
     <Progress
       value={raisedAmounts?.current ? raisedAmounts.current : 0}
       max={raisedAmounts?.target ? raisedAmounts.target : 100}
@@ -37,5 +37,5 @@ export const RaiseProgress = ({ loading, raisedAmounts, tokenName }: RaiseProgre
         raised of <span className="text-black-1">{raisedAmounts?.target}</span>
       </Typography>
     )}
-  </>
+  </div>
 );
