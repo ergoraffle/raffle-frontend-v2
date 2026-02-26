@@ -196,31 +196,28 @@ export const WalletButton = () => {
               Connect Wallet
               {wallet.wallets.map((item) => (
                 <button
+                  className="flex items-center gap-3"
                   disabled={!!wallet.connecting}
                   key={item.name}
                   type="button"
                   onClick={() => wallet.select(item.name)}
                 >
+                  <div className="w-12 h-12">
+                    <item.iconReact />
+                  </div>
                   {item.name} {wallet.connecting === item.name ? 'connecting' : ''}
                 </button>
               ))}
             </>
           )}
-          {/* 
-            {!!wallet.agreement && !!(wallet.selected instanceof BitcoinPayWallet) && <>BitcoinPay</>}
-            {!!wallet.agreement && !!(wallet.selected instanceof ErgoPayWallet) && (
-              <>
-                ErgoPay
-                {wallet.selected.qrcode}
-              </>
-            )}
-            {!!wallet.agreement && !!(wallet.selected instanceof NautilusWallet) && (
-              <>
-                Nautilus
-                <button onClick={wallet.disconnect}>disconnect</button>
-              </>
-            )}
-          */}
+          {!!wallet.agreement && !!wallet.selected && (
+            <>
+              {wallet.selected.label}
+              <button type="button" onClick={wallet.disconnect}>
+                disconnect
+              </button>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </>
