@@ -31,7 +31,7 @@ export const RaffleTabs = () => (
     </TabsContent>
     <TabsContent value={RAFFLE_TABS.ACTIVE}>
       <Suspense fallback={<RaffleListSkeleton />}>
-        <RaffleList limit={3} params={{ status: 'active' }} />
+        <RaffleList limit={3} params={{ status: ['active'] }} />
       </Suspense>
     </TabsContent>
     <TabsContent value={RAFFLE_TABS.HISTORY}>

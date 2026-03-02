@@ -7,7 +7,11 @@ import {
 } from '@ergo-raffle/client';
 import { Empty, SeeMoreLink, Typography } from '@ergo-raffle/ui-kit';
 
+import { toQueryString } from '@/lib/utils';
+
 import { RaffleCard } from './RaffleCard';
+import { RafflesPagination } from './RafflePagination';
+import { RafflesSort } from './RaffleSort';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -22,7 +26,7 @@ type Props = {
 };
 
 export const RaffleList = async ({ params, limit }: Props) => {
-  const limitedParams = limit ? { pageSize: limit, page: 1 } : {};
+  const limitedParams = limit ? { limit, offset: 0 } : {};
 
   const { items, total } = await withMock(
     async () => await getRaffles({ ...params, ...limitedParams })
@@ -41,8 +45,19 @@ export const RaffleList = async ({ params, limit }: Props) => {
   }
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full">
+    <div className="flex flex-col w-full mb-52">
+      {!limit && (
+        <div className="flex justify-end lg:justify-between items-center mb-2 lg:mb-5">
+          {total > items.length && (
+            <Typography variant="heading-5" className="hidden lg:block">
+              Showing {items.length} of {total} Raffles:
+            </Typography>
+          )}
+          <RafflesSort />
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full clear-both">
         {items.map((raffle) => {
           const raisedAmounts = {
             target: raffle.soldTicketCount * raffle.ticketPrice,
@@ -50,7 +65,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
             verified: true
           };
 
-          const deadline = infoData.lastBlockHeight - Date.now();
+          const deadline = raffle.deadline - infoData.lastBlockHeight;
 
           const trust = { value: 0, max: 100 };
           return (
@@ -65,12 +80,10 @@ export const RaffleList = async ({ params, limit }: Props) => {
         })}
       </div>
 
-      {limit && total > limit && <SeeMoreLink href="/raffles" />}
-      {!limit && total > items.length && (
-        <Typography variant="body-md" className="text-gray-2 mt-4">
-          Showing {items.length} of {total} raffles.
-        </Typography>
+      {limit && total > limit && (
+        <SeeMoreLink href={`/raffles${params ? `?${toQueryString(params)}` : ''}`} />
       )}
+      {!limit && total > items.length && <RafflesPagination total={total} />}
     </div>
   );
 };
