@@ -107,6 +107,8 @@ export type PaginationProps = ComponentProps<'div'> & {
   onChangePerPage: (perPage: number) => void;
 };
 
+export const perPageItems = [12, 24, 36, 48, 60];
+
 export const Pagination = ({
   page,
   perPage,
@@ -177,11 +179,11 @@ export const Pagination = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="12">12</SelectItem>
-                    <SelectItem value="24">24</SelectItem>
-                    <SelectItem value="36">36</SelectItem>
-                    <SelectItem value="48">48</SelectItem>
-                    <SelectItem value="60">60</SelectItem>
+                    {perPageItems.map((item) => (
+                      <SelectItem value={item.toString()} key={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>

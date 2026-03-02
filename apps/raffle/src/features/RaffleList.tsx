@@ -65,7 +65,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
             verified: true
           };
 
-          const deadline = infoData.lastBlockHeight - 1416515375925;
+          const deadline = raffle.deadline - infoData.lastBlockHeight;
 
           const trust = { value: 0, max: 100 };
           return (

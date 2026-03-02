@@ -3,7 +3,6 @@ import './globals.css';
 import type { PropsWithChildren } from 'react';
 
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
 
 import { LayoutBackground } from '@ergo-raffle/ui-kit';
 
@@ -17,28 +16,25 @@ export const metadata: Metadata = {
   description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
 };
 
-const RootLayout = async ({ children }: PropsWithChildren) => {
-  const cookieStore = await cookies();
-  const theme = cookieStore.get('theme');
-  return (
-    <html
-      lang="en"
-      className={`
+const RootLayout = async ({ children }: PropsWithChildren) => (
+  <html
+    lang="en"
+    className={`
         ${fraunces.variable}
         ${poppins.variable}
-        ${karla.variable} ${theme?.value === 'dark' ? 'dark' : 'light'}
+        ${karla.variable} 
       `}
-    >
-      <body className="antialiased">
-        <AppProviders>
-          <LayoutBackground>
-            <Header />
-            <div className="container min-h-dvh">{children}</div>
-            <Footer />
-          </LayoutBackground>
-        </AppProviders>
-      </body>
-    </html>
-  );
-};
+    suppressHydrationWarning
+  >
+    <body className="antialiased">
+      <AppProviders>
+        <LayoutBackground>
+          <Header />
+          <div className="container min-h-dvh">{children}</div>
+          <Footer />
+        </LayoutBackground>
+      </AppProviders>
+    </body>
+  </html>
+);
 export default RootLayout;
