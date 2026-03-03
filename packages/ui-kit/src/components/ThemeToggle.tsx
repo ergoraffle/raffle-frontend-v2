@@ -1,6 +1,5 @@
 import { Moon, Sun } from '@ergo-raffle/icons';
-
-import { useTheme } from '@/hooks';
+import { useTheme } from 'next-themes';
 
 import { Button } from './Button';
 
@@ -9,7 +8,11 @@ type ThemeToggleProps = {
 };
 
 export const ThemeToggle = ({ className }: ThemeToggleProps) => {
-  const [theme, toggleTheme] = useTheme();
+  const { setTheme, theme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
 
   return (
     <Button
