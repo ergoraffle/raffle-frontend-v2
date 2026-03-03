@@ -115,8 +115,8 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
                     <span>No votes yet</span>
                   </Typography>
                 </div>
-                <div className="flex items-center justify-end gap-4 text-gray-1">
-                  <Progress className="w-15" variant="bar" value={trust?.value} max={trust?.max} />
+                <div className="flex items-center justify-end gap-4 text-gray-1 w-20">
+                  <Progress value={trust?.value} max={trust?.max} />
                   <Votes className="size-7" />
                 </div>
               </CardContent>
