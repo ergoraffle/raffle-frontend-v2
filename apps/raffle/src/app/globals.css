@@ -1,6 +1,5 @@
 @import "tailwindcss";
-
 @source "./src";
 @source "../../../../packages/ui-kit/src";
 
-@import "@ergo-raffle/ui-kit/styles/index.css";
+@import "@ergo-raffle/ui-kit/index.css"; 

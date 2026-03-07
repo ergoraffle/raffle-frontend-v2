@@ -5,7 +5,7 @@ import { DotMenuHorizontal, Left, Right } from '@ergo-raffle/icons';
 import { cn } from '@/lib/utils';
 import { type AnchorProps, useFramework } from '@/providers';
 
-import { Button } from './Button';
+import { Button, type ButtonProps } from './Button';
 import {
   Select,
   SelectContent,
@@ -45,41 +45,57 @@ const PaginationItem = ({ ...props }: PaginationItemProps) => (
 
 type PaginationLinkProps = {
   isActive?: boolean;
+  onChangePage?: never;
 } & AnchorProps;
 
-const PaginationLink = ({ className, isActive, ...props }: PaginationLinkProps) => {
+type PaginationButtonProps = {
+  isActive?: boolean;
+} & ButtonProps;
+
+type PaginationTriggerProps = PaginationLinkProps | PaginationButtonProps;
+
+const PaginationTrigger = ({ className, isActive, ...props }: PaginationTriggerProps) => {
   const Link = useFramework().components.Anchor;
+  if ('href' in props) {
+    return (
+      <Button
+        asChild
+        variant="plain"
+        size="icon-xs"
+        className={cn('aria-disabled:opacity-50 aria-disabled:pointer-events-none', className)}
+      >
+        <Link
+          aria-current={isActive ? 'page' : undefined}
+          data-slot="pagination-link"
+          data-active={isActive}
+          {...props}
+        />
+      </Button>
+    );
+  }
   return (
     <Button
-      asChild
       variant="plain"
       size="icon-xs"
       className={cn('aria-disabled:opacity-50 aria-disabled:pointer-events-none', className)}
-    >
-      <Link
-        aria-current={isActive ? 'page' : undefined}
-        data-slot="pagination-link"
-        data-active={isActive}
-        {...props}
-      />
-    </Button>
+      aria-current={isActive ? 'page' : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      {...props}
+    />
   );
 };
 
-type PaginationPreviousProps = ComponentProps<typeof PaginationLink>;
-
-const PaginationPrevious = ({ className, ...props }: PaginationPreviousProps) => (
-  <PaginationLink aria-label="Go to previous page" className={cn(className)} {...props}>
+const PaginationPrevious = ({ className, ...props }: PaginationTriggerProps) => (
+  <PaginationTrigger aria-label="Go to previous page" className={cn(className)} {...props}>
     <Left data-icon="inline-start" className="cn-rtl-flip" />
-  </PaginationLink>
+  </PaginationTrigger>
 );
 
-type PaginationNextProps = ComponentProps<typeof PaginationLink>;
-
-const PaginationNext = ({ className, ...props }: PaginationNextProps) => (
-  <PaginationLink aria-label="Go to next page" className={cn(className)} {...props}>
+const PaginationNext = ({ className, ...props }: PaginationTriggerProps) => (
+  <PaginationTrigger aria-label="Go to next page" className={cn(className)} {...props}>
     <Right data-icon="inline-end" className="cn-rtl-flip" />
-  </PaginationLink>
+  </PaginationTrigger>
 );
 
 type PaginationEllipsisProps = ComponentProps<'span'>;
@@ -98,14 +114,21 @@ const PaginationEllipsis = ({ className, ...props }: PaginationEllipsisProps) =>
   </span>
 );
 
+type PaginationLinkMode = {
+  getPageHref: (pageNumber: number) => string;
+  onChangePage?: never;
+};
+
+type PaginationButtonMode = {
+  onChangePage: (pageNumber: number) => void;
+  getPageHref?: never;
+};
 export type PaginationProps = ComponentProps<'div'> & {
   page: number;
   perPage: number;
   total: number;
-  showChangeLimitation?: boolean;
-  getPageHref: (pageNumber: number) => string;
   onChangePerPage: (perPage: number) => void;
-};
+} & (PaginationLinkMode | PaginationButtonMode);
 
 export const perPageItems = [12, 24, 36, 48, 60];
 
@@ -113,9 +136,9 @@ export const Pagination = ({
   page,
   perPage,
   total,
-  showChangeLimitation,
   getPageHref,
   onChangePerPage,
+  onChangePage,
   className,
   ...props
 }: PaginationProps) => {
@@ -138,7 +161,10 @@ export const Pagination = ({
       <PaginationWrapper className="w-full lg:w-auto lg:flex-1">
         <PaginationContent className="w-full lg:w-auto justify-stretch lg:justify-start">
           <PaginationItem>
-            <PaginationPrevious href={getPageHref(page - 1)} aria-disabled={page <= 1} />
+            <PaginationPrevious
+              href={getPageHref ? getPageHref(page - 1) : undefined}
+              aria-disabled={page <= 1}
+            />
           </PaginationItem>
           <li className="lg:inline-flex lg:items-center grow lg:grow-0">
             <ul className="w-full flex items-center justify-center">
@@ -147,13 +173,14 @@ export const Pagination = ({
                   {p === 'ellipsis' ? (
                     <PaginationEllipsis />
                   ) : (
-                    <PaginationLink
-                      href={getPageHref(p)}
+                    <PaginationTrigger
+                      href={getPageHref ? getPageHref(p) : undefined}
+                      onClick={!getPageHref && onChangePage ? () => onChangePage(p) : undefined}
                       isActive={p === page}
                       aria-disabled={p === page}
                     >
                       {p}
-                    </PaginationLink>
+                    </PaginationTrigger>
                   )}
                 </PaginationItem>
               ))}
@@ -161,35 +188,34 @@ export const Pagination = ({
           </li>
 
           <PaginationItem>
-            <PaginationNext href={getPageHref(page + 1)} aria-disabled={page >= total} />
+            <PaginationNext
+              href={getPageHref ? getPageHref(page + 1) : undefined}
+              aria-disabled={page >= total}
+            />
           </PaginationItem>
         </PaginationContent>
       </PaginationWrapper>
       <div className=" items-center flex-1 gap-1 justify-end hidden lg:flex">
-        {showChangeLimitation ? (
-          <>
-            <Typography variant="heading-5">Item per Page:</Typography>
-            <div className="w-20">
-              <Select
-                value={perPage.toString() || '12'}
-                onValueChange={(value) => onChangePerPage(Number(value))}
-              >
-                <SelectTrigger className="w-full max-w-48" variant="plain" size="sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {perPageItems.map((item) => (
-                      <SelectItem value={item.toString()} key={item}>
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        ) : null}
+        <Typography variant="heading-5">Item per Page:</Typography>
+        <div className="w-20">
+          <Select
+            value={perPage.toString() || '12'}
+            onValueChange={(value) => onChangePerPage(Number(value))}
+          >
+            <SelectTrigger className="w-full max-w-48" variant="plain" size="sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {perPageItems.map((item) => (
+                  <SelectItem value={item.toString()} key={item}>
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </div>
   );

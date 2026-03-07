@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 
 import { Close } from '@ergo-raffle/icons';
 import { Dialog as DialogPrimitive } from 'radix-ui';
@@ -46,14 +46,12 @@ export const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => (
 
 export type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean;
-  title?: ReactNode;
 };
 
 export const DialogContent = ({
   className,
   children,
   showCloseButton = true,
-  title,
   ...props
 }: DialogContentProps) => (
   <DialogPortal>
@@ -68,7 +66,7 @@ export const DialogContent = ({
     >
       {showCloseButton ? (
         <DialogPrimitive.Close data-slot="dialog-top-close" asChild>
-          <Button variant="ghost" size="icon-sm" className="absolute top-2 right-2">
+          <Button variant="ghost" size="icon-sm" className="absolute top-2 right-2 z-110">
             <Close />
             <span className="sr-only">Close</span>
           </Button>

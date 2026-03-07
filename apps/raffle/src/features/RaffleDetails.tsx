@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { configureClient, getInfo, getRafflesRaffleId, withMock } from '@ergo-raffle/client';
-import { HandCoin, Pin, SandClock, Share, Ticket, Votes } from '@ergo-raffle/icons';
+import { HandCoin, Pin, SandClock, Share, Ticket } from '@ergo-raffle/icons';
 import {
   Button,
   Card,
@@ -12,10 +12,14 @@ import {
   CardImageWrapper,
   CardTitle,
   Identifier,
-  Progress,
   RaiseProgress,
+  TrustBar,
   Typography
 } from '@ergo-raffle/ui-kit';
+
+import { RaffleDonate } from './RaffleDonate';
+import { RaffleVote } from './RaffleVote';
+import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -116,8 +120,8 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
                   </Typography>
                 </div>
                 <div className="flex items-center justify-end gap-4 text-gray-1 w-20">
-                  <Progress value={trust?.value} max={trust?.max} />
-                  <Votes className="size-7" />
+                  <TrustBar value={trust?.value} max={trust?.max} />
+                  <RaffleVote raffleId={raffle.raffleId} raffleTitle={raffle.name} />
                 </div>
               </CardContent>
             </Card>
@@ -136,8 +140,8 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             </div>
           </div>
           <RaiseProgress raisedAmounts={raisedAmounts} tokenName={raffle?.collectingTokenName} />
-          <Card>
-            <CardContent className="flex items-center justify-around">
+          <Card padding="lg">
+            <CardContent className="flex items-center justify-between py-2 px-5.5">
               <div className="flex flex-col items-center justify-center gap-1">
                 <SandClock className="size-13" />
                 <Typography variant="subtitle-lg">
@@ -159,7 +163,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
               </div>
             </CardContent>
           </Card>
-          <Button variant="primary">Donate</Button>
+          <RaffleDonate tokenName={raffle.collectingTokenName} />
           <div className="relative h-48.5 w-full">
             <Image
               src="/illustrations/raffleDonateIllustration.svg"
@@ -170,18 +174,22 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           </div>
         </div>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Description:</CardTitle>
-          <CardDescription>A very short Description.</CardDescription>
-        </CardHeader>
-        <CardContent>{raffle.description}</CardContent>
-      </Card>
+      {raffle.description ? (
+        <Card shadow>
+          <CardHeader>
+            <CardTitle>Description:</CardTitle>
+            <CardDescription>A very short Description.</CardDescription>
+          </CardHeader>
+          <CardContent>{raffle.description}</CardContent>
+        </Card>
+      ) : null}
       <Card>
         <CardHeader>
           <CardTitle>Winner Baskets</CardTitle>
         </CardHeader>
-        <CardContent>...</CardContent>
+        <CardContent>
+          <RaffleWinnerBaskets raffleId={raffleId} />
+        </CardContent>
       </Card>
       <div className="flex flex-col lg:flex-row gap-9.5">
         <Card className="flex-1">

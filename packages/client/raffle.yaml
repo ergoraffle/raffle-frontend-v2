@@ -106,7 +106,95 @@ paths:
                 $ref: '#/components/schemas/RaffleDetailResponse'
         '404':
           description: Raffle not found
+  /raffles/{raffleId}/vote:
+    post:
+      summary: Vote up or down a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: Vote registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResponse'
+        '400':
+          description: Invalid vote value
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/pin:
+    post:
+      summary: Pin or unpin a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinRequest'
+      responses:
+        '200':
+          description: Pin status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinResponse'
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/winner-baskets:
+    get:
+      summary: Get winner baskets of a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
 
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [share, empty, gift, share_gift]
+          description: Basket filter type
+
+      responses:
+        '200':
+          description: Winner baskets list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WinnerBasketListResponse'
+
+        '404':
+          description: Raffle not found
 components:
   schemas:
     #######################
@@ -346,4 +434,127 @@ components:
           type: integer
       required:
         - prizeId
+        - name
+
+    #######################
+    # Vote
+    #######################
+
+    VoteRequest:
+      type: object
+      properties:
+        vote:
+          type: string
+          enum: [up, down]
+      required:
+        - vote
+
+    VoteResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        upVotes:
+          type: integer
+          minimum: 0
+        downVotes:
+          type: integer
+          minimum: 0
+      required:
+        - raffleId
+        - upVotes
+        - downVotes
+
+    #######################
+    # Pin
+    #######################
+
+    PinRequest:
+      type: object
+      properties:
+        pinned:
+          type: boolean
+      required:
+        - pinned
+
+    PinResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        pinned:
+          type: boolean
+      required:
+        - raffleId
+        - pinned
+    #######################
+    # Winner Baskets
+    #######################
+
+    WinnerBasketListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WinnerBasket'
+      required:
+        - total
+        - items
+
+
+    WinnerBasket:
+      type: object
+      properties:
+        basketId:
+          type: string
+
+        share:
+          type: integer
+          description: Basket index shown in UI
+
+        shareAmount:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          x-faker: 1000
+          description: Calculated share amount
+
+        sharePercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+          x-faker: 10
+          description: Calculated share amount percent
+
+        gifts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasketGift'
+
+        tokenId:
+          type: string
+          description: Token ID
+
+        tokenName:
+          type: string
+          description: Token Name
+          
+
+      required:
+        - basketId
+        - basketNumber
+        - type
+
+
+    BasketGift:
+      type: object
+      properties:
+        name:
+          type: string
+        amount:
+          type: integer
+      required:
         - name
