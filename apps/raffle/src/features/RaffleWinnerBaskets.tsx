@@ -1,4 +1,4 @@
-import { getRafflesRaffleIdWinnerBaskets, withMock } from '@ergo-raffle/client';
+'use client';
 import { Plus } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -6,18 +6,22 @@ import {
   Card,
   CardContent,
   Empty,
-  Typography
-  //   Pagination
+  Typography,
+  Pagination
 } from '@ergo-raffle/ui-kit';
+import { RaffleWinnerBasketsFilters } from './RaffleWinnerBasketsFilters';
+import { useFetchWinnerBaskets } from '@/hooks/useFetchWinnerBaskets';
+import { useFetchWinnerBasketsFilters } from '@/hooks/useFetchWinnerBasketsFilters';
 
 export type RaffleWinnerBasketsProps = { raffleId: string };
 
-export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps) => {
-  const { items } = await withMock(async () => await getRafflesRaffleIdWinnerBaskets(raffleId));
+export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
+  const { items, total } = useFetchWinnerBaskets(raffleId);
+  const { pagination, onChangePage, onChangePerPage } = useFetchWinnerBasketsFilters();
 
-  if (items.length === 0) {
+  if (!items?.length) {
     return (
-      <div className="flex justify-center items-center grow">
+      <div className="flex justify-center items-center grow my-9">
         <Empty>
           <Typography variant="heading-3">No matching results found.</Typography>
         </Empty>
@@ -25,11 +29,12 @@ export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps
     );
   }
 
-  const firstColumn = items.slice(0, 5);
-  const secondColumn = items.slice(5, 10);
+  const firstColumn = items?.slice(0, 5);
+  const secondColumn = items?.slice(5, 10);
 
   return (
     <>
+      <RaffleWinnerBasketsFilters />
       <div className="flex">
         <div className="flex-1">
           <div className="flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
@@ -44,7 +49,7 @@ export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps
             </Typography>
           </div>
           <div className="space-y-2.5 pr-1.25">
-            {firstColumn.map((basket, index) => (
+            {firstColumn?.map((basket, index) => (
               <Card key={basket.basketId} className="group p-0">
                 <CardContent className="flex items-center p-0">
                   <div className="flex py-4 grow items-center min-h-19 group-hover:bg-black-4 rounded-lg">
@@ -96,7 +101,7 @@ export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps
             ))}
           </div>
         </div>
-        {secondColumn.length > 0 ? (
+        {secondColumn && secondColumn.length > 0 ? (
           <div className="flex-1">
             <div className="flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
               <Typography className="px-4 flex-1" variant="body-lg">
@@ -110,7 +115,7 @@ export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps
               </Typography>
             </div>
             <div className="space-y-2.5 pl-1.25">
-              {secondColumn.map((basket, index) => (
+              {secondColumn?.map((basket, index) => (
                 <Card key={basket.basketId} className="group p-0">
                   <CardContent className="flex items-center p-0">
                     <div className="flex py-4 grow items-center min-h-19 group-hover:bg-black-4 rounded-lg">
@@ -164,15 +169,15 @@ export const RaffleWinnerBaskets = async ({ raffleId }: RaffleWinnerBasketsProps
           </div>
         ) : null}
       </div>
-      {/* {total > items.length ? (
+      {items && total && total > items.length ? (
         <Pagination
           page={pagination.page}
           perPage={pagination.perPage}
-          onChangePerPage={(value) => setFilter('perPage', value.toString())}
-          onChangePage={(value: number) => setFilter('page', value.toString())}
+          onChangePerPage={onChangePage}
+          onChangePage={onChangePerPage}
           total={total}
         />
-      ) : null} */}
+      ) : null}
     </>
   );
 };

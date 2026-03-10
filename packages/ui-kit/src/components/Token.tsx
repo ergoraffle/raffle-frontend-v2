@@ -66,7 +66,7 @@ export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenPro
       {isLoading ? (
         <>
           <Skeleton className="size-5 rounded-full mr-1" />
-          <Skeleton className="h-3 w-14 rounded-full" />
+          <Skeleton className="h-3 w-14 rounded-md" />
         </>
       ) : (
         <span className="truncate">{name}</span>

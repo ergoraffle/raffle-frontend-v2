@@ -20,6 +20,7 @@ import {
 import { RaffleDonate } from './RaffleDonate';
 import { RaffleVote } from './RaffleVote';
 import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
+import { RaffleActivity } from './RaffleActivity';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -197,7 +198,9 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <CardTitle>Activity</CardTitle>
             <CardDescription>Timeline of events</CardDescription>
           </CardHeader>
-          <CardContent>...</CardContent>
+          <CardContent>
+            <RaffleActivity />
+          </CardContent>
         </Card>
         <Card className="flex-1">
           <CardHeader>
