@@ -20,3 +20,26 @@ export const toQueryString = (params: Record<string, unknown>): string => {
 
   return searchParams.toString();
 };
+
+export const formatDateTime = (date: string | Date | number) => {
+  const d = new Date(date);
+  const today = new Date();
+
+  const isToday = d.toDateString() === today.toDateString();
+
+  if (isToday) {
+    return d.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  return d.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+};

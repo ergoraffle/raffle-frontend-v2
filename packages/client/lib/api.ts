@@ -212,6 +212,42 @@ export interface BasketGift {
   amount?: number;
 }
 
+export interface RaffleActivityResponse {
+  /**
+   * @minimum 0
+   * @maximum 10000
+   */
+  total: number;
+  items: RaffleActivity[];
+}
+
+export interface RaffleActivity {
+  activityId: string;
+  type: RaffleActivityType;
+  /** Wallet address */
+  wallet: string;
+  /**
+   * Ticket count or vote weight
+   * @nullable
+   */
+  amount?: number | null;
+  /** Human readable text */
+  description?: string;
+  /** Unix timestamp (seconds) */
+  createdAt: number;
+}
+
+export type RaffleActivityType = (typeof RaffleActivityType)[keyof typeof RaffleActivityType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RaffleActivityType = {
+  raffle_created: 'raffle_created',
+  ticket_bought: 'ticket_bought',
+  upvoted: 'upvoted',
+  downvoted: 'downvoted',
+  gift_added: 'gift_added'
+} as const;
+
 export type GetRafflesParams = {
   offset?: number;
   limit?: number;
@@ -274,6 +310,31 @@ export const GetRafflesRaffleIdWinnerBasketsType = {
   share_gift: 'share_gift'
 } as const;
 
+export type GetRafflesRaffleIdActivitiesParams = {
+  offset?: number;
+  limit?: number;
+  /**
+   * Filter activity types
+   */
+  type?: GetRafflesRaffleIdActivitiesType;
+  /**
+   * Return only activities of the caller
+   */
+  onlyMyAddress?: boolean;
+};
+
+export type GetRafflesRaffleIdActivitiesType =
+  (typeof GetRafflesRaffleIdActivitiesType)[keyof typeof GetRafflesRaffleIdActivitiesType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRafflesRaffleIdActivitiesType = {
+  raffle_created: 'raffle_created',
+  ticket_bought: 'ticket_bought',
+  upvoted: 'upvoted',
+  downvoted: 'downvoted',
+  gift_added: 'gift_added'
+} as const;
+
 /**
  * @summary Get startup configuration
  */
@@ -331,6 +392,19 @@ export const getRafflesRaffleIdWinnerBaskets = (
     params
   });
 
+/**
+ * @summary Get raffle activities
+ */
+export const getRafflesRaffleIdActivities = (
+  raffleId: string,
+  params?: GetRafflesRaffleIdActivitiesParams
+) =>
+  httpClient<RaffleActivityResponse>({
+    url: `/raffles/${raffleId}/activities`,
+    method: 'GET',
+    params
+  });
+
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
@@ -347,6 +421,9 @@ export type PostRafflesRaffleIdPinResult = NonNullable<
 >;
 export type GetRafflesRaffleIdWinnerBasketsResult = NonNullable<
   Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBaskets>>
+>;
+export type GetRafflesRaffleIdActivitiesResult = NonNullable<
+  Awaited<ReturnType<typeof getRafflesRaffleIdActivities>>
 >;
 
 export const getGetStartupResponseMock = (
@@ -507,6 +584,27 @@ export const getGetRafflesRaffleIdWinnerBasketsResponseMock = (
       faker.string.alpha({ length: { min: 10, max: 20 } }),
       undefined
     ])
+  })),
+  ...overrideResponse
+});
+
+export const getGetRafflesRaffleIdActivitiesResponseMock = (
+  overrideResponse: Partial<RaffleActivityResponse> = {}
+): RaffleActivityResponse => ({
+  total: faker.number.int({ min: 0, max: 10000 }),
+  items: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    activityId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    type: faker.helpers.arrayElement(Object.values(RaffleActivityType)),
+    wallet: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    amount: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([faker.number.int({ min: undefined, max: undefined }), null]),
+      undefined
+    ]),
+    description: faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      undefined
+    ]),
+    createdAt: faker.number.int({ min: undefined, max: undefined })
   })),
   ...overrideResponse
 });
@@ -699,6 +797,33 @@ export const getGetRafflesRaffleIdWinnerBasketsMockHandler = (
     },
     options
   );
+
+export const getGetRafflesRaffleIdActivitiesMockHandler = (
+  overrideResponse?:
+    | RaffleActivityResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<RaffleActivityResponse> | RaffleActivityResponse),
+  options?: RequestHandlerOptions
+) =>
+  http.get(
+    '*/raffles/:raffleId/activities',
+    async (info) => {
+      await delay(1000);
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetRafflesRaffleIdActivitiesResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    },
+    options
+  );
 export const getRaffleServiceAPIMock = () => [
   getGetStartupMockHandler(),
   getGetInfoMockHandler(),
@@ -706,5 +831,6 @@ export const getRaffleServiceAPIMock = () => [
   getGetRafflesRaffleIdMockHandler(),
   getPostRafflesRaffleIdVoteMockHandler(),
   getPostRafflesRaffleIdPinMockHandler(),
-  getGetRafflesRaffleIdWinnerBasketsMockHandler()
+  getGetRafflesRaffleIdWinnerBasketsMockHandler(),
+  getGetRafflesRaffleIdActivitiesMockHandler()
 ];

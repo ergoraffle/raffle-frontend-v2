@@ -1,10 +1,11 @@
 'use client';
 
+import { useMemo, useState } from 'react';
+
 import type {
   GetRafflesRaffleIdWinnerBasketsParams,
   GetRafflesRaffleIdWinnerBasketsType
 } from '@ergo-raffle/client';
-import { useMemo, useState } from 'react';
 
 export type FetchWinnerBasketsFilters = {
   type?: GetRafflesRaffleIdWinnerBasketsType;
@@ -12,12 +13,12 @@ export type FetchWinnerBasketsFilters = {
   perPage: number;
 };
 
-export const useFetchWinnerBasketsFilters = (): {
+export const useWinnerBasketsParams = (): {
   params: GetRafflesRaffleIdWinnerBasketsParams;
   pagination: { page: number; perPage: number };
   onChangePage: (pageNumber: number) => void;
   onChangePerPage: (perPage: number) => void;
-  onTypeFilterCHange: (type: GetRafflesRaffleIdWinnerBasketsType) => void;
+  onTypeFilterChange: (type: GetRafflesRaffleIdWinnerBasketsType) => void;
 } => {
   const [filters, setFilters] = useState<FetchWinnerBasketsFilters>({
     page: 1,
@@ -28,7 +29,7 @@ export const useFetchWinnerBasketsFilters = (): {
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });
-  const onTypeFilterCHange = (type: GetRafflesRaffleIdWinnerBasketsType) =>
+  const onTypeFilterChange = (type: GetRafflesRaffleIdWinnerBasketsType) =>
     setFilters({ ...filters, type });
   const params = useMemo(
     () => ({ offset, limit: filters.perPage, type: filters.type }),
@@ -39,6 +40,6 @@ export const useFetchWinnerBasketsFilters = (): {
     pagination: { page: filters.page, perPage: filters.perPage },
     onChangePage,
     onChangePerPage,
-    onTypeFilterCHange
+    onTypeFilterChange
   };
 };

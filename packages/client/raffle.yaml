@@ -195,6 +195,51 @@ paths:
 
         '404':
           description: Raffle not found
+  /raffles/{raffleId}/activities:
+    get:
+      summary: Get raffle activities
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+
+        - in: query
+          name: type
+          description: Filter activity types
+          schema:
+            type: string
+            enum: [raffle_created, ticket_bought, upvoted, downvoted, gift_added]
+          style: form
+          explode: false
+
+        - in: query
+          name: onlyMyAddress
+          description: Return only activities of the caller
+          schema:
+            type: boolean
+            default: false
+
+      responses:
+        '200':
+          description: Raffle activities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaffleActivityResponse'
 components:
   schemas:
     #######################
@@ -504,7 +549,6 @@ components:
         - total
         - items
 
-
     WinnerBasket:
       type: object
       properties:
@@ -548,7 +592,6 @@ components:
         - basketNumber
         - type
 
-
     BasketGift:
       type: object
       properties:
@@ -558,3 +601,63 @@ components:
           type: integer
       required:
         - name
+    #######################
+    # Raffle Activity
+    #######################
+    RaffleActivityResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          maximum: 10000
+
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaffleActivity'
+
+      required:
+        - total
+        - items
+    
+    RaffleActivity:
+      type: object
+      properties:
+        activityId:
+          type: string
+
+        type:
+          $ref: '#/components/schemas/RaffleActivityType'
+
+        wallet:
+          type: string
+          description: Wallet address
+
+        amount:
+          type: integer
+          description: Ticket count or vote weight
+          nullable: true
+
+        description:
+          type: string
+          description: Human readable text
+
+        createdAt:
+          type: integer
+          description: Unix timestamp (seconds)
+
+      required:
+        - activityId
+        - type
+        - wallet
+        - createdAt
+    
+    RaffleActivityType:
+      type: string
+      enum:
+        - raffle_created
+        - ticket_bought
+        - upvoted
+        - downvoted
+        - gift_added

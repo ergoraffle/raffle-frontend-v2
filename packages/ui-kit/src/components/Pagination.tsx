@@ -22,7 +22,7 @@ const PaginationWrapper = ({ className, ...props }: PaginationWrapperProps) => (
   <nav
     aria-label="pagination"
     data-slot="pagination"
-    className={cn('mx-auto flex w-full justify-center', className)}
+    className={cn('mx-auto flex w-full', className)}
     {...props}
   />
 );
@@ -127,15 +127,27 @@ export type PaginationProps = ComponentProps<'div'> & {
   page: number;
   perPage: number;
   total: number;
+  align?: 'side' | 'center';
   onChangePerPage: (perPage: number) => void;
 } & (PaginationLinkMode | PaginationButtonMode);
 
 export const perPageItems = [12, 24, 36, 48, 60];
 
+const getPerPageOptions = (perPage: number): number[] => {
+  const result: number[] = [];
+
+  for (let i = 1; i <= 5; i++) {
+    result.push(perPage * i);
+  }
+
+  return result;
+};
+
 export const Pagination = ({
   page,
   perPage,
   total,
+  align = 'center',
   getPageHref,
   onChangePerPage,
   onChangePage,
@@ -144,6 +156,7 @@ export const Pagination = ({
 }: PaginationProps) => {
   const totalPages = Math.ceil(total / perPage);
   const pages: (number | 'ellipsis')[] = [];
+  const perPageItems = getPerPageOptions(perPage);
 
   for (let i = 1; i <= totalPages; i++) {
     if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
@@ -156,15 +169,21 @@ export const Pagination = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div {...props} className={cn('mt-4 lg:mt-9 flex items-center', className)}>
-      <div className="flex-1 hidden lg:block" />
-      <PaginationWrapper className="w-full lg:w-auto lg:flex-1">
+    <div {...props} className={cn('flex items-center', className)}>
+      {align === 'center' && <div className="flex-1 hidden lg:block" />}
+      <PaginationWrapper
+        className={`w-full lg:w-auto lg:flex-1 ${align === 'center' ? 'justify-center' : ''}`}
+      >
         <PaginationContent className="w-full lg:w-auto justify-stretch lg:justify-start">
           <PaginationItem>
-            <PaginationPrevious
-              href={getPageHref ? getPageHref(page - 1) : undefined}
-              aria-disabled={page <= 1}
-            />
+            {getPageHref ? (
+              <PaginationPrevious href={getPageHref(page - 1)} aria-disabled={page <= 1} />
+            ) : (
+              <PaginationPrevious
+                aria-disabled={page <= 1}
+                onClick={() => onChangePage?.(page - 1)}
+              />
+            )}
           </PaginationItem>
           <li className="lg:inline-flex lg:items-center grow lg:grow-0">
             <ul className="w-full flex items-center justify-center">
@@ -172,10 +191,17 @@ export const Pagination = ({
                 <PaginationItem key={p}>
                   {p === 'ellipsis' ? (
                     <PaginationEllipsis />
+                  ) : getPageHref ? (
+                    <PaginationTrigger
+                      href={getPageHref(page)}
+                      isActive={p === page}
+                      aria-disabled={p === page}
+                    >
+                      {p}
+                    </PaginationTrigger>
                   ) : (
                     <PaginationTrigger
-                      href={getPageHref ? getPageHref(p) : undefined}
-                      onClick={!getPageHref && onChangePage ? () => onChangePage(p) : undefined}
+                      onClick={() => onChangePage(page)}
                       isActive={p === page}
                       aria-disabled={p === page}
                     >
@@ -188,10 +214,14 @@ export const Pagination = ({
           </li>
 
           <PaginationItem>
-            <PaginationNext
-              href={getPageHref ? getPageHref(page + 1) : undefined}
-              aria-disabled={page >= total}
-            />
+            {getPageHref ? (
+              <PaginationNext href={getPageHref(page + 1)} aria-disabled={page >= total} />
+            ) : (
+              <PaginationNext
+                aria-disabled={page >= total}
+                onClick={() => onChangePage?.(page + 1)}
+              />
+            )}
           </PaginationItem>
         </PaginationContent>
       </PaginationWrapper>

@@ -1,14 +1,36 @@
-import { Card, Skeleton } from '@ergo-raffle/ui-kit';
+import Image from 'next/image';
+
+import { RaiseProgress, Skeleton } from '@ergo-raffle/ui-kit';
+
+import { RaffleDetailsDescription } from './RaffleDetailsDescription';
+import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
+import { RaffleDetailsImageCard } from './RaffleDetailsImageCard';
 
 export const RaffleDetailsSkeleton = () => (
-  <div className="flex gap-9.5">
-    <div className="flex gap-9.5">
-      <Card>
-        <Skeleton />
-      </Card>
+  <div className="space-y-9.5">
+    <div className="flex flex-col lg:flex-row gap-9.5">
+      <RaffleDetailsImageCard loading />
+      <div className="flex flex-col gap-5 grow order-1 lg:order-21">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-4 w-1/2" />
+          <div className="flex items-center gap-3.5">
+            <Skeleton className="rounded-full size-12" />
+            <Skeleton className="rounded-full size-12" />
+          </div>
+        </div>
+        <RaiseProgress loading />
+        <RaffleDetailsIconBox loading />
+        <Skeleton className="h-12 w-full" />
+        <div className="relative h-48.5 w-full">
+          <Image
+            src="/illustrations/raffleDonateIllustration.svg"
+            alt="Donate"
+            className="object-contain"
+            fill
+          />
+        </div>
+      </div>
     </div>
-    <Card>
-      <Skeleton />
-    </Card>
+    <RaffleDetailsDescription loading />
   </div>
 );

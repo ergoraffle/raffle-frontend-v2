@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,7 +12,6 @@ import {
   Checkbox,
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
   Field,
   FieldLabel,
   Input,
@@ -17,50 +20,89 @@ import {
 
 export type RaffleDonateProps = { tokenName?: string };
 
-export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => (
-  <Collapsible>
-    <CollapsibleContent>
-      <Card className="mb-2">
-        <CardContent className="flex items-stretch ">
-          <div className="space-y-4 grow xl:max-w-1/2">
-            <div>
-              <Typography variant="heading-4" className="text-black-1 mb-1">
-                How many Tickets to Get?
-              </Typography>
-              {tokenName ? (
-                <Typography variant="subtitle-md" className="text-gray-2">
-                  each Ticket = 2 {tokenName}
-                </Typography>
-              ) : null}
-            </div>
-            <Field>
-              <Input />
-            </Field>
-            <Field orientation="horizontal">
-              <Checkbox id="checkout-terms" />
-              <FieldLabel htmlFor="checkout-terms">
-                I Agree to the{' '}
-                <Link href="/terms" className="underline">
-                  Terms of Use
-                </Link>
-              </FieldLabel>
-            </Field>
-          </div>
-          <div className="relative w-1/2">
-            <Image
-              src="/illustrations/raffleDonateFormIllustration.svg"
-              alt="Donate"
-              fill
-              className="object-contain"
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </CollapsibleContent>
-    <CollapsibleTrigger asChild>
-      <Button variant="primary" className="w-full">
-        Donate
-      </Button>
-    </CollapsibleTrigger>
-  </Collapsible>
-);
+export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
+  const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const handleDonateClick = () => {
+    if (openCollapsible) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 10000);
+    } else {
+      setOpenCollapsible(true);
+    }
+  };
+  return (
+    <div className="grow w-full relative">
+      <Collapsible
+        open={openCollapsible}
+        onOpenChange={setOpenCollapsible}
+        className="relative z-10"
+      >
+        <CollapsibleContent>
+          <Card className="mb-2 py-8">
+            <CardContent className="flex items-stretch">
+              {showSuccessMessage ? (
+                <div className="flex flex-col">Massage</div>
+              ) : (
+                <>
+                  <div className="space-y-4 grow xl:max-w-1/2">
+                    <div>
+                      <Typography variant="heading-4" className="text-black-1 mb-1">
+                        How many Tickets to Get?
+                      </Typography>
+                      {tokenName ? (
+                        <Typography variant="subtitle-md" className="text-gray-2">
+                          each Ticket = 2 {tokenName}
+                        </Typography>
+                      ) : null}
+                    </div>
+                    <Field>
+                      <Input />
+                    </Field>
+                    <Field orientation="horizontal">
+                      <Checkbox id="checkout-terms" />
+                      <FieldLabel htmlFor="checkout-terms">
+                        I Agree to the{' '}
+                        <Link href="/terms" className="underline">
+                          Terms of Use
+                        </Link>
+                      </FieldLabel>
+                    </Field>
+                  </div>
+                  <div className="relative w-1/2">
+                    <Image
+                      src="/illustrations/raffleDonateFormIllustration.svg"
+                      alt="Donate"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </CollapsibleContent>
+        <Button
+          variant="primary"
+          className="w-full"
+          disabled={showSuccessMessage}
+          onClick={handleDonateClick}
+        >
+          Donate
+        </Button>
+      </Collapsible>
+      <div
+        className={`absolute bottom-0 left-0 z-9 h-48.5 w-full transition-all transition-duration-300 ${openCollapsible ? 'opacity-0' : 'opacity-100'}`}
+      >
+        <Image
+          src="/illustrations/raffleDonateIllustration.svg"
+          alt="Donate"
+          className={`object-contain object-bottom`}
+          fill
+        />
+      </div>
+    </div>
+  );
+};

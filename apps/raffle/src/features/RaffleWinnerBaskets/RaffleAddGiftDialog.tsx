@@ -1,4 +1,7 @@
 'use client';
+
+import { useState } from 'react';
+
 // import { Search } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -15,12 +18,12 @@ import {
   Token,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { useState } from 'react';
-import { SelectAssets } from './SelectAssets';
+
+import { SelectAssets } from '../SelectAssets';
 
 export type RaffleAddGiftDialogProps = {
   open: boolean;
-  initialBasketNumber?: number;
+  initialBasketNumber?: string;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -30,7 +33,7 @@ export const RaffleAddGiftDialog = ({
   onOpenChange
 }: RaffleAddGiftDialogProps) => {
   const [values, setValues] = useState<{
-    basketNumber?: number;
+    basketNumber?: string;
     selectedAssets: { name: string; amount: number }[];
   }>({
     basketNumber: initialBasketNumber,
