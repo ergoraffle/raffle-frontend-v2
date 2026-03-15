@@ -245,6 +245,7 @@ export const RaffleActivityType = {
   ticket_bought: 'ticket_bought',
   upvoted: 'upvoted',
   downvoted: 'downvoted',
+  voted: 'voted',
   gift_added: 'gift_added'
 } as const;
 
@@ -330,8 +331,7 @@ export type GetRafflesRaffleIdActivitiesType =
 export const GetRafflesRaffleIdActivitiesType = {
   raffle_created: 'raffle_created',
   ticket_bought: 'ticket_bought',
-  upvoted: 'upvoted',
-  downvoted: 'downvoted',
+  voted: 'voted',
   gift_added: 'gift_added'
 } as const;
 

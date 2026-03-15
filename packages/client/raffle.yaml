@@ -222,7 +222,7 @@ paths:
           description: Filter activity types
           schema:
             type: string
-            enum: [raffle_created, ticket_bought, upvoted, downvoted, gift_added]
+            enum: [raffle_created, ticket_bought, voted, gift_added]
           style: form
           explode: false
 
@@ -660,4 +660,5 @@ components:
         - ticket_bought
         - upvoted
         - downvoted
+        - voted
         - gift_added

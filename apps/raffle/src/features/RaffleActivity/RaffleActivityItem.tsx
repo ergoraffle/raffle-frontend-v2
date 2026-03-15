@@ -25,6 +25,11 @@ export const activityRenderMap = {
     text: () => 'Downvoted'
   },
 
+  voted: {
+    icon: Downvote,
+    text: () => 'Voted'
+  },
+
   gift_added: {
     icon: Gift,
     text: () => 'Gift added'

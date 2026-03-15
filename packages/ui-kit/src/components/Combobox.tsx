@@ -1,11 +1,13 @@
+import { type ComponentPropsWithRef, useRef } from 'react';
+
 import { Combobox as ComboboxPrimitive } from '@base-ui/react';
 import { Check, Close, Down, Search } from '@ergo-raffle/icons';
 
 import { cn } from '@/lib/utils';
 
+import { Badge } from './Badge';
 import { Button } from './Button';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './InputGroup';
-import { useRef } from 'react';
 
 export const Combobox = ComboboxPrimitive.Root;
 
@@ -123,61 +125,78 @@ export const ComboboxEmpty = ({ className, ...props }: ComboboxEmptyProps) => (
   />
 );
 
-export const ComboboxChips = ({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> & ComboboxPrimitive.Chips.Props) => (
+export type ComboboxChipsProps = ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> &
+  ComboboxPrimitive.Chips.Props;
+
+export const ComboboxChips = ({ className, children, ...props }: ComboboxChipsProps) => (
   <ComboboxPrimitive.Chips
     data-slot="combobox-chips"
-    className={cn(
-      'dark:bg-input/30 border-input focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive dark:has-aria-invalid:border-destructive/50 flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1',
-      className
-    )}
     {...props}
+    render={
+      <InputGroup
+        className={cn(
+          'w-full has-data-[slot=combobox-chip]:pl-1 **:data-[slot=combobox-chip-input]:pl-0',
+          className
+        )}
+        variant="bordered"
+        size="sm"
+      >
+        {children}
+        <InputGroupAddon align="inline-end">
+          <Search className="size-5" />
+        </InputGroupAddon>
+      </InputGroup>
+    }
   />
 );
+
+export type ComboboxChipProps = ComboboxPrimitive.Chip.Props & {
+  showRemove?: boolean;
+};
+
 export const ComboboxChip = ({
   className,
   children,
   showRemove = true,
   ...props
-}: ComboboxPrimitive.Chip.Props & {
-  showRemove?: boolean;
-}) => (
+}: ComboboxChipProps) => (
   <ComboboxPrimitive.Chip
     data-slot="combobox-chip"
-    className={cn(
-      'bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap has-data-[slot=combobox-chip-remove]:pr-0 has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50',
-      className
-    )}
     {...props}
-  >
-    {children}
-    {showRemove ? (
-      <ComboboxPrimitive.ChipRemove
-        className="-ml-1 opacity-50 hover:opacity-100"
-        data-slot="combobox-chip-remove"
-        render={<Close className="pointer-events-none" />}
-      />
-    ) : null}
-  </ComboboxPrimitive.Chip>
+    render={
+      <Badge
+        variant="secondary"
+        className={cn('has-data-[slot=combobox-chip-remove]:pr-0', className)}
+      >
+        {children}
+        {showRemove ? (
+          <ComboboxPrimitive.ChipRemove
+            className="-ml-1 opacity-50 hover:opacity-100"
+            data-slot="combobox-chip-remove"
+            render={
+              <Button variant="plain" size="icon-xs">
+                <Close className="pointer-events-none size-5" />
+              </Button>
+            }
+          />
+        ) : null}
+      </Badge>
+    }
+  />
 );
 
-export const ComboboxChipsInput = ({ className, ...props }: ComboboxPrimitive.Input.Props) => (
+export type ComboboxChipsInputProps = ComboboxPrimitive.Input.Props;
+
+export const ComboboxChipsInput = ({
+  className,
+  disabled = false,
+  ...props
+}: ComboboxChipsInputProps) => (
   <ComboboxPrimitive.Input
     data-slot="combobox-chip-input"
     className={cn('min-w-16 flex-1 outline-none', className)}
+    render={<InputGroupInput disabled={disabled} size="sm" />}
     {...props}
-    // render={
-    //   <InputGroup className="flex-1">
-    //     <InputGroupInput placeholder="Add item..." onChange={(e) => console.log(e.target.value)} />
-    //     <InputGroupAddon>
-    //       <Button variant="primary" size="sm">
-    //         <Search />
-    //       </Button>
-    //     </InputGroupAddon>
-    //   </InputGroup>
-    // }
   />
 );
 

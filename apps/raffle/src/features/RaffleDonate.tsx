@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ export type RaffleDonateProps = { tokenName?: string };
 
 export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
   const { isMobile } = useBreakpoint();
-  const [openCollapsible, setOpenCollapsible] = useState<boolean>(isMobile);
+  const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const handleDonateClick = () => {
     if (openCollapsible) {
@@ -35,6 +35,11 @@ export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
       !isMobile && setOpenCollapsible(true);
     }
   };
+
+  useEffect(() => {
+    setOpenCollapsible(isMobile);
+  }, [isMobile]);
+
   return (
     <div className="grow w-full relative">
       <Collapsible

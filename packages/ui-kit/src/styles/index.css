@@ -35,6 +35,14 @@ body {
   .bg-blur {
     @apply backdrop-blur-[27px];
   }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE و Edge قدیمی */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
 @utility container {

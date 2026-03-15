@@ -2,10 +2,13 @@
 
 import { useMemo, useState } from 'react';
 
-import type { GetRafflesRaffleIdActivitiesParams, RaffleActivityType } from '@ergo-raffle/client';
+import type {
+  GetRafflesRaffleIdActivitiesParams,
+  GetRafflesRaffleIdActivitiesType
+} from '@ergo-raffle/client';
 
 export type FetchActivityFilters = {
-  type?: RaffleActivityType;
+  type?: GetRafflesRaffleIdActivitiesType;
   onlyMyAddress?: boolean;
   page: number;
   perPage: number;
@@ -16,7 +19,7 @@ export const useActivityParams = (): {
   pagination: { page: number; perPage: number };
   onChangePage: (pageNumber: number) => void;
   onChangePerPage: (perPage: number) => void;
-  onTypeFilterChange: (type: RaffleActivityType) => void;
+  onTypeFilterChange: (type: GetRafflesRaffleIdActivitiesType) => void;
 } => {
   const [filters, setFilters] = useState<FetchActivityFilters>({
     page: 1,
@@ -27,7 +30,8 @@ export const useActivityParams = (): {
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });
-  const onTypeFilterChange = (type: RaffleActivityType) => setFilters({ ...filters, type });
+  const onTypeFilterChange = (type: GetRafflesRaffleIdActivitiesType) =>
+    setFilters({ ...filters, type });
   const params = useMemo(
     () => ({
       offset,
