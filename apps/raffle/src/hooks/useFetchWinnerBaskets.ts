@@ -37,6 +37,204 @@ const mockData: WinnerBasket[] = [
     ],
     tokenId: 'sfsfsdfsdf',
     tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
+  },
+  {
+    basketId: '2',
+    share: 500,
+    shareAmount: 50,
+    sharePercent: 10,
+    gifts: [
+      {
+        name: 'erg',
+        amount: 200
+      },
+      {
+        name: 'ada',
+        amount: 50
+      },
+      {
+        name: 'btc',
+        amount: 200
+      }
+    ],
+    tokenId: 'sfsfsdfsdf',
+    tokenName: 'erg'
   }
 ];
 

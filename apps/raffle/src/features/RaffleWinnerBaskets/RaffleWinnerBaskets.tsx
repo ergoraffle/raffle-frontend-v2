@@ -3,7 +3,17 @@
 import { useState } from 'react';
 
 import { Plus } from '@ergo-raffle/icons';
-import { Button, Empty, Pagination, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Empty,
+  Pagination,
+  Skeleton,
+  Typography
+} from '@ergo-raffle/ui-kit';
 
 import { useFetchWinnerBaskets } from '@/hooks/useFetchWinnerBaskets';
 import { useWinnerBasketsParams } from '@/hooks/useWinnerBasketsParams';
@@ -47,49 +57,39 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
   const secondColumn = items?.slice(5, 10);
 
   return (
-    <>
-      <div className="flex justify-between items-center my-3">
-        <RaffleWinnerBasketsFilters />
-        {isLoading ? (
-          <Skeleton className="h-10 w-24" />
-        ) : (
-          <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
-            <Plus />
-            Add Gift
-          </Button>
-        )}
-      </div>
-      <div className="flex">
-        <div className="flex-1">
-          <div className="flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
-            <Typography className="px-4 flex-1" variant="body-lg">
-              Basket
-            </Typography>
-            <Typography className="px-4 flex-2" variant="body-lg">
-              Share of Winners pot
-            </Typography>
-            <Typography className="px-4 flex-7" variant="body-lg">
-              Additional Gifts
-            </Typography>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center">
+          Winner Baskets
+          <div className="sm:hidden">
+            {isLoading ? (
+              <Skeleton className="h-10 w-24" />
+            ) : (
+              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
+                <Plus />
+                Add Gift
+              </Button>
+            )}
           </div>
-          <div className="space-y-2.5 pr-1.25">
-            {isLoading
-              ? Array.from({ length: 5 }).map((_, index) => (
-                  <RaffleWinnerBasketItem key={index.toString()} loading />
-                ))
-              : firstColumn?.map((basket) => (
-                  <RaffleWinnerBasketItem
-                    basket={basket}
-                    key={basket.basketId}
-                    handleOpenAddGiftDialog={openAddGiftDialog}
-                    handleOpenInfoDialog={setBasketInfoDialog}
-                  />
-                ))}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex justify-between items-center my-3">
+          <RaffleWinnerBasketsFilters />
+          <div className="hidden sm:block">
+            {isLoading ? (
+              <Skeleton className="h-10 w-24" />
+            ) : (
+              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
+                <Plus />
+                Add Gift
+              </Button>
+            )}
           </div>
         </div>
-        {(secondColumn && secondColumn.length > 0) || isLoading ? (
-          <div className="flex-1">
-            <div className="flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
+        <div className="flex flex-col sm:flex-row">
+          <div className="sm:flex-1">
+            <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
               <Typography className="px-4 flex-1" variant="body-lg">
                 Basket
               </Typography>
@@ -100,7 +100,7 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                 Additional Gifts
               </Typography>
             </div>
-            <div className="space-y-2.5 pl-1.25">
+            <div className="space-y-2.5 pr-1.25">
               {isLoading
                 ? Array.from({ length: 5 }).map((_, index) => (
                     <RaffleWinnerBasketItem key={index.toString()} loading />
@@ -115,32 +115,61 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                   ))}
             </div>
           </div>
-        ) : null}
-      </div>
-      {!isLoading && (
-        <>
-          {items && total && total > items.length ? (
-            <Pagination
-              page={pagination.page}
-              perPage={pagination.perPage}
-              onChangePerPage={onChangePage}
-              onChangePage={onChangePerPage}
-              total={total}
-              align="side"
-              className="mt-4"
-            />
+          {(secondColumn && secondColumn.length > 0) || isLoading ? (
+            <div className="sm:flex-1">
+              <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
+                <Typography className="px-4 flex-1" variant="body-lg">
+                  Basket
+                </Typography>
+                <Typography className="px-4 flex-2" variant="body-lg">
+                  Share of Winners pot
+                </Typography>
+                <Typography className="px-4 flex-7" variant="body-lg">
+                  Additional Gifts
+                </Typography>
+              </div>
+              <div className="space-y-2.5 pl-1.25">
+                {isLoading
+                  ? Array.from({ length: 5 }).map((_, index) => (
+                      <RaffleWinnerBasketItem key={index.toString()} loading />
+                    ))
+                  : firstColumn?.map((basket) => (
+                      <RaffleWinnerBasketItem
+                        basket={basket}
+                        key={basket.basketId}
+                        handleOpenAddGiftDialog={openAddGiftDialog}
+                        handleOpenInfoDialog={setBasketInfoDialog}
+                      />
+                    ))}
+              </div>
+            </div>
           ) : null}
-          <RaffleAddGiftDialog
-            open={addGiftDialog.open}
-            onOpenChange={handleAddGiftDialogOpen}
-            initialBasketNumber={addGiftDialog.initialBasketNumber}
-          />
-          <RaffleWinnerBasketInfoDialog
-            open={Boolean(basketInfoDialog)}
-            onOpenChange={() => setBasketInfoDialog(null)}
-          />
-        </>
-      )}
-    </>
+        </div>
+        {!isLoading && (
+          <>
+            {items && total && total > items.length ? (
+              <Pagination
+                page={pagination.page}
+                perPage={pagination.perPage}
+                onChangePerPage={onChangePage}
+                onChangePage={onChangePerPage}
+                total={total}
+                align="side"
+                className="mt-4"
+              />
+            ) : null}
+            <RaffleAddGiftDialog
+              open={addGiftDialog.open}
+              onOpenChange={handleAddGiftDialogOpen}
+              initialBasketNumber={addGiftDialog.initialBasketNumber}
+            />
+            <RaffleWinnerBasketInfoDialog
+              open={Boolean(basketInfoDialog)}
+              onOpenChange={() => setBasketInfoDialog(null)}
+            />
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 };

@@ -5,6 +5,8 @@ import { RaiseProgress, Skeleton } from '@ergo-raffle/ui-kit';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
 import { RaffleDetailsImageCard } from './RaffleDetailsImageCard';
+import { RafflePinButton } from './RafflePinButton';
+import { RaffleShareButton } from './RaffleShareButton';
 
 export const RaffleDetailsSkeleton = () => (
   <div className="space-y-9.5">
@@ -14,8 +16,8 @@ export const RaffleDetailsSkeleton = () => (
         <div className="flex justify-between items-center">
           <Skeleton className="h-4 w-1/2" />
           <div className="flex items-center gap-3.5">
-            <Skeleton className="rounded-full size-12" />
-            <Skeleton className="rounded-full size-12" />
+            <RafflePinButton loading />
+            <RaffleShareButton loading />
           </div>
         </div>
         <RaiseProgress loading />

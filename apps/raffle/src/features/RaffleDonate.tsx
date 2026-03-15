@@ -15,13 +15,15 @@ import {
   Field,
   FieldLabel,
   Input,
-  Typography
+  Typography,
+  useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
 export type RaffleDonateProps = { tokenName?: string };
 
 export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
-  const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
+  const { isMobile } = useBreakpoint();
+  const [openCollapsible, setOpenCollapsible] = useState<boolean>(isMobile);
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const handleDonateClick = () => {
     if (openCollapsible) {
@@ -30,7 +32,7 @@ export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
         setShowSuccessMessage(false);
       }, 10000);
     } else {
-      setOpenCollapsible(true);
+      !isMobile && setOpenCollapsible(true);
     }
   };
   return (
@@ -71,7 +73,7 @@ export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
                       </FieldLabel>
                     </Field>
                   </div>
-                  <div className="relative w-1/2">
+                  <div className="hidden sm:block relative w-1/2">
                     <Image
                       src="/illustrations/raffleDonateFormIllustration.svg"
                       alt="Donate"
@@ -94,7 +96,7 @@ export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
         </Button>
       </Collapsible>
       <div
-        className={`absolute bottom-0 left-0 z-9 h-48.5 w-full transition-all transition-duration-300 ${openCollapsible ? 'opacity-0' : 'opacity-100'}`}
+        className={`hidden sm:block absolute bottom-0 left-0 z-9 h-48.5 w-full transition-all transition-duration-300 ${openCollapsible ? 'opacity-0' : 'opacity-100'}`}
       >
         <Image
           src="/illustrations/raffleDonateIllustration.svg"

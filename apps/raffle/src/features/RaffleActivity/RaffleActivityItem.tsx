@@ -39,17 +39,17 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
 
   return (
     <div className="flex items-stretch space-x-2">
-      <Card padding="xs" className="flex-2">
+      <Card padding="xs" className="sm:flex-2">
         <CardContent className="flex items-center space-x-1  my-auto">
           {loading ? (
             <>
               <Skeleton className="size-6" />
-              <Skeleton className="w-20 h-3" />
+              <Skeleton className="w-20 h-3 hidden sm:block" />
             </>
           ) : (
             <>
               <Icon className="size-6" />
-              <Typography variant="body-md">
+              <Typography variant="body-md" className="hidden sm:block">
                 {config?.text(activity?.amount ?? undefined)}
               </Typography>
             </>
@@ -58,7 +58,7 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
       </Card>
       <Card padding="xs" className="grow">
         <CardContent className="flex items-center justify-between space-x-1 text-gray-2 my-auto">
-          <div className="max-w-70">
+          <div className="max-w-30 sm:max-w-70">
             {loading ? (
               <Skeleton className="h-2 w-70" />
             ) : (

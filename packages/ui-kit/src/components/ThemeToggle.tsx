@@ -24,7 +24,7 @@ export const ThemeToggle = ({ className }: ThemeToggleProps) => {
       suppressHydrationWarning
     >
       <Moon suppressHydrationWarning className={`${theme === 'dark' ? 'hidden' : ''}`} />
-      {/* <Sun suppressHydrationWarning className={`${theme === 'light' ? 'hidden' : ''}`} /> */}
+      <Sun suppressHydrationWarning className={`${theme === 'dark' ? '' : 'hidden'}`} />
     </Button>
   );
 };

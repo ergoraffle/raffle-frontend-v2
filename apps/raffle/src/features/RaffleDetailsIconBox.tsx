@@ -15,8 +15,8 @@ export const RaffleDetailsIconBox = ({
   const deadline = lastBlockHeight ? lastBlockHeight - 1416515375925 : 0;
   return (
     <Card padding="lg">
-      <CardContent className="flex items-center justify-between py-2 px-5.5">
-        <div className="flex flex-col items-center justify-center gap-1">
+      <CardContent className="flex justify-between sm:py-2 sm:px-5.5 text-center">
+        <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
           <SandClock className="size-13" />
           {loading ? (
             <div className="flex space-x-1">
@@ -31,7 +31,7 @@ export const RaffleDetailsIconBox = ({
             </Typography>
           )}
         </div>
-        <div className="flex flex-col items-center justify-center gap-1">
+        <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
           <Ticket className="size-13" />
           {loading ? (
             <div className="flex space-x-1">
@@ -42,7 +42,7 @@ export const RaffleDetailsIconBox = ({
             <Typography variant="subtitle-lg">{soldTicketCount ?? 0} Ticket Bought</Typography>
           )}
         </div>
-        <div className="flex flex-col items-center justify-center gap-1">
+        <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
           <HandCoin className="size-13" />
           {/* Static */}
           {loading ? (

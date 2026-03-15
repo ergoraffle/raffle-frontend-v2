@@ -1,9 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { configureClient, getInfo, getRafflesRaffleId, withMock } from '@ergo-raffle/client';
-import { Pin, Share } from '@ergo-raffle/icons';
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
@@ -18,6 +16,8 @@ import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
 import { RaffleDetailsImageCard } from './RaffleDetailsImageCard';
 import { RaffleDonate } from './RaffleDonate';
+import { RafflePinButton } from './RafflePinButton';
+import { RaffleShareButton } from './RaffleShareButton';
 import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
 import { getRaisedAmount } from './utils';
 
@@ -41,37 +41,36 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
 
   return (
     <div className="flex flex-col gap-9.5">
-      <div className="flex flex-col lg:flex-row gap-9.5">
+      <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
         <RaffleDetailsImageCard />
-        <div className="flex flex-col gap-5 grow order-1 lg:order-21">
-          <div className="flex justify-between items-center">
-            <Typography variant="heading-1">{raffle.name}</Typography>
+        <div className="flex flex-col gap-5 grow order-1 lg:order-2">
+          <div className="flex justify-between sm:items-center max-w-full">
+            <Typography variant="heading-1" asChild>
+              <h1>{raffle.name}</h1>
+            </Typography>
             <div className="flex items-center gap-3.5">
-              <Button variant="rounded" size="icon">
-                <Pin />
-              </Button>
-              <Button variant="rounded" size="icon">
-                <Share />
-              </Button>
+              <RafflePinButton initialPined={false} />
+              <RaffleShareButton />
             </div>
           </div>
           <RaiseProgress raisedAmounts={raisedAmounts} tokenName={raffle?.collectingTokenName} />
+          <div className="hidden sm:block">
+            <RaffleDetailsIconBox
+              lastBlockHeight={infoData.lastBlockHeight}
+              soldTicketCount={raffle?.soldTicketCount}
+            />
+          </div>
+          <RaffleDonate tokenName={raffle.collectingTokenName} />
+        </div>
+        <div className="order-3 sm:hidden">
           <RaffleDetailsIconBox
             lastBlockHeight={infoData.lastBlockHeight}
             soldTicketCount={raffle?.soldTicketCount}
           />
-          <RaffleDonate tokenName={raffle.collectingTokenName} />
         </div>
       </div>
       <RaffleDetailsDescription description={raffle.description} />
-      <Card>
-        <CardHeader>
-          <CardTitle>Winner Baskets</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RaffleWinnerBaskets raffleId={raffleId} />
-        </CardContent>
-      </Card>
+      <RaffleWinnerBaskets raffleId={raffleId} />
       <div className="flex flex-col lg:flex-row gap-9.5">
         <Card className="flex-1">
           <CardHeader>

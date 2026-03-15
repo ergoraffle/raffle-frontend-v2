@@ -25,7 +25,8 @@
     "@sentry/nextjs": "^10.32.1",
     "next": "^15.5.12",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
