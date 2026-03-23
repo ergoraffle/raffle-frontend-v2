@@ -31,22 +31,26 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
       ) : (
         <Carousel>
           <CarouselContent>
-            {raffle?.images?.map((image) => (
-              <CarouselItem key={image}>
-                <CardImageWrapper>
-                  <Image
-                    // src={image}
-                    src="/sample.png"
-                    priority
-                    alt={raffle.name}
-                    className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
-                    fill
-                  />
-                </CardImageWrapper>
-              </CarouselItem>
-            ))}
+            {raffle?.images && raffle?.images.length > 0 ? (
+              raffle.images.map((image) => (
+                <CarouselItem key={image}>
+                  <CardImageWrapper>
+                    <Image
+                      // src={image}
+                      src="/sample.png"
+                      priority
+                      alt={raffle.name}
+                      className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
+                      fill
+                    />
+                  </CardImageWrapper>
+                </CarouselItem>
+              ))
+            ) : (
+              <CardImageWrapper />
+            )}
           </CarouselContent>
-          <CarouselDots />
+          {raffle?.images && raffle.images.length > 1 ? <CarouselDots /> : null}
         </Carousel>
       )}
       <CardContent className="flex flex-col gap-1.5 p-0 justify-stretch grow">

@@ -40,7 +40,7 @@ const mockData: WinnerBasket[] = [
 export const useFetchWinnerBaskets = (raffleId: string) => {
   const { params } = useWinnerBasketsParams();
   const [data, setData] = useState<WinnerBasketListResponse>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
