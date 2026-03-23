@@ -5,6 +5,10 @@ import {
   Card,
   CardContent,
   CardImageWrapper,
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
   Identifier,
   Skeleton,
   TrustBar,
@@ -15,25 +19,36 @@ import { RaffleVote } from './RaffleVote';
 
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
-  raffle?: Pick<RaffleDetailResponse, 'raffleId' | 'image' | 'name'>;
+  raffle?: Pick<RaffleDetailResponse, 'raffleId' | 'images' | 'name'>;
 };
 
 export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => {
   const trust = { value: 0, max: 100 };
   return (
     <Card className="w-full lg:w-125 order-2 lg:order-1 p-0" border={false}>
-      <CardImageWrapper loading={loading}>
-        {raffle?.image ? (
-          <Image
-            // src={raffle.image}
-            src="/sample.png"
-            priority
-            alt={raffle.name}
-            className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
-            fill
-          />
-        ) : null}
-      </CardImageWrapper>
+      {loading ? (
+        <CardImageWrapper loading={loading} />
+      ) : (
+        <Carousel>
+          <CarouselContent>
+            {raffle?.images?.map((image) => (
+              <CarouselItem key={image}>
+                <CardImageWrapper>
+                  <Image
+                    // src={image}
+                    src="/sample.png"
+                    priority
+                    alt={raffle.name}
+                    className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
+                    fill
+                  />
+                </CardImageWrapper>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselDots />
+        </Carousel>
+      )}
       <CardContent className="flex flex-col gap-1.5 p-0 justify-stretch grow">
         <Card border={false}>
           <CardContent className="flex flex-col">

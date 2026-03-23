@@ -424,9 +424,11 @@ components:
           type: string
         description:
           type: string
-        image:
-          type: string
-          format: uri
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
         collectingTokenId:
           type: string
         collectingTokenName:

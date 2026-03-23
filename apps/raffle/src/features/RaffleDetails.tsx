@@ -42,7 +42,9 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   return (
     <div className="flex flex-col gap-9.5">
       <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
-        <RaffleDetailsImageCard />
+        <RaffleDetailsImageCard
+          raffle={{ raffleId: raffle.raffleId, name: raffle.name, images: raffle.images }}
+        />
         <div className="flex flex-col gap-5 grow order-1 lg:order-2">
           <div className="flex justify-between sm:items-center max-w-full">
             <Typography variant="heading-1" asChild>

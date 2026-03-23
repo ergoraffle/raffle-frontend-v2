@@ -104,7 +104,7 @@ export interface RaffleDetailResponse {
   raffleId: string;
   name: string;
   description?: string;
-  image?: string;
+  images?: string[];
   collectingTokenId: string;
   /**
    * @minLength 1
@@ -553,7 +553,12 @@ export const getGetRafflesRaffleIdResponseMock = (
     faker.string.alpha({ length: { min: 10, max: 20 } }),
     undefined
   ]),
-  image: faker.helpers.arrayElement([faker.internet.url(), undefined]),
+  images: faker.helpers.arrayElement([
+    Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+      faker.internet.url()
+    ),
+    undefined
+  ]),
   collectingTokenId: faker.string.alpha({ length: { min: 10, max: 20 } }),
   collectingTokenName: faker.helpers.arrayElement([
     faker.string.alpha({ length: { min: 1, max: 5 } }),
