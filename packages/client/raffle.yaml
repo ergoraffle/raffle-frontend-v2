@@ -240,6 +240,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RaffleActivityResponse'
+  /raffles/{raffleId}/winner-baskets/{basketId}:
+    get:
+      summary: Get details of a winner basket
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: basketId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Winner basket details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WinnerBasketDetailResponse'
+        '404':
+          description: Basket not found
 components:
   schemas:
     #######################
@@ -595,12 +618,35 @@ components:
     BasketGift:
       type: object
       properties:
-        name:
+        id:
           type: string
-        amount:
-          type: integer
+          description: Gift Id
+        basketId:
+          type: string
+          description: Basket Id
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftAsset'
       required:
-        - name
+        - id
+        - basketId
+        - assets
+    GiftAsset:
+      type: object
+      properties:
+        tokenId:
+          type: string
+          description: Token Id
+        tokenName:
+          type: string
+          description: Token Name
+        amount:
+          type: number
+          description: Amount
+      required:
+        - tokenId
+        - amount
     #######################
     # Raffle Activity
     #######################
@@ -662,3 +708,67 @@ components:
         - downvoted
         - voted
         - gift_added
+    #######################
+    # Winner Basket Detail
+    #######################
+    WinnerBasketDetailResponse:
+      type: object
+      properties:
+        basketId:
+          type: string
+          example: "bsk_7"
+        sharePercent:
+          type: number
+          format: float
+          description: Percentage share of the winners pot
+          example: 15
+        shareAmount:
+          type: number
+          description: Amount of token in the share
+          example: 34
+        tokenId:
+          type: string
+          example: "ada"
+        tokenName:
+          type: string
+          example: "ADA"
+        gifts:
+          type: array
+          description: List of gifts in the basket
+          items:
+            $ref: '#/components/schemas/BasketGift'
+        transactions:
+          type: array
+          description: List of transactions associated with this basket
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "123"
+              amount:
+                type: number
+                example: 129
+              type:
+                type: string
+                enum: ['asset_unwrap', 'ticket_won']
+              wallet:
+                type: string
+                description: Recipient address
+                example: "9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK"
+              txId:
+                type: string
+                description: Transaction ID
+                example: "1537b49ebdcccb01537b49ebdcccb01537b49ebdcccb01537b49ebdcccb0"
+              time:
+                type: string
+                format: date-time
+                example: "2026-03-23T00:32:00Z"
+      required:
+        - basketId
+        - sharePercent
+        - shareAmount
+        - tokenId
+        - tokenName
+        - gifts
+        - transactions

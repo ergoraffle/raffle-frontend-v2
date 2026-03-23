@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-// import { fetchBasketsAction } from '@/features/mockApi';
 import type { WinnerBasket, WinnerBasketListResponse } from '@ergo-raffle/client';
 
 import { useWinnerBasketsParams } from './useWinnerBasketsParams';
@@ -23,215 +22,15 @@ const mockData: WinnerBasket[] = [
     sharePercent: 10,
     gifts: [
       {
-        name: 'erg',
-        amount: 200
+        id: 'gift1',
+        basketId: '2',
+        assets: [
+          { tokenId: 'erg', tokenName: 'erg', amount: 10 },
+          { tokenId: 'btc', tokenName: 'btc', amount: 20 }
+        ]
       },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
-    ],
-    tokenId: 'sfsfsdfsdf',
-    tokenName: 'erg'
-  },
-  {
-    basketId: '2',
-    share: 500,
-    shareAmount: 50,
-    sharePercent: 10,
-    gifts: [
-      {
-        name: 'erg',
-        amount: 200
-      },
-      {
-        name: 'ada',
-        amount: 50
-      },
-      {
-        name: 'btc',
-        amount: 200
-      }
+      { id: 'gift2', basketId: '2', assets: [{ tokenId: 'erg', tokenName: 'erg', amount: 10 }] },
+      { id: 'gift3', basketId: '2', assets: [{ tokenId: 'ada', tokenName: 'ada', amount: 50 }] }
     ],
     tokenId: 'sfsfsdfsdf',
     tokenName: 'erg'
@@ -245,11 +44,6 @@ export const useFetchWinnerBaskets = (raffleId: string) => {
 
   useEffect(() => {
     setIsLoading(true);
-    // fetchBasketsAction(raffleId, params)
-    //   .then((data) => {
-    //     setData(data);
-    //   })
-    //   .finally(() => setIsLoading(false));
     setTimeout(() => {
       const result =
         params.type === 'gift' ? mockData.filter((i) => i.gifts && i.gifts.length > 0) : mockData;

@@ -163,10 +163,14 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
             />
-            <RaffleWinnerBasketInfoDialog
-              open={Boolean(basketInfoDialog)}
-              onOpenChange={() => setBasketInfoDialog(null)}
-            />
+            {basketInfoDialog ? (
+              <RaffleWinnerBasketInfoDialog
+                open={Boolean(basketInfoDialog)}
+                onOpenChange={() => setBasketInfoDialog(null)}
+                initialBasketId={basketInfoDialog}
+                raffleId={raffleId}
+              />
+            ) : null}
           </>
         )}
       </CardContent>

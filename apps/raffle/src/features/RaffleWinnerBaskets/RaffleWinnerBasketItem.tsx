@@ -69,11 +69,14 @@ export const RaffleWinnerBasketItem = ({
               {basket.gifts ? (
                 <>
                   <div className="hidden sm:block">
-                    {basket.gifts.slice(0, 2).map((gift) => (
-                      <Typography key={gift.name} variant="subtitle-md">
-                        {gift.amount}X {gift.name}
-                      </Typography>
-                    ))}
+                    {basket.gifts
+                      .flatMap((gift) => gift.assets)
+                      .slice(0, 2)
+                      .map((asset) => (
+                        <Typography key={asset?.tokenId} variant="subtitle-md">
+                          {asset?.amount}X {asset?.tokenName}
+                        </Typography>
+                      ))}
 
                     {basket.gifts.length > 2 ? (
                       <Typography className="text-gray-2 underline" variant="subtitle-md">
