@@ -22,6 +22,7 @@ export * from './SeeMoreLink';
 export * from './Select';
 export * from './Sheet';
 export * from './Skeleton';
+export * from './Stepper';
 export * from './Switch';
 export * from './Tabs';
 export * from './Token';
