@@ -14,7 +14,7 @@ export const inputGroupVariants = cva(
         default:
           'bg-white-3 text-white-3-foreground has-[[data-slot=input-group-control]:focus-visible]:bg-white-2 [&_[data-slot=input-group-control]]:pl-0 aria-invalid:bg-error-light-hover focus-visible:bg-white-2 has-[[data-slot][aria-invalid=true]]:bg-error-light-hover in-data-[slot=combobox-content]:focus-within:bg-inherit',
         bordered:
-          'border border-gray-4 focus-within:border-ring aria-invalid:border-error focus-visible:ring-1 has-[[data-slot][aria-invalid=true]]:border-error in-data-[slot=combobox-content]:focus-within:border-inherit focus-visible:ring-gray-3 data-[state=open]:border-inherit data-[state=open]:ring-0'
+          'border border-gray-4 focus-within:border-ring aria-invalid:border-error focus-visible:ring-1 [&_[data-slot=input-group-control]]:pl-0 has-[[data-slot][aria-invalid=true]]:border-error in-data-[slot=combobox-content]:focus-within:border-inherit focus-visible:ring-gray-3 data-[state=open]:border-inherit data-[state=open]:ring-0'
       },
       size: {
         sm: 'h-9.5 sm:h-10 rounded-md pl-2 pr-1.5 sm:pl-4 sm:pr-3',
