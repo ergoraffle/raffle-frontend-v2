@@ -1,0 +1,29 @@
+{
+  "name": "@ergo-raffle/nautilus-wallet",
+  "version": "0.0.0",
+  "private": true,
+  "description": "This is a private package utilized within Ergo Raffle UI app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/raffle.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "lint": "biome check --write && npm run prettify",
+    "lint:check": "biome check && npm run prettify:check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ergo-raffle/base-wallet": "^0.0.0"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}
