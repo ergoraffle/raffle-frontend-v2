@@ -17,8 +17,8 @@ export const RafflesPagination = ({ total }: RafflesPaginationProps) => {
       perPage={perPage}
       onChangePerPage={(value) => setParam('perPage', value.toString())}
       getPageHref={getPageLink}
-      showChangeLimitation
       total={total}
+      className="mt-4 lg:mt-9"
     />
   );
 };

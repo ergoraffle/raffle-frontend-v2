@@ -25,6 +25,7 @@
   --radius-lg: 12pt;
   --radius-xlg: 16pt;
   --radius-2xlg: 20pt;
+  --radius-full: 100%;
 }
 body {
   @apply font-poppins leading-none bg-background text-foreground;
@@ -33,6 +34,14 @@ body {
 @layer utilities {
   .bg-blur {
     @apply backdrop-blur-[27px];
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE, Old Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 

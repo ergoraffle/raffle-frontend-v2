@@ -21,8 +21,10 @@ export const ThemeToggle = ({ className }: ThemeToggleProps) => {
       className={className}
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      suppressHydrationWarning
     >
-      {theme === 'light' ? <Moon /> : <Sun />}
+      <Moon suppressHydrationWarning className={`${theme === 'dark' ? 'hidden' : ''}`} />
+      <Sun suppressHydrationWarning className={`${theme === 'dark' ? '' : 'hidden'}`} />
     </Button>
   );
 };

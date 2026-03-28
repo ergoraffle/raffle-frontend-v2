@@ -88,7 +88,181 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RaffleSummaryResponse'
+  /raffles/{raffleId}:
+    get:
+      summary: Get raffle details by ID
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Raffle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaffleDetailResponse'
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/vote:
+    post:
+      summary: Vote up or down a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: Vote registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResponse'
+        '400':
+          description: Invalid vote value
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/pin:
+    post:
+      summary: Pin or unpin a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinRequest'
+      responses:
+        '200':
+          description: Pin status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinResponse'
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/winner-baskets:
+    get:
+      summary: Get winner baskets of a raffle
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
 
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [share, empty, gift, share_gift]
+          description: Basket filter type
+
+      responses:
+        '200':
+          description: Winner baskets list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WinnerBasketListResponse'
+
+        '404':
+          description: Raffle not found
+  /raffles/{raffleId}/activities:
+    get:
+      summary: Get raffle activities
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+
+        - in: query
+          name: type
+          description: Filter activity types
+          schema:
+            type: string
+            enum: [raffle_created, ticket_bought, voted, gift_added]
+          style: form
+          explode: false
+
+        - in: query
+          name: onlyMyAddress
+          description: Return only activities of the caller
+          schema:
+            type: boolean
+            default: false
+
+      responses:
+        '200':
+          description: Raffle activities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaffleActivityResponse'
+  /raffles/{raffleId}/winner-baskets/{basketId}:
+    get:
+      summary: Get details of a winner basket
+      parameters:
+        - in: path
+          name: raffleId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: basketId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Winner basket details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WinnerBasketDetailResponse'
+        '404':
+          description: Basket not found
 components:
   schemas:
     #######################
@@ -237,3 +411,366 @@ components:
         - ticketPrice
         - soldTicketCount
         - status
+    #######################
+    # Raffle Detail
+    #######################
+
+    RaffleDetailResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+        collectingTokenId:
+          type: string
+        collectingTokenName:
+          type: string
+          minLength: 1
+          maxLength: 5
+          x-faker: rsBTC
+        winnersCount:
+          type: integer
+          x-faker: 2
+          minimum: 1
+          maximum: 5
+        giftCount:
+          type: integer
+          minimum: 1
+          maximum: 5
+          x-faker: 5
+        tags:
+          type: array
+          items:
+            type: string
+        deadline:
+          type: integer
+          description: Unix timestamp (seconds)
+        goal:
+          type: integer
+          maximum: 100
+          x-faker: 1000
+        ticketPrice:
+          type: integer
+          minimum: 1
+          maximum: 100
+          x-faker: 1000
+        soldTicketCount:
+          type: integer
+          minimum: 1
+          maximum: 100
+          x-faker: 56
+        status:
+          type: string
+          enum: [active, successful, failed]
+        createdAt:
+          type: integer
+          description: Unix timestamp (seconds)
+        creator:
+          type: string
+        prizes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RafflePrize'
+      required:
+        - raffleId
+        - name
+        - collectingTokenId
+        - winnersCount
+        - giftCount
+        - deadline
+        - goal
+        - ticketPrice
+        - soldTicketCount
+        - status
+    RafflePrize:
+      type: object
+      properties:
+        prizeId:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+        amount:
+          type: integer
+      required:
+        - prizeId
+        - name
+
+    #######################
+    # Vote
+    #######################
+
+    VoteRequest:
+      type: object
+      properties:
+        vote:
+          type: string
+          enum: [up, down]
+      required:
+        - vote
+
+    VoteResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        upVotes:
+          type: integer
+          minimum: 0
+        downVotes:
+          type: integer
+          minimum: 0
+      required:
+        - raffleId
+        - upVotes
+        - downVotes
+
+    #######################
+    # Pin
+    #######################
+
+    PinRequest:
+      type: object
+      properties:
+        pinned:
+          type: boolean
+      required:
+        - pinned
+
+    PinResponse:
+      type: object
+      properties:
+        raffleId:
+          type: string
+        pinned:
+          type: boolean
+      required:
+        - raffleId
+        - pinned
+    #######################
+    # Winner Baskets
+    #######################
+
+    WinnerBasketListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WinnerBasket'
+      required:
+        - total
+        - items
+
+    WinnerBasket:
+      type: object
+      properties:
+        basketId:
+          type: string
+
+        share:
+          type: integer
+          description: Basket index shown in UI
+
+        shareAmount:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          x-faker: 1000
+          description: Calculated share amount
+
+        sharePercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+          x-faker: 10
+          description: Calculated share amount percent
+
+        gifts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasketGift'
+
+        tokenId:
+          type: string
+          description: Token ID
+
+        tokenName:
+          type: string
+          description: Token Name
+          
+
+      required:
+        - basketId
+        - basketNumber
+        - type
+
+    BasketGift:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Gift Id
+        basketId:
+          type: string
+          description: Basket Id
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/GiftAsset'
+      required:
+        - id
+        - basketId
+        - assets
+    GiftAsset:
+      type: object
+      properties:
+        tokenId:
+          type: string
+          description: Token Id
+        tokenName:
+          type: string
+          description: Token Name
+        amount:
+          type: number
+          description: Amount
+      required:
+        - tokenId
+        - amount
+    #######################
+    # Raffle Activity
+    #######################
+    RaffleActivityResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          maximum: 10000
+
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaffleActivity'
+
+      required:
+        - total
+        - items
+    
+    RaffleActivity:
+      type: object
+      properties:
+        activityId:
+          type: string
+
+        type:
+          $ref: '#/components/schemas/RaffleActivityType'
+
+        wallet:
+          type: string
+          description: Wallet address
+
+        amount:
+          type: integer
+          description: Ticket count or vote weight
+          nullable: true
+
+        description:
+          type: string
+          description: Human readable text
+
+        createdAt:
+          type: integer
+          description: Unix timestamp (seconds)
+
+      required:
+        - activityId
+        - type
+        - wallet
+        - createdAt
+    
+    RaffleActivityType:
+      type: string
+      enum:
+        - raffle_created
+        - ticket_bought
+        - upvoted
+        - downvoted
+        - voted
+        - gift_added
+    #######################
+    # Winner Basket Detail
+    #######################
+    WinnerBasketDetailResponse:
+      type: object
+      properties:
+        basketId:
+          type: string
+          example: "bsk_7"
+        sharePercent:
+          type: number
+          format: float
+          description: Percentage share of the winners pot
+          example: 15
+        shareAmount:
+          type: number
+          description: Amount of token in the share
+          example: 34
+        tokenId:
+          type: string
+          example: "ada"
+        tokenName:
+          type: string
+          example: "ADA"
+        gifts:
+          type: array
+          description: List of gifts in the basket
+          items:
+            $ref: '#/components/schemas/BasketGift'
+        transactions:
+          type: array
+          description: List of transactions associated with this basket
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "123"
+              amount:
+                type: number
+                example: 129
+              type:
+                type: string
+                enum: ['asset_unwrap', 'ticket_won']
+              wallet:
+                type: string
+                description: Recipient address
+                example: "9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK"
+              txId:
+                type: string
+                description: Transaction ID
+                example: "1537b49ebdcccb01537b49ebdcccb01537b49ebdcccb01537b49ebdcccb0"
+              time:
+                type: string
+                format: date-time
+                example: "2026-03-23T00:32:00Z"
+      required:
+        - basketId
+        - sharePercent
+        - shareAmount
+        - tokenId
+        - tokenName
+        - gifts
+        - transactions
