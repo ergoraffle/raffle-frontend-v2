@@ -13,7 +13,7 @@ import {
   Strikethrough,
   Underline
 } from '@ergo-raffle/icons';
-import Quill from 'quill';
+import type Quill from 'quill';
 
 import { Button } from './Button';
 import {
@@ -36,29 +36,45 @@ export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEdito
   const quillRef = useRef<Quill | null>(null);
 
   useEffect(() => {
-    if (editorRef.current) {
-      quillRef.current = new Quill(editorRef.current, {
+    if (!editorRef.current) return;
+
+    let isMounted = true;
+
+    import('quill').then((QuillModule) => {
+      if (!isMounted) return;
+      if (!editorRef.current) return;
+      if (!document.getElementById('toolbar')) return;
+
+      const Quill = QuillModule.default;
+
+      const quill = new Quill(editorRef.current, {
         placeholder,
         modules: {
           toolbar: '#toolbar'
         }
       });
 
-      quillRef.current.root.innerHTML = value;
+      quill.root.innerHTML = value;
 
-      quillRef.current.on('text-change', () => {
-        quillRef.current && onChange?.(quillRef.current.root.innerHTML);
+      quill.on('text-change', () => {
+        onChange?.(quill.root.innerHTML);
       });
-    }
+
+      quillRef.current = quill;
+    });
 
     return () => {
+      isMounted = false;
       quillRef.current = null;
     };
   }, [onChange, value, placeholder]);
 
   useEffect(() => {
-    if (quillRef.current && quillRef.current.root.innerHTML !== value) {
-      quillRef.current.root.innerHTML = value;
+    const quill = quillRef.current;
+    if (!quill) return;
+
+    if (value !== quill.root.innerHTML) {
+      quill.clipboard.dangerouslyPasteHTML(value);
     }
   }, [value]);
 
@@ -73,11 +89,11 @@ export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEdito
     left: () => <AlignLeft />,
     right: () => <AlignRight />,
     center: () => <AlignCenter />,
-    justified: () => <AlignJustified />
+    justify: () => <AlignJustified />
   };
 
   return (
-    <div className="border-gray-4 border rounded-3xlg">
+    <div className="ql-wrapper border-gray-4 border rounded-3xlg">
       <div id="toolbar" className="px-4 py-3 flex items-center gap-x-3">
         <Button variant="plain" size="icon-xs" className="ql-bold">
           <Bold />
@@ -120,7 +136,7 @@ export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEdito
           <List />
         </Button>
       </div>
-      <div ref={editorRef} className="min-h-50 border-0 typo-body-md" />
+      <div ref={editorRef} className="min-h-50 border-0 typo-body-md px-4 py-3" />
     </div>
   );
 };
