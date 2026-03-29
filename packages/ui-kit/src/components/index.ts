@@ -25,6 +25,7 @@ export * from './Skeleton';
 export * from './Stepper';
 export * from './Switch';
 export * from './Tabs';
+export * from './TextEditor';
 export * from './Token';
 export * from './Tooltip';
 export * from './TrustBar';

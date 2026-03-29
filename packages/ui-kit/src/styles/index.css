@@ -1,6 +1,7 @@
 /* Tailwind v4 imports */
 @import "./colors.css";
 @import "./typography.css";
+@import "./textEditor.css";
 
 /* =========================
    Design Tokens
@@ -25,6 +26,7 @@
   --radius-lg: 12pt;
   --radius-xlg: 16pt;
   --radius-2xlg: 20pt;
+  --radius-3xlg: 24pt;
 }
 body {
   @apply font-poppins leading-none bg-background text-foreground;
