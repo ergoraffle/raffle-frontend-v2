@@ -1,0 +1,27 @@
+.ql-wrapper .ql-editor {
+  @apply min-h-50 focus-visible:outline-0 } .ql-editor li[data-list="bullet"] { @apply list-disc;
+}
+.ql-editor li[data-list="ordered"] {
+  @apply list-decimal;
+}
+.ql-wrapper .ql-editor ul {
+  @apply pl-5;
+}
+.ql-wrapper .ql-editor ol {
+  @apply pl-5;
+}
+.ql-wrapper .ql-editor .ql-align-center {
+  @apply text-center;
+}
+.ql-wrapper .ql-editor .ql-align-justify {
+  @apply text-justify;
+}
+.ql-wrapper .ql-editor .ql-align-left {
+  @apply text-left;
+}
+.ql-wrapper .ql-editor .ql-align-right {
+  @apply text-right;
+}
+.ql-wrapper .ql-editor p {
+  @apply focus-visible:outline-0;
+}
