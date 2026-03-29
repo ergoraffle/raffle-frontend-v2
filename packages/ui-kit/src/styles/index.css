@@ -1,6 +1,7 @@
 /* Tailwind v4 imports */
 @import "./colors.css";
 @import "./typography.css";
+@import "../components/Uploader/uploader.css";
 
 /* =========================
    Design Tokens

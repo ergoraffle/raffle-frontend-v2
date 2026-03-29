@@ -29,3 +29,4 @@ export * from './Token';
 export * from './Tooltip';
 export * from './TrustBar';
 export * from './Typography';
+export * from './Uploader';
