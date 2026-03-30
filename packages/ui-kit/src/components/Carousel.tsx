@@ -31,18 +31,22 @@ export const useCarousel = () => {
   return context;
 };
 
-export type CarouselProps = ComponentProps<'div'>;
+export type CarouselProps = ComponentProps<'div'> & { onChangeSlide?: (index: number) => void };
 
-export const Carousel = ({ className, children, ...props }: CarouselProps) => {
+export const Carousel = ({ className, onChangeSlide, children, ...props }: CarouselProps) => {
   const [carouselRef, api] = useEmblaCarousel();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
-  const onSelect = useCallback((api: CarouselApi) => {
-    if (!api) return;
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, []);
+  const onSelect = useCallback(
+    (api: CarouselApi) => {
+      if (!api) return;
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+      onChangeSlide?.(api.selectedScrollSnap());
+    },
+    [onChangeSlide]
+  );
 
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();
@@ -123,7 +127,6 @@ export type CarouselNavButtonProps = ButtonProps;
 
 export const CarouselPrevious = ({ className, ...props }: CarouselNavButtonProps) => {
   const { scrollPrev, canScrollPrev } = useCarousel();
-  if (!canScrollPrev) return null;
   return (
     <Button
       data-slot="carousel-previous"
@@ -131,9 +134,11 @@ export const CarouselPrevious = ({ className, ...props }: CarouselNavButtonProps
       size="icon-xs"
       className={cn(
         'rounded-full absolute touch-manipulation top-1/2 left-3.5 -translate-y-1/2',
+        !canScrollPrev && 'opacity-50',
         className
       )}
       onClick={scrollPrev}
+      disabled={!canScrollPrev}
       {...props}
     >
       <Left className="cn-rtl-flip" />
@@ -144,7 +149,6 @@ export const CarouselPrevious = ({ className, ...props }: CarouselNavButtonProps
 
 export const CarouselNext = ({ className, ...props }: CarouselNavButtonProps) => {
   const { scrollNext, canScrollNext } = useCarousel();
-  if (!canScrollNext) return null;
   return (
     <Button
       data-slot="carousel-next"
@@ -152,9 +156,11 @@ export const CarouselNext = ({ className, ...props }: CarouselNavButtonProps) =>
       size="icon-xs"
       className={cn(
         'rounded-full absolute touch-manipulation top-1/2 right-3.5 -translate-y-1/2',
+        !canScrollNext && 'opacity-50',
         className
       )}
       onClick={scrollNext}
+      disabled={!canScrollNext}
       {...props}
     >
       <Right className="cn-rtl-flip" />

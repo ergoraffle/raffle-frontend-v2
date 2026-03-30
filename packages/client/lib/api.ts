@@ -90,6 +90,207 @@ export interface RaffleSummary {
   status: RaffleSummaryStatus;
 }
 
+export interface RaffleDetailResponse {
+  id: string;
+  name: string;
+  /**
+   * @minLength 128
+   * @maxLength 256
+   */
+  address?: string;
+  description?: string;
+  images?: string[];
+  /**
+   * @minLength 128
+   * @maxLength 256
+   */
+  collectingTokenId: string;
+  /**
+   * @minLength 1
+   * @maxLength 5
+   */
+  collectingTokenName?: string;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  missionFund?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  serviceFee?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  winnerPot?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  trust?: number;
+  /**
+   * @minimum 1
+   * @maximum 1000
+   */
+  voteCount?: number;
+  /**
+   * @minimum 1
+   * @maximum 60
+   */
+  ticketBought?: number;
+  /**
+   * @minimum 1
+   * @maximum 60
+   */
+  backer?: number;
+  /** Unix timestamp (seconds) */
+  deadline: number;
+  /** @maximum 100 */
+  goal: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  ticketPrice: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  soldTicketCount: number;
+}
+
+export interface RafflePrize {
+  prizeId: string;
+  name: string;
+  image?: string;
+  amount?: number;
+}
+
+export interface WinnerBasketListResponse {
+  total: number;
+  items: WinnerBasket[];
+}
+
+export type WinnerBasketType = (typeof WinnerBasketType)[keyof typeof WinnerBasketType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const WinnerBasketType = {
+  empty: 'empty',
+  shared: 'shared'
+} as const;
+
+export interface WinnerBasket {
+  basketId: string;
+  type: WinnerBasketType;
+  /** Calculated share amount */
+  shareAmount?: number;
+  /** Calculated share percent */
+  sharePercent?: number;
+  gifts: BasketGiftSimple[];
+}
+
+export interface BasketGift {
+  /** Gift Id */
+  id: string;
+  /** Basket Id */
+  basketId: string;
+  assets: GiftAsset[];
+}
+
+export interface GiftAsset {
+  /** Token Id */
+  tokenId: string;
+  /** Token Name */
+  tokenName?: string;
+  /** Amount */
+  amount: number;
+}
+
+export interface BasketGiftSimple {
+  asset: string;
+  amount: number;
+  verified: boolean;
+}
+
+export type WinnerBasketDetailResponseType =
+  (typeof WinnerBasketDetailResponseType)[keyof typeof WinnerBasketDetailResponseType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const WinnerBasketDetailResponseType = {
+  empty: 'empty',
+  shared: 'shared'
+} as const;
+
+export interface WinnerBasketDetailResponse {
+  basketId: string;
+  type: WinnerBasketDetailResponseType;
+  sharePercent?: number;
+  shareAmount?: number;
+  gifts: BasketGiftDetail[];
+  transactions: BasketTransaction[];
+}
+
+export interface BasketGiftDetail {
+  id: string;
+  basketId?: string;
+  assets: GiftAsset[];
+  verified: boolean;
+}
+
+export type BasketTransactionType =
+  (typeof BasketTransactionType)[keyof typeof BasketTransactionType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BasketTransactionType = {
+  asset_unwrap: 'asset_unwrap',
+  ticket_won: 'ticket_won',
+  asset_added: 'asset_added'
+} as const;
+
+export interface BasketTransaction {
+  id: string;
+  type: BasketTransactionType;
+  amount: number;
+  wallet: string;
+  address: string;
+  createdAt: string;
+}
+
+export interface RaffleActivityResponse {
+  total: number;
+  items: RaffleActivity[];
+}
+
+export type RaffleActivityType = (typeof RaffleActivityType)[keyof typeof RaffleActivityType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RaffleActivityType = {
+  raffle_created: 'raffle_created',
+  ticket_bought: 'ticket_bought',
+  upvoted: 'upvoted',
+  downvoted: 'downvoted',
+  basket_won: 'basket_won',
+  gift_added: 'gift_added',
+  raising_money: 'raising_money'
+} as const;
+
+export interface RaffleActivity {
+  id: string;
+  type: RaffleActivityType;
+  address: string;
+  /** @nullable */
+  amount?: number | null;
+  /** @nullable */
+  basketNumber?: string | null;
+  basketType: string;
+  /** @nullable */
+  raffleName?: string | null;
+  raffleId?: string;
+  createdAt: number;
+}
+
 export type GetRafflesParams = {
   offset?: number;
   limit?: number;
@@ -132,6 +333,50 @@ export const GetRafflesSortBy = {
   Deadline: 'Deadline'
 } as const;
 
+export type GetRafflesRaffleIdWinnerBasketsParams = {
+  offset?: number;
+  limit?: number;
+  /**
+   * Basket filter type
+   */
+  type?: GetRafflesRaffleIdWinnerBasketsType;
+};
+
+export type GetRafflesRaffleIdWinnerBasketsType =
+  (typeof GetRafflesRaffleIdWinnerBasketsType)[keyof typeof GetRafflesRaffleIdWinnerBasketsType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRafflesRaffleIdWinnerBasketsType = {
+  share: 'share',
+  empty: 'empty',
+  gift: 'gift',
+  share_gift: 'share_gift'
+} as const;
+
+export type GetRafflesRaffleIdActivitiesParams = {
+  offset?: number;
+  limit?: number;
+  /**
+   * Filter activity types
+   */
+  type?: GetRafflesRaffleIdActivitiesType;
+  /**
+   * Return only activities of the caller
+   */
+  onlyMyAddress?: boolean;
+};
+
+export type GetRafflesRaffleIdActivitiesType =
+  (typeof GetRafflesRaffleIdActivitiesType)[keyof typeof GetRafflesRaffleIdActivitiesType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRafflesRaffleIdActivitiesType = {
+  raffle_created: 'raffle_created',
+  ticket_bought: 'ticket_bought',
+  voted: 'voted',
+  gift_added: 'gift_added'
+} as const;
+
 /**
  * @summary Get startup configuration
  */
@@ -148,6 +393,47 @@ export const getInfo = () => httpClient<InfoResponse>({ url: `/info`, method: 'G
 export const getRaffles = (params?: GetRafflesParams) =>
   httpClient<RaffleSummaryResponse>({ url: `/raffles`, method: 'GET', params });
 
+/**
+ * @summary Get raffle details by ID
+ */
+export const getRafflesRaffleId = (raffleId: string) =>
+  httpClient<RaffleDetailResponse>({ url: `/raffles/${raffleId}`, method: 'GET' });
+
+/**
+ * @summary Get winner baskets of a raffle
+ */
+export const getRafflesRaffleIdWinnerBaskets = (
+  raffleId: string,
+  params?: GetRafflesRaffleIdWinnerBasketsParams
+) =>
+  httpClient<WinnerBasketListResponse>({
+    url: `/raffles/${raffleId}/winner-baskets`,
+    method: 'GET',
+    params
+  });
+
+/**
+ * @summary Get raffle activities
+ */
+export const getRafflesRaffleIdActivities = (
+  raffleId: string,
+  params?: GetRafflesRaffleIdActivitiesParams
+) =>
+  httpClient<RaffleActivityResponse>({
+    url: `/raffles/${raffleId}/activities`,
+    method: 'GET',
+    params
+  });
+
+/**
+ * @summary Get details of a winner basket
+ */
+export const getRafflesRaffleIdWinnerBasketsBasketId = (raffleId: string, basketId: string) =>
+  httpClient<WinnerBasketDetailResponse>({
+    url: `/raffles/${raffleId}/winner-baskets/${basketId}`,
+    method: 'GET'
+  });
+
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
@@ -155,6 +441,16 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 export type GetStartupResult = NonNullable<Awaited<ReturnType<typeof getStartup>>>;
 export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>;
 export type GetRafflesResult = NonNullable<Awaited<ReturnType<typeof getRaffles>>>;
+export type GetRafflesRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRafflesRaffleId>>>;
+export type GetRafflesRaffleIdWinnerBasketsResult = NonNullable<
+  Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBaskets>>
+>;
+export type GetRafflesRaffleIdActivitiesResult = NonNullable<
+  Awaited<ReturnType<typeof getRafflesRaffleIdActivities>>
+>;
+export type GetRafflesRaffleIdWinnerBasketsBasketIdResult = NonNullable<
+  Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBasketsBasketId>>
+>;
 
 export const getGetStartupResponseMock = (
   overrideResponse: Partial<StartupResponse> = {}
@@ -213,6 +509,155 @@ export const getGetRafflesResponseMock = (
     soldTicketCount: faker.number.int({ min: 1, max: 100 }),
     status: faker.helpers.arrayElement(['active', 'successful', 'failed'] as const)
   })),
+  ...overrideResponse
+});
+
+export const getGetRafflesRaffleIdResponseMock = (
+  overrideResponse: Partial<RaffleDetailResponse> = {}
+): RaffleDetailResponse => ({
+  id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  address: faker.helpers.arrayElement([
+    faker.string.alpha({ length: { min: 128, max: 256 } }),
+    undefined
+  ]),
+  description: faker.helpers.arrayElement([
+    faker.string.alpha({ length: { min: 10, max: 20 } }),
+    undefined
+  ]),
+  images: faker.helpers.arrayElement([
+    Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+      faker.internet.url()
+    ),
+    undefined
+  ]),
+  collectingTokenId: faker.string.alpha({ length: { min: 128, max: 256 } }),
+  collectingTokenName: faker.helpers.arrayElement([
+    faker.string.alpha({ length: { min: 1, max: 5 } }),
+    undefined
+  ]),
+  missionFund: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
+  serviceFee: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
+  winnerPot: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
+  trust: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
+  voteCount: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 1000 }), undefined]),
+  ticketBought: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 60 }), undefined]),
+  backer: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 60 }), undefined]),
+  deadline: faker.number.int({ min: undefined, max: undefined }),
+  goal: faker.number.int({ min: undefined, max: 100 }),
+  ticketPrice: faker.number.int({ min: 1, max: 100 }),
+  soldTicketCount: faker.number.int({ min: 1, max: 100 }),
+  ...overrideResponse
+});
+
+export const getGetRafflesRaffleIdWinnerBasketsResponseMock = (
+  overrideResponse: Partial<WinnerBasketListResponse> = {}
+): WinnerBasketListResponse => ({
+  total: faker.number.int({ min: undefined, max: undefined }),
+  items: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    basketId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    type: faker.helpers.arrayElement(['empty', 'shared'] as const),
+    shareAmount: faker.helpers.arrayElement([
+      faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+      undefined
+    ]),
+    sharePercent: faker.helpers.arrayElement([
+      faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+      undefined
+    ]),
+    gifts: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        asset: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        amount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        verified: faker.datatype.boolean()
+      })
+    )
+  })),
+  ...overrideResponse
+});
+
+export const getGetRafflesRaffleIdActivitiesResponseMock = (
+  overrideResponse: Partial<RaffleActivityResponse> = {}
+): RaffleActivityResponse => ({
+  total: faker.number.int({ min: undefined, max: undefined }),
+  items: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    type: faker.helpers.arrayElement([
+      'raffle_created',
+      'ticket_bought',
+      'upvoted',
+      'downvoted',
+      'basket_won',
+      'gift_added',
+      'raising_money'
+    ] as const),
+    address: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    amount: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([
+        faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        null
+      ]),
+      undefined
+    ]),
+    basketNumber: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+      undefined
+    ]),
+    basketType: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    raffleName: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+      undefined
+    ]),
+    raffleId: faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      undefined
+    ]),
+    createdAt: faker.number.int({ min: undefined, max: undefined })
+  })),
+  ...overrideResponse
+});
+
+export const getGetRafflesRaffleIdWinnerBasketsBasketIdResponseMock = (
+  overrideResponse: Partial<WinnerBasketDetailResponse> = {}
+): WinnerBasketDetailResponse => ({
+  basketId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  type: faker.helpers.arrayElement(['empty', 'shared'] as const),
+  sharePercent: faker.helpers.arrayElement([
+    faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    undefined
+  ]),
+  shareAmount: faker.helpers.arrayElement([
+    faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    undefined
+  ]),
+  gifts: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    basketId: faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      undefined
+    ]),
+    assets: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        tokenId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        tokenName: faker.helpers.arrayElement([
+          faker.string.alpha({ length: { min: 10, max: 20 } }),
+          undefined
+        ]),
+        amount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 })
+      })
+    ),
+    verified: faker.datatype.boolean()
+  })),
+  transactions: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+    () => ({
+      id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      type: faker.helpers.arrayElement(['asset_unwrap', 'ticket_won', 'asset_added'] as const),
+      amount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+      wallet: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      address: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`
+    })
+  ),
   ...overrideResponse
 });
 
@@ -296,8 +741,120 @@ export const getGetRafflesMockHandler = (
     },
     options
   );
+
+export const getGetRafflesRaffleIdMockHandler = (
+  overrideResponse?:
+    | RaffleDetailResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<RaffleDetailResponse> | RaffleDetailResponse),
+  options?: RequestHandlerOptions
+) =>
+  http.get(
+    '*/raffles/:raffleId',
+    async (info) => {
+      await delay(1000);
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetRafflesRaffleIdResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    },
+    options
+  );
+
+export const getGetRafflesRaffleIdWinnerBasketsMockHandler = (
+  overrideResponse?:
+    | WinnerBasketListResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<WinnerBasketListResponse> | WinnerBasketListResponse),
+  options?: RequestHandlerOptions
+) =>
+  http.get(
+    '*/raffles/:raffleId/winner-baskets',
+    async (info) => {
+      await delay(1000);
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetRafflesRaffleIdWinnerBasketsResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    },
+    options
+  );
+
+export const getGetRafflesRaffleIdActivitiesMockHandler = (
+  overrideResponse?:
+    | RaffleActivityResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<RaffleActivityResponse> | RaffleActivityResponse),
+  options?: RequestHandlerOptions
+) =>
+  http.get(
+    '*/raffles/:raffleId/activities',
+    async (info) => {
+      await delay(1000);
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetRafflesRaffleIdActivitiesResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    },
+    options
+  );
+
+export const getGetRafflesRaffleIdWinnerBasketsBasketIdMockHandler = (
+  overrideResponse?:
+    | WinnerBasketDetailResponse
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0]
+      ) => Promise<WinnerBasketDetailResponse> | WinnerBasketDetailResponse),
+  options?: RequestHandlerOptions
+) =>
+  http.get(
+    '*/raffles/:raffleId/winner-baskets/:basketId',
+    async (info) => {
+      await delay(1000);
+
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === 'function'
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetRafflesRaffleIdWinnerBasketsBasketIdResponseMock()
+        ),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    },
+    options
+  );
 export const getRaffleServiceAPIMock = () => [
   getGetStartupMockHandler(),
   getGetInfoMockHandler(),
-  getGetRafflesMockHandler()
+  getGetRafflesMockHandler(),
+  getGetRafflesRaffleIdMockHandler(),
+  getGetRafflesRaffleIdWinnerBasketsMockHandler(),
+  getGetRafflesRaffleIdActivitiesMockHandler(),
+  getGetRafflesRaffleIdWinnerBasketsBasketIdMockHandler()
 ];

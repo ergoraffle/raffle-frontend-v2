@@ -44,6 +44,7 @@ export { default as Telegram } from './telegram.svg?react';
 export { default as Ticket } from './ticket.svg?react';
 export { default as Underline } from './underline.svg?react';
 export { default as Up } from './up.svg?react';
+export { default as UpLeft } from './up-left.svg?react';
 export { default as Upvote } from './upvote.svg?react';
 export { default as User } from './user.svg?react';
 export { default as Verified } from './verified.svg?react';

@@ -43,12 +43,14 @@ export type ProgressProps = ComponentProps<typeof ProgressPrimitive.Root> &
 
 export const Progress = ({
   className,
-  value,
+  value = 0,
+  max = 100,
   loading = false,
   variant = 'default',
   ...props
-}: ProgressProps) =>
-  loading ? (
+}: ProgressProps) => {
+  const percentage = value ? Math.max(0, Math.min((value / max) * 100, 100)) : 0;
+  return loading ? (
     <Skeleton className={cn(progressLoadingVariants({ variant }))} />
   ) : (
     <ProgressPrimitive.Root
@@ -59,7 +61,8 @@ export const Progress = ({
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
         className="bg-primary-1 h-full transition-all rounded-sm"
-        style={{ width: `${value ? 100 - value : 0}%` }}
+        style={{ width: `${percentage}%` }}
       />
     </ProgressPrimitive.Root>
   );
+};

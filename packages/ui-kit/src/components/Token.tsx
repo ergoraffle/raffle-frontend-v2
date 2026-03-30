@@ -4,14 +4,21 @@ import { TOKENS } from '@ergo-raffle/icons';
 
 import { useFramework } from '../providers';
 import { Skeleton } from './Skeleton';
+import { Typography } from './Typography';
 
 export type TokenProps = ComponentProps<'span'> & {
   loading?: boolean;
   name?: string;
   tokenId?: string;
+  size?: 'default' | 'lg';
 };
 
-export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenProps) => {
+export const Token = ({
+  loading,
+  name = 'Unsupported token',
+  size = 'default',
+  tokenId
+}: TokenProps) => {
   const Image = useFramework().components.Image;
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -43,22 +50,23 @@ export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenPro
   }, []);
 
   return (
-    <span ref={ref} className="flex items-center">
+    <span ref={ref} className={`flex items-center ${size === 'lg' ? 'space-x-1.5' : 'space-x-1'}`}>
       {!!url && isVisible && (
         <Image
           alt={`Token ${name}`}
           src={url}
           loading="lazy"
-          className="mr-1"
-          width={20}
-          height={20}
+          width={size === 'lg' ? 24 : 20}
+          height={size === 'lg' ? 24 : 20}
           onLoad={() => setIsLoaded(true)}
           onError={() => setIsLoaded(true)}
         />
       )}
 
       {!isLoading && !url && (
-        <span className="uppercase bg-black-4 text-black-4-foreground rounded-full typo-subtitle-sm flex items-center justify-center size-5 mr-1">
+        <span
+          className={`uppercase bg-black-4 text-black-4-foreground rounded-full typo-subtitle-sm flex items-center justify-center ${size === 'lg' ? 'size-6' : 'size-5'}`}
+        >
           {name.slice(0, 1)}
         </span>
       )}
@@ -66,10 +74,12 @@ export const Token = ({ loading, name = 'Unsupported token', tokenId }: TokenPro
       {isLoading ? (
         <>
           <Skeleton className="size-5 rounded-full mr-1" />
-          <Skeleton className="h-3 w-14 rounded-full" />
+          <Skeleton className="h-3 w-14 rounded-md" />
         </>
       ) : (
-        <span className="truncate">{name}</span>
+        <Typography asChild variant={size === 'lg' ? 'body-lg' : 'subtitle-md'}>
+          <span className="truncate">{name}</span>
+        </Typography>
       )}
     </span>
   );
