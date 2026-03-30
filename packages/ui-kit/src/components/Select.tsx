@@ -50,13 +50,14 @@ export const selectTriggerVariants = cva(
 );
 
 export type SelectTriggerProps = ComponentProps<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof selectTriggerVariants>;
+  VariantProps<typeof selectTriggerVariants> & { showIcon?: boolean };
 
 export const SelectTrigger = ({
   className,
   size = 'default',
   variant = 'default',
   children,
+  showIcon = true,
   ...props
 }: SelectTriggerProps) => (
   <SelectPrimitive.Trigger
@@ -66,9 +67,11 @@ export const SelectTrigger = ({
     {...props}
   >
     {children}
-    <SelectPrimitive.Icon asChild>
-      <Down className="size-6 pointer-events-none" />
-    </SelectPrimitive.Icon>
+    {showIcon ? (
+      <SelectPrimitive.Icon asChild>
+        <Down className="size-6 pointer-events-none" />
+      </SelectPrimitive.Icon>
+    ) : null}
   </SelectPrimitive.Trigger>
 );
 
