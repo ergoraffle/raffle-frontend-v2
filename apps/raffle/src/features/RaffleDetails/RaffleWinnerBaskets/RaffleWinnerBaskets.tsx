@@ -116,18 +116,17 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
             </div>
           ) : null}
         </div>
-        {!isLoading &&
-          (items && total && total > items.length ? (
-            <Pagination
-              page={pagination.page}
-              perPage={pagination.perPage}
-              onChangePerPage={onChangePage}
-              onChangePage={onChangePerPage}
-              total={total}
-              align="side"
-              className="mt-4"
-            />
-          ) : null)}
+        {!isLoading && items && total ? (
+          <Pagination
+            page={pagination.page}
+            perPage={pagination.perPage}
+            onChangePerPage={onChangePage}
+            onChangePage={onChangePerPage}
+            total={total}
+            align="side"
+            className="mt-4"
+          />
+        ) : null}
       </CardContent>
     </Card>
   );

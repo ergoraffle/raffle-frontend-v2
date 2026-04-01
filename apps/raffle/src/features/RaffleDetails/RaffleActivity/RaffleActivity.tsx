@@ -32,7 +32,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
             ))
           : items?.map((item) => <RaffleActivityItem key={item.id} activity={item} />)}
       </div>
-      {items && total && total > items.length && !isLoading ? (
+      {!isLoading && items && total ? (
         <Pagination
           page={pagination.page}
           perPage={pagination.perPage}
