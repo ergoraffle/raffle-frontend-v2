@@ -1,5 +1,6 @@
 export * from './AllRafflesListSkeleton';
 export * from './RaffleCard';
+export * from './RaffleDetails';
 export * from './RaffleFilters';
 export * from './RaffleList';
 export * from './RaffleListSkeleton';

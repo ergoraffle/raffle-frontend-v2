@@ -12,6 +12,7 @@ import { toQueryString } from '@/lib/utils';
 import { RaffleCard } from './RaffleCard';
 import { RafflesPagination } from './RafflePagination';
 import { RafflesSort } from './RaffleSort';
+import { getDeadlineAmount } from './utils';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -65,7 +66,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
             verified: true
           };
 
-          const deadline = raffle.deadline - infoData.lastBlockHeight;
+          const deadline = getDeadlineAmount(raffle.deadline, infoData.lastBlockHeight);
 
           const trust = { value: 0, max: 100 };
           return (

@@ -3,7 +3,7 @@
 import { SortDown, SortUp } from '@ergo-raffle/icons';
 import { Button } from '@ergo-raffle/ui-kit';
 
-import { useRafflesQuery } from '@/hooks/useRafflesParams';
+import { useRafflesQuery } from '@/hooks';
 
 export const RafflesSort = () => {
   const { params, setParam } = useRafflesQuery();

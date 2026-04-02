@@ -685,5 +685,4 @@ components:
         - id
         - type
         - address
-        - basketType
         - createdAt

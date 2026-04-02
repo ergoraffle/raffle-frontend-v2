@@ -2,7 +2,7 @@
 
 import { Pagination } from '@ergo-raffle/ui-kit';
 
-import { useRafflesQuery } from '@/hooks/useRafflesParams';
+import { useRafflesQuery } from '@/hooks';
 
 export type RafflesPaginationProps = {
   total: number;

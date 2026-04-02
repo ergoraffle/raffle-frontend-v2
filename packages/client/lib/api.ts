@@ -284,7 +284,7 @@ export interface RaffleActivity {
   amount?: number | null;
   /** @nullable */
   basketNumber?: string | null;
-  basketType: string;
+  basketType?: string;
   /** @nullable */
   raffleName?: string | null;
   raffleId?: string;
@@ -603,7 +603,10 @@ export const getGetRafflesRaffleIdActivitiesResponseMock = (
       faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
       undefined
     ]),
-    basketType: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    basketType: faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      undefined
+    ]),
     raffleName: faker.helpers.arrayElement([
       faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
       undefined

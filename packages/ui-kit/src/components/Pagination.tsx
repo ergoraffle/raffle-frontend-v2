@@ -162,7 +162,7 @@ export const Pagination = (props: PaginationProps) => {
     }
   }
 
-  if (totalPages <= 1) return null;
+  if (totalPages < 1) return null;
 
   return (
     <div {...props} className={cn('flex items-center', className)}>
@@ -173,7 +173,7 @@ export const Pagination = (props: PaginationProps) => {
         <PaginationContent className="w-full lg:w-auto justify-stretch lg:justify-start">
           <PaginationItem>
             <PaginationPrevious
-              aria-disabled={page <= 1}
+              aria-disabled={page <= 1 || totalPages <= 1}
               {...(isLink
                 ? { href: props.getPageHref(page - 1) }
                 : { onClick: () => props.onChangePage(page - 1) })}
@@ -206,7 +206,7 @@ export const Pagination = (props: PaginationProps) => {
               {...(isLink
                 ? { href: props.getPageHref(page + 1) }
                 : { onClick: () => props.onChangePage(page + 1) })}
-              aria-disabled={page >= total}
+              aria-disabled={page >= total || totalPages <= 1}
             />
           </PaginationItem>
         </PaginationContent>
@@ -217,6 +217,7 @@ export const Pagination = (props: PaginationProps) => {
           <Select
             value={perPage.toString() || '12'}
             onValueChange={(value) => onChangePerPage(Number(value))}
+            disabled={total <= perPage}
           >
             <SelectTrigger className="w-full max-w-48" variant="plain" size="sm">
               <SelectValue />

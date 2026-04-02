@@ -21,6 +21,8 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { getDeadlineString } from './utils';
+
 export type RafflesContentProps = {
   raffle?: RaffleSummary;
   loading?: boolean;
@@ -150,11 +152,7 @@ export const RaffleCard = ({
           {loading ? (
             <Skeleton className="w-24 h-3" />
           ) : deadline ? (
-            <Typography variant="subtitle-md">
-              {deadline > 0
-                ? `${Math.floor(deadline / (1000 * 60 * 60 * 24))} Days remaining`
-                : `Ended ${Math.floor(Math.abs(deadline) / (1000 * 60 * 60 * 24))} Days ago`}
-            </Typography>
+            <Typography variant="subtitle-md">{getDeadlineString(deadline)}</Typography>
           ) : (
             ''
           )}

@@ -15,7 +15,7 @@ import {
   TabsTrigger
 } from '@ergo-raffle/ui-kit';
 
-import { useRafflesQuery } from '@/hooks/useRafflesParams';
+import { useRafflesQuery } from '@/hooks';
 
 const statusFilterItems: { value: GetRafflesStatusItem; label: string }[] = [
   {
