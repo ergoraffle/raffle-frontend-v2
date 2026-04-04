@@ -10,9 +10,9 @@ import { ImageEditorDialog } from './ImageEditorDialog';
 import { UploaderBrowse } from './UploaderBrowse';
 import type { useUploader } from './useUploader';
 
-export type ImageUploaderProps = ReturnType<typeof useUploader>;
+export type UploaderProps = ReturnType<typeof useUploader>;
 
-export const ImageUploader = ({
+export const Uploader = ({
   edit,
   editing,
   error,
@@ -20,7 +20,7 @@ export const ImageUploader = ({
   instance,
   ready,
   uploading
-}: ImageUploaderProps) => {
+}: UploaderProps) => {
   void ready;
   return (
     <UppyContextProvider uppy={instance}>

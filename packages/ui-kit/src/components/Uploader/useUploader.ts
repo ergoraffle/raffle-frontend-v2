@@ -72,7 +72,11 @@ export const useUploader = ({
     const result = await uppy.upload();
 
     if (!result?.successful) {
-      throw new Error('TODO');
+      throw new Error(
+        `File upload failed: no successful uploads. Failed files: ${
+          result?.failed?.map((f) => f.name).join(', ') || 'unknown'
+        }`
+      );
     }
 
     return result.successful.map((file) => ({
