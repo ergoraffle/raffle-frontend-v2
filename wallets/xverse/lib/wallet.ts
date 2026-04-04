@@ -1,12 +1,13 @@
-import {
-  NonNativeSegWitAddressError,
-  NonTaprootAddressError,
-  Wallet
-} from '@ergo-raffle/base-wallet';
+import { Wallet } from '@ergo-raffle/base-wallet';
 import { AddressPurpose, request } from 'sats-connect';
 
 import { ICON } from './icon';
-import type { XverseWalletAddresses, XverseWalletConfig } from './types';
+import {
+  NonNativeSegWitAddressError,
+  NonTaprootAddressError,
+  type XverseWalletAddresses,
+  type XverseWalletConfig
+} from './types';
 
 export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddresses> {
   icon = ICON;
