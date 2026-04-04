@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Plus } from '@ergo-raffle/icons';
 import {
   Button,
@@ -15,12 +17,28 @@ import {
 
 import { useFetchWinnerBaskets, useWinnerBasketsParams } from '@/hooks';
 
+import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
+import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';
 import { RaffleWinnerBasketItem } from './RaffleWinnerBasketItem';
 import { RaffleWinnerBasketsFilters } from './RaffleWinnerBasketsFilters';
 
 export type RaffleWinnerBasketsProps = { raffleId: string };
 
 export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
+  const [basketInfoDialog, setBasketInfoDialog] = useState<string | null>(null);
+  const [addGiftDialog, setAddGiftDialog] = useState<{
+    open: boolean;
+    initialBasketNumber?: string;
+  }>({ open: false });
+  const handleAddGiftDialogOpen = (open: boolean) => {
+    setAddGiftDialog({ open });
+  };
+  const openAddGiftDialog = (initialBasketNumber?: string) => {
+    setAddGiftDialog({
+      open: true,
+      initialBasketNumber
+    });
+  };
   const { items, total, isLoading } = useFetchWinnerBaskets(raffleId);
   const { pagination, onChangePage, onChangePerPage } = useWinnerBasketsParams();
 
@@ -46,7 +64,7 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
             {isLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : (
-              <Button variant="primary-soft">
+              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
                 <Plus />
                 Add Gift
               </Button>
@@ -61,7 +79,7 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
             {isLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : (
-              <Button variant="primary-soft">
+              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
                 <Plus />
                 Add Gift
               </Button>
@@ -87,7 +105,12 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                     <RaffleWinnerBasketItem key={index.toString()} loading />
                   ))
                 : firstColumn?.map((basket) => (
-                    <RaffleWinnerBasketItem basket={basket} key={basket.basketId} />
+                    <RaffleWinnerBasketItem
+                      basket={basket}
+                      key={basket.basketId}
+                      handleOpenAddGiftDialog={openAddGiftDialog}
+                      handleOpenInfoDialog={setBasketInfoDialog}
+                    />
                   ))}
             </div>
           </div>
@@ -110,23 +133,45 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                       <RaffleWinnerBasketItem key={index.toString()} loading />
                     ))
                   : firstColumn?.map((basket) => (
-                      <RaffleWinnerBasketItem basket={basket} key={basket.basketId} />
+                      <RaffleWinnerBasketItem
+                        basket={basket}
+                        key={basket.basketId}
+                        handleOpenAddGiftDialog={openAddGiftDialog}
+                        handleOpenInfoDialog={setBasketInfoDialog}
+                      />
                     ))}
               </div>
             </div>
           ) : null}
         </div>
-        {!isLoading && items && total ? (
-          <Pagination
-            page={pagination.page}
-            perPage={pagination.perPage}
-            onChangePerPage={onChangePage}
-            onChangePage={onChangePerPage}
-            total={total}
-            align="side"
-            className="mt-4"
-          />
-        ) : null}
+        {!isLoading && (
+          <>
+            {items && total ? (
+              <Pagination
+                page={pagination.page}
+                perPage={pagination.perPage}
+                onChangePerPage={onChangePage}
+                onChangePage={onChangePerPage}
+                total={total}
+                align="side"
+                className="mt-4"
+              />
+            ) : null}
+            <RaffleAddGiftDialog
+              open={addGiftDialog.open}
+              onOpenChange={handleAddGiftDialogOpen}
+              initialBasketNumber={addGiftDialog.initialBasketNumber}
+            />
+            {basketInfoDialog ? (
+              <RaffleWinnerBasketInfoDialog
+                open={Boolean(basketInfoDialog)}
+                onOpenChange={() => setBasketInfoDialog(null)}
+                initialBasketId={basketInfoDialog}
+                raffleId={raffleId}
+              />
+            ) : null}
+          </>
+        )}
       </CardContent>
     </Card>
   );

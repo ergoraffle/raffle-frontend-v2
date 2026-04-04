@@ -11,7 +11,7 @@ export type RaffleWinnerBasketsFiltersProps = {
 export const RaffleWinnerBasketsFilters = ({ isLoading }: RaffleWinnerBasketsFiltersProps) => {
   const { params, onTypeFilterChange } = useWinnerBasketsParams();
   return (
-    <div className="space-x-2">
+    <div className="space-x-2 space-y-2">
       <Badge
         variant={params.type === 'share' ? 'secondary' : 'elevated'}
         size="lg"

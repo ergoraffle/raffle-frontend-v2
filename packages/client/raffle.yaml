@@ -571,6 +571,10 @@ components:
         type:
           type: string
           enum: [empty, shared]
+        tokenId:
+          type: string
+        tokenName:
+          type: string
         sharePercent:
           type: number
           format: float
@@ -589,6 +593,8 @@ components:
         - type
         - gifts
         - transactions
+        - tokenId
+        - tokenName
 
     BasketGiftDetail:
       type: object
