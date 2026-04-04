@@ -226,6 +226,8 @@ export const WinnerBasketDetailResponseType = {
 export interface WinnerBasketDetailResponse {
   basketId: string;
   type: WinnerBasketDetailResponseType;
+  tokenId: string;
+  tokenName: string;
   sharePercent?: number;
   shareAmount?: number;
   gifts: BasketGiftDetail[];
@@ -625,6 +627,8 @@ export const getGetRafflesRaffleIdWinnerBasketsBasketIdResponseMock = (
 ): WinnerBasketDetailResponse => ({
   basketId: faker.string.alpha({ length: { min: 10, max: 20 } }),
   type: faker.helpers.arrayElement(['empty', 'shared'] as const),
+  tokenId: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  tokenName: faker.string.alpha({ length: { min: 10, max: 20 } }),
   sharePercent: faker.helpers.arrayElement([
     faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
     undefined

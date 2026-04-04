@@ -103,6 +103,8 @@ export const winnerBasketDetail: WinnerBasketDetailResponse = {
   sharePercent: 60,
   shareAmount: 100,
   type: 'shared',
+  tokenId: 'tgksfsdfjfsdjfsdncsjdncsdjfsnjfsnfdsjfnsjfnsjfnsjf',
+  tokenName: 'erg',
   gifts: [
     {
       id: 'gift1',

@@ -143,7 +143,11 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
           </div>
           <div className="flex items-center justify-end gap-4 text-gray-1 w-20">
             <TrustBar loading={loading} />
-            {loading ? <Skeleton className="size-7" /> : <RaffleVote />}
+            {loading ? (
+              <Skeleton className="size-7" />
+            ) : (
+              !!raffle && <RaffleVote raffleTitle={raffle.name} raffleId={raffle.id} />
+            )}
           </div>
         </CardContent>
       </Card>

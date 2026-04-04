@@ -5,9 +5,16 @@ import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@
 export type RaffleWinnerBasketItemProps = {
   basket?: WinnerBasket;
   loading?: boolean;
+  handleOpenAddGiftDialog?: (basketId?: string) => void;
+  handleOpenInfoDialog?: (basketId: string) => void;
 };
 
-export const RaffleWinnerBasketItem = ({ basket, loading }: RaffleWinnerBasketItemProps) => (
+export const RaffleWinnerBasketItem = ({
+  basket,
+  loading,
+  handleOpenAddGiftDialog,
+  handleOpenInfoDialog
+}: RaffleWinnerBasketItemProps) => (
   <Card className="group p-0">
     <CardContent className="flex items-center p-0">
       {loading ? (
@@ -26,7 +33,18 @@ export const RaffleWinnerBasketItem = ({ basket, loading }: RaffleWinnerBasketIt
         </div>
       ) : basket ? (
         <>
-          <div className="flex py-4 grow items-center min-h-19 group-hover:bg-black-4 rounded-lg cursor-pointer">
+          {/* biome-ignore lint/a11y: using div as button intentionally */}
+          <div
+            className="flex py-4 grow items-center min-h-19 group-hover:bg-black-4 rounded-lg cursor-pointer"
+            onClick={() => handleOpenInfoDialog?.(basket.basketId)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleOpenInfoDialog?.(basket.basketId);
+              }
+            }}
+          >
             <div className="px-4 flex-1 flex space-x-4">
               <BasketStatus
                 className="size-7"
@@ -73,7 +91,12 @@ export const RaffleWinnerBasketItem = ({ basket, loading }: RaffleWinnerBasketIt
             </div>
           </div>
           <div className="sm:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 group-hover:w-10">
-            <Button variant="plain" size="icon-xs" className="text-primary-1">
+            <Button
+              variant="plain"
+              size="icon-xs"
+              className="text-primary-1"
+              onClick={() => handleOpenAddGiftDialog?.(basket.basketId)}
+            >
               <Plus />
             </Button>
           </div>

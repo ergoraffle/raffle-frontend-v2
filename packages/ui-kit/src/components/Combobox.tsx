@@ -63,10 +63,17 @@ export const ComboboxInput = ({
 );
 
 export type ComboboxContentProps = ComboboxPrimitive.Popup.Props &
-  Pick<ComboboxPrimitive.Positioner.Props, 'anchor'>;
+  Pick<ComboboxPrimitive.Positioner.Props, 'anchor'> & {
+    portalContainerRef?: React.RefObject<HTMLDivElement | null>;
+  };
 
-export const ComboboxContent = ({ className, anchor, ...props }: ComboboxContentProps) => (
-  <ComboboxPrimitive.Portal>
+export const ComboboxContent = ({
+  className,
+  anchor,
+  portalContainerRef,
+  ...props
+}: ComboboxContentProps) => (
+  <ComboboxPrimitive.Portal container={portalContainerRef?.current}>
     <ComboboxPrimitive.Positioner anchor={anchor} className="isolate z-150">
       <ComboboxPrimitive.Popup
         data-slot="combobox-content"
@@ -135,7 +142,7 @@ export const ComboboxChips = ({ className, children, ...props }: ComboboxChipsPr
     render={
       <InputGroup
         className={cn(
-          'w-full has-data-[slot=combobox-chip]:pl-1 **:data-[slot=combobox-chip-input]:pl-0',
+          'w-full has-data-[slot=combobox-chip]:pl-1 **:data-[slot=combobox-chip-input]:pl-0 gap-2',
           className
         )}
         variant="bordered"
