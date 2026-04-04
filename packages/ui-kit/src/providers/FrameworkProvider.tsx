@@ -21,12 +21,18 @@ export const useFramework = () => {
 export type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
 };
-export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
+export type ImageProps =
+  | (ImgHTMLAttributes<HTMLImageElement> & {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+    })
+  | {
+      src: string;
+      alt: string;
+      fill: boolean;
+    };
 
 export type AnchorComponent = ComponentType<AnchorProps>;
 export type ImageComponent = ComponentType<ImageProps>;
