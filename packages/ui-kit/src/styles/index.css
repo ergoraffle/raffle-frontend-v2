@@ -40,10 +40,20 @@ body {
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
   }
-
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE, Old Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  /* Chrome, Safari, Edge */
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* Firefox */
+  .no-spinner {
+    -moz-appearance: textfield;
   }
 }
 
