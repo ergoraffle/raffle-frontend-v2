@@ -1,0 +1,9 @@
+@import "@uppy/react/css/style.css";
+@import "@uppy/react/css/image-editor.css";
+
+.image-uploader-item {
+  aspect-ratio: 1.57;
+  & [data-uppy-element="thumbnail"] {
+    aspect-ratio: 1.57 !important;
+  }
+}
