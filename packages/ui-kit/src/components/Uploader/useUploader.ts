@@ -86,9 +86,13 @@ export const useUploader = ({
     }));
   };
 
-  useEffect(() => uppy.destroy, [uppy]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') return;
+    uppy.destroy;
+  }, [uppy]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') return;
     const start = () => setIsUploading(true);
 
     const end = () => setIsUploading(false);
@@ -107,6 +111,7 @@ export const useUploader = ({
   }, [uppy]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') return;
     inputFiles.forEach((file) => {
       let id: string;
 
