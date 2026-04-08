@@ -2,17 +2,17 @@
 
 import { useMemo, useState } from 'react';
 
-import type { GetRafflesRaffleIdActivitiesType } from '@ergo-raffle/client';
+import type { GetActivitiesParams, GetActivitiesType } from '@ergo-raffle/client';
 
 export type FetchActivityFilters = {
-  type?: GetRafflesRaffleIdActivitiesType;
-  onlyMyAddress?: boolean;
+  params?: GetActivitiesParams;
   page: number;
   perPage: number;
 };
 
-export const useActivityParams = () => {
+export const useActivityParams = (initialParams?: GetActivitiesParams) => {
   const [filters, setFilters] = useState<FetchActivityFilters>({
+    params: initialParams,
     page: 1,
     perPage: 5
   });
@@ -21,22 +21,31 @@ export const useActivityParams = () => {
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });
-  const onTypeFilterChange = (type: GetRafflesRaffleIdActivitiesType) =>
-    setFilters({ ...filters, type });
-  const params = useMemo(
+  const onTypeFilterChange = (type: GetActivitiesType) => {
+    if (filters.params?.type === type) {
+      setFilters({ ...filters, params: { ...filters.params, type: undefined } });
+    } else {
+      setFilters({ ...filters, params: { ...filters.params, type } });
+    }
+  };
+  const onAddressFilterChange = (address?: string) => {
+    setFilters({ ...filters, params: { ...filters.params, address } });
+  };
+
+  const params: GetActivitiesParams = useMemo(
     () => ({
+      ...filters.params,
       offset,
-      limit: filters.perPage,
-      type: filters.type,
-      onlyMyAddress: filters.onlyMyAddress
+      limit: filters.perPage
     }),
-    [offset, filters.perPage, filters.type, filters.onlyMyAddress]
+    [filters.params, filters.params?.type, offset, filters.perPage]
   );
   return {
     params,
     pagination: { page: filters.page, perPage: filters.perPage },
     onChangePage,
     onChangePerPage,
-    onTypeFilterChange
+    onTypeFilterChange,
+    onAddressFilterChange
   };
 };

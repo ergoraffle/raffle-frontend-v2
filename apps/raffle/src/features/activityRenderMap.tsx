@@ -35,13 +35,30 @@ export const activityRenderMap = {
   },
   basket_won: {
     icon: <BasketStatus hasGift className="size-6" />,
-    shortText: () => 'Won the Basket of Raffle',
+    shortText: () => 'Won the Basket',
     text: (activity?: RaffleActivity) =>
       `Won the #${activity?.basketNumber ?? ''} Basket of “raising money for ${activity?.raffleName ?? ''}” Raffle`
   },
   raising_money: {
     icon: <BasketStatus className="size-6" />,
-    shortText: () => 'raising money for Raffle',
+    shortText: () => 'raising money',
     text: (activity?: RaffleActivity) => `“raising money for ${activity?.raffleName ?? ''}” Raffle`
+  }
+} as const;
+
+export const activityStatusRenderMap = {
+  successful: {
+    color: 'text-success',
+    text: 'Successful'
+  },
+
+  pending: {
+    color: 'text-gray-2',
+    text: 'In progress'
+  },
+
+  canceled: {
+    color: 'text-alert',
+    text: 'Took too long'
   }
 } as const;

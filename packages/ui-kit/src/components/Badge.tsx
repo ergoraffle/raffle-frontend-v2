@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Skeleton } from './Skeleton';
 
 export const badgeVariants = cva(
-  'inline-flex items-center justify-center rounded-lg border px-3 has-[>svg:first-child]:pr-4 has-[>svg:first-child]:pl-2 py-0.5 typo-subtitle-md w-fit whitespace-nowrap shrink-0 [&>svg]:size-5 gap-1 [&>svg]:pointer-events-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,background-color,box-shadow] overflow-hidden',
+  'inline-flex items-center justify-center rounded-lg border px-3 has-[>svg:first-child]:pr-4 has-[>svg:first-child]:pl-2 py-0.5 typo-subtitle-md w-fit whitespace-nowrap shrink-0 [&>svg]:size-5 gap-1 [&>svg]:pointer-events-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,background-color,box-shadow] overflow-hidden aria-disabled:pointer-events-none',
   {
     variants: {
       variant: {
