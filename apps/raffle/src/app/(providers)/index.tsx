@@ -8,12 +8,17 @@ import Link from 'next/link';
 import {
   type AnchorComponent,
   FrameworkProvider,
-  type ImageComponent as ImageComponentType
+  type ImageComponent as ImageComponentType,
+  ThemeProvider,
+  Toaster
 } from '@ergo-raffle/ui-kit';
 
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
 const ImageComponent: ImageComponentType = (props) => <Image {...props} />;
 
 export const AppProviders = ({ children }: { children: ReactNode }) => (
-  <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>{children}</FrameworkProvider>
+  <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <Toaster />
+    <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>{children}</FrameworkProvider>
+  </ThemeProvider>
 );

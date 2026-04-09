@@ -10,7 +10,10 @@ import {
 // biome-ignore lint/complexity/noBannedTypes: in feuture we will have more config options
 export type WalletConfig = {};
 
-export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
+export abstract class Wallet<
+  Config extends WalletConfig = WalletConfig,
+  Addresses extends Record<string, string> = Record<string, string>
+> {
   abstract icon: string;
   abstract name: string;
   abstract label: string;
@@ -20,7 +23,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
   abstract performConnect: () => Promise<void>;
   abstract performDisconnect: () => Promise<void>;
-  abstract fetchAddresses: () => Promise<string[] | undefined>;
+  abstract fetchAddresses: () => Promise<Addresses | undefined>;
   abstract isAvailable: () => boolean;
   abstract hasConnection: () => Promise<boolean>;
 
@@ -53,7 +56,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     }
   };
 
-  getAddresses = async (): Promise<string[]> => {
+  getAddresses = async (): Promise<Addresses> => {
     this.requireAvailable();
 
     await this.requireConnection();

@@ -1,8 +1,11 @@
+import { type ComponentPropsWithRef, useRef } from 'react';
+
 import { Combobox as ComboboxPrimitive } from '@base-ui/react';
 import { Check, Close, Down, Search } from '@ergo-raffle/icons';
 
 import { cn } from '@/lib/utils';
 
+import { Badge } from './Badge';
 import { Button } from './Button';
 import { InputGroup, InputGroupAddon, InputGroupInput } from './InputGroup';
 
@@ -60,11 +63,18 @@ export const ComboboxInput = ({
 );
 
 export type ComboboxContentProps = ComboboxPrimitive.Popup.Props &
-  Pick<ComboboxPrimitive.Positioner.Props, 'anchor'>;
+  Pick<ComboboxPrimitive.Positioner.Props, 'anchor'> & {
+    portalContainerRef?: React.RefObject<HTMLDivElement | null>;
+  };
 
-export const ComboboxContent = ({ className, anchor, ...props }: ComboboxContentProps) => (
-  <ComboboxPrimitive.Portal>
-    <ComboboxPrimitive.Positioner anchor={anchor} className="isolate z-50">
+export const ComboboxContent = ({
+  className,
+  anchor,
+  portalContainerRef,
+  ...props
+}: ComboboxContentProps) => (
+  <ComboboxPrimitive.Portal container={portalContainerRef?.current}>
+    <ComboboxPrimitive.Positioner anchor={anchor} className="isolate z-150">
       <ComboboxPrimitive.Popup
         data-slot="combobox-content"
         data-chips={!!anchor}
@@ -121,3 +131,80 @@ export const ComboboxEmpty = ({ className, ...props }: ComboboxEmptyProps) => (
     {...props}
   />
 );
+
+export type ComboboxChipsProps = ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> &
+  ComboboxPrimitive.Chips.Props;
+
+export const ComboboxChips = ({ className, children, ...props }: ComboboxChipsProps) => (
+  <ComboboxPrimitive.Chips
+    data-slot="combobox-chips"
+    {...props}
+    render={
+      <InputGroup
+        className={cn(
+          'w-full has-data-[slot=combobox-chip]:pl-1 **:data-[slot=combobox-chip-input]:pl-0 gap-2',
+          className
+        )}
+        variant="bordered"
+        size="sm"
+      >
+        {children}
+        <InputGroupAddon align="inline-end">
+          <Search className="size-5" />
+        </InputGroupAddon>
+      </InputGroup>
+    }
+  />
+);
+
+export type ComboboxChipProps = ComboboxPrimitive.Chip.Props & {
+  showRemove?: boolean;
+};
+
+export const ComboboxChip = ({
+  className,
+  children,
+  showRemove = true,
+  ...props
+}: ComboboxChipProps) => (
+  <ComboboxPrimitive.Chip
+    data-slot="combobox-chip"
+    {...props}
+    render={
+      <Badge
+        variant="secondary"
+        className={cn('has-data-[slot=combobox-chip-remove]:pr-0', className)}
+      >
+        {children}
+        {showRemove ? (
+          <ComboboxPrimitive.ChipRemove
+            className="-ml-1 opacity-50 hover:opacity-100"
+            data-slot="combobox-chip-remove"
+            render={
+              <Button variant="plain" size="icon-xs">
+                <Close className="pointer-events-none size-5" />
+              </Button>
+            }
+          />
+        ) : null}
+      </Badge>
+    }
+  />
+);
+
+export type ComboboxChipsInputProps = ComboboxPrimitive.Input.Props;
+
+export const ComboboxChipsInput = ({
+  className,
+  disabled = false,
+  ...props
+}: ComboboxChipsInputProps) => (
+  <ComboboxPrimitive.Input
+    data-slot="combobox-chip-input"
+    className={cn('min-w-16 flex-1 outline-none', className)}
+    render={<InputGroupInput disabled={disabled} size="sm" />}
+    {...props}
+  />
+);
+
+export const useComboboxAnchor = () => useRef<HTMLDivElement | null>(null);

@@ -1,20 +1,35 @@
 import { type ComponentProps, useMemo } from 'react';
 
+import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@/lib/utils';
 
 import { Label, type LabelProps } from './Label';
 
-export type FieldProps = ComponentProps<'div'>;
+export const fieldVariants = cva('group/field flex', {
+  variants: {
+    orientation: {
+      vertical: 'flex-col *:w-full [&>.sr-only]:w-auto gap-y-2',
+      horizontal:
+        'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px'
+    }
+  },
+  defaultVariants: {
+    orientation: 'vertical'
+  }
+});
 
-export const Field = ({ className, ...props }: FieldProps) => (
-  <div data-slot="field" className={cn('group/field flex flex-col w-full', className)} {...props} />
+export type FieldProps = ComponentProps<'div'> & VariantProps<typeof fieldVariants>;
+
+export const Field = ({ className, orientation, ...props }: FieldProps) => (
+  <div data-slot="field" className={cn(fieldVariants({ orientation }), className)} {...props} />
 );
 
 export const FieldLabel = ({ className, ...props }: LabelProps) => (
   <Label
     data-slot="field-label"
     className={cn(
-      'has-data-checked:bg-primary/5 has-data-checked:border-primary/30 mb-2 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 gap-2 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 group/field-label peer/field-label flex w-fit leading-snug',
+      'has-data-checked:bg-primary/5 has-data-checked:border-primary/30 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 gap-2 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 group/field-label peer/field-label flex w-fit leading-snug',
       'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
       className
     )}
@@ -57,7 +72,7 @@ export const FieldError = ({ className, children, errors, ...props }: FieldError
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
-          (error) => error?.message && <li key={crypto.randomUUID()}>{error.message}</li>
+          (error, index) => error?.message && <li key={index.toString()}>{error.message}</li>
         )}
       </ul>
     );

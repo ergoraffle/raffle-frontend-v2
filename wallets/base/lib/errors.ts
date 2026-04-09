@@ -68,31 +68,6 @@ export class NotConnectedError extends WalletError {
   }
 }
 
-export class NonNativeSegWitAddressError extends WalletError {
-  constructor(
-    public wallet: string,
-    public cause?: unknown
-  ) {
-    super(
-      `The source address of the selected [${wallet}] wallet is not native SegWit (P2WPKH or P2WSH).`,
-      {
-        cause
-      }
-    );
-  }
-}
-
-export class NonTaprootAddressError extends WalletError {
-  constructor(
-    public wallet: string,
-    public cause?: unknown
-  ) {
-    super(`The source address of the selected [${wallet}] wallet is not Taproot.`, {
-      cause
-    });
-  }
-}
-
 export class UnavailableApiError extends WalletError {
   constructor(
     public wallet: string,

@@ -22,8 +22,9 @@ const RootLayout = async ({ children }: PropsWithChildren) => (
     className={`
         ${fraunces.variable}
         ${poppins.variable}
-        ${karla.variable}
+        ${karla.variable} 
       `}
+    suppressHydrationWarning
   >
     <body className="antialiased">
       <AppProviders>
@@ -36,5 +37,4 @@ const RootLayout = async ({ children }: PropsWithChildren) => (
     </body>
   </html>
 );
-
 export default RootLayout;

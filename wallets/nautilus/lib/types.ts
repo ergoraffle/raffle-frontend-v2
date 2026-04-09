@@ -2,6 +2,10 @@ import type { WalletConfig } from '@ergo-raffle/base-wallet';
 
 export type NautilusWalletConfig = WalletConfig & {};
 
+export type NautilusWalletAddresses = {
+  main: string;
+};
+
 declare global {
   interface Window {
     ergoConnector: {

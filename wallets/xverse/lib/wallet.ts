@@ -1,17 +1,18 @@
-import {
-  NonNativeSegWitAddressError,
-  NonTaprootAddressError,
-  Wallet
-} from '@ergo-raffle/base-wallet';
+import { Wallet } from '@ergo-raffle/base-wallet';
 import { AddressPurpose, request } from 'sats-connect';
 
 import { ICON } from './icon';
-import type { XverseWalletConfig } from './types';
+import {
+  NonNativeSegWitAddressError,
+  NonTaprootAddressError,
+  type XverseWalletAddresses,
+  type XverseWalletConfig
+} from './types';
 
-export class XverseWallet extends Wallet<XverseWalletConfig> {
+export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddresses> {
   icon = ICON;
 
-  name = 'Xverse' as const;;
+  name = 'Xverse' as const;
 
   label = 'Xverse';
 
@@ -33,7 +34,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     throw response.error;
   };
 
-  fetchAddresses = async (): Promise<string[] | undefined> => {
+  fetchAddresses = async (): Promise<XverseWalletAddresses | undefined> => {
     const response = await request('getAddresses', {
       purposes: [AddressPurpose.Ordinals, AddressPurpose.Payment]
     });
@@ -62,7 +63,11 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       throw new NonNativeSegWitAddressError(this.name);
     }
 
-    return [taprootAddress.address, nativeSegWitAddress.address];
+    return {
+      nativeSegWit: nativeSegWitAddress.address,
+      taproot: taprootAddress.address,
+      taprootPublicKey: taprootAddress.publicKey
+    };
   };
 
   isAvailable = (): boolean =>

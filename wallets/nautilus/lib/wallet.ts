@@ -1,9 +1,9 @@
 import { ConnectionTimeoutError, Wallet } from '@ergo-raffle/base-wallet';
 
 import { ICON } from './icon';
-import type { NautilusWalletConfig } from './types';
+import type { NautilusWalletAddresses, NautilusWalletConfig } from './types';
 
-export class NautilusWallet extends Wallet<NautilusWalletConfig> {
+export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletAddresses> {
   icon = ICON;
 
   name = 'Nautilus' as const;
@@ -38,14 +38,16 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
     throw new Error();
   };
 
-  fetchAddresses = async (): Promise<string[] | undefined> => {
+  fetchAddresses = async (): Promise<NautilusWalletAddresses | undefined> => {
     const wallet = await this.api.getContext();
 
     const address = await wallet.get_change_address();
 
     if (!address) return;
 
-    return [address];
+    return {
+      main: address
+    };
   };
 
   isAvailable = (): boolean =>
