@@ -145,13 +145,12 @@ paths:
 
         '404':
           description: Raffle not found
-  /raffles/{raffleId}/activities:
+  /activities:
     get:
-      summary: Get raffle activities
+      summary: Get activities
       parameters:
-        - in: path
+        - in: query
           name: raffleId
-          required: true
           schema:
             type: string
 
@@ -177,11 +176,10 @@ paths:
           explode: false
 
         - in: query
-          name: onlyMyAddress
+          name: address
           description: Return only activities of the caller
           schema:
-            type: boolean
-            default: false
+            type: string
 
       responses:
         '200':
@@ -477,6 +475,9 @@ components:
       properties:
         total:
           type: integer
+          minimum: 1
+          maximum: 1000
+          x-faker: 23
         items:
           type: array
           items:
@@ -647,6 +648,9 @@ components:
       properties:
         total:
           type: integer
+          minimum: 1
+          maximum: 1000
+          x-faker: 23
         items:
           type: array
           items:
@@ -670,6 +674,12 @@ components:
             - basket_won
             - gift_added
             - raising_money
+        status:
+          type: string
+          enum:
+            - successful
+            - pending
+            - canceled
         address:
           type: string
         amount:
