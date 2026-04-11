@@ -15,13 +15,10 @@ import {
   Token,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-
-import { createDonationGoalForm } from '@/mockApi';
+import { useFormContext } from 'react-hook-form';
 
 import { SERVICE_SHARE } from '../constants';
-import { type RaffleDonationGoalForm, raffleDonationGoalSchema } from '../schemas';
+import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
 import { FieldTitle } from './FieldTitle';
 
@@ -37,24 +34,16 @@ const tokens = [
 
 export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormProps) => {
   const {
-    handleSubmit,
     formState: { errors },
     reset,
     register,
     watch,
     getValues,
     setValue
-  } = useForm({
-    resolver: zodResolver(raffleDonationGoalSchema)
-  });
+  } = useFormContext<RaffleDonationGoalForm>();
 
   const missionFund = watch('missionFund');
   const winnerPotShare = watch('winnerPotShare');
-
-  const onSubmit = (data: RaffleDonationGoalForm) => {
-    handleNext();
-    createDonationGoalForm(data);
-  };
 
   const onBack = () => {
     reset();
@@ -62,7 +51,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <div className="space-y-8">
       <div>
         <FieldTitle title="Base Token" />
         <div className="flex flex-col sm:flex-row gap-x-2 gap-y-3">
@@ -154,10 +143,10 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={onBack}>
           Back
         </Button>
-        <Button type="submit" variant="primary" className="w-32.5 sm:w-70">
+        <Button type="button" variant="primary" className="w-32.5 sm:w-70" onClick={handleNext}>
           Next
         </Button>
       </div>
-    </form>
+    </div>
   );
 };

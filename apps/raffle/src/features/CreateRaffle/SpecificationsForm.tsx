@@ -18,12 +18,9 @@ import {
   Uploader,
   useUploader
 } from '@ergo-raffle/ui-kit';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-import { createSpecificationForm } from '@/mockApi';
-
-import { type RaffleSpecificationsForm, raffleSpecificationsSchema } from '../schemas';
+import type { RaffleSpecificationsForm } from '../schemas';
 import { FieldTitle } from './FieldTitle';
 
 export type SpecificationsFormProps = {
@@ -39,40 +36,42 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
   });
 
   const {
-    handleSubmit,
     setValue,
     getValues,
     register,
     watch,
     formState: { errors }
-  } = useForm({
-    resolver: zodResolver(raffleSpecificationsSchema)
-  });
+  } = useFormContext<RaffleSpecificationsForm>();
 
   const tags = watch('tags');
+  const description = watch('description');
 
-  const onSubmit = async (data: RaffleSpecificationsForm) => {
+  const onSubmit = async () => {
     const images = await uploader.upload();
-    const values = { ...data, images };
-    createSpecificationForm(values).then(() => {
-      handleNext();
+    setValue('images', images, {
+      shouldDirty: true,
+      shouldValidate: true
     });
+    handleNext();
   };
 
   const handleAddTag = () => {
     if (tagInputValue && !tags?.includes(tagInputValue)) {
-      setValue('tags', [...(tags ?? []), tagInputValue]);
+      setValue('tags', [...(tags ?? []), tagInputValue], {
+        shouldValidate: true,
+        shouldDirty: true
+      });
       setTagInputValue('');
     }
   };
 
   const handleRemoveTag = (tag: string) => {
-    const newTags = tags?.filter((t) => t !== tag);
+    const newTags = tags?.filter((t: string) => t !== tag);
     setValue('tags', newTags);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <div className="space-y-8">
       <Field>
         <FieldTitle title="Set Raffle’s Title/What is the mission of this Raffle?" />
         <Input variant="bordered" className="max-w-205" {...register('name')} />
@@ -82,8 +81,13 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <FieldTitle title="Add a Description for your Raffle" />
         <TextEditor
           className="max-w-205"
-          value={getValues('description') || ''}
-          onChange={(value) => setValue('description', value as string)}
+          value={description || ''}
+          onChange={(value) =>
+            setValue('description', value as string, {
+              shouldValidate: true,
+              shouldDirty: true
+            })
+          }
         />
         {!!errors.description && <FieldError>{errors.description.message}</FieldError>}
       </Field>
@@ -144,7 +148,10 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
             variant="bordered"
             className="max-w-205 grow"
             type="number"
-            {...register('deadline', { valueAsNumber: true })}
+            {...register('deadline', {
+              valueAsNumber: true,
+              setValueAs: (v) => (v.isNaN ? undefined : v)
+            })}
           />
           <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
             ≈ 23 Hours
@@ -153,10 +160,10 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         {!!errors.deadline && <FieldError>{errors.deadline.message}</FieldError>}
       </Field>
       <div className="flex items-center justify-end">
-        <Button variant="primary" type="submit" className="w-32.5 sm:w-70">
+        <Button variant="primary" className="w-32.5 sm:w-70" onClick={onSubmit} type="button">
           Next
         </Button>
       </div>
-    </form>
+    </div>
   );
 };

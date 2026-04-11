@@ -24,13 +24,11 @@ import {
   Tooltip,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { calcPercentageDistribution } from '@/features/utils';
-import { createBasketForm } from '@/mockApi';
 
-import { type RaffleBasketsForm, raffleBasketsSchema } from '../schemas';
+import type { RaffleBasketsForm } from '../schemas';
 import { FieldTitle } from './FieldTitle';
 
 export type BasketsFormProps = {
@@ -54,25 +52,17 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   }, [shareBasketCount, biggestShareBasket]);
 
   const {
-    handleSubmit,
     formState: { errors },
     reset,
     register
-  } = useForm({
-    resolver: zodResolver(raffleBasketsSchema)
-  });
-
-  const onSubmit = (data: RaffleBasketsForm) => {
-    handleNext();
-    createBasketForm(data);
-  };
+  } = useFormContext<RaffleBasketsForm>();
 
   const onBack = () => {
     reset();
     handleBack();
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <div className="space-y-8">
       <div>
         <Typography variant="heading-2">Create Baskets.</Typography>
         <Typography variant="body-md">
@@ -164,10 +154,10 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
         <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={onBack}>
           Back
         </Button>
-        <Button type="submit" variant="primary" className="w-32.5 sm:w-70">
+        <Button type="button" variant="primary" className="w-32.5 sm:w-70" onClick={handleNext}>
           Next
         </Button>
       </div>
-    </form>
+    </div>
   );
 };
