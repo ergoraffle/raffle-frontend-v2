@@ -32,7 +32,8 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
   const uploader = useUploader({
     files: [],
     maxFileSize: 1024 * (1024 * 1.75),
-    allowedFileTypes: ['.jpg', '.png', '.jpeg']
+    allowedFileTypes: ['.jpg', '.png', '.jpeg'],
+    maxNumberOfFiles: 4
   });
 
   const {

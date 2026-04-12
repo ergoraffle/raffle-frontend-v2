@@ -88,7 +88,7 @@ export const useUploader = ({
 
   useEffect(() => {
     if (typeof window !== 'undefined') return;
-    uppy.destroy;
+    return uppy.destroy;
   }, [uppy]);
 
   useEffect(() => {
@@ -151,6 +151,7 @@ export const useUploader = ({
     instance: uppy,
     ready: !!isReady,
     upload,
-    uploading: !!isUploading
+    uploading: !!isUploading,
+    maxNumberOfFiles
   };
 };
