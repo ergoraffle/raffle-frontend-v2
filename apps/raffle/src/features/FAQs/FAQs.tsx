@@ -9,25 +9,8 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { basketsFAQs, generalFAQs, raffleCreationFAQs, supportedTokensFAQs } from './constants';
+import { TABS } from './constants';
 import { FAQItem } from './FAQItem';
-
-const TABS = [
-  {
-    xsLabel: 'Creation',
-    label: 'Raffle creation',
-    value: 'raffle_creation',
-    items: raffleCreationFAQs
-  },
-  { xsLabel: 'Baskets', label: 'Baskets', value: 'baskets', items: basketsFAQs },
-  {
-    xsLabel: 'Tokens',
-    label: 'Supported tokens',
-    value: 'supported_tokens',
-    items: supportedTokensFAQs
-  },
-  { xsLabel: 'General', label: 'General', value: 'general', items: generalFAQs }
-] as const;
 
 export const FAQs = () => (
   <Card>
@@ -45,7 +28,7 @@ export const FAQs = () => (
 
           {TABS.map(({ value, items }) => (
             <TabsContent value={value} className="space-y-3" key={value}>
-              {items && items.length > 0 ? (
+              {items.length > 0 ? (
                 items.map((faq) => <FAQItem faq={faq} key={faq.id} />)
               ) : (
                 <Empty>
