@@ -64,7 +64,7 @@ export abstract class Wallet<
     try {
       const addresses = await this.fetchAddresses();
 
-      if (!addresses || !addresses.length) throw addresses;
+      if (!addresses || !Object.keys(addresses).length) throw addresses;
 
       return addresses;
     } catch (error) {
