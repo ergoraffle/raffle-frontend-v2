@@ -4,9 +4,9 @@ import { useCallback, useState } from 'react';
 
 import { Button, Field, FieldError, FieldLabel, Input } from '@ergo-raffle/ui-kit';
 
-import { useWallet } from '../../hooks/useWallet';
+import { validateAddress } from '@/actions';
 
-const validate = async () => new Promise<void>((resolve) => setTimeout(() => resolve(), 250));
+import { useWallet } from '../../hooks/useWallet';
 
 export const ErgoWalletAddress = () => {
   const wallet = useWallet();
@@ -19,7 +19,8 @@ export const ErgoWalletAddress = () => {
     setHasError(false);
     setIsLoading(true);
     try {
-      await validate();
+      await validateAddress('ergo', address || '');
+
       wallet.setErgoAddress(address);
     } catch {
       setHasError(true);
