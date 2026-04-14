@@ -1,4 +1,4 @@
-import { Wallet } from '@ergo-raffle/base-wallet';
+import { Wallet, type WalletToken } from '@ergo-raffle/base-wallet';
 import { AddressPurpose, request } from 'sats-connect';
 
 import { ICON } from './icon';
@@ -79,4 +79,6 @@ export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddress
     });
     return response.status === 'success';
   };
+
+  fetchTokens = async (): Promise<WalletToken[]> => [];
 }

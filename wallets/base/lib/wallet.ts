@@ -6,6 +6,7 @@ import {
   UnavailableApiError,
   WalletError
 } from './errors';
+import type { WalletToken } from './types';
 
 // biome-ignore lint/complexity/noBannedTypes: in feuture we will have more config options
 export type WalletConfig = {};
@@ -26,6 +27,7 @@ export abstract class Wallet<
   abstract fetchAddresses: () => Promise<Addresses | undefined>;
   abstract isAvailable: () => boolean;
   abstract hasConnection: () => Promise<boolean>;
+  abstract fetchTokens: () => Promise<WalletToken[]>;
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();

@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import { Header as HeaderPrimitive, useBreakpoint } from '@ergo-raffle/ui-kit';
 
 import { WalletButton } from '@/components';
-import { WalletProvider } from '@/hooks/useWallet';
 
 export const Header = () => {
   const { down } = useBreakpoint();
@@ -33,11 +32,7 @@ export const Header = () => {
   return (
     <HeaderPrimitive
       links={isMobile ? mobileMenuLinks : desktopMenuLinks}
-      connectWalletRender={() => (
-        <WalletProvider>
-          <WalletButton />
-        </WalletProvider>
-      )}
+      connectWalletRender={() => <WalletButton />}
     />
   );
 };

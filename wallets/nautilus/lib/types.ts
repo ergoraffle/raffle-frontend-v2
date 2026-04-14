@@ -118,7 +118,7 @@ interface EipWalletApi {
     paginate?: Paging
   ) => Promise<ErgoBoxProxy[] | undefined>;
 
-  get_balance: (token_id: TokenId) => Promise<string>;
+  get_balance: (token_id: TokenId) => Promise<Array<{ balance: string; tokenId: string }>>;
 
   get_used_addresses: (paginate?: Paging) => Promise<Address[]>;
 

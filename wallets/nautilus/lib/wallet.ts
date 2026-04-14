@@ -1,7 +1,13 @@
-import { ConnectionTimeoutError, Wallet } from '@ergo-raffle/base-wallet';
+import { ConnectionTimeoutError, Wallet, type WalletToken } from '@ergo-raffle/base-wallet';
 
 import { ICON } from './icon';
 import type { NautilusWalletAddresses, NautilusWalletConfig } from './types';
+
+const ERG_TOKEN: WalletToken = {
+  id: 'ERG',
+  name: 'Erg',
+  decimals: 9
+};
 
 export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletAddresses> {
   icon = ICON;
@@ -14,6 +20,14 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletA
 
   private get api() {
     return window.ergoConnector.nautilus;
+  }
+
+  private get tokens(): WalletToken[] {
+    return JSON.parse(localStorage.getItem(`Wallet:${this.name}`) || '[]');
+  }
+
+  private set tokens(value: WalletToken[]) {
+    localStorage.setItem(`Wallet:${this.name}`, JSON.stringify(value));
   }
 
   performConnect = async (): Promise<void> => {
@@ -54,4 +68,55 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletA
     typeof window.ergoConnector !== 'undefined' && !!window.ergoConnector.nautilus;
 
   hasConnection = async (): Promise<boolean> => await this.api.isAuthorized();
+
+  fetchTokens = async (): Promise<WalletToken[]> => {
+    const cachedTokens = this.tokens;
+
+    const wallet = await this.api.getContext();
+
+    const balances = await wallet.get_balance('all');
+
+    const ids = balances.map((balance) => balance.tokenId);
+
+    const idsToFetch = ids.filter(
+      (id) => id !== ERG_TOKEN.id && !cachedTokens.some((token) => token.id === id)
+    );
+
+    const responses = await Promise.allSettled(
+      idsToFetch.map((id) =>
+        fetch(`https://api.ergoplatform.com/api/v1/tokens/${id}`).then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+      )
+    );
+
+    const fulfilled = responses.filter((response) => response.status === 'fulfilled');
+
+    const failedCount = responses.length - fulfilled.length;
+
+    const parsedTokens = fulfilled.map<WalletToken>((response) => ({
+      id: response.value.id,
+      name: response.value.name ?? '',
+      decimals: response.value.decimals ?? -1
+    }));
+
+    const hasErg = cachedTokens.some((token) => token.id === ERG_TOKEN.id);
+
+    const mergedTokens = [
+      ...(hasErg ? [] : [ERG_TOKEN]),
+      ...cachedTokens,
+      ...parsedTokens.filter((newToken) => !cachedTokens.some((token) => token.id === newToken.id))
+    ];
+
+    this.tokens = mergedTokens;
+
+    if (failedCount > 0) {
+      throw new Error(`[${this.name}] Failed to fetch ${failedCount} token(s) from Ergo API.`);
+    }
+
+    return mergedTokens;
+  };
 }
