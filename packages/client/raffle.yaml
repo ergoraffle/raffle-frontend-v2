@@ -15,7 +15,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/StartupResponse'
 
-  /info:
+  /info/blockchain:
     get:
       summary: Get service information
       responses:
@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InfoResponse'
+                $ref: '#/components/schemas/InfoBlockchainResponse'
 
   /raffles:
     get:
@@ -245,34 +245,34 @@ components:
       required: [tokenId, name]
 
     #######################
-    # Info
+    # Blockchain Info
     #######################
-    InfoResponse:
+    InfoBlockchainResponse:
       type: object
       properties:
-        lastBlockHeight:
-          type: integer
-          x-faker: 123456
-        health:
-          type: string
-          x-faker: healthy
-        serviceFee:
-          type: integer
-          description: Percentage * 10 (e.g. 30 = 3%)
-          x-faker: 30
-        implementerFee:
-          type: integer
-          description: Percentage * 10 (e.g. 20 = 2%)
-          x-faker: 20
-        creationFee:
-          type: integer
-          x-faker: 20000000000
+        fee:
+          type: object
+          properties:
+            tx:
+              type: integer
+              format: int64
+            service:
+              type: number
+            implementer:
+              type: number
+            creation:
+              type: integer
+              format: int64
+          required:
+            - tx
+            - service
+            - implementer
+            - creation
+        height:
+          type: number
       required:
-        - lastBlockHeight
-        - health
-        - serviceFee
-        - implementerFee
-        - creationFee
+        - fee
+        - height
 
     #######################
     # Raffles

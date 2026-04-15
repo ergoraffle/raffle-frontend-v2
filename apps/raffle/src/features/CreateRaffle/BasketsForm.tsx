@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
-
 import { Info } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
   Field,
-  FieldDescription,
   FieldError,
   FieldLabel,
   Input,
@@ -13,7 +10,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
   PercentageDistribution,
-  type PercentageDistributionItem,
   Progress,
   Select,
   SelectContent,
@@ -24,11 +20,9 @@ import {
   Tooltip,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { calcPercentageDistribution } from '@/features/utils';
-
-import type { RaffleBasketsForm } from '../schemas';
+import type { RaffleBasketsForm, RaffleDonationGoalForm } from '../schemas';
 import { FieldTitle } from './FieldTitle';
 
 export type BasketsFormProps = {
@@ -39,23 +33,15 @@ export type BasketsFormProps = {
 const shareSplitMethods = [{ value: 'decreasingStep', label: 'Decreasing step' }];
 
 export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
-  const [shareBasketCount, setShareBasketCount] = useState<number>();
-  const [biggestShareBasket, setBiggestShareBasket] = useState<number>();
-  const [percentageDistribution, setPercentageDistribution] =
-    useState<PercentageDistributionItem[]>();
-
-  useEffect(() => {
-    if (shareBasketCount && biggestShareBasket) {
-      const distribution = calcPercentageDistribution(shareBasketCount, biggestShareBasket);
-      setPercentageDistribution(distribution);
-    }
-  }, [shareBasketCount, biggestShareBasket]);
-
   const {
     formState: { errors },
     reset,
-    register
-  } = useFormContext<RaffleBasketsForm>();
+    register,
+    watch,
+    control
+  } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
+
+  const winnerPotShare = watch('winnerPotShare', 0);
 
   const onBack = () => {
     reset();
@@ -73,18 +59,15 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
         <div>
           <FieldTitle title="Distribute Winners Pot between Share Baskets." />
           <Typography variant="body-md" className="mt-1 mb-3">
-            Winners Pot: 30% of Total Fund
+            Winners Pot: {winnerPotShare}% of Total Fund
           </Typography>
         </div>
-        <Progress variant="box" value={30} max={100} />
+        <Progress variant="box" value={winnerPotShare} max={100} />
         <div className="flex flex-col lg:flex-row  gap-x-5 gap-y-3">
           <Field className="sm:max-w-1/2 md:max-w-auto flex-1">
             <FieldLabel>Share Baskets</FieldLabel>
             <InputGroup variant="bordered">
-              <InputGroupInput
-                onChange={(e) => setShareBasketCount(Number(e.target.value))}
-                value={shareBasketCount}
-              />
+              <InputGroupInput />
               <InputGroupAddon align="inline-start">
                 <BasketStatus className="size-6" filled />
               </InputGroupAddon>
@@ -115,21 +98,20 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             </Field>
             <Field className="flex-1">
               <FieldLabel>Biggest Share</FieldLabel>
-              <Input
-                variant="bordered"
-                onChange={(e) => setBiggestShareBasket(Number(e.target.value))}
-                value={biggestShareBasket}
-              />
-              <FieldDescription>minimum= 19.5</FieldDescription>
+              <Input variant="bordered" />
             </Field>
           </div>
         </div>
         <Field>
           <FieldLabel>Details</FieldLabel>
-          <PercentageDistribution
-            items={percentageDistribution}
-            onChange={setPercentageDistribution}
+          <Controller
+            name="details"
+            control={control}
+            render={({ field }) => (
+              <PercentageDistribution items={field.value ?? []} onChange={field.onChange} />
+            )}
           />
+          {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
         </Field>
       </div>
       <div className="space-y-3">

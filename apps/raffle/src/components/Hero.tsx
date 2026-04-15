@@ -35,7 +35,7 @@ export const Hero = () => (
           <Link href="/raffles">Explore Raffles</Link>
         </Button>
         <Button variant="outline" className="mt-4 w-full" size="lg" asChild>
-          <Link href="/create-raffle">Create Raffle</Link>
+          <Link href="/raffles/create">Create Raffle</Link>
         </Button>
       </div>
     </div>

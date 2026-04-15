@@ -12,12 +12,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Token,
-  Typography
+  Token
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import { SERVICE_SHARE } from '../constants';
+import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
+import { tokens } from '@/mockData';
+
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
 import { FieldTitle } from './FieldTitle';
@@ -27,12 +28,8 @@ export type DonationGoalFormProps = {
   handleBack: () => void;
 };
 
-const tokens = [
-  { value: 'ADA', label: 'ADA' },
-  { value: 'USDC', label: 'USDC' }
-];
-
 export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormProps) => {
+  const { data: infoBlockchainData } = useInfoBlockchain();
   const {
     formState: { errors },
     reset,
@@ -57,11 +54,11 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         <div className="flex flex-col sm:flex-row gap-x-2 gap-y-3">
           <Field className="flex-1">
             <Select
-              value={getValues('tokenName')}
-              onValueChange={(value) => setValue('tokenName', value)}
+              value={getValues('tokenId')}
+              onValueChange={(value) => setValue('tokenId', value)}
             >
               <SelectTrigger variant="bordered" className="mt-7.5">
-                <SelectValue {...register('tokenName')} />
+                <SelectValue {...register('tokenId')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -73,12 +70,11 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {!!errors.tokenName && <FieldError>{errors.tokenName.message}</FieldError>}
+            {!!errors.tokenId && <FieldError>{errors.tokenId.message}</FieldError>}
           </Field>
           <Field className="flex-2">
             <FieldLabel>Token ID</FieldLabel>
-            <Input variant="bordered" {...register('tokenId')} />
-            {!!errors.tokenId && <FieldError>{errors.tokenId.message}</FieldError>}
+            <Input variant="bordered" value={watch('tokenId')} readOnly />
           </Field>
         </div>
       </div>
@@ -91,9 +87,6 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         <FieldTitle title="Set each Ticket’s Price." />
         <div className="flex items-center gap-x-5">
           <Input variant="bordered" {...register('amount')} className="max-w-205 grow" />
-          <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
-            ≈ 34.67 USD
-          </Typography>
         </div>
         {!!errors.amount && <FieldError>{errors.amount.message}</FieldError>}
       </Field>
@@ -106,7 +99,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         <FieldTitle title="Set How to Distribute." />
 
         <DistributionBar
-          service={SERVICE_SHARE}
+          service={infoBlockchainData?.fee.implementer ?? 0}
           winnerPot={errors.winnerPotShare ? undefined : Number(winnerPotShare)}
           missionFund={errors.missionFund ? undefined : Number(missionFund)}
         />
@@ -114,7 +107,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
           <div className="sm:w-1/2 md:w-auto flex-1">
             <Field>
               <FieldLabel>Service</FieldLabel>
-              <Input variant="bordered" disabled value="5%" />
+              <Input variant="bordered" disabled value={infoBlockchainData?.fee.implementer} />
             </Field>
           </div>
           <div className="flex flex-col sm:flex-row flex-2 gap-x-2 gap-y-3">

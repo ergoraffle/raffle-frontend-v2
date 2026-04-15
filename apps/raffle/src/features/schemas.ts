@@ -1,9 +1,5 @@
 import { z } from 'zod';
 
-import { SERVICE_SHARE } from '@/features/constants';
-
-const MAX_SHARE = 100 - SERVICE_SHARE;
-
 export const raffleSpecificationsSchema = z.object({
   name: z
     .string({
@@ -31,39 +27,85 @@ export const raffleSpecificationsSchema = z.object({
     .min(1, 'Deadline must be at least 1')
 });
 
-export const raffleDonationGoalSchema = z
-  .object({
-    tokenId: z.string({ message: 'Can not be empty' }),
-    tokenName: z.string({ message: 'Can not be empty' }),
-    count: z.string({ message: 'Can not be empty' }),
-    amount: z.string({ message: 'Can not be empty' }),
-    missionFund: z.number({ message: 'Can not be empty' }).min(1, 'Can not be less than 1'),
-    winnerPotShare: z.number({ message: 'Can not be empty' }).min(1, 'Can not be less than 1'),
-    address: z.string({ message: 'Can not be empty' })
-  })
-  .check(
-    z.superRefine((data, ctx) => {
-      if (data.missionFund + data.winnerPotShare > MAX_SHARE) {
+export const raffleDonationGoalSchema = z.object({
+  tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
+  count: z.string({ message: 'Can not be empty' }),
+  amount: z.string({ message: 'Can not be empty' }),
+  missionFund: z
+    .number({ message: 'Can not be empty' })
+    .min(0, 'Can not be less than 0')
+    .max(100, 'Can not be more than 100'),
+  winnerPotShare: z
+    .number({ message: 'Can not be empty' })
+    .min(0, 'Can not be less than 0')
+    .max(100, 'Can not be more than 100'),
+  address: z.string({ message: 'Can not be empty' })
+});
+
+export const createRaffleSchema = (serviceShare?: number) => {
+  if (!serviceShare) return raffleSchema;
+  const MAX = 100 - serviceShare;
+
+  return raffleSchema.superRefine((data, ctx) => {
+    if (data.missionFund + data.winnerPotShare > MAX) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Max allowed is ${MAX}`,
+        path: ['missionFund']
+      });
+    }
+  });
+};
+
+export const raffleBasketsSchema = z.object({
+  emptyBaskets: z.string({ message: 'Can not be empty' }),
+  details: z
+    .array(
+      z.object({
+        id: z.string({ message: 'Can not be empty' }),
+        count: z.number({ message: 'Can not be empty' }).min(1, 'Can not be less than 1'),
+        percent: z
+          .number({ message: 'Can not be empty' })
+          .min(1, 'Can not be less than 1')
+          .max(100, 'Can not be more than 100')
+      })
+    )
+    .min(1, 'At least one detail is required')
+    .superRefine((items, ctx) => {
+      if (items.length === 0) return;
+
+      if (items.some((i) => i.percent === 0)) {
         ctx.addIssue({
           code: 'custom',
-          inclusive: true,
-          message: `Sum must not exceed ${MAX_SHARE}`,
-          path: ['missionFund'],
-          input: data.missionFund
+          message: 'Percents can not be less than 1',
+          path: []
         });
+      }
+      if (items.some((i) => i.percent > 100)) {
         ctx.addIssue({
           code: 'custom',
-          message: `Sum must not exceed ${MAX_SHARE}`,
-          path: ['winnerPotShare'],
-          inclusive: true,
-          input: data.winnerPotShare
+          message: 'Percents can not be more than 100',
+          path: []
+        });
+      }
+      if (items.some((i) => i.count === 0)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Counts can not be less than 1',
+          path: []
+        });
+      }
+
+      const total = items.reduce((sum, item) => sum + item.percent * item.count, 0);
+
+      if (total !== 100) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Sum of percentages must equal 100',
+          path: []
         });
       }
     })
-  );
-
-export const raffleBasketsSchema = z.object({
-  emptyBaskets: z.string()
 });
 
 export const raffleSchema = raffleSpecificationsSchema

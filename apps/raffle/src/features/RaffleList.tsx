@@ -1,7 +1,7 @@
 import {
   configureClient,
   type GetRafflesParams,
-  getInfo,
+  getInfoBlockchain,
   getRaffles,
   withMock
 } from '@ergo-raffle/client';
@@ -33,7 +33,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
     async () => await getRaffles({ ...params, ...limitedParams })
   );
 
-  const infoData = await withMock(async () => await getInfo());
+  const infoData = await withMock(async () => await getInfoBlockchain());
 
   if (items.length === 0) {
     return (
@@ -66,7 +66,7 @@ export const RaffleList = async ({ params, limit }: Props) => {
             verified: true
           };
 
-          const deadline = getDeadlineAmount(raffle.deadline, infoData.lastBlockHeight);
+          const deadline = getDeadlineAmount(raffle.deadline, infoData.height);
 
           const trust = { value: 0, max: 100 };
           return (

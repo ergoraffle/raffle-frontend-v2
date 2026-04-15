@@ -1,5 +1,5 @@
 import type { GetRafflesParams } from '@ergo-raffle/client';
-import type { PercentageDistributionItem, RaisedAmounts } from '@ergo-raffle/ui-kit';
+import type { RaisedAmounts } from '@ergo-raffle/ui-kit';
 
 export const getRafflesParamsTransformer = (searchParams: {
   [key: string]: string | string[] | undefined;
@@ -44,48 +44,4 @@ export const getDeadlineString = (deadline: number): string => {
   }
 
   return isFuture ? `${str} remaining` : `Ended ${str} ago`;
-};
-
-export const calcPercentageDistribution = (
-  shareBasketCount: number,
-  biggestShareBasket: number
-) => {
-  const distribution: PercentageDistributionItem[] = [];
-
-  const remaining = 100 - biggestShareBasket;
-  const otherCount = shareBasketCount - 1;
-
-  if (otherCount <= 0) {
-    return [
-      {
-        id: crypto.randomUUID(),
-        count: 1,
-        percent: 100
-      }
-    ];
-  }
-
-  const exact = remaining / otherCount;
-
-  const base = Math.floor(exact);
-
-  let remainder = remaining - base * otherCount;
-
-  for (let i = 0; i < shareBasketCount; i++) {
-    let percent = 0;
-
-    if (i === 0) {
-      percent = biggestShareBasket;
-    } else {
-      percent = base + (remainder > 0 ? 1 : 0);
-      if (remainder > 0) remainder--;
-    }
-
-    distribution.push({
-      id: crypto.randomUUID(),
-      count: 1,
-      percent
-    });
-  }
-  return distribution;
 };

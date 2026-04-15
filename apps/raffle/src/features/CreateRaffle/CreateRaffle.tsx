@@ -8,18 +8,24 @@ import { Card, CardContent, Stepper, Typography } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
 import { createRaffle } from '@/mockApi';
 
-import { type RaffleForm, raffleSchema } from '../schemas';
+import { createRaffleSchema, type RaffleForm } from '../schemas';
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
 import { SpecificationsForm } from './SpecificationsForm';
 
 export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const { data: infoBlockchainData } = useInfoBlockchain();
+  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.service);
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
-    shouldUnregister: false
+    shouldUnregister: false,
+    defaultValues: {
+      details: []
+    }
   });
 
   const handleNext = async () => {
@@ -44,20 +50,12 @@ export const CreateRaffle = () => {
     {
       title: 'Donation Goal',
       content: <DonationGoalForm handleNext={handleNext} handleBack={handleBack} />,
-      fields: [
-        'tokenId',
-        'tokenName',
-        'count',
-        'amount',
-        'missionFund',
-        'winnerPotShare',
-        'address'
-      ] as const
+      fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
     },
     {
       title: 'Baskets',
       content: <BasketsForm handleNext={handleNext} handleBack={handleBack} />,
-      fields: ['emptyBaskets'] as const
+      fields: ['emptyBaskets', 'details'] as const
     }
   ];
   const onSubmit = (data: RaffleForm) => {

@@ -20,14 +20,16 @@ export interface VerifiedToken {
   name: string;
 }
 
-export interface InfoResponse {
-  lastBlockHeight: number;
-  health: string;
-  /** Percentage * 10 (e.g. 30 = 3%) */
-  serviceFee: number;
-  /** Percentage * 10 (e.g. 20 = 2%) */
-  implementerFee: number;
-  creationFee: number;
+export type InfoBlockchainResponseFee = {
+  tx: number;
+  service: number;
+  implementer: number;
+  creation: number;
+};
+
+export interface InfoBlockchainResponse {
+  fee: InfoBlockchainResponseFee;
+  height: number;
 }
 
 export interface RaffleSummaryResponse {
@@ -387,7 +389,8 @@ export const getStartup = () => httpClient<StartupResponse>({ url: `/startup`, m
 /**
  * @summary Get service information
  */
-export const getInfo = () => httpClient<InfoResponse>({ url: `/info`, method: 'GET' });
+export const getInfoBlockchain = () =>
+  httpClient<InfoBlockchainResponse>({ url: `/info/blockchain`, method: 'GET' });
 
 /**
  * @summary Get raffle summaries
@@ -441,7 +444,7 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 export type GetStartupResult = NonNullable<Awaited<ReturnType<typeof getStartup>>>;
-export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>;
+export type GetInfoBlockchainResult = NonNullable<Awaited<ReturnType<typeof getInfoBlockchain>>>;
 export type GetRafflesResult = NonNullable<Awaited<ReturnType<typeof getRaffles>>>;
 export type GetRafflesRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRafflesRaffleId>>>;
 export type GetRafflesRaffleIdWinnerBasketsResult = NonNullable<
@@ -469,14 +472,16 @@ export const getGetStartupResponseMock = (
   ...overrideResponse
 });
 
-export const getGetInfoResponseMock = (
-  overrideResponse: Partial<InfoResponse> = {}
-): InfoResponse => ({
-  lastBlockHeight: faker.number.int({ min: undefined, max: undefined }),
-  health: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  serviceFee: faker.number.int({ min: undefined, max: undefined }),
-  implementerFee: faker.number.int({ min: undefined, max: undefined }),
-  creationFee: faker.number.int({ min: undefined, max: undefined }),
+export const getGetInfoBlockchainResponseMock = (
+  overrideResponse: Partial<InfoBlockchainResponse> = {}
+): InfoBlockchainResponse => ({
+  fee: {
+    tx: faker.number.int({ min: undefined, max: undefined }),
+    service: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    implementer: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    creation: faker.number.int({ min: undefined, max: undefined })
+  },
+  height: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
   ...overrideResponse
 });
 
@@ -695,16 +700,16 @@ export const getGetStartupMockHandler = (
     options
   );
 
-export const getGetInfoMockHandler = (
+export const getGetInfoBlockchainMockHandler = (
   overrideResponse?:
-    | InfoResponse
+    | InfoBlockchainResponse
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0]
-      ) => Promise<InfoResponse> | InfoResponse),
+      ) => Promise<InfoBlockchainResponse> | InfoBlockchainResponse),
   options?: RequestHandlerOptions
 ) =>
   http.get(
-    '*/info',
+    '*/info/blockchain',
     async (info) => {
       await delay(1000);
 
@@ -714,7 +719,7 @@ export const getGetInfoMockHandler = (
             ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
-            : getGetInfoResponseMock()
+            : getGetInfoBlockchainResponseMock()
         ),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
@@ -858,7 +863,7 @@ export const getGetRafflesRaffleIdWinnerBasketsBasketIdMockHandler = (
   );
 export const getRaffleServiceAPIMock = () => [
   getGetStartupMockHandler(),
-  getGetInfoMockHandler(),
+  getGetInfoBlockchainMockHandler(),
   getGetRafflesMockHandler(),
   getGetRafflesRaffleIdMockHandler(),
   getGetRafflesRaffleIdWinnerBasketsMockHandler(),
