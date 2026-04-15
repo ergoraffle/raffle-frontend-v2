@@ -1,13 +1,13 @@
-import type { FAQItemType } from './FAQItem';
+import type { FaqItemType } from './FaqItem';
 
-export type TABs = {
+export type Tabs = {
   label: string;
   xsLabel: string;
   value: 'general' | 'supported_tokens' | 'raffle_creation' | 'baskets';
-  items: FAQItemType[];
+  items: FaqItemType[];
 };
 
-export const TABS: TABs[] = [
+export const tabs: Tabs[] = [
   {
     xsLabel: 'Creation',
     label: 'Raffle creation',
@@ -16,7 +16,11 @@ export const TABS: TABs[] = [
       {
         id: 3,
         question: 'Do all winners get a share of the gathered money?',
-        answer: 'A raffle is a contest where participants can win prizes by purchasing tickets.'
+        answer: (
+          <>
+            A raffle is a contest where <b>participants</b> can win prizes by purchasing tickets.
+          </>
+        )
       }
     ]
   },
@@ -28,7 +32,7 @@ export const TABS: TABs[] = [
       {
         id: 1,
         question: 'How do the Baskets work?',
-        answer: 'A raffle is a contest where participants can win prizes by purchasing tickets.'
+        answer: <>A raffle is a contest where participants can win prizes by purchasing tickets.</>
       }
     ]
   },
@@ -46,7 +50,7 @@ export const TABS: TABs[] = [
       {
         id: 1,
         question: 'What is a raffle?',
-        answer: 'A raffle is a contest where participants can win prizes by purchasing tickets.'
+        answer: <>A raffle is a contest where participants can win prizes by purchasing tickets.</>
       }
     ]
   }

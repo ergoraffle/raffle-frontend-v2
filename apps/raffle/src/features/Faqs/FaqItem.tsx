@@ -6,17 +6,17 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-export type FAQItemType = {
+export type FaqItemType = {
   id: number;
   question: string;
-  answer: string;
+  answer: React.ReactElement;
 };
 
-export type FAQItemProps = {
-  faq?: FAQItemType;
+export type FaqItemProps = {
+  faq?: FaqItemType;
 };
 
-export const FAQItem = ({ faq }: FAQItemProps) => (
+export const FaqItem = ({ faq }: FaqItemProps) => (
   <Collapsible className="rounded-sm data-[state=open]:bg-gray-5">
     <CollapsibleTrigger asChild>
       <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0">
