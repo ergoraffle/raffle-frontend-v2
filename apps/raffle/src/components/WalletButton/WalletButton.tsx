@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Wallet as WalletIcon } from '@ergo-raffle/icons';
-import { Button, FieldError, Spinner, Tooltip, Typography } from '@ergo-raffle/ui-kit';
+import { Button, FieldError, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
 
 import { useWallet } from '../../hooks/useWallet';
 import { Agreement } from './Agreement';
@@ -16,6 +16,14 @@ export const WalletButton = () => {
   const wallet = useWallet();
 
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!wallet.error) return;
+
+    toast.error(String(wallet.error));
+
+    setOpen(false);
+  }, [wallet.error]);
 
   const state = useMemo<'agreement' | 'wallet' | 'ergoAddress'>(() => {
     if (!wallet.agreed) return 'agreement';

@@ -129,12 +129,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (candidate) {
-      setError(undefined);
-    }
-  }, [candidate]);
-
   const value = useMemo(
     () => ({
       candidate,
