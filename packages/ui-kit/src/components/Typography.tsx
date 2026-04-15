@@ -21,7 +21,8 @@ export const typographyVariants = cva('', {
       'body-button-bold': 'typo-body-button-bold',
       'subtitle-sm': 'typo-subtitle-sm',
       'subtitle-md': 'typo-subtitle-md',
-      'subtitle-lg': 'typo-subtitle-lg'
+      'subtitle-lg': 'typo-subtitle-lg',
+      'subtitle-xl': 'typo-subtitle-xl'
     },
     defaultVariants: {
       variant: 'body-md'
