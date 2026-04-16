@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import type {
-  GetRafflesParams,
-  GetRafflesSort,
-  GetRafflesSortBy,
-  GetRafflesStatusItem
+  GetRaffleDirection,
+  GetRaffleOrder,
+  GetRaffleParams,
+  GetRaffleStatusItem
 } from '@ergo-raffle/client';
 
 const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
@@ -16,18 +16,18 @@ const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
 export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const name = searchParams.get('name') ?? undefined;
-  const [search, setSearch] = useState<string | undefined>(name);
+  const text = searchParams.get('text') ?? undefined;
+  const [search, setSearch] = useState<string | undefined>(text);
 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
   const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 12);
 
-  const sort = (searchParams.get('sort') ?? undefined) as GetRafflesSort | undefined;
-  const sortBy = (searchParams.get('sortBy') ?? undefined) as GetRafflesSortBy | undefined;
+  const order = (searchParams.get('sort') ?? undefined) as GetRaffleOrder | undefined;
+  const direction = (searchParams.get('direction') ?? undefined) as GetRaffleDirection | undefined;
 
-  const status = searchParams.getAll('status') as GetRafflesStatusItem[];
-  const token = searchParams.getAll('token');
-  const category = searchParams.getAll('category');
+  const status = searchParams.getAll('status') as GetRaffleStatusItem[];
+  const tokenIds = searchParams.getAll('tokenIds');
+  const ids = searchParams.getAll('ids');
 
   const offset = (page - 1) * perPage;
 
@@ -57,15 +57,15 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     return `?${params.toString()}`;
   };
 
-  const params: GetRafflesParams = {
+  const params: GetRaffleParams = {
     offset,
     limit: perPage,
-    sort,
-    sortBy,
+    order,
+    direction,
     status: status.length ? status : undefined,
-    token: token.length ? token : undefined,
-    category: category.length ? category : undefined,
-    name: name || undefined
+    tokenIds: tokenIds.length ? tokenIds : undefined,
+    ids: ids.length ? ids : undefined,
+    text: text || undefined
   };
 
   return { page, perPage, params, search, setSearch, setParam, getPageLink };

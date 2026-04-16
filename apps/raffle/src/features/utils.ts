@@ -1,9 +1,9 @@
-import type { GetRafflesParams } from '@ergo-raffle/client';
+import type { GetRaffleParams } from '@ergo-raffle/client';
 import type { RaisedAmounts } from '@ergo-raffle/ui-kit';
 
 export const getRafflesParamsTransformer = (searchParams: {
   [key: string]: string | string[] | undefined;
-}): GetRafflesParams => {
+}): GetRaffleParams => {
   const { page, perPage, ...params } = searchParams;
   const limit = perPage ? Number(perPage) : 12;
   const offset = page && perPage ? Number(page) * Number(perPage) - 1 : 0;

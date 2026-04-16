@@ -12,16 +12,16 @@ export const RafflesSort = () => {
     <div className="flex items-center gap-2 float-right">
       <Button
         variant="white"
-        onClick={() => setParam('sortBy', params.sortBy === 'Creation' ? 'Deadline' : 'Creation')}
+        onClick={() => setParam('sortBy', params.order === 'height' ? 'deadline' : 'height')}
       >
-        Raffle {params.sortBy || 'Deadline'}
+        Raffle {params.order === 'height' ? 'Creation' : 'Deadline'}
       </Button>
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => setParam('sort', params.sort === 'asc' ? 'desc' : 'asc')}
+        onClick={() => setParam('sort', params.direction === 'ASC' ? 'DESC' : 'ASC')}
       >
-        {params.sort === 'asc' ? <SortUp /> : <SortDown />}
+        {params.direction === 'ASC' ? <SortUp /> : <SortDown />}
       </Button>
     </div>
   );

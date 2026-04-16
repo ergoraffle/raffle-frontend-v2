@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 
-import type { GetRafflesStatusItem } from '@ergo-raffle/client';
+import type { GetRaffleStatusItem } from '@ergo-raffle/client';
 import { Search } from '@ergo-raffle/icons';
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 
 import { useRafflesQuery } from '@/hooks';
 
-const statusFilterItems: { value: GetRafflesStatusItem; label: string }[] = [
+const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
   {
     value: 'active',
     label: 'Active'
@@ -36,17 +36,12 @@ const tokenFilterItems = [
   { value: 'btc', label: 'BTC' },
   { value: 'ada', label: 'ADA' }
 ];
-const categoryFilterItems = [
-  { value: 'cat1', label: 'Cat 1' },
-  { value: 'cat2', label: 'Cat 2' },
-  { value: 'cat3', label: 'Cat 3' }
-];
 
 export const RafflesFilters = () => {
   const { search, params, setSearch, setParam } = useRafflesQuery();
 
   const onSearch = () => {
-    setParam('name', search);
+    setParam('text', search);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -84,24 +79,16 @@ export const RafflesFilters = () => {
           <MultiSelectCombobox
             items={statusFilterItems}
             selected={(params.status as string[]) ?? []}
-            onChange={(values) => setParam('status', values as GetRafflesStatusItem[])}
+            onChange={(values) => setParam('status', values as GetRaffleStatusItem[])}
             placeholder="Status"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />
           <MultiSelectCombobox
             items={tokenFilterItems}
-            selected={params.token ?? []}
-            onChange={(values) => setParam('token', values as string[])}
+            selected={params.tokenIds ?? []}
+            onChange={(values) => setParam('tokenIds', values as string[])}
             placeholder="Token"
-            closeOnChange
-            className="flex-1 lg:flex-auto"
-          />
-          <MultiSelectCombobox
-            items={categoryFilterItems}
-            selected={params.category ?? []}
-            onChange={(values) => setParam('category', values as string[])}
-            placeholder="Category"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />

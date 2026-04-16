@@ -59,7 +59,7 @@ export const RaffleCard = ({
   trust,
   loading
 }: RafflesContentProps) => (
-  <Link href={`/raffles/${raffle?.raffleId}`} className="flex items-stretch grow">
+  <Link href={`/raffles/${raffle?.id}`} className="flex items-stretch grow">
     <Card className="relative grow w-full" hover>
       <CardImageWrapper loading={loading}>
         {raffle?.image ? (
@@ -92,9 +92,9 @@ export const RaffleCard = ({
             </>
           ) : (
             <>
-              {raffle?.collectingTokenId ? (
+              {raffle?.token ? (
                 <Badge variant="primary">
-                  <Token name={raffle?.collectingTokenName} tokenId={raffle?.collectingTokenId} />
+                  <Token name={raffle?.token.name} tokenId={raffle?.token.id} />
                 </Badge>
               ) : null}
               {raffle?.winnersCount ? (
@@ -142,7 +142,7 @@ export const RaffleCard = ({
         </div>
         <RaiseProgress
           raisedAmounts={raisedAmounts}
-          tokenName={raffle?.collectingTokenName}
+          tokenName={raffle?.token?.name}
           loading={loading}
         />
       </CardContent>
