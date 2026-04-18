@@ -4,15 +4,19 @@ import {
   DisconnectionFailedError,
   NotConnectedError,
   UnavailableApiError,
+  UtxoFetchError,
   WalletError
 } from './errors';
+import type { WalletToken } from './types';
 
 // biome-ignore lint/complexity/noBannedTypes: in feuture we will have more config options
 export type WalletConfig = {};
 
 export abstract class Wallet<
   Config extends WalletConfig = WalletConfig,
-  Addresses extends Record<string, string> = Record<string, string>
+  Addresses extends Record<string, string> = Record<string, string>,
+  Box = unknown,
+  WalletTransferParams = unknown
 > {
   abstract icon: string;
   abstract name: string;
@@ -26,6 +30,9 @@ export abstract class Wallet<
   abstract fetchAddresses: () => Promise<Addresses | undefined>;
   abstract isAvailable: () => boolean;
   abstract hasConnection: () => Promise<boolean>;
+  abstract fetchTokens: () => Promise<WalletToken[]>;
+  abstract fetchBoxes: () => Promise<Box[]>;
+  abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
@@ -64,7 +71,7 @@ export abstract class Wallet<
     try {
       const addresses = await this.fetchAddresses();
 
-      if (!addresses || !addresses.length) throw addresses;
+      if (!addresses || !Object.keys(addresses).length) throw addresses;
 
       return addresses;
     } catch (error) {
@@ -73,6 +80,26 @@ export abstract class Wallet<
       }
       throw new AddressRetrievalError(this.name, error);
     }
+  };
+
+  getBoxes = async (): Promise<Box[]> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    try {
+      return await this.fetchBoxes();
+    } catch (error) {
+      throw new UtxoFetchError(this.name, error);
+    }
+  };
+
+  transfer = async (params: WalletTransferParams): Promise<string> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    return await this.performTransfer(params);
   };
 
   protected requireAvailable = () => {

@@ -5,6 +5,7 @@ import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['ergo-lib-wasm-nodejs', '@emurgo/cardano-serialization-lib-nodejs'],
   transpilePackages: ['@ergo-raffle/ui-kit']
 };
 
