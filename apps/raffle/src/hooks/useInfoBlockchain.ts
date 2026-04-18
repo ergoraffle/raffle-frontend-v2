@@ -20,7 +20,7 @@ export const useInfoBlockchain = () => {
             implementer: 5,
             creation: 195161
           },
-          height: 123456
+          height: 293950
         };
         setData(result);
       } finally {

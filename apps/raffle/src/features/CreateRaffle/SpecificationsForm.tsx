@@ -20,7 +20,10 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
+import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
+
 import type { RaffleSpecificationsForm } from '../schemas';
+import { deadlineToHour } from '../utils';
 import { FieldTitle } from './FieldTitle';
 
 export type SpecificationsFormProps = {
@@ -28,13 +31,8 @@ export type SpecificationsFormProps = {
 };
 
 export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
+  const { data: infoBlockchainData } = useInfoBlockchain();
   const [tagInputValue, setTagInputValue] = useState<string>();
-  const uploader = useUploader({
-    files: [],
-    maxFileSize: 1024 * (1024 * 1.75),
-    allowedFileTypes: ['.jpg', '.png', '.jpeg'],
-    maxNumberOfFiles: 4
-  });
 
   const {
     setValue,
@@ -43,15 +41,23 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
     watch,
     formState: { errors }
   } = useFormContext<RaffleSpecificationsForm>();
-
+  const images = getValues('images');
+  const uploader = useUploader({
+    files: images || [],
+    maxFileSize: 1024 * (1024 * 1.75),
+    allowedFileTypes: ['.jpg', '.png', '.jpeg'],
+    maxNumberOfFiles: 4
+  });
   const tags = watch('tags');
   const onSubmit = async () => {
     const images = await uploader.upload();
-    setValue('images', images, {
-      shouldDirty: true,
-      shouldValidate: true
-    });
-    handleNext();
+    if (!uploader.uploading) {
+      setValue('images', images, {
+        shouldDirty: true,
+        shouldValidate: true
+      });
+      handleNext();
+    }
   };
 
   const handleAddTag = () => {
@@ -68,6 +74,8 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
     const newTags = tags?.filter((t: string) => t !== tag);
     setValue('tags', newTags);
   };
+
+  const hours = deadlineToHour(watch('deadline') || 0, infoBlockchainData?.height || 0);
 
   return (
     <div className="space-y-8">
@@ -142,14 +150,17 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
             variant="bordered"
             className="max-w-205 grow"
             type="number"
+            placeholder="Blocks to go"
             {...register('deadline', {
               valueAsNumber: true,
               setValueAs: (v) => (v.isNaN ? undefined : v)
             })}
           />
-          <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
-            ≈ 23 Hours
-          </Typography>
+          {!!hours && (
+            <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
+              ≈ {hours} Hours
+            </Typography>
+          )}
         </div>
         {!!errors.deadline && <FieldError>{errors.deadline.message}</FieldError>}
       </Field>

@@ -12,7 +12,7 @@ export const raffleSpecificationsSchema = z.object({
     .array(
       z.object({
         id: z.string(),
-        url: z.string().optional(),
+        url: z.string(),
         name: z.string()
       })
     )
@@ -27,8 +27,8 @@ export const raffleSpecificationsSchema = z.object({
 
 export const raffleDonationGoalSchema = z.object({
   tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
-  count: z.number({ message: 'Can not be empty' }),
-  amount: z.number({ message: 'Can not be empty' }),
+  count: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+  amount: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
   missionFund: z
     .number({ message: 'Can not be empty' })
     .min(0, 'Can not be less than 0')
@@ -40,16 +40,22 @@ export const raffleDonationGoalSchema = z.object({
   address: z.string({ message: 'Can not be empty' })
 });
 
-export const createRaffleSchema = (serviceShare?: number) => {
-  if (!serviceShare) return raffleSchema;
-  const MAX = 100 - serviceShare;
+export const createRaffleSchema = (serviceShare?: number, height?: number) => {
+  const MAX = serviceShare ? 100 - serviceShare : undefined;
 
   return raffleSchema.superRefine((data, ctx) => {
-    if (data.missionFund + data.winnerPotShare > MAX) {
+    if (MAX && data.missionFund + data.winnerPotShare > MAX) {
       ctx.addIssue({
         code: 'custom',
         message: `Max allowed is ${MAX}`,
         path: ['missionFund']
+      });
+    }
+    if (height && data.deadline <= height) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Deadline must be greater than current block height (${height})`,
+        path: ['deadline']
       });
     }
   });

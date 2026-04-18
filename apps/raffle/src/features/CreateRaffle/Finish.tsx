@@ -4,7 +4,6 @@ import Link from 'next/link';
 import {
   BasketStatus,
   Button,
-  CardImageWrapper,
   Carousel,
   CarouselContent,
   CarouselDots,
@@ -41,22 +40,22 @@ export const Finish = ({ handleBack }: FinishProps) => {
       </Typography>
 
       {data.images && data?.images.length > 0 ? (
-        <div className="w-full lg:w-125 px-auto">
+        <div className="w-51.75 h-41.75 lg:w-127 lg:h-78.75 mx-auto rounded-md overflow-hidden">
           <Carousel>
             <CarouselContent>
               {data.images.map((image) => (
                 <CarouselItem key={image.id}>
-                  <CardImageWrapper>
+                  <div className="w-51.75 h-41.75 lg:w-127 lg:h-78.75 relative">
                     {!!image.url && (
                       <Image
                         src={image.url}
                         priority
                         alt={data.name}
-                        className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
+                        className="object-cover"
                         fill
                       />
                     )}
-                  </CardImageWrapper>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -109,7 +108,7 @@ export const Finish = ({ handleBack }: FinishProps) => {
         </Typography>
         <div>
           <div className="not-last:border-b border-b-black-4 space-y-3 py-3">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <Typography variant="body-button" className="flex items-center gap-2">
                 <BasketStatus filled className="size-7" /> Share baskets:
               </Typography>
