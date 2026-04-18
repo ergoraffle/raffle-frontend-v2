@@ -14,17 +14,22 @@ import { createRaffle } from '@/mockApi';
 import { createRaffleSchema, type RaffleForm } from '../schemas';
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
+import { Finish } from './Finish';
 import { SpecificationsForm } from './SpecificationsForm';
 
 export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const { data: infoBlockchainData } = useInfoBlockchain();
-  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.service);
+
+  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
     shouldUnregister: false,
+    mode: 'onChange',
     defaultValues: {
-      details: []
+      details: [],
+      terms: false,
+      eligibility: false
     }
   });
 
@@ -56,6 +61,10 @@ export const CreateRaffle = () => {
       title: 'Baskets',
       content: <BasketsForm handleNext={handleNext} handleBack={handleBack} />,
       fields: ['emptyBaskets', 'details'] as const
+    },
+    {
+      title: 'Overview & Agreement',
+      content: <Finish handleBack={handleBack} />
     }
   ];
   const onSubmit = (data: RaffleForm) => {

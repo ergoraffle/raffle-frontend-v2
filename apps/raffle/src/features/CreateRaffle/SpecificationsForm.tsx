@@ -45,8 +45,6 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
   } = useFormContext<RaffleSpecificationsForm>();
 
   const tags = watch('tags');
-  const description = watch('description');
-
   const onSubmit = async () => {
     const images = await uploader.upload();
     setValue('images', images, {
@@ -82,13 +80,8 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <FieldTitle title="Add a Description for your Raffle" />
         <TextEditor
           className="max-w-205"
-          value={description || ''}
-          onChange={(value) =>
-            setValue('description', value as string, {
-              shouldValidate: true,
-              shouldDirty: true
-            })
-          }
+          value={getValues('description') || ''}
+          onChange={(value) => setValue('description', value as string)}
         />
         {!!errors.description && <FieldError>{errors.description.message}</FieldError>}
       </Field>

@@ -32,7 +32,6 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
   const { data: infoBlockchainData } = useInfoBlockchain();
   const {
     formState: { errors },
-    reset,
     register,
     watch,
     getValues,
@@ -41,11 +40,6 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
 
   const missionFund = watch('missionFund');
   const winnerPotShare = watch('winnerPotShare');
-
-  const onBack = () => {
-    reset();
-    handleBack();
-  };
 
   return (
     <div className="space-y-8">
@@ -80,13 +74,23 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
       </div>
       <Field>
         <FieldTitle title="How many Token to collect?" />
-        <Input variant="bordered" className="max-w-205" {...register('count')} />
+        <Input
+          variant="bordered"
+          className="max-w-205"
+          {...register('count', { valueAsNumber: true })}
+          type="number"
+        />
         {!!errors.count && <FieldError>{errors.count.message}</FieldError>}
       </Field>
       <Field>
         <FieldTitle title="Set each Ticket’s Price." />
         <div className="flex items-center gap-x-5">
-          <Input variant="bordered" {...register('amount')} className="max-w-205 grow" />
+          <Input
+            variant="bordered"
+            {...register('amount', { valueAsNumber: true })}
+            className="max-w-205 grow"
+            type="number"
+          />
         </div>
         {!!errors.amount && <FieldError>{errors.amount.message}</FieldError>}
       </Field>
@@ -133,7 +137,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         </div>
       </div>
       <div className="flex justify-between items-center">
-        <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={onBack}>
+        <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={handleBack}>
           Back
         </Button>
         <Button type="button" variant="primary" className="w-32.5 sm:w-70" onClick={handleNext}>

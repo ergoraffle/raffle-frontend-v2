@@ -35,18 +35,14 @@ const shareSplitMethods = [{ value: 'decreasingStep', label: 'Decreasing step' }
 export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   const {
     formState: { errors },
-    reset,
     register,
     watch,
-    control
+    control,
+    setValue
   } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
 
   const winnerPotShare = watch('winnerPotShare', 0);
 
-  const onBack = () => {
-    reset();
-    handleBack();
-  };
   return (
     <div className="space-y-8">
       <div>
@@ -108,7 +104,15 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             name="details"
             control={control}
             render={({ field }) => (
-              <PercentageDistribution items={field.value ?? []} onChange={field.onChange} />
+              <PercentageDistribution
+                items={field.value ?? []}
+                onChange={(val) => {
+                  setValue('details', val, {
+                    shouldValidate: false,
+                    shouldDirty: true
+                  });
+                }}
+              />
             )}
           />
           {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
@@ -133,7 +137,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
         </Field>
       </div>
       <div className="flex justify-between items-center">
-        <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={onBack}>
+        <Button type="button" variant="outline" className="w-32.5 sm:w-70" onClick={handleBack}>
           Back
         </Button>
         <Button type="button" variant="primary" className="w-32.5 sm:w-70" onClick={handleNext}>
