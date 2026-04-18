@@ -43,7 +43,7 @@
 
 @layer utilities {
   .typo-heading-1 {
-    @apply font-medium text-5xl;
+    @apply font-medium text-lg sm:text-5xl;
   }
 
   .typo-heading-2 {

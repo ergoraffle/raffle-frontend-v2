@@ -49,7 +49,7 @@ export const PercentageDistribution = ({ items = [], onChange }: PercentageDistr
   );
 
   return (
-    <div className="flex items-center border border-gray-4 rounded-2xlg pt-2 pr-3 pb-2.5 pl-4 gap-2">
+    <div className="flex items-center flex-wrap border border-gray-4 rounded-2xlg pt-2 pr-3 pb-2.5 pl-4 gap-2">
       {items.map((item) => (
         <div
           key={item.id}
@@ -78,12 +78,12 @@ export const PercentageDistribution = ({ items = [], onChange }: PercentageDistr
             />
             <span>%</span>
           </div>
-          <Button variant="plain" size="icon-xs" onClick={() => remove(item.id)}>
+          <Button variant="plain" size="icon-xs" onClick={() => remove(item.id)} type="button">
             <Close />
           </Button>
         </div>
       ))}
-      <Button variant="plain" size="icon-xs" onClick={add}>
+      <Button variant="plain" size="icon-xs" onClick={add} type="button">
         <Plus />
       </Button>
     </div>

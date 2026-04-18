@@ -19,7 +19,8 @@ export const Uploader = ({
   files,
   instance,
   ready,
-  uploading
+  uploading,
+  maxNumberOfFiles
 }: UploaderProps) => {
   void ready;
   return (
@@ -83,7 +84,7 @@ export const Uploader = ({
             </div>
           );
         })}
-        {files.length < 4 && (
+        {(!maxNumberOfFiles || files.length < maxNumberOfFiles) && (
           <UploaderBrowse className="item flex items-center justify-center image-uploader-item bg-gray-4 text-gray-4-foreground rounded-xlg cursor-pointer">
             <Plus className="size-10" />
           </UploaderBrowse>

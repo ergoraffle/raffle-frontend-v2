@@ -1,6 +1,11 @@
 import { notFound } from 'next/navigation';
 
-import { configureClient, getInfo, getRafflesRaffleId, withMock } from '@ergo-raffle/client';
+import {
+  configureClient,
+  getInfoBlockchain,
+  getRafflesRaffleId,
+  withMock
+} from '@ergo-raffle/client';
 import {
   Card,
   CardContent,
@@ -30,7 +35,7 @@ export type RaffleDetailsProps = {
 };
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   const raffle = await withMock(async () => await getRafflesRaffleId(raffleId));
-  const infoData = await withMock(async () => await getInfo());
+  const infoBlockchainData = await withMock(async () => await getInfoBlockchain());
 
   if (!raffle) return notFound();
 
@@ -53,7 +58,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           <RaiseProgress raisedAmounts={raisedAmounts} tokenName={raffle?.collectingTokenName} />
           <div className="hidden sm:block">
             <RaffleDetailsIconBox
-              lastBlockHeight={infoData.lastBlockHeight}
+              lastBlockHeight={infoBlockchainData.height}
               soldTicketCount={raffle?.soldTicketCount}
               raffleDeadline={raffle?.deadline}
               backer={raffle?.backer}
@@ -63,7 +68,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
         </div>
         <div className="order-3 sm:hidden">
           <RaffleDetailsIconBox
-            lastBlockHeight={infoData.lastBlockHeight}
+            lastBlockHeight={infoBlockchainData.height}
             soldTicketCount={raffle?.soldTicketCount}
           />
         </div>

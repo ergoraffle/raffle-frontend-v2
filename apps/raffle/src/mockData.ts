@@ -141,3 +141,8 @@ export const winnerBasketDetail: WinnerBasketDetailResponse = {
     }
   ]
 };
+
+export const tokens = [
+  { value: 'sfsdfsfsfsdsdfsdfsfsdfsfsfsdsdfsdf', label: 'ADA' },
+  { value: 'sfsdfsfsfsfsdfsfssfsdfsfsfsfsdfsfs', label: 'USDC' }
+];
