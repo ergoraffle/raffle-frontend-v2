@@ -10,14 +10,12 @@ import {
   useState
 } from 'react';
 
-import type { Wallet } from '@ergo-raffle/base-wallet';
-
-import { type WalletName, wallets } from '@/lib';
+import { type WalletInstance, type WalletName, wallets } from '@/lib';
 
 type WalletContextValue = {
   addresses?: Record<string, string>;
-  wallets: Wallet[];
-  selected?: Wallet;
+  wallets: WalletInstance[];
+  selected?: WalletInstance;
   connecting?: boolean;
   agreed?: boolean;
   error?: unknown;
@@ -49,7 +47,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [ergoAddress, setErgoAddress] = useState<string>();
   const [candidate, setCandidate] = useState<WalletName>();
   const [agreed, setAgreed] = useState<boolean>();
-  const [selected, setSelected] = useState<Wallet>();
+  const [selected, setSelected] = useState<WalletInstance>();
 
   const agree = useCallback(() => {
     setAgreed(true);

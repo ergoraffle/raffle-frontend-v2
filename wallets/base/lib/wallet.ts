@@ -4,6 +4,7 @@ import {
   DisconnectionFailedError,
   NotConnectedError,
   UnavailableApiError,
+  UtxoFetchError,
   WalletError
 } from './errors';
 import type { WalletToken } from './types';
@@ -13,7 +14,9 @@ export type WalletConfig = {};
 
 export abstract class Wallet<
   Config extends WalletConfig = WalletConfig,
-  Addresses extends Record<string, string> = Record<string, string>
+  Addresses extends Record<string, string> = Record<string, string>,
+  Box = unknown,
+  WalletTransferParams = unknown
 > {
   abstract icon: string;
   abstract name: string;
@@ -28,6 +31,8 @@ export abstract class Wallet<
   abstract isAvailable: () => boolean;
   abstract hasConnection: () => Promise<boolean>;
   abstract fetchTokens: () => Promise<WalletToken[]>;
+  abstract fetchBoxes: () => Promise<Box[]>;
+  abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
@@ -75,6 +80,26 @@ export abstract class Wallet<
       }
       throw new AddressRetrievalError(this.name, error);
     }
+  };
+
+  getBoxes = async (): Promise<Box[]> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    try {
+      return await this.fetchBoxes();
+    } catch (error) {
+      throw new UtxoFetchError(this.name, error);
+    }
+  };
+
+  transfer = async (params: WalletTransferParams): Promise<string> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    return await this.performTransfer(params);
   };
 
   protected requireAvailable = () => {

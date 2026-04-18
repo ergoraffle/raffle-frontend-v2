@@ -1,7 +1,19 @@
-import { ConnectionTimeoutError, Wallet, type WalletToken } from '@ergo-raffle/base-wallet';
+import {
+  ConnectionTimeoutError,
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  type WalletToken
+} from '@ergo-raffle/base-wallet';
 
 import { ICON } from './icon';
-import type { NautilusWalletAddresses, NautilusWalletConfig } from './types';
+import type {
+  ErgoBoxProxy,
+  ErgoTxProxy,
+  NautilusWalletAddresses,
+  NautilusWalletConfig,
+  UnsignedErgoTxProxy
+} from './types';
 
 const ERG_TOKEN: WalletToken = {
   id: 'ERG',
@@ -9,7 +21,12 @@ const ERG_TOKEN: WalletToken = {
   decimals: 9
 };
 
-export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletAddresses> {
+export class NautilusWallet extends Wallet<
+  NautilusWalletConfig,
+  NautilusWalletAddresses,
+  ErgoBoxProxy,
+  UnsignedErgoTxProxy
+> {
   icon = ICON;
 
   name = 'Nautilus' as const;
@@ -118,5 +135,30 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig, NautilusWalletA
     }
 
     return mergedTokens;
+  };
+
+  fetchBoxes = async (): Promise<ErgoBoxProxy[]> => {
+    const wallet = await this.api.getContext();
+
+    const boxes = await wallet.get_utxos();
+
+    return boxes || [];
+  };
+
+  performTransfer = async (unsignedTx: UnsignedErgoTxProxy): Promise<string> => {
+    const wallet = await this.api.getContext();
+
+    let signedTx: ErgoTxProxy;
+
+    try {
+      signedTx = await wallet.sign_tx(unsignedTx);
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+    try {
+      return await wallet.submit_tx(signedTx);
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 }

@@ -68,12 +68,45 @@ export class NotConnectedError extends WalletError {
   }
 }
 
+export class SubmitTransactionError extends WalletError {
+  constructor(
+    public wallet: string,
+    public cause?: unknown
+  ) {
+    super(`Transaction failed for the [${wallet}] wallet`, {
+      cause
+    });
+  }
+}
+
 export class UnavailableApiError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown
   ) {
     super(`The [${wallet}] wallet API is not available.`, {
+      cause
+    });
+  }
+}
+
+export class UserDeniedTransactionSignatureError extends WalletError {
+  constructor(
+    public wallet: string,
+    public cause?: unknown
+  ) {
+    super(`Transaction signature denied by the user for the [${wallet}] wallet`, {
+      cause
+    });
+  }
+}
+
+export class UtxoFetchError extends WalletError {
+  constructor(
+    public wallet: string,
+    public cause?: unknown
+  ) {
+    super(`Failed to fetch wallet UTXOs from the [${wallet}] wallet`, {
       cause
     });
   }
