@@ -2,10 +2,8 @@ import { z } from 'zod';
 
 export const raffleSpecificationsSchema = z.object({
   name: z
-    .string({
-      message: 'Name is required'
-    })
-    .trim()
+    .string()
+    .nonempty('Can not be empty')
     .min(2, 'Name is too short')
     .max(50, 'Name is too long'),
   description: z.string().max(1024, 'Description is too long').optional(),
@@ -22,15 +20,15 @@ export const raffleSpecificationsSchema = z.object({
     .optional(),
   deadline: z
     .number({
-      message: 'Deadline is required'
+      message: 'Can not be empty'
     })
     .min(1, 'Deadline must be at least 1')
 });
 
 export const raffleDonationGoalSchema = z.object({
   tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
-  count: z.string({ message: 'Can not be empty' }),
-  amount: z.string({ message: 'Can not be empty' }),
+  count: z.number({ message: 'Can not be empty' }),
+  amount: z.number({ message: 'Can not be empty' }),
   missionFund: z
     .number({ message: 'Can not be empty' })
     .min(0, 'Can not be less than 0')
@@ -58,7 +56,7 @@ export const createRaffleSchema = (serviceShare?: number) => {
 };
 
 export const raffleBasketsSchema = z.object({
-  emptyBaskets: z.string({ message: 'Can not be empty' }),
+  emptyBaskets: z.number({ message: 'Can not be empty' }),
   details: z
     .array(
       z.object({
@@ -108,7 +106,17 @@ export const raffleBasketsSchema = z.object({
     })
 });
 
-export const raffleSchema = raffleSpecificationsSchema
+export const raffleAgreementSchema = z.object({
+  terms: z.boolean().refine((val) => val === true, {
+    message: 'You must agree to the terms'
+  }),
+  eligibility: z.boolean().refine((val) => val === true, {
+    message: 'Please confirm your eligibility to continue.'
+  })
+});
+
+export const raffleSchema = raffleAgreementSchema
+  .extend(raffleSpecificationsSchema.shape)
   .extend(raffleDonationGoalSchema.shape)
   .extend(raffleBasketsSchema.shape);
 
