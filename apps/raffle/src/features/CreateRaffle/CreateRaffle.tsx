@@ -21,6 +21,29 @@ import { CreationProxyTxBuilder } from '@ergo-raffle/proxy-transactions';
 import { useWallet } from '@/hooks';
 import { NautilusWalletAddresses, UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 
+export const getNonDecimalString = (value: string, decimals: number) => {
+  if (!decimals) return value;
+
+  const decimalPointIndex = value.indexOf('.');
+
+  // if there is no fractional part, just add enough zeros at the end
+  if (decimalPointIndex === -1) {
+    return `${value}${'0'.repeat(decimals)}`;
+  }
+
+  // otherwise shift decimal point to the right and add enough zeros at the end
+  const fractionalPartLength = value.length - decimalPointIndex - 1;
+
+  return `${value.slice(0, decimalPointIndex)}${value.slice(
+    decimalPointIndex + 1,
+    decimalPointIndex + 1 + decimals,
+  )}${
+    fractionalPartLength <= decimals
+      ? '0'.repeat(decimals - fractionalPartLength)
+      : ''
+  }`.replace(/^0+(\d+)/, '$1');
+};
+
 export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const { data: infoBlockchainData } = useInfoBlockchain();
@@ -93,52 +116,95 @@ export const CreateRaffle = () => {
         throw new Error('TODO');
       }
 
+      // Current chain height
+      const chainHeight = infoBlockchainData.height;
+
+      // Organizer UTXO boxes the selector may spend
+      const feeBoxes = (await wallet.selected.getBoxes()).values();
+
+      // organizer address is the wallet address that is creating the raffle and will receive the change
       const organizerAddress = (wallet.addresses as NautilusWalletAddresses).main;
 
-      const boxes = await wallet.selected.getBoxes();
+      // implementer address is the address of the service that is implementing the raffle
+      const implementerAddress = process.env.NEXT_PUBLIC_IMPLEMENTER_ADDRESS || '';
+
+      // block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
+      const expirationHeight = infoBlockchainData.height + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT);
+
+      const name = data.name;
+
+      const description = data.description || '';
+
+      // Tags string (use empty string when none)
+      const tags = data.tags?.join(',') || '';
 
       const images = data.images?.filter((image) => !!image.url).map((image) => image.url || '') || [];
 
-      const winnerCount = data.details.reduce((result, current) => result + current.count, 0);
+      // Ticket price in nanoERG or collecting-token units
+      const ticketPrice = BigInt(getNonDecimalString(data.amount.toString(), token.decimals));
 
+      // Funding goal in nanoERG or collecting-token units
+      const goal = BigInt(getNonDecimalString(data.count.toString(), token.decimals));
+
+      // Total winners share in thousandths
+      const winnersPercent = data.winnerPotShare * 10;
+
+      // Number of winners
+      const winnerCount = data.details.reduce((result, current) => result + current.count, data.emptyBaskets);
+
+      // array of winners percentages in thousandths (should sum to 1000)
       const winnersPercentList: bigint[] = [];
-
       for (const current of data.details) {
         for (let i = 0; i < current.count; i++) {
-          winnersPercentList.push(BigInt(current.percent) * 1000n);
+          winnersPercentList.push(BigInt(current.percent) * 10n);
         }
       }
+      for (let i = 0; i < data.emptyBaskets; i++) {
+        winnersPercentList.push(0n);
+      }
+
+      // Raffle deadline height
+      const deadline = data.deadline;
+
+      // Optional project address (defaults to organizer when omitted)
+      const projectAddress = data.address;
+
+      // Service creation fee in nanoERG
+      const creationFee = BigInt(infoBlockchainData.fee.tx);
+
+      // Transaction fee in nanoERG
+      const txFee = BigInt(infoBlockchainData.fee.tx)
 
       const builder = (new CreationProxyTxBuilder())
-        .setChainHeight(infoBlockchainData.height)                                                         // Current chain height
-        .setFeeBoxes(boxes.values())                                                                       // Organizer UTXO boxes the selector may spend
-        .setOrganizerAddress(organizerAddress)                                                             // organizer address is the wallet address that is creating the raffle and will receive the change
-        .setImplementerAddress(process.env.NEXT_PUBLIC_IMPLEMENTER_ADDRESS || '')                          // implementer address is the address of the service that is implementing the raffle
-        .setExpirationHeight(infoBlockchainData.height + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT))// block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
-        .setName(data.name)
-        .setDescription(data.description || '')
-        .setTags(data.tags?.join(',') || '')                                                                // Tags string (use empty string when none)
+        .setChainHeight(chainHeight)
+        .setFeeBoxes(feeBoxes)
+        .setOrganizerAddress(organizerAddress)
+        .setImplementerAddress(implementerAddress)
+        .setExpirationHeight(expirationHeight)
+        .setName(name)
+        .setDescription(description)
+        .setTags(tags)
         .setPictures(images)
-        // .setTicketPrice(ticketPrice)                                                                        // Ticket price in nanoERG or collecting-token units
-        // .setGoal(BigInt(data.count))                                                                        // Funding goal in nanoERG or collecting-token units
-        // .setWinnersPercent(winnersPercent)                                                                  // Total winners share in thousandths
-        // .setWinnerCount(winnerCount)                                                                        // Number of winners
-        // .setWinnersPercentList(winnersPercentList)                                                          // array of winners percentages in thousandths (should sum to 1000)
-        .setRaffleDeadline(data.deadline)                                                                    // Raffle deadline height
-        .setProjectAddress(data.address)                                                                    // Optional project address (defaults to organizer when omitted)
-        // .setCreationFee(BigInt(infoBlockchainData.fee.tx))                                                  // Service creation fee in nanoERG
-        // .setTxFee(BigInt(infoBlockchainData?.fee.tx));                                                      // Transaction fee in nanoERG
+        .setTicketPrice(ticketPrice)
+        .setGoal(goal)
+        .setWinnersPercent(winnersPercent)
+        .setWinnerCount(winnerCount)
+        .setWinnersPercentList(winnersPercentList)                                                          
+        .setRaffleDeadline(deadline)
+        .setProjectAddress(projectAddress)                                                                    
+        .setCreationFee(creationFee)
+        .setTxFee(txFee);
  
       // if the raffle is a token-goal raffle, set the collecting token id
       // if (collectingTokenId !== undefined) {
       //   builder = builder.setCollectingTokenId(collectingTokenId);
       // }
 
-      debugger
-
       const unsignedTx = await builder.build();
 
       const eip12Object = unsignedTx.toEIP12Object();
+
+      debugger
 
       await wallet.selected.transfer(eip12Object as UnsignedErgoTxProxy)
 
@@ -185,7 +251,7 @@ export const CreateRaffle = () => {
                   missionFund: 4,
                   name: "erere",
                   terms: true,
-                  tokenId: "erg",
+                  tokenId: "ERG",
                   winnerPotShare: 4,
                 })}
               >create</button>
