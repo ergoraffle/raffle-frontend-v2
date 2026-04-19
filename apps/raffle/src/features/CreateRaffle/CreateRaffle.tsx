@@ -167,7 +167,7 @@ export const CreateRaffle = () => {
       }
 
       // Raffle deadline height
-      const deadline = data.deadline;
+      const deadline = infoBlockchainData.height + data.deadline;
 
       // Optional project address (defaults to organizer when omitted)
       const projectAddress = data.address;
