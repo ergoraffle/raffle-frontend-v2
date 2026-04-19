@@ -50,7 +50,10 @@ export const CreateRaffle = () => {
 
   const wallet = useWallet();
 
-  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
+  const raffleSchema = createRaffleSchema(
+    infoBlockchainData?.fee?.implementer,
+    infoBlockchainData?.height
+  );
 
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
@@ -80,7 +83,7 @@ export const CreateRaffle = () => {
     {
       title: 'Specifications',
       content: <SpecificationsForm handleNext={handleNext} />,
-      fields: ['name', 'description', 'tags', 'deadline'] as const
+      fields: ['name', 'description', 'tags', 'deadline', 'images'] as const
     },
     {
       title: 'Donation Goal',

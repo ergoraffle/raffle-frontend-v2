@@ -6,7 +6,18 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['ergo-lib-wasm-nodejs', '@emurgo/cardano-serialization-lib-nodejs'],
-  transpilePackages: ['@ergo-raffle/ui-kit']
+  transpilePackages: ['@ergo-raffle/ui-kit'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'tusd.tusdemo.net',
+        port: '',
+        pathname: '/**',
+        search: ''
+      }
+    ]
+  }
 };
 
 export default withSentryConfig(nextConfig, {

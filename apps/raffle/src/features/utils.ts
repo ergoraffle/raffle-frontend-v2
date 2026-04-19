@@ -45,3 +45,12 @@ export const getDeadlineString = (deadline: number): string => {
 
   return isFuture ? `${str} remaining` : `Ended ${str} ago`;
 };
+
+export const deadlineToHour = (deadline: number, height: number): number => {
+  const dif = deadline - height;
+  if (dif <= 0) return 0;
+
+  const count = dif / 2;
+
+  return Math.floor(count);
+};
