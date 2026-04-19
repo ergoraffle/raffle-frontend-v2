@@ -103,16 +103,16 @@ export const TextEditor = ({
   return (
     <div {...props} className={cn('ql-wrapper border-gray-4 border rounded-3xlg', className)}>
       <div id="toolbar" className="px-4 py-3 flex items-center flex-wrap gap-x-3">
-        <Button variant="plain" size="icon-xs" className="ql-bold">
+        <Button variant="plain" size="icon-xs" className="ql-bold" type="button">
           <Bold />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-italic">
+        <Button variant="plain" size="icon-xs" className="ql-italic" type="button">
           <Italic />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-underline">
+        <Button variant="plain" size="icon-xs" className="ql-underline" type="button">
           <Underline />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-strike">
+        <Button variant="plain" size="icon-xs" className="ql-strike" type="button">
           <Strikethrough />
         </Button>
         <Select onValueChange={handleAlign} defaultValue="left">
@@ -134,13 +134,13 @@ export const TextEditor = ({
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button variant="plain" size="icon-xs" className="ql-link">
+        <Button variant="plain" size="icon-xs" className="ql-link" type="button">
           <Link />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-list" value="ordered">
+        <Button variant="plain" size="icon-xs" className="ql-list" value="ordered" type="button">
           <ListNumbers />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-list" value="bullet">
+        <Button variant="plain" size="icon-xs" className="ql-list" value="bullet" type="button">
           <List />
         </Button>
       </div>

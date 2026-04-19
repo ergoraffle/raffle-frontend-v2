@@ -21,10 +21,7 @@ export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const { data: infoBlockchainData } = useInfoBlockchain();
 
-  const raffleSchema = createRaffleSchema(
-    infoBlockchainData?.fee?.implementer,
-    infoBlockchainData?.height
-  );
+  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
 
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),

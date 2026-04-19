@@ -63,7 +63,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
           <Field className="sm:max-w-1/2 md:max-w-auto flex-1">
             <FieldLabel>Share Baskets</FieldLabel>
             <InputGroup variant="bordered">
-              <InputGroupInput />
+              <InputGroupInput disabled />
               <InputGroupAddon align="inline-start">
                 <BasketStatus className="size-6" filled />
               </InputGroupAddon>
@@ -78,7 +78,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             <Field className="flex-1">
               <FieldLabel>Share split Method</FieldLabel>
               <Select defaultValue="decreasingStep">
-                <SelectTrigger variant="bordered">
+                <SelectTrigger variant="bordered" disabled>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -94,7 +94,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             </Field>
             <Field className="flex-1">
               <FieldLabel>Biggest Share</FieldLabel>
-              <Input variant="bordered" />
+              <Input variant="bordered" disabled />
             </Field>
           </div>
         </div>
@@ -123,7 +123,11 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
         <Field>
           <FieldLabel>Empty Baskets</FieldLabel>
           <InputGroup className="max-w-70 w-full" variant="bordered">
-            <InputGroupInput {...register('emptyBaskets', { valueAsNumber: true })} />
+            <InputGroupInput
+              {...register('emptyBaskets', { valueAsNumber: true })}
+              type="number"
+              min={0}
+            />
             <InputGroupAddon align="inline-start">
               <BasketStatus className="size-6" />
             </InputGroupAddon>

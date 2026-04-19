@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
-export const raffleSpecificationsSchema = z.object({
+import { validatedAddress } from '@/features/utils';
+
+const raffleSpecificationsSchema = z.object({
   name: z
     .string()
     .nonempty('Can not be empty')
     .min(2, 'Name is too short')
     .max(50, 'Name is too long'),
-  description: z.string().max(1024, 'Description is too long').optional(),
+  description: z.string({ message: 'Can not be empty' }).max(1024, 'Description is too long'),
   tags: z.array(z.string()).max(5, 'Can not be more than 5').optional(),
   images: z
     .array(
@@ -25,43 +27,39 @@ export const raffleSpecificationsSchema = z.object({
     .min(1, 'Deadline must be at least 1')
 });
 
-export const raffleDonationGoalSchema = z.object({
-  tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
-  count: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
-  amount: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
-  missionFund: z
-    .number({ message: 'Can not be empty' })
-    .min(0, 'Can not be less than 0')
-    .max(100, 'Can not be more than 100'),
-  winnerPotShare: z
-    .number({ message: 'Can not be empty' })
-    .min(0, 'Can not be less than 0')
-    .max(100, 'Can not be more than 100'),
-  address: z.string({ message: 'Can not be empty' })
-});
+const raffleDonationGoalSchema = (serviceShare?: number) =>
+  z
+    .object({
+      tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
+      count: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+      amount: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+      address: z
+        .string({ message: 'Can not be empty' })
+        .nonempty('Can not be empty')
+        .refine((val) => validatedAddress(val), {
+          message: 'Invalid address'
+        }),
+      missionFund: z
+        .number({ message: 'Can not be empty' })
+        .min(0, 'Can not be less than 0')
+        .max(100, 'Can not be more than 100'),
+      winnerPotShare: z
+        .number({ message: 'Can not be empty' })
+        .min(0, 'Can not be less than 0')
+        .max(100, 'Can not be more than 100')
+    })
+    .superRefine((data, ctx) => {
+      const max = serviceShare ? 100 - serviceShare : undefined;
+      if (max !== undefined && Number(data.missionFund) + Number(data.winnerPotShare) !== max) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Sum of missionFund and winnerPotShare must be ${max}`,
+          path: ['missionFund']
+        });
+      }
+    });
 
-export const createRaffleSchema = (serviceShare?: number, height?: number) => {
-  const MAX = serviceShare ? 100 - serviceShare : undefined;
-
-  return raffleSchema.superRefine((data, ctx) => {
-    if (MAX && data.missionFund + data.winnerPotShare > MAX) {
-      ctx.addIssue({
-        code: 'custom',
-        message: `Max allowed is ${MAX}`,
-        path: ['missionFund']
-      });
-    }
-    if (height && data.deadline <= height) {
-      ctx.addIssue({
-        code: 'custom',
-        message: `Deadline must be greater than current block height (${height})`,
-        path: ['deadline']
-      });
-    }
-  });
-};
-
-export const raffleBasketsSchema = z.object({
+const raffleBasketsSchema = z.object({
   emptyBaskets: z.number({ message: 'Can not be empty' }),
   details: z
     .array(
@@ -112,7 +110,7 @@ export const raffleBasketsSchema = z.object({
     })
 });
 
-export const raffleAgreementSchema = z.object({
+const raffleAgreementSchema = z.object({
   terms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms'
   }),
@@ -121,12 +119,13 @@ export const raffleAgreementSchema = z.object({
   })
 });
 
-export const raffleSchema = raffleAgreementSchema
-  .extend(raffleSpecificationsSchema.shape)
-  .extend(raffleDonationGoalSchema.shape)
-  .extend(raffleBasketsSchema.shape);
+export const createRaffleSchema = (serviceShare?: number) =>
+  raffleAgreementSchema
+    .and(raffleSpecificationsSchema)
+    .and(raffleDonationGoalSchema(serviceShare))
+    .and(raffleBasketsSchema);
 
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
-export type RaffleDonationGoalForm = z.infer<typeof raffleDonationGoalSchema>;
+export type RaffleDonationGoalForm = z.infer<ReturnType<typeof raffleDonationGoalSchema>>;
 export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
-export type RaffleForm = z.infer<typeof raffleSchema>;
+export type RaffleForm = z.infer<ReturnType<typeof createRaffleSchema>>;
