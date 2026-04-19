@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Wallet as WalletIcon } from '@ergo-raffle/icons';
-import { Button, FieldError, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
+import { Button, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
 
 import { useWallet } from '../../hooks/useWallet';
 import { Agreement } from './Agreement';
@@ -124,7 +124,6 @@ export const WalletButton = () => {
         description={steps[state].description}
       >
         {steps[state].component}
-        {wallet.error ? <FieldError className="mt-4">{String(wallet.error)}</FieldError> : null}
       </ConnectWalletDialog>
     </>
   );
