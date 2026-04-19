@@ -1,7 +1,7 @@
 import { Right } from '@ergo-raffle/icons';
 import { Spinner, Typography } from '@ergo-raffle/ui-kit';
 
-import { useWallet } from '@/hooks/useWallet';
+import { useWallet } from '@/hooks';
 import type { WalletName } from '@/lib';
 
 export const ChooseWallet = () => {

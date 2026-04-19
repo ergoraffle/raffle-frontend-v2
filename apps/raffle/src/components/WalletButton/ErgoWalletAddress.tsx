@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { Button, Field, FieldError, FieldLabel, Input } from '@ergo-raffle/ui-kit';
 
 import { validateAddress } from '@/actions';
-import { useWallet } from '@/hooks/useWallet';
+import { useWallet } from '@/hooks';
 
 export const ErgoWalletAddress = () => {
   const wallet = useWallet();

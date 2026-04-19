@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Button, Typography } from '@ergo-raffle/ui-kit';
 
-import { useWallet } from '@/hooks/useWallet';
+import { useWallet } from '@/hooks';
 
 export const Agreement = () => {
   const wallet = useWallet();
