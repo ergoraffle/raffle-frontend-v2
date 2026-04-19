@@ -11,6 +11,7 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { getDeadlineAmount, getMissionFund, getSoldTicketCount, getWinnerPot } from '../utils';
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
@@ -29,10 +30,20 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
 
   if (!raffle) return notFound();
 
+  const soldTicketCount = getSoldTicketCount(raffle.amount.raised, raffle.ticketPrice);
+  const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
+  const missionFund = getMissionFund(raffle.share);
+  const winnerPot = getWinnerPot(raffle.share.winner);
+
   return (
     <div className="flex flex-col gap-9.5">
       <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
-        <RaffleDetailsImageCard raffle={raffle} serviceFee={infoData.fee.implementer} />
+        <RaffleDetailsImageCard
+          raffle={raffle}
+          serviceFee={infoData.fee.implementer}
+          winnerPot={winnerPot}
+          missionFund={missionFund}
+        />
         <div className="flex flex-col gap-5 grow order-1 lg:order-2">
           <div className="flex justify-between sm:items-center max-w-full">
             <Typography variant="heading-1" asChild>
@@ -46,15 +57,19 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           <RaiseProgress amount={raffle.amount} token={raffle?.token} />
           <div className="hidden sm:block">
             <RaffleDetailsIconBox
-              lastBlockHeight={infoData.height}
-              raffleDeadline={raffle?.deadline}
+              deadline={deadline}
+              soldTicketCount={soldTicketCount}
               baker={raffle?.baker}
             />
           </div>
           <RaffleDonate />
         </div>
         <div className="order-3 sm:hidden">
-          <RaffleDetailsIconBox lastBlockHeight={infoData.height} />
+          <RaffleDetailsIconBox
+            deadline={deadline}
+            soldTicketCount={soldTicketCount}
+            baker={raffle?.baker}
+          />
         </div>
       </div>
       <RaffleDetailsDescription description={raffle.description} />

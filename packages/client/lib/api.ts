@@ -96,9 +96,9 @@ export type RaffleDetailResponseAddresses = {
 };
 
 export type RaffleDetailResponseShare = {
-  project: string;
-  implementer: string;
-  service: string;
+  winner: number;
+  implementer: number;
+  service: number;
 };
 
 export type RaffleDetailResponseStatus =
@@ -527,9 +527,9 @@ export const getGetRaffleRaffleIdResponseMock = (
     service: faker.string.alpha({ length: { min: 10, max: 20 } })
   },
   share: {
-    project: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    implementer: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    service: faker.string.alpha({ length: { min: 10, max: 20 } })
+    winner: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    implementer: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    service: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 })
   },
   baker: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
   status: faker.helpers.arrayElement(['active', 'successful', 'failed'] as const),

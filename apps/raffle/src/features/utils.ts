@@ -34,3 +34,9 @@ export const getDeadlineString = (deadline: number): string => {
 
   return isFuture ? `${str} remaining` : `Ended ${str} ago`;
 };
+
+export const getWinnerPot = (shareWinner: number): number => shareWinner / 10;
+export const getSoldTicketCount = (raisedAmount: number, ticketPrice: number): number =>
+  raisedAmount / ticketPrice;
+export const getMissionFund = (amounts: Record<string, number>): number =>
+  (1000 - Object.values(amounts).reduce((sum, value) => sum + value, 0)) / 10;

@@ -17,15 +17,16 @@ import {
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
   serviceFee?: number;
-  raffle?: Pick<
-    RaffleDetailResponse,
-    'id' | 'pictures' | 'name' | 'baker' | 'addresses' | 'winnersCount'
-  >;
+  winnerPot?: number;
+  missionFund?: number;
+  raffle?: Pick<RaffleDetailResponse, 'pictures' | 'name' | 'addresses'>;
 };
 
 export const RaffleDetailsImageCard = ({
   loading,
   serviceFee,
+  winnerPot,
+  missionFund,
   raffle
 }: RaffleDetailsImageCardProps) => (
   <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:h-130" border={false}>
@@ -66,7 +67,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                {/* <span>{raffle?.missionFund || 0}%</span> */}
+                <span>{missionFund || 0}%</span>
               </Typography>
             )}
           </div>
@@ -85,7 +86,7 @@ export const RaffleDetailsImageCard = ({
           </div>
         </CardContent>
       </Card>
-      <Card border={false} className="grow">
+      <Card border={false}>
         <CardContent className="flex flex-col">
           <div className="flex items-center justify-between text-black-1">
             <Typography variant="heading-5" asChild>
@@ -95,7 +96,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                {/* <span>{raffle?.winnerPot}</span> */}
+                <span>{winnerPot || 0}%</span>
               </Typography>
             )}
           </div>

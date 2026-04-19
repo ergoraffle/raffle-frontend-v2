@@ -11,7 +11,7 @@ import type {
   GetRaffleStatusItem
 } from '@ergo-raffle/client';
 
-import { PINED_RAFFLES_STORAGE_KEY } from '@/features/RaffleDetails/RafflePinButton';
+import { PINED_RAFFLES_STORAGE_KEY } from '@/features/constants';
 
 const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
 

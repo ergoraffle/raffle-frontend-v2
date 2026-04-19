@@ -416,13 +416,13 @@ components:
         share:
           type: object
           properties:
-            project:
-              type: string
+            winner:
+              type: number
             implementer:
-              type: string
+              type: number
             service:
-              type: string
-          required: [project, implementer, service]
+              type: number
+          required: [winner, implementer, service]
         baker:
           type: number
         status:

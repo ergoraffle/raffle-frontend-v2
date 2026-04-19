@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import { Pin } from '@ergo-raffle/icons';
 import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 
+import { PINED_RAFFLES_STORAGE_KEY } from '@/features/constants';
+
 export type RafflePinButtonProps = {
   loading?: boolean;
   raffleId?: string;
 };
-
-export const PINED_RAFFLES_STORAGE_KEY = 'pinned_raffles';
 
 export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => {
   const [pined, setPined] = useState(false);
