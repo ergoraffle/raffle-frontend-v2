@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Wallet as WalletIcon } from '@ergo-raffle/icons';
 import { Button, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
 
-import { useWallet } from '../../hooks/useWallet';
+import { useWallet } from '@/hooks/useWallet';
+
 import { Agreement } from './Agreement';
 import { ChooseWallet } from './ChooseWallet';
 import { ConnectWalletDialog } from './ConnectWalletDialog';
