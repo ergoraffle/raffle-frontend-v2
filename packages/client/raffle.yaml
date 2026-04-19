@@ -15,7 +15,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/StartupResponse'
 
-  /info:
+  /info/blockchain:
     get:
       summary: Get service information
       responses:
@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InfoResponse'
+                $ref: '#/components/schemas/InfoBlockchainResponse'
 
   /raffle:
     get:
@@ -88,7 +88,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RaffleSummaryResponse'
-  /raffles/{raffleId}:
+  /raffle/{raffleId}:
     get:
       summary: Get raffle details by ID
       parameters:
@@ -243,34 +243,34 @@ components:
       required: [tokenId, name]
 
     #######################
-    # Info
+    # Blockchain Info
     #######################
-    InfoResponse:
+    InfoBlockchainResponse:
       type: object
       properties:
-        lastBlockHeight:
-          type: integer
-          x-faker: 123456
-        health:
-          type: string
-          x-faker: healthy
-        serviceFee:
-          type: integer
-          description: Percentage * 10 (e.g. 30 = 3%)
-          x-faker: 30
-        implementerFee:
-          type: integer
-          description: Percentage * 10 (e.g. 20 = 2%)
-          x-faker: 20
-        creationFee:
-          type: integer
-          x-faker: 20000000000
+        fee:
+          type: object
+          properties:
+            tx:
+              type: integer
+              format: int64
+            service:
+              type: number
+            implementer:
+              type: number
+            creation:
+              type: integer
+              format: int64
+          required:
+            - tx
+            - service
+            - implementer
+            - creation
+        height:
+          type: number
       required:
-        - lastBlockHeight
-        - health
-        - serviceFee
-        - implementerFee
-        - creationFee
+        - fee
+        - height
 
     #######################
     # Raffles
@@ -298,7 +298,7 @@ components:
           type: string
         description:
           type: string
-        image:
+        picture:
           type: string
         token:
           type: object
@@ -336,7 +336,94 @@ components:
         ticketPrice:
           type: integer
           format: int64
-        trust:
+        status:
+          type: string
+          enum: [active, successful, failed]
+      required:
+        - id
+        - name
+        - description
+        - token
+        - winnersCount
+        - giftCount
+        - deadline
+        - amount
+        - ticketPrice
+        - status
+    #######################
+    # Raffle Detail
+    #######################
+
+    RaffleDetailResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        token:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            decimals:
+              type: number
+              default: 0
+            verified:
+              type: boolean
+          required: [id, name, decimals, verified]
+        tags:
+          type: array
+          items:
+            type: string
+        pictures:
+          type: array
+          items:
+            type: string
+        giftCount:
+          type: number
+        winnersCount:
+          type: number
+        ticketPrice:
+          type: integer
+          format: int64
+        deadline:
+          type: number
+        amount:
+          type: object
+          properties:
+            goal:
+              type: integer
+              format: int64
+            raised:
+              type: integer
+              format: int64
+          required: [goal, raised]
+        addresses:
+          type: object
+          properties:
+            project:
+              type: string
+            implementer:
+              type: string
+            service:
+              type: string
+          required: [project, implementer, service]
+        share:
+          type: object
+          properties:
+            project:
+              type: string
+            implementer:
+              type: string
+            service:
+              type: string
+          required: [project, implementer, service]
+        baker:
           type: number
         status:
           type: string
@@ -351,99 +438,11 @@ components:
         - deadline
         - amount
         - ticketPrice
-        - trust
         - status
-    #######################
-    # Raffle Detail
-    #######################
-
-    RaffleDetailResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        address:
-          type: string
-          minLength: 128
-          maxLength: 256
-        description:
-          type: string
-        images:
-          type: array
-          items:
-            type: string
-            format: uri
-        collectingTokenId:
-          type: string
-          minLength: 128
-          maxLength: 256
-        collectingTokenName:
-          type: string
-          minLength: 1
-          maxLength: 5
-          x-faker: rsBTC
-        missionFund:
-          type: integer
-          x-faker: 20
-          minimum: 1
-          maximum: 100
-        serviceFee:
-          type: integer
-          x-faker: 20
-          minimum: 1
-          maximum: 100
-        winnerPot:
-          type: integer
-          x-faker: 20
-          minimum: 1
-          maximum: 100
-        trust:
-          type: integer
-          x-faker: 30
-          minimum: 1
-          maximum: 100
-        voteCount:
-          type: integer
-          minimum: 1
-          maximum: 1000
-          x-faker: 200
-        ticketBought:
-          type: integer
-          minimum: 1
-          maximum: 60
-          x-faker: 40
-        backer:
-          type: integer
-          minimum: 1
-          maximum: 60
-          x-faker: 25
-        deadline:
-          type: integer
-          description: Unix timestamp (seconds)
-        goal:
-          type: integer
-          maximum: 100
-          x-faker: 1000
-        ticketPrice:
-          type: integer
-          minimum: 1
-          maximum: 100
-          x-faker: 1000
-        soldTicketCount:
-          type: integer
-          minimum: 1
-          maximum: 100
-          x-faker: 56
-      required:
-        - id
-        - name
-        - collectingTokenId
-        - deadline
-        - goal
-        - ticketPrice
-        - soldTicketCount
+        - pictures
+        - addresses
+        - share
+        - baker
     RafflePrize:
       type: object
       properties:

@@ -9,7 +9,7 @@ export type RaffleDetailsIconBoxProps = {
   lastBlockHeight?: number;
   raffleDeadline?: number;
   soldTicketCount?: number;
-  backer?: RaffleDetailResponse['backer'];
+  baker?: RaffleDetailResponse['baker'];
 };
 
 export const RaffleDetailsIconBox = ({
@@ -17,7 +17,7 @@ export const RaffleDetailsIconBox = ({
   lastBlockHeight,
   soldTicketCount,
   raffleDeadline,
-  backer
+  baker
 }: RaffleDetailsIconBoxProps) => {
   const deadline =
     lastBlockHeight && raffleDeadline ? getDeadlineAmount(lastBlockHeight, raffleDeadline) : 0;
@@ -54,7 +54,7 @@ export const RaffleDetailsIconBox = ({
               <Skeleton className="h-4 w-16" />
             </div>
           ) : (
-            <Typography variant="subtitle-lg">{backer ?? 0} Backer</Typography>
+            <Typography variant="subtitle-lg">{baker ?? 0} Backer</Typography>
           )}
         </div>
       </CardContent>

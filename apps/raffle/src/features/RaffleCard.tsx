@@ -12,12 +12,9 @@ import {
   CardHeader,
   CardImageWrapper,
   CardTitle,
-  type RaffleTrustBarProps,
-  type RaisedAmounts,
   RaiseProgress,
   Skeleton,
   Token,
-  TrustBar,
   Typography
 } from '@ergo-raffle/ui-kit';
 
@@ -27,8 +24,6 @@ export type RafflesContentProps = {
   raffle?: RaffleSummary;
   loading?: boolean;
   deadline?: number;
-  raisedAmounts?: RaisedAmounts;
-  trust?: Omit<RaffleTrustBarProps, 'loading'>;
 };
 
 const raffleStatusMap: Record<
@@ -52,17 +47,14 @@ const raffleStatusMap: Record<
   }
 };
 
-export const RaffleCard = ({
-  raffle,
-  raisedAmounts,
-  deadline,
-  trust,
-  loading
-}: RafflesContentProps) => (
-  <Link href={`/raffles/${raffle?.id}`} className="flex items-stretch grow">
+export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) => (
+  <Link
+    href={`/raffles/${raffle?.id}`}
+    className={`flex items-stretch grow ${loading ? 'pointer-events-none' : ''}`}
+  >
     <Card className="relative grow w-full" hover>
       <CardImageWrapper loading={loading}>
-        {raffle?.image ? (
+        {raffle?.picture ? (
           <Image
             // src={raffle.image}
             src="/sample.png"
@@ -140,11 +132,7 @@ export const RaffleCard = ({
             ))
           )}
         </div>
-        <RaiseProgress
-          raisedAmounts={raisedAmounts}
-          tokenName={raffle?.token?.name}
-          loading={loading}
-        />
+        <RaiseProgress amount={raffle?.amount} token={raffle?.token} loading={loading} />
       </CardContent>
       <CardFooter>
         <div className="flex items-center gap-x-1">
@@ -157,7 +145,6 @@ export const RaffleCard = ({
             ''
           )}
         </div>
-        <TrustBar value={trust?.value} max={trust?.max} loading={loading} />
       </CardFooter>
     </Card>
   </Link>

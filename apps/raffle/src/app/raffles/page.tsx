@@ -13,7 +13,7 @@ const Raffles = async ({
     <>
       <RafflesFilters />
       <Suspense key={JSON.stringify(params)} fallback={<AllRafflesListSkeleton />}>
-        <RaffleList params={getRafflesParamsTransformer(params)} />
+        <RaffleList params={getRafflesParamsTransformer(params)} pined={Boolean(params.pined)} />
       </Suspense>
     </>
   );

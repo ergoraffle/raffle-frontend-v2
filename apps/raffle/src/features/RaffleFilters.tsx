@@ -38,7 +38,15 @@ const tokenFilterItems = [
 ];
 
 export const RafflesFilters = () => {
-  const { search, params, setSearch, setParam } = useRafflesQuery();
+  const {
+    search,
+    params,
+    setSearch,
+    setParam,
+    togglePinedParam,
+    setStatusParamWithSwitchTabs,
+    pined
+  } = useRafflesQuery();
 
   const onSearch = () => {
     setParam('text', search);
@@ -56,22 +64,49 @@ export const RafflesFilters = () => {
     PINED = 'Pined'
   }
 
+  const getTabValue = () => {
+    if (pined) {
+      return RAFFLE_LIST_TABS.PINED;
+    }
+    if (params.status?.length === 1) {
+      if (params.status[0] === 'active') {
+        return RAFFLE_LIST_TABS.ACTIVE;
+      }
+      if (params.status[0] === 'failed' || params.status[0] === 'successful') {
+        return RAFFLE_LIST_TABS.HISTORY;
+      }
+    }
+    return RAFFLE_LIST_TABS.ALL;
+  };
+  const onTabChange = (value: string) => {
+    switch (value) {
+      case RAFFLE_LIST_TABS.ACTIVE:
+        setStatusParamWithSwitchTabs('active');
+        break;
+      case RAFFLE_LIST_TABS.HISTORY:
+        setStatusParamWithSwitchTabs('failed');
+        break;
+      case RAFFLE_LIST_TABS.PINED:
+        togglePinedParam();
+        break;
+      default:
+        setStatusParamWithSwitchTabs();
+    }
+  };
+
   return (
     <>
-      <Tabs defaultValue={RAFFLE_LIST_TABS.ALL} className="w-full">
+      <Tabs
+        defaultValue={RAFFLE_LIST_TABS.ALL}
+        value={getTabValue()}
+        className="w-full"
+        onValueChange={(value) => onTabChange(value)}
+      >
         <TabsList>
-          <TabsTrigger key={RAFFLE_LIST_TABS.ALL} value={RAFFLE_LIST_TABS.ALL}>
-            {RAFFLE_LIST_TABS.ALL}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.ACTIVE} value={RAFFLE_LIST_TABS.ACTIVE}>
-            {RAFFLE_LIST_TABS.ACTIVE}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.HISTORY} value={RAFFLE_LIST_TABS.HISTORY}>
-            {RAFFLE_LIST_TABS.HISTORY}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.PINED} value={RAFFLE_LIST_TABS.PINED}>
-            {RAFFLE_LIST_TABS.PINED}
-          </TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.ALL}>{RAFFLE_LIST_TABS.ALL}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.ACTIVE}>{RAFFLE_LIST_TABS.ACTIVE}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.HISTORY}>{RAFFLE_LIST_TABS.HISTORY}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.PINED}>{RAFFLE_LIST_TABS.PINED}</TabsTrigger>
         </TabsList>
       </Tabs>
       <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">

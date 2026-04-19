@@ -20,14 +20,16 @@ export interface VerifiedToken {
   name: string;
 }
 
-export interface InfoResponse {
-  lastBlockHeight: number;
-  health: string;
-  /** Percentage * 10 (e.g. 30 = 3%) */
-  serviceFee: number;
-  /** Percentage * 10 (e.g. 20 = 2%) */
-  implementerFee: number;
-  creationFee: number;
+export type InfoBlockchainResponseFee = {
+  tx: number;
+  service: number;
+  implementer: number;
+  creation: number;
+};
+
+export interface InfoBlockchainResponse {
+  fee: InfoBlockchainResponseFee;
+  height: number;
 }
 
 export interface RaffleSummaryResponse {
@@ -64,7 +66,7 @@ export interface RaffleSummary {
   id: string;
   name: string;
   description: string;
-  image?: string;
+  picture?: string;
   token: RaffleSummaryToken;
   winnersCount: number;
   giftCount: number;
@@ -72,79 +74,59 @@ export interface RaffleSummary {
   deadline: number;
   amount: RaffleSummaryAmount;
   ticketPrice: number;
-  trust: number;
   status: RaffleSummaryStatus;
 }
+
+export type RaffleDetailResponseToken = {
+  id: string;
+  name: string;
+  decimals: number;
+  verified: boolean;
+};
+
+export type RaffleDetailResponseAmount = {
+  goal: number;
+  raised: number;
+};
+
+export type RaffleDetailResponseAddresses = {
+  project: string;
+  implementer: string;
+  service: string;
+};
+
+export type RaffleDetailResponseShare = {
+  project: string;
+  implementer: string;
+  service: string;
+};
+
+export type RaffleDetailResponseStatus =
+  (typeof RaffleDetailResponseStatus)[keyof typeof RaffleDetailResponseStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RaffleDetailResponseStatus = {
+  active: 'active',
+  successful: 'successful',
+  failed: 'failed'
+} as const;
 
 export interface RaffleDetailResponse {
   id: string;
   name: string;
-  /**
-   * @minLength 128
-   * @maxLength 256
-   */
-  address?: string;
-  description?: string;
-  images?: string[];
-  /**
-   * @minLength 128
-   * @maxLength 256
-   */
-  collectingTokenId: string;
-  /**
-   * @minLength 1
-   * @maxLength 5
-   */
-  collectingTokenName?: string;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  missionFund?: number;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  serviceFee?: number;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  winnerPot?: number;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  trust?: number;
-  /**
-   * @minimum 1
-   * @maximum 1000
-   */
-  voteCount?: number;
-  /**
-   * @minimum 1
-   * @maximum 60
-   */
-  ticketBought?: number;
-  /**
-   * @minimum 1
-   * @maximum 60
-   */
-  backer?: number;
-  /** Unix timestamp (seconds) */
-  deadline: number;
-  /** @maximum 100 */
-  goal: number;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
+  description: string;
+  token: RaffleDetailResponseToken;
+  tags?: string[];
+  pictures: string[];
+  giftCount: number;
+  winnersCount: number;
   ticketPrice: number;
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  soldTicketCount: number;
+  deadline: number;
+  amount: RaffleDetailResponseAmount;
+  addresses: RaffleDetailResponseAddresses;
+  share: RaffleDetailResponseShare;
+  baker: number;
+  status: RaffleDetailResponseStatus;
 }
 
 export interface RafflePrize {
@@ -386,7 +368,8 @@ export const getStartup = () => httpClient<StartupResponse>({ url: `/startup`, m
 /**
  * @summary Get service information
  */
-export const getInfo = () => httpClient<InfoResponse>({ url: `/info`, method: 'GET' });
+export const getInfoBlockchain = () =>
+  httpClient<InfoBlockchainResponse>({ url: `/info/blockchain`, method: 'GET' });
 
 /**
  * @summary Get raffle summaries
@@ -397,8 +380,8 @@ export const getRaffle = (params?: GetRaffleParams) =>
 /**
  * @summary Get raffle details by ID
  */
-export const getRafflesRaffleId = (raffleId: string) =>
-  httpClient<RaffleDetailResponse>({ url: `/raffles/${raffleId}`, method: 'GET' });
+export const getRaffleRaffleId = (raffleId: string) =>
+  httpClient<RaffleDetailResponse>({ url: `/raffle/${raffleId}`, method: 'GET' });
 
 /**
  * @summary Get winner baskets of a raffle
@@ -433,9 +416,9 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 export type GetStartupResult = NonNullable<Awaited<ReturnType<typeof getStartup>>>;
-export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>;
+export type GetInfoBlockchainResult = NonNullable<Awaited<ReturnType<typeof getInfoBlockchain>>>;
 export type GetRaffleResult = NonNullable<Awaited<ReturnType<typeof getRaffle>>>;
-export type GetRafflesRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRafflesRaffleId>>>;
+export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRaffleRaffleId>>>;
 export type GetRafflesRaffleIdWinnerBasketsResult = NonNullable<
   Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBaskets>>
 >;
@@ -459,14 +442,16 @@ export const getGetStartupResponseMock = (
   ...overrideResponse
 });
 
-export const getGetInfoResponseMock = (
-  overrideResponse: Partial<InfoResponse> = {}
-): InfoResponse => ({
-  lastBlockHeight: faker.number.int({ min: undefined, max: undefined }),
-  health: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  serviceFee: faker.number.int({ min: undefined, max: undefined }),
-  implementerFee: faker.number.int({ min: undefined, max: undefined }),
-  creationFee: faker.number.int({ min: undefined, max: undefined }),
+export const getGetInfoBlockchainResponseMock = (
+  overrideResponse: Partial<InfoBlockchainResponse> = {}
+): InfoBlockchainResponse => ({
+  fee: {
+    tx: faker.number.int({ min: undefined, max: undefined }),
+    service: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    implementer: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    creation: faker.number.int({ min: undefined, max: undefined })
+  },
+  height: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
   ...overrideResponse
 });
 
@@ -478,7 +463,7 @@ export const getGetRaffleResponseMock = (
     id: faker.string.alpha({ length: { min: 10, max: 20 } }),
     name: faker.string.alpha({ length: { min: 10, max: 20 } }),
     description: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    image: faker.helpers.arrayElement([
+    picture: faker.helpers.arrayElement([
       faker.string.alpha({ length: { min: 10, max: 20 } }),
       undefined
     ]),
@@ -502,47 +487,52 @@ export const getGetRaffleResponseMock = (
       raised: faker.number.int({ min: undefined, max: undefined })
     },
     ticketPrice: faker.number.int({ min: undefined, max: undefined }),
-    trust: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
     status: faker.helpers.arrayElement(['active', 'successful', 'failed'] as const)
   })),
   ...overrideResponse
 });
 
-export const getGetRafflesRaffleIdResponseMock = (
+export const getGetRaffleRaffleIdResponseMock = (
   overrideResponse: Partial<RaffleDetailResponse> = {}
 ): RaffleDetailResponse => ({
   id: faker.string.alpha({ length: { min: 10, max: 20 } }),
   name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  address: faker.helpers.arrayElement([
-    faker.string.alpha({ length: { min: 128, max: 256 } }),
-    undefined
-  ]),
-  description: faker.helpers.arrayElement([
-    faker.string.alpha({ length: { min: 10, max: 20 } }),
-    undefined
-  ]),
-  images: faker.helpers.arrayElement([
+  description: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  token: {
+    id: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    decimals: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    verified: faker.datatype.boolean()
+  },
+  tags: faker.helpers.arrayElement([
     Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
-      faker.internet.url()
+      faker.string.alpha({ length: { min: 10, max: 20 } })
     ),
     undefined
   ]),
-  collectingTokenId: faker.string.alpha({ length: { min: 128, max: 256 } }),
-  collectingTokenName: faker.helpers.arrayElement([
-    faker.string.alpha({ length: { min: 1, max: 5 } }),
-    undefined
-  ]),
-  missionFund: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
-  serviceFee: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
-  winnerPot: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
-  trust: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 100 }), undefined]),
-  voteCount: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 1000 }), undefined]),
-  ticketBought: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 60 }), undefined]),
-  backer: faker.helpers.arrayElement([faker.number.int({ min: 1, max: 60 }), undefined]),
-  deadline: faker.number.int({ min: undefined, max: undefined }),
-  goal: faker.number.int({ min: undefined, max: 100 }),
-  ticketPrice: faker.number.int({ min: 1, max: 100 }),
-  soldTicketCount: faker.number.int({ min: 1, max: 100 }),
+  pictures: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+    faker.string.alpha({ length: { min: 10, max: 20 } })
+  ),
+  giftCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+  winnersCount: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+  ticketPrice: faker.number.int({ min: undefined, max: undefined }),
+  deadline: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+  amount: {
+    goal: faker.number.int({ min: undefined, max: undefined }),
+    raised: faker.number.int({ min: undefined, max: undefined })
+  },
+  addresses: {
+    project: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    implementer: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    service: faker.string.alpha({ length: { min: 10, max: 20 } })
+  },
+  share: {
+    project: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    implementer: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    service: faker.string.alpha({ length: { min: 10, max: 20 } })
+  },
+  baker: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+  status: faker.helpers.arrayElement(['active', 'successful', 'failed'] as const),
   ...overrideResponse
 });
 
@@ -693,16 +683,16 @@ export const getGetStartupMockHandler = (
     options
   );
 
-export const getGetInfoMockHandler = (
+export const getGetInfoBlockchainMockHandler = (
   overrideResponse?:
-    | InfoResponse
+    | InfoBlockchainResponse
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0]
-      ) => Promise<InfoResponse> | InfoResponse),
+      ) => Promise<InfoBlockchainResponse> | InfoBlockchainResponse),
   options?: RequestHandlerOptions
 ) =>
   http.get(
-    '*/info',
+    '*/info/blockchain',
     async (info) => {
       await delay(1000);
 
@@ -712,7 +702,7 @@ export const getGetInfoMockHandler = (
             ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
-            : getGetInfoResponseMock()
+            : getGetInfoBlockchainResponseMock()
         ),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
@@ -747,7 +737,7 @@ export const getGetRaffleMockHandler = (
     options
   );
 
-export const getGetRafflesRaffleIdMockHandler = (
+export const getGetRaffleRaffleIdMockHandler = (
   overrideResponse?:
     | RaffleDetailResponse
     | ((
@@ -756,7 +746,7 @@ export const getGetRafflesRaffleIdMockHandler = (
   options?: RequestHandlerOptions
 ) =>
   http.get(
-    '*/raffles/:raffleId',
+    '*/raffle/:raffleId',
     async (info) => {
       await delay(1000);
 
@@ -766,7 +756,7 @@ export const getGetRafflesRaffleIdMockHandler = (
             ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
-            : getGetRafflesRaffleIdResponseMock()
+            : getGetRaffleRaffleIdResponseMock()
         ),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
@@ -856,9 +846,9 @@ export const getGetRafflesRaffleIdWinnerBasketsBasketIdMockHandler = (
   );
 export const getRaffleServiceAPIMock = () => [
   getGetStartupMockHandler(),
-  getGetInfoMockHandler(),
+  getGetInfoBlockchainMockHandler(),
   getGetRaffleMockHandler(),
-  getGetRafflesRaffleIdMockHandler(),
+  getGetRaffleRaffleIdMockHandler(),
   getGetRafflesRaffleIdWinnerBasketsMockHandler(),
   getGetActivitiesMockHandler(),
   getGetRafflesRaffleIdWinnerBasketsBasketIdMockHandler()

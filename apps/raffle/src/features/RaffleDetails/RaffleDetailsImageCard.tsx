@@ -11,43 +11,35 @@ import {
   CarouselItem,
   Identifier,
   Skeleton,
-  TrustBar,
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { RaffleVote } from './RaffleVote';
-
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
+  serviceFee?: number;
   raffle?: Pick<
     RaffleDetailResponse,
-    | 'id'
-    | 'images'
-    | 'name'
-    | 'backer'
-    | 'missionFund'
-    | 'address'
-    | 'winnerPot'
-    | 'serviceFee'
-    | 'voteCount'
-    | 'trust'
+    'id' | 'pictures' | 'name' | 'baker' | 'addresses' | 'winnersCount'
   >;
 };
 
-export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => (
-  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0" border={false}>
+export const RaffleDetailsImageCard = ({
+  loading,
+  serviceFee,
+  raffle
+}: RaffleDetailsImageCardProps) => (
+  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:h-130" border={false}>
     {loading ? (
       <CardImageWrapper loading={loading} />
     ) : (
       <Carousel>
         <CarouselContent>
-          {raffle?.images && raffle?.images.length > 0 ? (
-            raffle.images.map((image) => (
-              <CarouselItem key={image}>
+          {raffle?.pictures && raffle?.pictures.length > 0 ? (
+            raffle.pictures.map((picture) => (
+              <CarouselItem key={picture}>
                 <CardImageWrapper>
                   <Image
-                    // src={image}
-                    src="/sample.png"
+                    src={picture}
                     priority
                     alt={raffle.name}
                     className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
@@ -60,7 +52,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
             <CardImageWrapper />
           )}
         </CarouselContent>
-        {raffle?.images && raffle.images.length > 1 ? <CarouselDots /> : null}
+        {raffle?.pictures && raffle.pictures.length > 1 ? <CarouselDots /> : null}
       </Carousel>
     )}
     <CardContent className="flex flex-col gap-1.5 p-0 justify-stretch grow">
@@ -74,7 +66,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{raffle?.missionFund || 0}%</span>
+                {/* <span>{raffle?.missionFund || 0}%</span> */}
               </Typography>
             )}
           </div>
@@ -84,8 +76,8 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
             </Typography>
             <div className="w-1/2">
               <Identifier
-                value={raffle?.address}
-                href={raffle?.address}
+                value={raffle?.addresses.project}
+                href={raffle?.addresses.project}
                 size="lg"
                 loading={loading}
               />
@@ -103,7 +95,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{raffle?.winnerPot}</span>
+                {/* <span>{raffle?.winnerPot}</span> */}
               </Typography>
             )}
           </div>
@@ -119,34 +111,8 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{raffle?.serviceFee || 0}%</span>
+                <span>{serviceFee || 0}%</span>
               </Typography>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-      <Card border={false}>
-        <CardContent className="flex items-center justify-between">
-          <div className="flex flex-col">
-            <Typography variant="heading-5">Credibility:</Typography>
-            {loading ? (
-              <Skeleton className="h-1.5 w-16 my-2" />
-            ) : (
-              <Typography variant="subtitle-lg" className="text-gray-1" asChild>
-                <span>
-                  {raffle?.voteCount
-                    ? `${raffle.voteCount} vote${raffle.voteCount > 1 ? 's' : ''}`
-                    : 'No votes yet'}
-                </span>
-              </Typography>
-            )}
-          </div>
-          <div className="flex items-center justify-end gap-4 text-gray-1 w-20">
-            <TrustBar loading={loading} />
-            {loading ? (
-              <Skeleton className="size-7" />
-            ) : (
-              !!raffle && <RaffleVote raffleTitle={raffle.name} raffleId={raffle.id} />
             )}
           </div>
         </CardContent>

@@ -11,6 +11,8 @@ import type {
   GetRaffleStatusItem
 } from '@ergo-raffle/client';
 
+import { PINED_RAFFLES_STORAGE_KEY } from '@/features/RaffleDetails/RafflePinButton';
+
 const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
 
 export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) => {
@@ -22,12 +24,13 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
   const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 12);
 
-  const order = (searchParams.get('sort') ?? undefined) as GetRaffleOrder | undefined;
+  const order = (searchParams.get('order') ?? undefined) as GetRaffleOrder | undefined;
   const direction = (searchParams.get('direction') ?? undefined) as GetRaffleDirection | undefined;
 
   const status = searchParams.getAll('status') as GetRaffleStatusItem[];
   const tokenIds = searchParams.getAll('tokenIds');
   const ids = searchParams.getAll('ids');
+  const pined = searchParams.get('pined') === 'true';
 
   const offset = (page - 1) * perPage;
 
@@ -51,6 +54,34 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     router.push(`?${params.toString()}`);
   };
 
+  const togglePinedParam = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('status');
+    if (ids.length > 0) {
+      params.delete('ids');
+      params.delete('pined');
+    } else {
+      params.append('pined', 'true');
+      const stored = localStorage.getItem(PINED_RAFFLES_STORAGE_KEY);
+      const items: string[] = stored ? JSON.parse(stored) : [];
+      items.forEach((v) => {
+        params.append('ids', v);
+      });
+    }
+    router.push(`?${params.toString()}`);
+  };
+
+  const setStatusParamWithSwitchTabs = (status?: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (ids) {
+      params.delete('ids');
+      params.delete('pined');
+    }
+    params.delete('status');
+    if (status) params.set('status', status);
+    router.push(`?${params.toString()}`);
+  };
+
   const getPageLink = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', String(newPage));
@@ -68,5 +99,16 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     text: text || undefined
   };
 
-  return { page, perPage, params, search, setSearch, setParam, getPageLink };
+  return {
+    page,
+    perPage,
+    pined,
+    params,
+    search,
+    setSearch,
+    setParam,
+    getPageLink,
+    togglePinedParam,
+    setStatusParamWithSwitchTabs
+  };
 };
