@@ -141,3 +141,19 @@ export const winnerBasketDetail: WinnerBasketDetailResponse = {
     }
   ]
 };
+
+export const activities: RaffleActivityResponse = {
+  items: [
+    {
+      id: 'NuIPFgCNvcKlujsiCYWX',
+      type: 'raising_money',
+      address: 'hiHbbfOIxQUF',
+      amount: null,
+      basketType: 'IAGZueiICPFHPsl',
+      raffleName: 'JQQIcKIOJH',
+      raffleId: 'dtciCFPejtYBVUVf',
+      createdAt: 5041485291298592
+    }
+  ],
+  total: 1
+};

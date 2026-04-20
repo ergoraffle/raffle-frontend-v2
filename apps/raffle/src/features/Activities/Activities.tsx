@@ -1,34 +1,27 @@
-import {
-  configureClient,
-  type GetActivitiesParams,
-  getActivities,
-  withMock
-} from '@ergo-raffle/client';
+import type { GetActivitiesParams } from '@ergo-raffle/client';
 import { Card, CardContent, CardHeader, CardTitle, Empty, Typography } from '@ergo-raffle/ui-kit';
+
+import { activities } from '@/mockData';
 
 import { ActivityFilers } from './ActivitiesFilters';
 import { ActivitiesPagination } from './ActivitiesPagination';
 import { ActivityItem } from './ActivityItem';
-
-export const runtime2 = 'nodejs';
-export const dynamic2 = 'force-dynamic';
-
-configureClient({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || `https://${process.env.VERCEL_URL}/api`
-});
 
 type ActivityProps = {
   params?: GetActivitiesParams;
 };
 
 export const Activities = async ({ params }: ActivityProps) => {
-  const { items, total } = await withMock(async () => await getActivities(params));
+  // const { items, total } = await getActivities(params);
+  const { items, total } = activities;
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>
           <Typography variant="heading-1">My Activities</Typography>
+          {/* TODO: remove after connecting to api */}
+          {params?.address}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
