@@ -79,6 +79,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
           className="max-w-205"
           {...register('count', { valueAsNumber: true })}
           type="number"
+          min={0}
         />
         {!!errors.count && <FieldError>{errors.count.message}</FieldError>}
       </Field>
@@ -90,6 +91,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
             {...register('amount', { valueAsNumber: true })}
             className="max-w-205 grow"
             type="number"
+            min={0}
           />
         </div>
         {!!errors.amount && <FieldError>{errors.amount.message}</FieldError>}
@@ -120,6 +122,8 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
               <Input
                 variant="bordered"
                 type="number"
+                min={0}
+                max={infoBlockchainData?.fee.implementer || 100}
                 {...register('missionFund', { valueAsNumber: true })}
               />
               {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
@@ -129,6 +133,8 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
               <Input
                 variant="bordered"
                 type="number"
+                min={0}
+                max={infoBlockchainData?.fee.implementer || 100}
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}

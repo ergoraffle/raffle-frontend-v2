@@ -20,10 +20,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
-
 import type { RaffleSpecificationsForm } from '../schemas';
-import { deadlineToHour } from '../utils';
 import { FieldTitle } from './FieldTitle';
 
 export type SpecificationsFormProps = {
@@ -31,7 +28,6 @@ export type SpecificationsFormProps = {
 };
 
 export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
-  const { data: infoBlockchainData } = useInfoBlockchain();
   const [tagInputValue, setTagInputValue] = useState<string>();
 
   const {
@@ -75,7 +71,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
     setValue('tags', newTags);
   };
 
-  const hours = deadlineToHour(watch('deadline') || 0, infoBlockchainData?.height || 0);
+  const deadline = getValues('deadline');
 
   return (
     <div className="space-y-8">
@@ -89,7 +85,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <TextEditor
           className="max-w-205"
           value={getValues('description') || ''}
-          onChange={(value) => setValue('description', value as string)}
+          onChange={(value) => setValue('description', value as string, { shouldDirty: true })}
         />
         {!!errors.description && <FieldError>{errors.description.message}</FieldError>}
       </Field>
@@ -150,15 +146,15 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
             variant="bordered"
             className="max-w-205 grow"
             type="number"
+            min={0}
             placeholder="Blocks to go"
             {...register('deadline', {
-              valueAsNumber: true,
-              setValueAs: (v) => (v.isNaN ? undefined : v)
+              valueAsNumber: true
             })}
           />
-          {!!hours && (
+          {!!deadline && (
             <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
-              ≈ {hours} Hours
+              ≈ {deadline} Hours
             </Typography>
           )}
         </div>
