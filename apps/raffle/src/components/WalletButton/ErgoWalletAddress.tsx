@@ -3,28 +3,24 @@
 import { useCallback, useState } from 'react';
 
 import { Button, Field, FieldError, FieldLabel, Input } from '@ergo-raffle/ui-kit';
+import { validateAddress } from '@fleet-sdk/core';
 
-import { validateAddress } from '@/actions';
 import { useWallet } from '@/hooks';
 
 export const ErgoWalletAddress = () => {
   const wallet = useWallet();
 
   const [address, setAddress] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
   const [hasError, setHasError] = useState<boolean>();
 
-  const handleClick = useCallback(async () => {
-    setHasError(false);
-    setIsLoading(true);
-    try {
-      await validateAddress('ergo', address || '');
+  const handleClick = useCallback(() => {
+    const isValid = validateAddress(address || '');
 
-      wallet.setErgoAddress(address);
-    } catch {
-      setHasError(true);
-    }
-    setIsLoading(false);
+    setHasError(!isValid);
+
+    if (!isValid) return;
+
+    wallet.setErgoAddress(address);
   }, [address, wallet.setErgoAddress]);
 
   return (
@@ -39,16 +35,11 @@ export const ErgoWalletAddress = () => {
         {!!hasError && <FieldError>Address is not valid</FieldError>}
       </Field>
       <div className="flex items-center justify-between mt-4">
-        <Button
-          disabled={!!isLoading}
-          type="button"
-          className="w-48"
-          onClick={() => wallet.setCandidate(undefined)}
-        >
+        <Button type="button" className="w-48" onClick={() => wallet.setCandidate(undefined)}>
           back
         </Button>
         <Button
-          disabled={!!isLoading || !address}
+          disabled={!address}
           type="button"
           className="w-48"
           onClick={handleClick}
