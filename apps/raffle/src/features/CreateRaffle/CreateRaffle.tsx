@@ -78,11 +78,6 @@ export const CreateRaffle = () => {
   ];
 
   const onSubmit = async (data: RaffleForm) => {
-    if (!infoBlockchainData) {
-      toast.error('Failed to create raffle. Please try again later.');
-      return;
-    }
-
     try {
       await createRaffle(data, wallet, infoBlockchainData);
 

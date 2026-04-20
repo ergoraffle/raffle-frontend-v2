@@ -1,7 +1,6 @@
 import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import type { NautilusWalletAddresses, UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 import { CreationProxyTxBuilder } from '@ergo-raffle/proxy-transactions';
-import { toast } from '@ergo-raffle/ui-kit';
 
 import { getNonDecimalString } from '@/features/utils';
 import type { WalletContextValue } from '@/hooks';
@@ -11,11 +10,13 @@ import type { RaffleForm } from './schemas';
 export const createRaffle = async (
   data: RaffleForm,
   wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse
+  infoBlockchainData: InfoBlockchainResponse | undefined
 ) => {
+  if (!infoBlockchainData) {
+    throw new Error('Failed to create raffle. Please try again later.');
+  }
   if (wallet?.selected?.name !== 'Nautilus') {
-    toast.error('Failed to get wallet.');
-    return;
+    throw new Error('Failed to get wallet.');
   }
 
   const tokens = await wallet.selected.fetchTokens();
