@@ -1,24 +1,13 @@
-import type { GetRafflesParams } from '@ergo-raffle/client';
-import type { RaisedAmounts } from '@ergo-raffle/ui-kit';
+import type { GetRaffleParams } from '@ergo-raffle/client';
 
 export const getRafflesParamsTransformer = (searchParams: {
   [key: string]: string | string[] | undefined;
-}): GetRafflesParams => {
+}): GetRaffleParams => {
   const { page, perPage, ...params } = searchParams;
   const limit = perPage ? Number(perPage) : 12;
   const offset = page && perPage ? Number(page) * Number(perPage) - 1 : 0;
   return { ...params, offset, limit };
 };
-
-export const getRaisedAmount = (
-  soldTicketCount: number,
-  ticketPrice: number,
-  goal: number
-): RaisedAmounts => ({
-  target: soldTicketCount * ticketPrice,
-  current: goal,
-  verified: true
-});
 
 export const getDeadlineAmount = (lastBlockHeight: number, deadline: number): number =>
   deadline - lastBlockHeight;
@@ -47,3 +36,8 @@ export const getDeadlineString = (deadline: number): string => {
 };
 
 export const validatedAddress = (address: string): boolean => Boolean(address);
+export const getWinnerPot = (shareWinner: number): number => shareWinner / 10;
+export const getSoldTicketCount = (raisedAmount: number, ticketPrice: number): number =>
+  raisedAmount / ticketPrice;
+export const getMissionFund = (amounts: Record<string, number>): number =>
+  (1000 - Object.values(amounts).reduce((sum, value) => sum + value, 0)) / 10;

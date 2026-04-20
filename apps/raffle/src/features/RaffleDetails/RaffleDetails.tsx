@@ -1,11 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import {
-  configureClient,
-  getInfoBlockchain,
-  getRafflesRaffleId,
-  withMock
-} from '@ergo-raffle/client';
+import { getInfoBlockchain, getRaffleRaffleId } from '@ergo-raffle/client';
 import {
   Card,
   CardContent,
@@ -16,7 +11,7 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { getRaisedAmount } from '../utils';
+import { getDeadlineAmount, getMissionFund, getSoldTicketCount, getWinnerPot } from '../utils';
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
@@ -26,25 +21,29 @@ import { RafflePinButton } from './RafflePinButton';
 import { RaffleShareButton } from './RaffleShareButton';
 import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
 
-configureClient({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || `https://${process.env.VERCEL_URL}/api`
-});
-
 export type RaffleDetailsProps = {
   raffleId: string;
 };
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
-  const raffle = await withMock(async () => await getRafflesRaffleId(raffleId));
-  const infoBlockchainData = await withMock(async () => await getInfoBlockchain());
+  const raffle = await getRaffleRaffleId(raffleId);
+  const infoData = await getInfoBlockchain();
 
   if (!raffle) return notFound();
 
-  const raisedAmounts = getRaisedAmount(raffle.soldTicketCount, raffle.ticketPrice, raffle.goal);
+  const soldTicketCount = getSoldTicketCount(raffle.amount.raised, raffle.ticketPrice);
+  const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
+  const missionFund = getMissionFund(raffle.share);
+  const winnerPot = getWinnerPot(raffle.share.winner);
 
   return (
     <div className="flex flex-col gap-9.5">
       <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
-        <RaffleDetailsImageCard raffle={raffle} />
+        <RaffleDetailsImageCard
+          raffle={raffle}
+          serviceFee={infoData.fee.implementer}
+          winnerPot={winnerPot}
+          missionFund={missionFund}
+        />
         <div className="flex flex-col gap-5 grow order-1 lg:order-2">
           <div className="flex justify-between sm:items-center max-w-full">
             <Typography variant="heading-1" asChild>
@@ -55,21 +54,21 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
               <RaffleShareButton />
             </div>
           </div>
-          <RaiseProgress raisedAmounts={raisedAmounts} tokenName={raffle?.collectingTokenName} />
+          <RaiseProgress amount={raffle.amount} token={raffle?.token} />
           <div className="hidden sm:block">
             <RaffleDetailsIconBox
-              lastBlockHeight={infoBlockchainData.height}
-              soldTicketCount={raffle?.soldTicketCount}
-              raffleDeadline={raffle?.deadline}
-              backer={raffle?.backer}
+              deadline={deadline}
+              soldTicketCount={soldTicketCount}
+              baker={raffle?.baker}
             />
           </div>
           <RaffleDonate />
         </div>
         <div className="order-3 sm:hidden">
           <RaffleDetailsIconBox
-            lastBlockHeight={infoBlockchainData.height}
-            soldTicketCount={raffle?.soldTicketCount}
+            deadline={deadline}
+            soldTicketCount={soldTicketCount}
+            baker={raffle?.baker}
           />
         </div>
       </div>

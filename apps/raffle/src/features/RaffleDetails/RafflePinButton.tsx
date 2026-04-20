@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import { Pin } from '@ergo-raffle/icons';
 import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 
+import { PINED_RAFFLES_STORAGE_KEY } from '@/features/constants';
+
 export type RafflePinButtonProps = {
   loading?: boolean;
   raffleId?: string;
 };
-
-const STORAGE_KEY = 'pinned_raffles';
 
 export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => {
   const [pined, setPined] = useState(false);
@@ -18,7 +18,7 @@ export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => 
   useEffect(() => {
     if (typeof window === 'undefined' || !raffleId) return;
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(PINED_RAFFLES_STORAGE_KEY);
     const items: string[] = stored ? JSON.parse(stored) : [];
 
     if (Array.isArray(items) && items.includes(raffleId)) {
@@ -30,7 +30,7 @@ export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => 
     if (typeof window === 'undefined' || !raffleId) return;
 
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = localStorage.getItem(PINED_RAFFLES_STORAGE_KEY);
       let items: string[] = stored ? JSON.parse(stored) : [];
 
       if (!Array.isArray(items)) items = [];
@@ -47,7 +47,7 @@ export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => 
         toast.success('Pinned!');
       }
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      localStorage.setItem(PINED_RAFFLES_STORAGE_KEY, JSON.stringify(updated));
     } catch {
       toast.error('Something went wrong, please try again later!');
     }
