@@ -21,7 +21,7 @@ export const Activities = async ({ params }: ActivityProps) => {
         <CardTitle>
           <Typography variant="heading-1">My Activities</Typography>
           {/* TODO: remove after connecting to api */}
-          {params?.address}
+          {params?.type}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
