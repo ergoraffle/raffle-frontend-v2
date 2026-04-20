@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
+import type { WalletToken } from '@ergo-raffle/base-wallet';
 import {
   Button,
   Field,
@@ -12,12 +15,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Token
+  Token,
+  toast
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
+import { useWallet } from '@/hooks';
 import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
-import { tokens } from '@/mockData';
 
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
@@ -38,6 +42,19 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
     setValue
   } = useFormContext<RaffleDonationGoalForm>();
 
+  const [tokens, setTokens] = useState<WalletToken[]>([]);
+
+  const wallet = useWallet();
+
+  useEffect(() => {
+    wallet.selected
+      ?.fetchTokens()
+      .then((tokens) => setTokens(tokens))
+      .catch(() => {
+        toast.error('Failed to get wallet.');
+      });
+  }, [wallet.selected]);
+
   const missionFund = watch('missionFund');
   const winnerPotShare = watch('winnerPotShare');
 
@@ -51,14 +68,14 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
               value={getValues('tokenId')}
               onValueChange={(value) => setValue('tokenId', value)}
             >
-              <SelectTrigger variant="bordered" className="mt-7.5">
+              <SelectTrigger variant="bordered" className="mt-7.5" disabled={tokens.length === 0}>
                 <SelectValue {...register('tokenId')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {tokens.map((item) => (
-                    <SelectItem value={item.value} key={item.value}>
-                      <Token name={item.label} />
+                  {tokens.map((token) => (
+                    <SelectItem value={token.id} key={token.id}>
+                      <Token name={token.name} />
                     </SelectItem>
                   ))}
                 </SelectGroup>

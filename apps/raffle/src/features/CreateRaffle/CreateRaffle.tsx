@@ -4,14 +4,15 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
-import { Card, CardContent, Stepper, Typography } from '@ergo-raffle/ui-kit';
+import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
+import { createRaffle } from '@/features/services';
+import { useWallet } from '@/hooks';
 import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
-import { createRaffle } from '@/mockApi';
 
-import { createRaffleSchema, type RaffleForm } from '../schemas';
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
 import { Finish } from './Finish';
@@ -20,6 +21,8 @@ import { SpecificationsForm } from './SpecificationsForm';
 export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const { data: infoBlockchainData } = useInfoBlockchain();
+
+  const wallet = useWallet();
 
   const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
 
@@ -47,6 +50,11 @@ export const CreateRaffle = () => {
     setActiveStepIndex((prev) => prev - 1);
   };
 
+  const resetForm = () => {
+    form.reset();
+    setActiveStepIndex(0);
+  };
+
   const steps = [
     {
       title: 'Specifications',
@@ -68,8 +76,23 @@ export const CreateRaffle = () => {
       content: <Finish handleBack={handleBack} />
     }
   ];
-  const onSubmit = (data: RaffleForm) => {
-    createRaffle(data);
+
+  const onSubmit = async (data: RaffleForm) => {
+    if (!infoBlockchainData) {
+      toast.error('Failed to create raffle. Please try again later.');
+      return;
+    }
+
+    try {
+      await createRaffle(data, wallet, infoBlockchainData);
+
+      toast.success('Raffle created successfully!');
+      resetForm();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to create raffle. Please try again later.'
+      );
+    }
   };
   return (
     <>

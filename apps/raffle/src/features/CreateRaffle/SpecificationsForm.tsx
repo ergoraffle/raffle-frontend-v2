@@ -20,7 +20,9 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import type { RaffleSpecificationsForm } from '../schemas';
+import type { RaffleSpecificationsForm } from '@/features/schemas';
+import { formatDuration } from '@/features/utils';
+
 import { FieldTitle } from './FieldTitle';
 
 export type SpecificationsFormProps = {
@@ -71,7 +73,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
     setValue('tags', newTags);
   };
 
-  const deadline = getValues('deadline');
+  const deadline = watch('deadline');
 
   return (
     <div className="space-y-8">
@@ -154,7 +156,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
           />
           {!!deadline && (
             <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
-              ≈ {deadline} Hours
+              ≈ {formatDuration(deadline * 2)}
             </Typography>
           )}
         </div>
