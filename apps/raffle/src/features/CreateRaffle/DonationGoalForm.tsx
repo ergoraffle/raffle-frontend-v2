@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import {
   Button,
   Field,
@@ -15,9 +17,10 @@ import {
   Token
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
+import { WalletToken } from '@ergo-raffle/base-wallet';
 
 import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
-import { tokens } from '@/mockData';
+import { useWallet } from '@/hooks';
 
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
@@ -38,6 +41,18 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
     setValue
   } = useFormContext<RaffleDonationGoalForm>();
 
+  const [tokens, setTokens] = useState<WalletToken[]>([]);
+
+  const wallet = useWallet();
+
+  useEffect(() => {
+    wallet.selected?.fetchTokens()
+      .then((tokens) => setTokens(tokens))
+      .catch(() => {
+        alert('TODO')
+      })
+  }, [wallet.selected])
+
   const missionFund = watch('missionFund');
   const winnerPotShare = watch('winnerPotShare');
 
@@ -56,9 +71,9 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {tokens.map((item) => (
-                    <SelectItem value={item.value} key={item.value}>
-                      <Token name={item.label} />
+                  {tokens.map((token) => (
+                    <SelectItem value={token.id} key={token.id}>
+                      <Token name={token.name} />
                     </SelectItem>
                   ))}
                 </SelectGroup>
