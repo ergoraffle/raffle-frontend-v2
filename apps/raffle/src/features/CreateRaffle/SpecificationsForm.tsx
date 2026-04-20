@@ -30,7 +30,7 @@ export type SpecificationsFormProps = {
 };
 
 export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
-  const [tagInputValue, setTagInputValue] = useState<string>();
+  const [tagInputValue, setTagInputValue] = useState<string>('');
 
   const {
     setValue,
