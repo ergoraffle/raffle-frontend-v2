@@ -2,7 +2,7 @@ import { Typography } from '@ergo-raffle/ui-kit';
 import { QRCodeSVG } from 'qrcode.react';
 
 export const QRStep = () => {
-  const value = 'ergopay://api.ergexplorer.com/ergopay/auth?id=5973&address=#P2PK_ADDRESS#';
+  const value = '';
   return (
     <div className="flex items-start justify-between">
       <div>
