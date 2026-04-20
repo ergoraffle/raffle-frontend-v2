@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { configureClient } from '@ergo-raffle/client';
 import {
   type AnchorComponent,
   FrameworkProvider,
@@ -17,6 +18,9 @@ import { WalletProvider } from '@/hooks';
 
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
 const ImageComponent: ImageComponentType = (props) => <Image {...props} />;
+configureClient({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
+});
 
 export const AppProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
