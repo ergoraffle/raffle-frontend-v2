@@ -5,7 +5,6 @@ import { DotMenuVertical, Recent } from '@ergo-raffle/icons';
 import { useFramework } from '@/providers';
 
 import { Button } from './Button';
-import { ConnectWallet } from './ConnectWallet';
 import { Logo } from './Logo';
 import { Sheet, SheetContent, SheetTrigger } from './Sheet';
 import { ThemeToggle } from './ThemeToggle';
@@ -19,10 +18,12 @@ type Link = {
 export type HeaderProps = {
   links: Array<Link>;
   scrollThreshold?: number;
+  connectWalletRender: () => React.ReactNode;
 };
 
-export const Header = ({ links, scrollThreshold = 10 }: HeaderProps) => {
+export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: HeaderProps) => {
   const Link = useFramework().components.Anchor;
+  const ConnectWallet = connectWalletRender;
 
   const [scrolled, setScrolled] = useState(false);
 

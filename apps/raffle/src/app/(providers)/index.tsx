@@ -13,12 +13,16 @@ import {
   Toaster
 } from '@ergo-raffle/ui-kit';
 
+import { WalletProvider } from '@/hooks';
+
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
 const ImageComponent: ImageComponentType = (props) => <Image {...props} />;
 
 export const AppProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
     <Toaster />
-    <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>{children}</FrameworkProvider>
+    <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>
+      <WalletProvider>{children}</WalletProvider>
+    </FrameworkProvider>
   </ThemeProvider>
 );

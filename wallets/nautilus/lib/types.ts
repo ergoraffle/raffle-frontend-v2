@@ -31,7 +31,7 @@ type Paging = {
   limit: number;
 };
 
-type ErgoBoxProxy = {
+export type ErgoBoxProxy = {
   readonly boxId: BoxId;
   readonly transactionId: TxId;
   readonly index: number;
@@ -52,7 +52,7 @@ declare type ErgoBoxCandidateProxy = {
 
 type ErgoTree = HexString;
 
-type ErgoTxProxy = {
+export type ErgoTxProxy = {
   readonly id: TxId;
   readonly inputs: Input[];
   readonly dataInputs: DataInput[];
@@ -101,7 +101,7 @@ type UnsignedInputProxy = {
   readonly extension: ContextExtension;
 };
 
-type UnsignedErgoTxProxy = {
+export type UnsignedErgoTxProxy = {
   readonly inputs: UnsignedInputProxy[];
   readonly dataInputs: DataInput[];
   readonly outputs: ErgoBoxCandidateProxy[];
@@ -118,7 +118,7 @@ interface EipWalletApi {
     paginate?: Paging
   ) => Promise<ErgoBoxProxy[] | undefined>;
 
-  get_balance: (token_id: TokenId) => Promise<string>;
+  get_balance: (token_id: TokenId) => Promise<Array<{ balance: string; tokenId: string }>>;
 
   get_used_addresses: (paginate?: Paging) => Promise<Address[]>;
 
