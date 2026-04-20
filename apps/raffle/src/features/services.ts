@@ -90,7 +90,7 @@ export const createRaffle = async (
   // Transaction fee in nanoERG
   const txFee = BigInt(infoBlockchainData.fee.tx);
 
-  const builder = new CreationProxyTxBuilder()
+  let builder = new CreationProxyTxBuilder()
     .setChainHeight(chainHeight)
     .setFeeBoxes(feeBoxes)
     .setOrganizerAddress(organizerAddress)
@@ -111,9 +111,9 @@ export const createRaffle = async (
     .setTxFee(txFee);
 
   // if the raffle is a token-goal raffle, set the collecting token id
-  // if (collectingTokenId !== undefined) {
-  //   builder = builder.setCollectingTokenId(collectingTokenId);
-  // }
+  if (token.id.toLowerCase() !== 'erg') {
+    builder = builder.setCollectingTokenId(token.id);
+  }
 
   const unsignedTx = await builder.build();
   const eip12Object = unsignedTx?.toEIP12Object();
