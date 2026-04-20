@@ -21,7 +21,6 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
-import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
 
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
@@ -30,10 +29,10 @@ import { FieldTitle } from './FieldTitle';
 export type DonationGoalFormProps = {
   handleNext: () => void;
   handleBack: () => void;
+  serviceFee?: number;
 };
 
-export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormProps) => {
-  const { data: infoBlockchainData } = useInfoBlockchain();
+export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: DonationGoalFormProps) => {
   const {
     formState: { errors },
     register,
@@ -122,7 +121,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
         <FieldTitle title="Set How to Distribute." />
 
         <DistributionBar
-          service={infoBlockchainData?.fee.implementer ?? 0}
+          service={serviceFee ?? 0}
           winnerPot={errors.winnerPotShare ? undefined : Number(winnerPotShare)}
           missionFund={errors.missionFund ? undefined : Number(missionFund)}
         />
@@ -130,7 +129,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
           <div className="sm:w-1/2 md:w-auto flex-1">
             <Field>
               <FieldLabel>Service</FieldLabel>
-              <Input variant="bordered" disabled value={infoBlockchainData?.fee.implementer} />
+              <Input variant="bordered" disabled value={serviceFee} />
             </Field>
           </div>
           <div className="flex flex-col sm:flex-row flex-2 gap-x-2 gap-y-3">
@@ -140,7 +139,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
                 variant="bordered"
                 type="number"
                 min={0}
-                max={infoBlockchainData?.fee.implementer || 100}
+                max={serviceFee || 100}
                 {...register('missionFund', { valueAsNumber: true })}
               />
               {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
@@ -151,7 +150,7 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
                 variant="bordered"
                 type="number"
                 min={0}
-                max={infoBlockchainData?.fee.implementer || 100}
+                max={serviceFee || 100}
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}

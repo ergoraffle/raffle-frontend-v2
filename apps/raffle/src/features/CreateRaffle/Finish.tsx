@@ -16,16 +16,14 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import { useInfoBlockchain } from '@/hooks/useInfoBlockchain';
-
 import type { RaffleForm } from '../schemas';
 
 export type FinishProps = {
   handleBack: () => void;
+  serviceFee?: number;
 };
 
-export const Finish = ({ handleBack }: FinishProps) => {
-  const { data: infoBlockchainData } = useInfoBlockchain();
+export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
   const {
     getValues,
     formState: { errors },
@@ -98,7 +96,7 @@ export const Finish = ({ handleBack }: FinishProps) => {
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
           <Typography variant="body-button">Service fee:</Typography>
           <Typography variant="body-lg" className="text-gray-1">
-            {infoBlockchainData?.fee.implementer}%
+            {serviceFee ?? 0}%
           </Typography>
         </div>
       </div>
