@@ -68,7 +68,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
                 <BasketStatus className="size-6" filled />
               </InputGroupAddon>
               <InputGroupAddon align="inline-end">
-                <Tooltip content="Share Baskets.">
+                <Tooltip content="Share Baskets." disabled>
                   <Info className="size-6" />
                 </Tooltip>
               </InputGroupAddon>

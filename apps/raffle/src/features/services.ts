@@ -16,7 +16,7 @@ export const createRaffle = async (
     throw new Error('Failed to create raffle. Please try again later.');
   }
   if (wallet?.selected?.name !== 'Nautilus') {
-    throw new Error('Failed to get wallet.');
+    throw new Error('Must be connected to Nautilus wallet.');
   }
 
   const tokens = await wallet.selected.fetchTokens();

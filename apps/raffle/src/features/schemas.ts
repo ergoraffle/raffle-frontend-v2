@@ -53,7 +53,7 @@ const raffleDonationGoalSchema = (serviceShare?: number) =>
       if (max !== undefined && Number(data.missionFund) + Number(data.winnerPotShare) !== max) {
         ctx.addIssue({
           code: 'custom',
-          message: `Sum of missionFund and winnerPotShare must be ${max}`,
+          message: `Sum of mission’s fund and winners pot share must be ${max}`,
           path: ['missionFund']
         });
       }
