@@ -57,7 +57,6 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   );
 };
 
-export const validatedAddress = (address: string): boolean => Boolean(address);
 export const getWinnerPot = (shareWinner: number): number => shareWinner / 10;
 export const getSoldTicketCount = (raisedAmount: number, ticketPrice: number): number =>
   raisedAmount / ticketPrice;

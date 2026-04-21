@@ -1,6 +1,5 @@
+import { validateAddress } from '@fleet-sdk/core';
 import { z } from 'zod';
-
-import { validatedAddress } from '@/features/utils';
 
 const raffleSpecificationsSchema = z.object({
   name: z
@@ -36,7 +35,7 @@ const raffleDonationGoalSchema = (serviceShare?: number) =>
       address: z
         .string({ message: 'Can not be empty' })
         .nonempty('Can not be empty')
-        .refine((val) => validatedAddress(val), {
+        .refine((val) => validateAddress(val), {
           message: 'Invalid address'
         }),
       missionFund: z
