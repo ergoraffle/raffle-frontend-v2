@@ -4,6 +4,7 @@ import type { PropsWithChildren } from 'react';
 
 import type { Metadata } from 'next';
 
+import { configureClient } from '@ergo-raffle/client';
 import { LayoutBackground } from '@ergo-raffle/ui-kit';
 
 import { Footer, Header } from '@/components';
@@ -15,6 +16,9 @@ export const metadata: Metadata = {
   title: 'Ergo Raffle',
   description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
 };
+configureClient({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
+});
 
 const RootLayout = async ({ children }: PropsWithChildren) => (
   <html
