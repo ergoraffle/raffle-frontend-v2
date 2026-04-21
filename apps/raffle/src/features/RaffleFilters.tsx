@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 
-import type { GetRafflesStatusItem } from '@ergo-raffle/client';
+import type { GetRaffleStatusItem } from '@ergo-raffle/client';
 import { Search } from '@ergo-raffle/icons';
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 
 import { useRafflesQuery } from '@/hooks';
 
-const statusFilterItems: { value: GetRafflesStatusItem; label: string }[] = [
+const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
   {
     value: 'active',
     label: 'Active'
@@ -36,17 +36,20 @@ const tokenFilterItems = [
   { value: 'btc', label: 'BTC' },
   { value: 'ada', label: 'ADA' }
 ];
-const categoryFilterItems = [
-  { value: 'cat1', label: 'Cat 1' },
-  { value: 'cat2', label: 'Cat 2' },
-  { value: 'cat3', label: 'Cat 3' }
-];
 
 export const RafflesFilters = () => {
-  const { search, params, setSearch, setParam } = useRafflesQuery();
+  const {
+    search,
+    params,
+    setSearch,
+    setParam,
+    togglePinedParam,
+    setStatusParamWithSwitchTabs,
+    pined
+  } = useRafflesQuery();
 
   const onSearch = () => {
-    setParam('name', search);
+    setParam('text', search);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -61,22 +64,49 @@ export const RafflesFilters = () => {
     PINED = 'Pined'
   }
 
+  const getTabValue = () => {
+    if (pined) {
+      return RAFFLE_LIST_TABS.PINED;
+    }
+    if (params.status?.length === 1) {
+      if (params.status[0] === 'active') {
+        return RAFFLE_LIST_TABS.ACTIVE;
+      }
+      if (params.status[0] === 'failed' || params.status[0] === 'successful') {
+        return RAFFLE_LIST_TABS.HISTORY;
+      }
+    }
+    return RAFFLE_LIST_TABS.ALL;
+  };
+  const onTabChange = (value: string) => {
+    switch (value) {
+      case RAFFLE_LIST_TABS.ACTIVE:
+        setStatusParamWithSwitchTabs('active');
+        break;
+      case RAFFLE_LIST_TABS.HISTORY:
+        setStatusParamWithSwitchTabs('failed');
+        break;
+      case RAFFLE_LIST_TABS.PINED:
+        togglePinedParam();
+        break;
+      default:
+        setStatusParamWithSwitchTabs();
+    }
+  };
+
   return (
     <>
-      <Tabs defaultValue={RAFFLE_LIST_TABS.ALL} className="w-full">
+      <Tabs
+        defaultValue={RAFFLE_LIST_TABS.ALL}
+        value={getTabValue()}
+        className="w-full"
+        onValueChange={(value) => onTabChange(value)}
+      >
         <TabsList>
-          <TabsTrigger key={RAFFLE_LIST_TABS.ALL} value={RAFFLE_LIST_TABS.ALL}>
-            {RAFFLE_LIST_TABS.ALL}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.ACTIVE} value={RAFFLE_LIST_TABS.ACTIVE}>
-            {RAFFLE_LIST_TABS.ACTIVE}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.HISTORY} value={RAFFLE_LIST_TABS.HISTORY}>
-            {RAFFLE_LIST_TABS.HISTORY}
-          </TabsTrigger>
-          <TabsTrigger key={RAFFLE_LIST_TABS.PINED} value={RAFFLE_LIST_TABS.PINED}>
-            {RAFFLE_LIST_TABS.PINED}
-          </TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.ALL}>{RAFFLE_LIST_TABS.ALL}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.ACTIVE}>{RAFFLE_LIST_TABS.ACTIVE}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.HISTORY}>{RAFFLE_LIST_TABS.HISTORY}</TabsTrigger>
+          <TabsTrigger value={RAFFLE_LIST_TABS.PINED}>{RAFFLE_LIST_TABS.PINED}</TabsTrigger>
         </TabsList>
       </Tabs>
       <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
@@ -84,24 +114,16 @@ export const RafflesFilters = () => {
           <MultiSelectCombobox
             items={statusFilterItems}
             selected={(params.status as string[]) ?? []}
-            onChange={(values) => setParam('status', values as GetRafflesStatusItem[])}
+            onChange={(values) => setParam('status', values as GetRaffleStatusItem[])}
             placeholder="Status"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />
           <MultiSelectCombobox
             items={tokenFilterItems}
-            selected={params.token ?? []}
-            onChange={(values) => setParam('token', values as string[])}
+            selected={params.tokenIds ?? []}
+            onChange={(values) => setParam('tokenIds', values as string[])}
             placeholder="Token"
-            closeOnChange
-            className="flex-1 lg:flex-auto"
-          />
-          <MultiSelectCombobox
-            items={categoryFilterItems}
-            selected={params.category ?? []}
-            onChange={(values) => setParam('category', values as string[])}
-            placeholder="Category"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />

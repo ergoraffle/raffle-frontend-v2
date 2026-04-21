@@ -16,10 +16,6 @@ export default defineConfig({
           path: './lib/http.ts',
           name: 'httpClient'
         }
-      },
-      mock: {
-        delay: 1000,
-        type: 'msw'
       }
     }
   }

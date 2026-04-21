@@ -33,8 +33,6 @@
     "npm": "11.6.2"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.3.0",
-    "axios": "^1.13.5",
-    "msw": "^2.12.10"
+    "axios": "^1.13.5"
   }
 }
