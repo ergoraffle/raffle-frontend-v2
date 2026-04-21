@@ -442,7 +442,7 @@ components:
         - pictures
         - addresses
         - share
-        - baker
+        - backers
     RafflePrize:
       type: object
       properties:
