@@ -59,7 +59,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <RaffleDetailsIconBox
               deadline={deadline}
               soldTicketCount={soldTicketCount}
-              baker={raffle?.baker}
+              backers={raffle?.backers}
             />
           </div>
           <RaffleDonate />
@@ -68,7 +68,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           <RaffleDetailsIconBox
             deadline={deadline}
             soldTicketCount={soldTicketCount}
-            baker={raffle?.baker}
+            backers={raffle?.backers}
           />
         </div>
       </div>

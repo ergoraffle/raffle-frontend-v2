@@ -423,7 +423,7 @@ components:
             service:
               type: number
           required: [winner, implementer, service]
-        baker:
+        backers:
           type: number
         status:
           type: string
