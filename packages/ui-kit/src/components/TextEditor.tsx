@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { type ComponentProps, useEffect, useRef } from 'react';
 
 import {
   AlignCenter,
@@ -15,6 +15,8 @@ import {
 } from '@ergo-raffle/icons';
 import type Quill from 'quill';
 
+import { cn } from '@/lib';
+
 import { Button } from './Button';
 import {
   Select,
@@ -25,13 +27,19 @@ import {
   SelectValue
 } from './Select';
 
-export type TextEditorProps = {
+export type TextEditorProps = Omit<ComponentProps<'div'>, 'value' | 'onChange'> & {
   value?: string;
   onChange?: (content: string) => void;
   placeholder?: string;
 };
 
-export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEditorProps) => {
+export const TextEditor = ({
+  value = '',
+  onChange,
+  placeholder = '',
+  className,
+  ...props
+}: TextEditorProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
 
@@ -93,18 +101,18 @@ export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEdito
   };
 
   return (
-    <div className="ql-wrapper border-gray-4 border rounded-3xlg">
-      <div id="toolbar" className="px-4 py-3 flex items-center gap-x-3">
-        <Button variant="plain" size="icon-xs" className="ql-bold">
+    <div {...props} className={cn('ql-wrapper border-gray-4 border rounded-3xlg', className)}>
+      <div id="toolbar" className="px-4 py-3 flex items-center flex-wrap gap-x-3">
+        <Button variant="plain" size="icon-xs" className="ql-bold" type="button">
           <Bold />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-italic">
+        <Button variant="plain" size="icon-xs" className="ql-italic" type="button">
           <Italic />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-underline">
+        <Button variant="plain" size="icon-xs" className="ql-underline" type="button">
           <Underline />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-strike">
+        <Button variant="plain" size="icon-xs" className="ql-strike" type="button">
           <Strikethrough />
         </Button>
         <Select onValueChange={handleAlign} defaultValue="left">
@@ -126,13 +134,13 @@ export const TextEditor = ({ value = '', onChange, placeholder = '' }: TextEdito
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button variant="plain" size="icon-xs" className="ql-link">
+        <Button variant="plain" size="icon-xs" className="ql-link" type="button">
           <Link />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-list" value="ordered">
+        <Button variant="plain" size="icon-xs" className="ql-list" value="ordered" type="button">
           <ListNumbers />
         </Button>
-        <Button variant="plain" size="icon-xs" className="ql-list" value="bullet">
+        <Button variant="plain" size="icon-xs" className="ql-list" value="bullet" type="button">
           <List />
         </Button>
       </div>

@@ -1,13 +1,125 @@
 'use client';
 
+import { useState } from 'react';
+
+import Image from 'next/image';
+
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { raffleSchema } from '../schemas';
+import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
+import { createRaffle } from '@/features/services';
+import { useWallet } from '@/hooks';
 
-export const CreateRaffle = () => {
-  const form = useForm({
-    resolver: zodResolver(raffleSchema)
+import { BasketsForm } from './BasketsForm';
+import { DonationGoalForm } from './DonationGoalForm';
+import { Finish } from './Finish';
+import { SpecificationsForm } from './SpecificationsForm';
+
+export type CreateRaffleProps = {
+  infoBlockchainData?: InfoBlockchainResponse;
+};
+
+export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const wallet = useWallet();
+
+  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
+
+  const form = useForm<RaffleForm>({
+    resolver: zodResolver(raffleSchema),
+    shouldUnregister: false,
+    mode: 'onChange',
+    defaultValues: {
+      details: [],
+      terms: false,
+      eligibility: false
+    }
   });
-  return <Form {...form}>Create Raffle Form</Form>;
+
+  const handleNext = async () => {
+    const fields = steps[activeStepIndex].fields;
+    if (fields?.length) {
+      const valid = await form.trigger(fields);
+      if (!valid) return;
+    }
+
+    setActiveStepIndex((prev) => prev + 1);
+  };
+  const handleBack = () => {
+    setActiveStepIndex((prev) => prev - 1);
+  };
+
+  const resetForm = () => {
+    form.reset();
+    setActiveStepIndex(0);
+  };
+
+  const steps = [
+    {
+      title: 'Specifications',
+      content: <SpecificationsForm handleNext={handleNext} />,
+      fields: ['name', 'description', 'tags', 'deadline', 'images'] as const
+    },
+    {
+      title: 'Donation Goal',
+      content: (
+        <DonationGoalForm
+          handleNext={handleNext}
+          handleBack={handleBack}
+          serviceFee={infoBlockchainData?.fee.implementer}
+        />
+      ),
+      fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
+    },
+    {
+      title: 'Baskets',
+      content: <BasketsForm handleNext={handleNext} handleBack={handleBack} />,
+      fields: ['emptyBaskets', 'details'] as const
+    },
+    {
+      title: 'Overview & Agreement',
+      content: <Finish handleBack={handleBack} serviceFee={infoBlockchainData?.fee.implementer} />
+    }
+  ];
+
+  const onSubmit = async (data: RaffleForm) => {
+    try {
+      await createRaffle(data, wallet, infoBlockchainData);
+
+      toast.success('Raffle created successfully!');
+      resetForm();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to create raffle. Please try again later.'
+      );
+    }
+  };
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center space-y-5 py-3.5 mb-7">
+        <Image
+          src="/illustrations/createRaffleIllustration.svg"
+          alt="Create Raffle"
+          width={500}
+          height={190}
+          className="hidden sm:block"
+        />
+        <Typography variant="heading-1">Ready to create a new raffle?</Typography>
+        <Stepper steps={steps.map((s) => s.title)} activeStepIndex={activeStepIndex} />
+      </div>
+      <Card className="py-7">
+        <CardContent>
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="mx-auto max-w-7xl">{steps[activeStepIndex]?.content}</div>
+            </form>
+          </FormProvider>
+        </CardContent>
+      </Card>
+    </>
+  );
 };

@@ -17,6 +17,7 @@ export type UseUploaderProps = {
   maxTotalFileSize?: number;
   maxNumberOfFiles?: number;
   minNumberOfFiles?: number;
+  endpoint?: string;
 };
 
 export const useUploader = ({
@@ -26,7 +27,8 @@ export const useUploader = ({
   maxNumberOfFiles,
   maxTotalFileSize,
   minFileSize,
-  minNumberOfFiles
+  minNumberOfFiles,
+  endpoint
 }: UseUploaderProps = {}) => {
   const [uppy] = useState(() =>
     new Uppy({
@@ -43,10 +45,10 @@ export const useUploader = ({
         cropperOptions: {
           aspectRatio: 1.57,
           viewMode: 1,
-          autoCropArea: 1
+          autoCropArea: 1.57
         }
       })
-      .use(Tus, { endpoint: 'https://tusd.tusdemo.net/files/' })
+      .use(Tus, { endpoint })
   );
 
   const [editing, setEditing] = useState<UppyFile<Meta, Record<string, never>>>();
@@ -82,13 +84,17 @@ export const useUploader = ({
     return result.successful.map((file) => ({
       id: file.id,
       name: file.name,
-      url: file.uploadURL
+      url: file.uploadURL ?? ''
     }));
   };
 
-  useEffect(() => uppy.destroy, [uppy]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') return;
+    return uppy.destroy;
+  }, [uppy]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const start = () => setIsUploading(true);
 
     const end = () => setIsUploading(false);
@@ -107,6 +113,7 @@ export const useUploader = ({
   }, [uppy]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     inputFiles.forEach((file) => {
       let id: string;
 
@@ -146,6 +153,7 @@ export const useUploader = ({
     instance: uppy,
     ready: !!isReady,
     upload,
-    uploading: !!isUploading
+    uploading: !!isUploading,
+    maxNumberOfFiles
   };
 };

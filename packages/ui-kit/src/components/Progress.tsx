@@ -13,7 +13,7 @@ export const progressVariants = cva(
     variants: {
       variant: {
         default: 'bg-black-4',
-        box: 'border-1 border-black-1 p-1.5 h-10.5 bg-transparent',
+        box: 'border-1 border-black-1 p-1 sm:p-1.5 h-6 sm:h-10.5 bg-transparent',
         rounded: 'bg-gray-5 rounded-md h-2.5 [&_[data-slot=progress-indicator]]:rounded-md'
       }
     },

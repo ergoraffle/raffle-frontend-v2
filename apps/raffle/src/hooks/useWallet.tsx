@@ -12,7 +12,7 @@ import {
 
 import { type WalletInstance, type WalletName, wallets } from '@/lib';
 
-type WalletContextValue = {
+export type WalletContextValue = {
   addresses?: Record<string, string>;
   wallets: WalletInstance[];
   selected?: WalletInstance;
