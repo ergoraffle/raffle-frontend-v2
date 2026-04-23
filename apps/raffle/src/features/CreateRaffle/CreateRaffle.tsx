@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -9,7 +9,7 @@ import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-k
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
+import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useWallet } from '@/hooks';
 
@@ -26,8 +26,6 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const wallet = useWallet();
-
-  const raffleSchema = createRaffleSchema(infoBlockchainData?.fee?.implementer);
 
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
@@ -58,6 +56,12 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     setActiveStepIndex(0);
   };
 
+  const serviceFee = useMemo(
+    () =>
+      infoBlockchainData ? infoBlockchainData.fee.service + infoBlockchainData.fee.implementer : 0,
+    [infoBlockchainData]
+  );
+
   const steps = [
     {
       title: 'Specifications',
@@ -67,11 +71,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     {
       title: 'Donation Goal',
       content: (
-        <DonationGoalForm
-          handleNext={handleNext}
-          handleBack={handleBack}
-          serviceFee={infoBlockchainData?.fee.implementer}
-        />
+        <DonationGoalForm handleNext={handleNext} handleBack={handleBack} serviceFee={serviceFee} />
       ),
       fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
     },
@@ -82,7 +82,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     },
     {
       title: 'Overview & Agreement',
-      content: <Finish handleBack={handleBack} serviceFee={infoBlockchainData?.fee.implementer} />
+      content: <Finish handleBack={handleBack} serviceFee={serviceFee} />
     }
   ];
 
