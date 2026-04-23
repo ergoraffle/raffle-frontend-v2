@@ -161,4 +161,12 @@ export class NautilusWallet extends Wallet<
       throw new SubmitTransactionError(this.name, error);
     }
   };
+
+  fetchBalance = async (tokenId: string): Promise<string> => {
+    const wallet = await this.api.getContext();
+
+    const amount = await wallet.get_balance(tokenId === 'erg' ? 'ERG' : tokenId);
+
+    return amount;
+  };
 }

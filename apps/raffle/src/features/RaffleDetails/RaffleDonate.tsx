@@ -14,38 +14,68 @@ import {
   CollapsibleContent,
   Field,
   FieldLabel,
+  getDecimalString,
   Input,
   Typography,
-  useBreakpoint
+  useBreakpoint,
+  toast
 } from '@ergo-raffle/ui-kit';
 
 import { RaffleDonateMessage } from './RaffleDonateMessage';
+import { useWallet } from '@/hooks';
+import { donateRaffle } from '../services';
+import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
 
-export type RaffleDonateProps = { tokenName?: string };
+export type RaffleDonateProps = {
+  infoBlockchain?: InfoBlockchainResponse;
+  raffle: RaffleDetailResponse;
+};
 
-export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
+export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
+  const wallet = useWallet();
+  const [tickets, setTickets] = useState<number>(0);
+  const [balance, setBalance] = useState<bigint>(0n);
   const { isMobile } = useBreakpoint();
-  const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
+  const [openCollapsible, setOpenCollapsible] = useState<boolean>(true);
   const [donateTransaction, setDonateTransaction] = useState<{ id: string }>();
-  const handleDonateClick = () => {
-    if (openCollapsible) {
-      setDonateTransaction({ id: 'fslkfnsdlosnvsoiefsofdvsldkjnsldknsdnsldn' });
-      setTimeout(() => {
-        setDonateTransaction(undefined);
-      }, 10000);
-    } else {
-      !isMobile && setOpenCollapsible(true);
+
+  const handleDonateClick = async () => {
+    try {
+      await donateRaffle({ tickets }, wallet, infoBlockchain, raffle)
+
+      toast.success('Raffle donated successfully!');
+      
+      // TODO
+      // resetForm();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to donate raffle. Please try again later.'
+      );
     }
+
+    // TODO
+    // if (openCollapsible) {
+    //   setDonateTransaction({ id: 'fslkfnsdlosnvsoiefsofdvsldkjnsldknsdnsldn' });
+    //   setTimeout(() => {
+    //     setDonateTransaction(undefined);
+    //   }, 10000);
+    // } else {
+    //   !isMobile && setOpenCollapsible(true);
+    // }
   };
 
   useEffect(() => {
     setOpenCollapsible(isMobile);
   }, [isMobile]);
 
+  useEffect(() => {
+    wallet.selected?.getBalance(raffle?.token.id || '').then(setBalance).catch(() => alert('TODO'));
+  }, [raffle?.token.id, wallet]);
+
   return (
     <div className="grow w-full relative">
       <Collapsible
-        open={openCollapsible}
+        open={true}
         onOpenChange={setOpenCollapsible}
         className="relative z-10"
       >
@@ -61,14 +91,15 @@ export const RaffleDonate = ({ tokenName }: RaffleDonateProps) => {
                       <Typography variant="heading-4" className="text-black-1 mb-1">
                         How many Tickets to Get?
                       </Typography>
-                      {tokenName ? (
+                      {raffle.token ? (
                         <Typography variant="subtitle-md" className="text-gray-2">
-                          each Ticket = 2 {tokenName}
+                          each Ticket = {getDecimalString(raffle.ticketPrice, raffle.token.decimals)} {raffle.token.name}
                         </Typography>
                       ) : null}
+                      your balance is: {getDecimalString(balance, raffle.token.decimals)}
                     </div>
                     <Field>
-                      <Input />
+                      <Input type="number" value={tickets} onChange={(event) => setTickets(+event.target.value)} />
                     </Field>
                     <Field orientation="horizontal">
                       <Checkbox id="checkout-terms" />
