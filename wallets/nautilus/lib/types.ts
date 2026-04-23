@@ -1,6 +1,8 @@
 import type { WalletConfig } from '@ergo-raffle/base-wallet';
 
-export type NautilusWalletConfig = WalletConfig & {};
+export type NautilusWalletConfig = WalletConfig & {
+  explorerApi: string;
+};
 
 export type NautilusWalletAddresses = {
   main: string;

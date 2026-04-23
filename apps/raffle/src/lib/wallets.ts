@@ -41,6 +41,12 @@ Object.defineProperty(Wallet.prototype, 'iconReact', {
 
 export type WalletName = (typeof wallets)[number]['name'];
 
-export const wallets = [new XverseWallet({}), new NautilusWallet({})];
+export const wallets = [
+  new XverseWallet({}),
+  new NautilusWallet({
+    // biome-ignore lint/style/noNonNullAssertion: NEXT_PUBLIC_ERGO_EXPLORER_API is required
+    explorerApi: process.env.NEXT_PUBLIC_ERGO_EXPLORER_API!
+  })
+];
 
 export type WalletInstance = (typeof wallets)[number];

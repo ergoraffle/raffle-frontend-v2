@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
+import type { WalletToken } from '@ergo-raffle/base-wallet';
 import {
   BasketStatus,
   Button,
@@ -12,9 +15,12 @@ import {
   Field,
   FieldError,
   FieldLabel,
-  Typography
+  Typography,
+  toast
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
+
+import { useWallet } from '@/hooks';
 
 import type { RaffleForm } from '../schemas';
 
@@ -24,12 +30,29 @@ export type FinishProps = {
 };
 
 export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
+  const [token, setToken] = useState<WalletToken>();
+
   const {
     getValues,
     formState: { errors },
     setValue
   } = useFormContext<RaffleForm>();
+
   const data = getValues();
+
+  const wallet = useWallet();
+
+  useEffect(() => {
+    wallet.selected
+      ?.fetchTokens()
+      .then((tokens) => {
+        const token = tokens.find((token) => token.id === data.tokenId);
+        setToken(token);
+      })
+      .catch(() => {
+        toast.error('Failed to load token info. Please try again later.');
+      });
+  }, [data.tokenId, wallet.selected]);
 
   return (
     <div className="space-y-8">
@@ -78,7 +101,13 @@ export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
           <Typography variant="body-button">Raffle goal:</Typography>
           <Typography variant="body-lg" className="text-gray-1">
-            {data.amount} {data.tokenId}
+            {data.count} {token?.name}
+          </Typography>
+        </div>
+        <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
+          <Typography variant="body-button">Ticket price:</Typography>
+          <Typography variant="body-lg" className="text-gray-1">
+            {data.amount} {token?.name}
           </Typography>
         </div>
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">

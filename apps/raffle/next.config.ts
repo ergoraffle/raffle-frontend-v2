@@ -4,38 +4,11 @@ import type { NextConfig } from 'next';
 
 import { withSentryConfig } from '@sentry/nextjs';
 
-const imageUploadEndpoint = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_URL;
-
-let hostname: string | undefined;
-let protocol: 'http' | 'https' = 'https';
-
-if (imageUploadEndpoint) {
-  const parsedUrl = new URL(imageUploadEndpoint);
-  hostname = parsedUrl.hostname;
-
-  if (parsedUrl.protocol === 'http:') {
-    protocol = 'http';
-  } else if (parsedUrl.protocol === 'https:') {
-    protocol = 'https';
-  }
-}
-
 const nextConfig: NextConfig = {
   transpilePackages: ['@ergo-raffle/ui-kit'],
-  ...(hostname
-    ? {
-        images: {
-          remotePatterns: [
-            {
-              protocol,
-              hostname,
-              pathname: '/**',
-              search: ''
-            }
-          ]
-        }
-      }
-    : {})
+  images: {
+    remotePatterns: [new URL(`${process.env.NEXT_PUBLIC_IMAGE_URL}/**`)]
+  }
 };
 
 export default withSentryConfig(nextConfig, {

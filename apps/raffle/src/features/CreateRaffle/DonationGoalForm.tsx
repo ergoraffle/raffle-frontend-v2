@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
 import {
@@ -54,8 +54,19 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
       });
   }, [wallet.selected]);
 
-  const missionFund = watch('missionFund');
   const winnerPotShare = watch('winnerPotShare');
+
+  const missionFund = useMemo(
+    () => (serviceFee && winnerPotShare ? 100 - (winnerPotShare + serviceFee) : 0),
+    [winnerPotShare, serviceFee]
+  );
+
+  useEffect(() => {
+    setValue('missionFund', missionFund || 0, {
+      shouldValidate: true,
+      shouldDirty: true
+    });
+  }, [missionFund, setValue]);
 
   return (
     <div className="space-y-8">
@@ -64,11 +75,11 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
         <div className="flex flex-col sm:flex-row gap-x-2 gap-y-3">
           <Field className="flex-1">
             <Select
-              value={getValues('tokenId')}
+              value={getValues('tokenId') ?? ''}
               onValueChange={(value) => setValue('tokenId', value)}
             >
               <SelectTrigger variant="bordered" className="mt-7.5" disabled={tokens.length === 0}>
-                <SelectValue {...register('tokenId')} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -84,7 +95,7 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
           </Field>
           <Field className="flex-2">
             <FieldLabel>Token ID</FieldLabel>
-            <Input variant="bordered" value={watch('tokenId')} readOnly />
+            <Input variant="bordered" value={watch('tokenId') ?? ''} readOnly />
           </Field>
         </div>
       </div>
@@ -137,9 +148,7 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
               <FieldLabel>Mission’s Fund</FieldLabel>
               <Input
                 variant="bordered"
-                type="number"
-                min={0}
-                max={serviceFee || 100}
+                disabled
                 {...register('missionFund', { valueAsNumber: true })}
               />
               {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
@@ -150,7 +159,7 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
                 variant="bordered"
                 type="number"
                 min={0}
-                max={serviceFee || 100}
+                max={serviceFee ? 100 - serviceFee : 100}
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}

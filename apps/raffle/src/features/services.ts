@@ -85,7 +85,7 @@ export const createRaffle = async (
   const projectAddress = data.address;
 
   // Service creation fee in nanoERG
-  const creationFee = BigInt(infoBlockchainData.fee.tx);
+  const creationFee = BigInt(infoBlockchainData.fee.creation);
 
   // Transaction fee in nanoERG
   const txFee = BigInt(infoBlockchainData.fee.tx);
