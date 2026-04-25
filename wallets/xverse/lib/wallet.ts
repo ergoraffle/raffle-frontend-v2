@@ -87,4 +87,6 @@ export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddress
   performTransfer = async (): Promise<string> => {
     throw new Error('Transfer not implemented for Xverse wallet');
   };
+
+  fetchBalance = async () => undefined;
 }
