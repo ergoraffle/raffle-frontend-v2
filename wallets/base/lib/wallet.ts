@@ -1,5 +1,6 @@
 import {
   AddressRetrievalError,
+  BalanceFetchError,
   ConnectionRejectedError,
   DisconnectionFailedError,
   NotConnectedError,
@@ -33,6 +34,9 @@ export abstract class Wallet<
   abstract fetchTokens: () => Promise<WalletToken[]>;
   abstract fetchBoxes: () => Promise<Box[]>;
   abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
+  abstract fetchBalance: (
+    tokenId: string,
+  ) => Promise<bigint | number | string | undefined>;
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
@@ -100,6 +104,28 @@ export abstract class Wallet<
     await this.requireConnection();
 
     return await this.performTransfer(params);
+  };
+
+  getBalance = async (tokenId: string): Promise<bigint> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    let raw: bigint | number | string | undefined;
+
+    try {
+      raw = await this.fetchBalance(tokenId);
+    } catch (error) {
+      throw new BalanceFetchError(this.name, error);
+    }
+
+    if (!raw) return 0n;
+
+    const amount = BigInt(raw);
+
+    if (!amount) return 0n;
+
+    return amount;
   };
 
   protected requireAvailable = () => {

@@ -1,15 +1,17 @@
 'use client';
 
-import { Dice } from '@ergo-raffle/icons';
+import { Dice, UpLeft } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
   Field,
   FieldError,
   FieldLabel,
+  getDecimalString,
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
+  Token,
   Typography
 } from '@ergo-raffle/ui-kit';
 
@@ -18,6 +20,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type AddGiftSchema, addGiftSchema } from '@/features/schemas';
 import { AssetsField } from './AssetsField';
 import { getRandomItem } from '@/lib';
+import { useWallet } from '@/hooks';
+import { useCallback, useEffect, useState } from 'react';
+import { WalletToken } from '@ergo-raffle/base-wallet';
+import { addGiftRaffle } from '@/features/services';
 
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
@@ -37,6 +43,37 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
     defaultValues: { winnerIndex: initialBasketNumber }
   });
 
+  const wallet = useWallet();
+
+  const [assets, setAssets] = useState<(WalletToken & { balance?: string })[]>([]);
+
+  const load = useCallback(async () => {
+    if (wallet.selected?.name !== 'Nautilus') {
+      throw new Error('Must be connected to Nautilus wallet.');
+    }
+
+    const tokens = await wallet.selected.fetchTokens();
+
+    const promises = tokens.map((token) => wallet.selected?.fetchBalance(token.id));
+
+    const balances = await Promise.all(promises);
+
+    const result = tokens.map((token, index) => ({...token, balance: balances[index]}));
+
+    return result;
+  }, [wallet.selected]);
+
+  useEffect(() => {
+    load()
+      .then((result) => {
+        setAssets(result)
+      })
+      .catch(() => {
+        // biome-ignore lint/suspicious/noAlert: TODO
+        alert('TODO')
+      })
+  }, [load]);
+
   const setRandomBasket = () => {
     if (baskets && baskets.length > 0) {
       const randomIndex = getRandomItem(baskets);
@@ -44,8 +81,16 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
     }
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data: AddGiftSchema) => {
+    try {
+      // biome-ignore lint/suspicious/noConsole: TODO
+      console.log(data);
+      // await addGiftRaffle(data, wallet, infoBlockchainData, raffle);
+    }
+    catch (error) {
+      // biome-ignore lint/suspicious/noConsole: TODO
+      console.log(error);
+    }
   };
 
   return (
@@ -89,36 +134,32 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
           )}
         />
       </Field>
-      {/* <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
-        {values.map((asset) => (
-          <Field key={asset.tokenId}>
-            <Token
-              name={tokens.find((i) => i.id === asset.tokenId)?.name}
-              tokenId={asset.tokenId}
-              size="lg"
-            />
+      <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
+        {assets.map((asset) => (
+          <Field key={asset.id}>
+            <Token name={asset.name} tokenId={asset.name} size="lg" />
             <div className="flex items-center space-x-2">
               <InputGroup variant="bordered" size="sm">
                 <InputGroupInput
                   type="number"
-                  value={asset.amount}
-                  onChange={(e) => onAmountChange(asset.tokenId, Number(e.target.value))}
+                  // value={asset.amount}
+                  // onChange={(e) => onAmountChange(asset.tokenId, Number(e.target.value))}
                 />
                 <InputGroupAddon align="inline-end">
                   <Typography variant="subtitle-md" className="text-gray-3" asChild>
                     <span className="flex items-center space-x-1">
-                      249.14 <UpLeft className="size-4" />
+                      {getDecimalString(asset.balance, asset.decimals)} <UpLeft className="size-4" />
                     </span>
                   </Typography>
                 </InputGroupAddon>
               </InputGroup>
-              <Typography variant="subtitle-sm" className="text-gray-3 whitespace-nowrap" asChild>
+              {/* <Typography variant="subtitle-sm" className="text-gray-3 whitespace-nowrap" asChild>
                 <span>≈ 86 USDT</span>
-              </Typography>
+              </Typography> */}
             </div>
           </Field>
         ))}
-      </div> */}
+      </div>
 
       <div className="mt-4 flex flex-col">
         <Button variant="primary" size="sm" type="submit">
