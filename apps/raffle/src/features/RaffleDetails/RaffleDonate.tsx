@@ -18,6 +18,7 @@ import {
   FieldLabel,
   getDecimalString,
   Input,
+  Spinner,
   Typography,
   toast,
   useBreakpoint
@@ -39,7 +40,7 @@ export type RaffleDonateProps = {
 
 export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
   const wallet = useWallet();
-  const [balance, setBalance] = useState<bigint>(0n);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
   const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [donateTransactionId, setDonateTransactionId] = useState<string>();
@@ -73,6 +74,7 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
 
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
+      setIsLoading(true);
       const result = await donateRaffle({ tickets }, wallet, infoBlockchain, raffle);
 
       toast.success('Raffle donated successfully!');
@@ -84,21 +86,14 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
       toast.error(
         error instanceof Error ? error.message : 'Failed to donate raffle. Please try again later.'
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     isMobile && setOpenCollapsible(true);
   }, [isMobile]);
-
-  useEffect(() => {
-    wallet.selected
-      ?.getBalance(raffle?.token.id || '')
-      .then(setBalance)
-      .catch(() =>
-        toast.error('Something went wrong with the wallet! Make sure your wallet is connected')
-      );
-  }, [raffle?.token.id, wallet]);
 
   return (
     <div className="grow w-full relative">
@@ -128,7 +123,6 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
                               {raffle.token.name}
                             </Typography>
                           ) : null}
-                          your balance is: {getDecimalString(balance, raffle.token.decimals)}
                         </div>
                         <Field>
                           <Input
@@ -173,8 +167,9 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
                 type="submit"
                 variant="primary"
                 className="w-full"
-                disabled={Boolean(donateTransactionId)}
+                disabled={Boolean(donateTransactionId) || isLoading}
               >
+                {!!isLoading && <Spinner className="size-7" />}
                 Donate
               </Button>
             </form>
@@ -184,7 +179,6 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
               type="button"
               variant="primary"
               className="w-full"
-              disabled={Boolean(donateTransactionId)}
               onClick={() => setOpenCollapsible(true)}
             >
               Donate

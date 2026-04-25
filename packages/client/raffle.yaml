@@ -423,7 +423,7 @@ components:
             service:
               type: number
           required: [winner, implementer, service]
-        backers:
+        backerCount:
           type: number
         status:
           type: string
@@ -442,7 +442,7 @@ components:
         - pictures
         - addresses
         - share
-        - backers
+        - backerCount
     RafflePrize:
       type: object
       properties:
