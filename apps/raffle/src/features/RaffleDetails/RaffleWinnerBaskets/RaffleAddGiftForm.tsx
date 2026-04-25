@@ -1,60 +1,67 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Dice, UpLeft } from '@ergo-raffle/icons';
+import { Dice } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
   Field,
+  FieldError,
   FieldLabel,
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  Token,
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { SelectAssets } from '../SelectAssets';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type AddGiftSchema, addGiftSchema } from '@/features/schemas';
+import { AssetsField } from './AssetsField';
+import { getRandomItem } from '@/lib';
 
 export type RaffleAddGiftFormProps = {
-  initialBasketNumber?: string;
+  initialBasketNumber?: number;
+  baskets?: number[];
 };
 
-export const RaffleAddGiftForm = ({ initialBasketNumber }: RaffleAddGiftFormProps) => {
-  const [values, setValues] = useState<{
-    basketNumber?: string;
-    selectedAssets: { name: string; amount: number }[];
-  }>({
-    basketNumber: initialBasketNumber,
-    selectedAssets: [
-      { name: 'erg', amount: 0 },
-      { name: 'doge', amount: 0 },
-      { name: 'ada', amount: 0 },
-      { name: 'btc', amount: 0 }
-    ]
+export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGiftFormProps) => {
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors },
+    control,
+    setValue
+  } = useForm<AddGiftSchema>({
+    resolver: zodResolver(addGiftSchema),
+    defaultValues: { winnerIndex: initialBasketNumber }
   });
 
-  const onValueChange = (key: string, value: string) => {
-    setValues({ ...values, [key]: value });
+  const setRandomBasket = () => {
+    if (baskets && baskets.length > 0) {
+      const randomIndex = getRandomItem(baskets);
+      setValue('winnerIndex', randomIndex);
+    }
+  };
+
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center space-x-2">
         <Field>
           <FieldLabel>Basket's Number</FieldLabel>
           <InputGroup variant="bordered">
-            <InputGroupInput
-              value={values.basketNumber}
-              onChange={(e) => onValueChange('basketNumber', e.target.value)}
-            />
+            <InputGroupInput {...register('winnerIndex', { valueAsNumber: true })} type="number" />
             <InputGroupAddon align="inline-start">
               <BasketStatus filled hasGift className="size-6" />
             </InputGroupAddon>
+            {!!errors.winnerIndex && <FieldError>{errors.winnerIndex.message}</FieldError>}
           </InputGroup>
         </Field>
-        <Button variant="plain">
+        <Button variant="plain" type="button" onClick={setRandomBasket}>
           <Dice className="size-6" />
           Random Basket
         </Button>
@@ -62,21 +69,40 @@ export const RaffleAddGiftForm = ({ initialBasketNumber }: RaffleAddGiftFormProp
       <div className="mt-2">
         <Typography variant="heading-5">Choose the Asset(s)</Typography>
         <Typography variant="heading-5" className="text-gray-2">
-          They will all be added to Basket #{values.basketNumber} as one Gift
+          They will all be added to Basket #{watch('winnerIndex')} as one Gift
         </Typography>
       </div>
       <Field>
-        <SelectAssets />
+        <Controller
+          name="tokens"
+          control={control}
+          render={({ field }) => (
+            <AssetsField
+              values={field.value ?? []}
+              onValueChange={(val) => {
+                setValue('tokens', val, {
+                  shouldValidate: false,
+                  shouldDirty: true
+                });
+              }}
+            />
+          )}
+        />
       </Field>
-      <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
-        {values.selectedAssets.map((asset) => (
-          <Field key={asset.name}>
-            <Token name={asset.name} tokenId={asset.name} size="lg" />
+      {/* <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
+        {values.map((asset) => (
+          <Field key={asset.tokenId}>
+            <Token
+              name={tokens.find((i) => i.id === asset.tokenId)?.name}
+              tokenId={asset.tokenId}
+              size="lg"
+            />
             <div className="flex items-center space-x-2">
               <InputGroup variant="bordered" size="sm">
                 <InputGroupInput
+                  type="number"
                   value={asset.amount}
-                  onChange={(e) => onValueChange('basketNumber', e.target.value)}
+                  onChange={(e) => onAmountChange(asset.tokenId, Number(e.target.value))}
                 />
                 <InputGroupAddon align="inline-end">
                   <Typography variant="subtitle-md" className="text-gray-3" asChild>
@@ -92,12 +118,13 @@ export const RaffleAddGiftForm = ({ initialBasketNumber }: RaffleAddGiftFormProp
             </div>
           </Field>
         ))}
-      </div>
+      </div> */}
+
       <div className="mt-4 flex flex-col">
-        <Button variant="primary" size="sm">
+        <Button variant="primary" size="sm" type="submit">
           Add Gift
         </Button>
       </div>
-    </>
+    </form>
   );
 };

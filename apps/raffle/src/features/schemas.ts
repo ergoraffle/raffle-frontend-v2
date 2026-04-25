@@ -125,7 +125,35 @@ export const createRaffleSchema = (serviceShare?: number) =>
     .and(raffleDonationGoalSchema(serviceShare))
     .and(raffleBasketsSchema);
 
+export const addGiftSchema = z.object({
+  winnerIndex: z.number({ message: 'Can not be empty' }),
+  tokens: z
+    .array(
+      z.object({
+        tokenId: z.string({ message: 'Can not be empty' }),
+        amount: z
+          .number({ message: 'Can not be empty' })
+          .min(1, 'Can not be less than 1')
+          .max(100, 'Can not be more than 100')
+          .optional()
+      })
+    )
+    .min(1, 'At least one gift is required')
+    .superRefine((items, ctx) => {
+      if (items.length === 0) return;
+
+      if (items.some((i) => !i.amount)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Amount can not be empty',
+          path: []
+        });
+      }
+    })
+});
+
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
 export type RaffleDonationGoalForm = z.infer<ReturnType<typeof raffleDonationGoalSchema>>;
 export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
 export type RaffleForm = z.infer<ReturnType<typeof createRaffleSchema>>;
+export type AddGiftSchema = z.infer<typeof addGiftSchema>;

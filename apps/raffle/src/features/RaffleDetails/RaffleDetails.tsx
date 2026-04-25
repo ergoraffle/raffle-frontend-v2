@@ -11,7 +11,13 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { getDeadlineAmount, getMissionFund, getSoldTicketCount, getWinnerPot } from '../utils';
+import {
+  getDeadlineAmount,
+  getMissionFund,
+  getSoldTicketCount,
+  getAmountPercentage,
+  getWinnerPotShareAmount
+} from '@/features/utils';
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
@@ -33,7 +39,8 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   const soldTicketCount = getSoldTicketCount(raffle.amount.raised, raffle.ticketPrice);
   const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
   const missionFund = getMissionFund(raffle.share);
-  const winnerPot = getWinnerPot(raffle.share.winner);
+  const winnerPotSharePercent = getAmountPercentage(raffle.share.winner);
+  const winnerPotShareAmount = getWinnerPotShareAmount(raffle.amount, winnerPotSharePercent);
 
   return (
     <div className="flex flex-col gap-9.5">
@@ -41,7 +48,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
         <RaffleDetailsImageCard
           raffle={raffle}
           serviceFee={infoData.fee.implementer}
-          winnerPot={winnerPot}
+          winnerPot={winnerPotSharePercent}
           missionFund={missionFund}
         />
         <div className="flex flex-col gap-5 grow order-1 lg:order-2">
@@ -59,7 +66,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <RaffleDetailsIconBox
               deadline={deadline}
               soldTicketCount={soldTicketCount}
-              baker={raffle?.baker}
+              backers={raffle?.backers}
             />
           </div>
           <RaffleDonate />
@@ -68,12 +75,16 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           <RaffleDetailsIconBox
             deadline={deadline}
             soldTicketCount={soldTicketCount}
-            baker={raffle?.baker}
+            backers={raffle?.backers}
           />
         </div>
       </div>
       <RaffleDetailsDescription description={raffle.description} />
-      <RaffleWinnerBaskets raffleId={raffleId} />
+      <RaffleWinnerBaskets
+        raffleId={raffleId}
+        raffleToken={raffle.token}
+        winnerPotShareAmount={winnerPotShareAmount}
+      />
       <div className="flex flex-col lg:flex-row gap-9.5">
         <Card className="flex-1">
           <CardHeader>

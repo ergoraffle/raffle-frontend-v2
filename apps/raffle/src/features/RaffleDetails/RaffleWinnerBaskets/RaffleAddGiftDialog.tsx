@@ -14,7 +14,7 @@ import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 
 export type RaffleAddGiftDialogProps = {
   open: boolean;
-  initialBasketNumber?: string;
+  initialBasketNumber?: number;
   onOpenChange: (open: boolean) => void;
 };
 

@@ -43,3 +43,8 @@ export const formatDateTime = (date: string | Date | number) => {
     hour12: true
   });
 };
+
+export const getRandomItem = (arr: number[]): number => {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+};
