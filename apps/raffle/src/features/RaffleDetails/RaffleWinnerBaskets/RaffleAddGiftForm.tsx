@@ -36,13 +36,11 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
     watch,
     formState: { errors },
     control,
-    setValue,
-    getValues
+    setValue
   } = useForm<AddGiftForm>({
     resolver: zodResolver(addGiftSchema),
     defaultValues: {
-      winnerIndex: initialBasketNumber,
-      tokens: [{ tokenId: 'sfsffd', amount: 0n }]
+      winnerIndex: initialBasketNumber
     }
   });
   const { fields: tokenFields } = useFieldArray({
