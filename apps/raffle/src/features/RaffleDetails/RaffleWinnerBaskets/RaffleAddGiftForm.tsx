@@ -114,9 +114,7 @@ export const RaffleAddGiftForm = ({
     });
 
     try {
-      // biome-ignore lint/suspicious/noConsole: TODO
-      console.log(data);
-      // await addGiftRaffle({ winnerIndex, tokens}, wallet, infoBlockchainData, raffle);
+      await addGiftRaffle({ winnerIndex, tokens}, wallet, infoBlockchain.data, raffle.data);
     } catch (error) {
       // biome-ignore lint/suspicious/noConsole: TODO
       console.log(error);

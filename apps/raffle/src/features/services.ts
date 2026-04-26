@@ -131,8 +131,12 @@ export const addGiftRaffle = async (
   },
   wallet: WalletContextValue | undefined,
   infoBlockchainData: InfoBlockchainResponse | undefined,
-  raffle: RaffleDetailResponse
+  raffle: RaffleDetailResponse | undefined
 ) => {
+  if (!raffle) {
+    throw new Error('Failed to donate raffle. Please try again later.');
+  }
+
   if (!infoBlockchainData) {
     throw new Error('Failed to donate raffle. Please try again later.');
   }
@@ -164,14 +168,14 @@ export const addGiftRaffle = async (
   const winnerIndex = data.winnerIndex; // index of the winner receiving the gift
 
   // Gift value in nanoERG (must be at least `4n * txFee`)
-  // const giftValue = data.giftValue;
+  const giftValue = BigInt(infoBlockchainData.fee.tx * 4);
 
   let builder = new AddGiftProxyTxBuilder()
     .setChainHeight(chainHeight)
     .setFeeBoxes(feeBoxes)
     .setGiftGiverAddress(giftGiverAddress)
     .setWinnerIndex(winnerIndex)
-    // .setGiftValue(giftValue)
+    .setGiftValue(giftValue)
     .setExpirationHeight(expirationHeight)
     .setRaffleDeadline(raffleDeadline)
     .setTxFee(txFee)
