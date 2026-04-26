@@ -159,7 +159,7 @@ export const RaffleAddGiftForm = ({
           values={watch('tokens') ?? []}
           onValueChange={(val) => {
             setValue('tokens', val, {
-              shouldValidate: false,
+              shouldValidate: true,
               shouldDirty: true
             });
           }}
