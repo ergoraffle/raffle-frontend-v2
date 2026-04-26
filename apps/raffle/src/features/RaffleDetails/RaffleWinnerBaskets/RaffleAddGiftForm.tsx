@@ -23,13 +23,10 @@ import { getRandomItem } from '@/lib';
 import { useWallet } from '@/hooks';
 import { useCallback, useEffect, useState } from 'react';
 import type { WalletToken } from '@ergo-raffle/base-wallet';
-<<<<<<< HEAD
 import { useFetchInfoBlockchain } from '@/hooks/useFetchInfoBlockchain';
 import { useFetchRaffle } from '@/hooks/useFetchRaffle';
-=======
 import { getNonDecimalString } from '@/features/utils';
 import { addGiftRaffle } from '@/features/services';
->>>>>>> 2593638eae81ce37adaae68c5145e8e70b1e28b5
 
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
@@ -113,7 +110,7 @@ export const RaffleAddGiftForm = ({
       return {
         amount: BigInt(value),
         tokenId: token.tokenId
-      }
+      };
     });
 
     try {
