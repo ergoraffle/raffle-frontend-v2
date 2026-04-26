@@ -129,7 +129,7 @@ export const addGiftSchema = z.object({
           .refine((value) => value > 0, { message: 'Must be more than 0' })
       })
     )
-    .min(1, 'At least one gift is required')
+    .min(1, 'At least one asset is required')
 });
 
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;

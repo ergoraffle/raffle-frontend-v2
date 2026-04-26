@@ -131,7 +131,9 @@ export const RaffleAddGiftForm = ({
           <InputGroup variant="bordered">
             <InputGroupInput
               min={1}
-              {...register('winnerIndex', { valueAsNumber: true })}
+              {...register('winnerIndex', {
+                setValueAs: (v) => (v === '' ? undefined : Number(v))
+              })}
               type="number"
             />
             <InputGroupAddon align="inline-start">
@@ -162,6 +164,7 @@ export const RaffleAddGiftForm = ({
             });
           }}
         />
+        {!!errors.tokens && <FieldError>{errors.tokens.message}</FieldError>}
       </Field>
       <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
         {tokenFields.map((asset, index) => (

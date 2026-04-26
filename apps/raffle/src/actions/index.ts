@@ -7,12 +7,7 @@ import {
   type GetRaffleRaffleIdBasketParams
 } from '@ergo-raffle/client';
 
-export async function getRaffle(raffleId: string) {
-  return await getRaffleRaffleId(raffleId);
-}
-export async function getRaffleBaskets(raffleId: string, params: GetRaffleRaffleIdBasketParams) {
-  return await getRaffleRaffleIdBasket(raffleId, params);
-}
-export async function getInfoBlockchain() {
-  return await getInfoBlockchainApi();
-}
+export const getRaffle = async (raffleId: string) => await getRaffleRaffleId(raffleId);
+export const getRaffleBaskets = async (raffleId: string, params: GetRaffleRaffleIdBasketParams) =>
+  await getRaffleRaffleIdBasket(raffleId, params);
+export const getInfoBlockchain = async () => await getInfoBlockchainApi();
