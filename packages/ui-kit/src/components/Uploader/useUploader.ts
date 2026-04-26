@@ -81,11 +81,15 @@ export const useUploader = ({
       );
     }
 
-    return result.successful.map((file) => ({
-      id: file.id,
-      name: file.name,
-      url: file.uploadURL ?? ''
-    }));
+    return [...uppy.getFiles(), ...result.successful]
+      .map((file) => ({
+        id: file.id,
+        name: file.name,
+        url: file.uploadURL ?? ''
+      }))
+      .filter((file, index, files) =>
+        files.findIndex((current) => current.id === file.id) === index
+      );
   };
 
   useEffect(() => {
@@ -115,6 +119,8 @@ export const useUploader = ({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     inputFiles.forEach((file) => {
+      if (uppy.getFile(file.id)) return;
+
       let id: string;
 
       try {
