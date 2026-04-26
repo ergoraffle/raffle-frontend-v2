@@ -36,13 +36,14 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
     watch,
     formState: { errors },
     control,
-    setValue
+    setValue,
+    getValues
   } = useForm<AddGiftForm>({
     resolver: zodResolver(addGiftSchema),
     defaultValues: {
-      winnerIndex: initialBasketNumber
-    },
-    reValidateMode: 'onChange'
+      winnerIndex: initialBasketNumber,
+      tokens: [{ tokenId: 'sfsffd', amount: 0n }]
+    }
   });
   const { fields: tokenFields } = useFieldArray({
     control,
@@ -112,7 +113,6 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
             <InputGroupAddon align="inline-start">
               <BasketStatus filled hasGift className="size-6" />
             </InputGroupAddon>
-            {!!errors.winnerIndex && <FieldError>{errors.winnerIndex.message}</FieldError>}
           </InputGroup>
           {!!errors.winnerIndex && <FieldError>{errors.winnerIndex.message}</FieldError>}
         </Field>
@@ -151,14 +151,7 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
               <InputGroup variant="bordered" size="sm">
                 <InputGroupInput
                   {...register(`tokens.${index}.amount`, {
-                    validate: (value) => {
-                      try {
-                        BigInt(value);
-                        return true;
-                      } catch {
-                        return 'Invalid bigint';
-                      }
-                    }
+                    setValueAs: (v) => (v === '' ? undefined : BigInt(v))
                   })}
                 />
                 <InputGroupAddon align="inline-end">

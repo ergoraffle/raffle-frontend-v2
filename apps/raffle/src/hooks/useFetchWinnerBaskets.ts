@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import {
-  getRaffleRaffleIdBasket,
-  type GetRaffleRaffleIdBasketParams,
-  type WinnerBasketListResponse
-} from '@ergo-raffle/client';
+import type { GetRaffleRaffleIdBasketParams, WinnerBasketListResponse } from '@ergo-raffle/client';
+import { getRaffleBaskets } from '@/actions/baskets';
 
 export const useFetchWinnerBaskets = (raffleId: string, params: GetRaffleRaffleIdBasketParams) => {
   const [data, setData] = useState<WinnerBasketListResponse>();
@@ -14,7 +11,7 @@ export const useFetchWinnerBaskets = (raffleId: string, params: GetRaffleRaffleI
 
   useEffect(() => {
     setIsLoading(true);
-    getRaffleRaffleIdBasket(raffleId, params).then((res) => {
+    getRaffleBaskets(raffleId, params).then((res) => {
       setData(res);
       setIsLoading(false);
     });

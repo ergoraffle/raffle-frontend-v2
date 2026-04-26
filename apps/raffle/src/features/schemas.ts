@@ -122,7 +122,11 @@ export const addGiftSchema = z.object({
     .array(
       z.object({
         tokenId: z.string({ message: 'Can not be empty' }),
-        amount: z.bigint({ message: 'Can not be empty' }).min(0n, 'Can not be less than 0')
+        amount: z
+          .bigint({
+            message: 'Can not be empty'
+          })
+          .min(0n, 'Can not be less than 0')
       })
     )
     .min(1, 'At least one gift is required')
