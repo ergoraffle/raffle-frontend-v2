@@ -23,6 +23,8 @@ import { getRandomItem } from '@/lib';
 import { useWallet } from '@/hooks';
 import { useCallback, useEffect, useState } from 'react';
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import { getNonDecimalString } from '@/features/utils';
+import { addGiftRaffle } from '@/features/services';
 
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
@@ -87,10 +89,25 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
   };
 
   const onSubmit = async (data: AddGiftForm) => {
+    const winnerIndex = data.winnerIndex;
+
+    const tokens = data.tokens.map((token) => {
+      const amount = token.amount.toString();
+
+      const decimal = assets.find((asset) => asset.id === token.tokenId)?.decimals || 0;
+
+      const value = getNonDecimalString(amount, decimal);
+
+      return {
+        amount: BigInt(value),
+        tokenId: token.tokenId
+      }
+    });
+
     try {
       // biome-ignore lint/suspicious/noConsole: TODO
       console.log(data);
-      // await addGiftRaffle(data, wallet, infoBlockchainData, raffle);
+      // await addGiftRaffle({ winnerIndex, tokens}, wallet, infoBlockchainData, raffle);
     } catch (error) {
       // biome-ignore lint/suspicious/noConsole: TODO
       console.log(error);

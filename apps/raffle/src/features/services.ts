@@ -5,7 +5,7 @@ import { AddGiftProxyTxBuilder, CreationProxyTxBuilder } from '@ergo-raffle/prox
 import { getNonDecimalString } from '@/features/utils';
 import type { WalletContextValue } from '@/hooks';
 
-import type { AddGiftForm, RaffleForm } from './schemas';
+import type { RaffleForm } from './schemas';
 
 export const createRaffle = async (
   data: RaffleForm,
@@ -122,7 +122,13 @@ export const createRaffle = async (
 };
 
 export const addGiftRaffle = async (
-  data: AddGiftForm,
+  data: {
+    winnerIndex: number;
+    tokens: {
+        tokenId: string;
+        amount: bigint;
+    }[];
+  },
   wallet: WalletContextValue | undefined,
   infoBlockchainData: InfoBlockchainResponse | undefined,
   raffle: RaffleDetailResponse
