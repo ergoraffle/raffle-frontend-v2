@@ -2,10 +2,11 @@
 
 import { useMemo, useState } from 'react';
 
-import type { GetRafflesRaffleIdWinnerBasketsType } from '@ergo-raffle/client';
+import type { GetRaffleRaffleIdBasketParams } from '@ergo-raffle/client';
 
 export type FetchWinnerBasketsFilters = {
-  type?: GetRafflesRaffleIdWinnerBasketsType;
+  withShare?: boolean;
+  withGift?: boolean;
   page: number;
   perPage: number;
 };
@@ -20,11 +21,17 @@ export const useWinnerBasketsParams = () => {
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });
-  const onTypeFilterChange = (type: GetRafflesRaffleIdWinnerBasketsType) =>
-    setFilters({ ...filters, type });
-  const params = useMemo(
-    () => ({ offset, limit: filters.perPage, type: filters.type }),
-    [offset, filters.perPage, filters.type]
+  const onTypeFilterChange = (withShare: boolean, withGift: boolean) =>
+    setFilters({ ...filters, withShare, withGift });
+
+  const params: GetRaffleRaffleIdBasketParams = useMemo(
+    () => ({
+      offset,
+      limit: filters.perPage,
+      withShare: filters.withShare,
+      withGift: filters.withGift
+    }),
+    [offset, filters.perPage, filters.withGift, filters.withShare]
   );
   return {
     params,

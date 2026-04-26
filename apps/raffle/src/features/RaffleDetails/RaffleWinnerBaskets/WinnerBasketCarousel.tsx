@@ -12,7 +12,7 @@ import { useFetchWinnerBaskets } from '@/hooks/useFetchWinnerBaskets';
 
 export type WinnerBasketCarouselProps = {
   raffleId: string;
-  setActiveBasketId?: (basketId: string) => void;
+  setActiveBasketId?: (basketId: number) => void;
 };
 
 export const WinnerBasketCarousel = ({
@@ -23,7 +23,7 @@ export const WinnerBasketCarousel = ({
   const onSlideChange = (index: number) => {
     if (items && setActiveBasketId) {
       const foundedBasket = items[index];
-      setActiveBasketId(foundedBasket.basketId);
+      setActiveBasketId(foundedBasket.index);
     }
   };
   return isLoading ? (
@@ -32,14 +32,14 @@ export const WinnerBasketCarousel = ({
     <Carousel onChangeSlide={onSlideChange}>
       <CarouselContent>
         {items?.map((item) => (
-          <CarouselItem key={item.basketId}>
+          <CarouselItem key={item.index}>
             <div className="flex items-center gap-1 px-10 justify-center">
               <BasketStatus
                 className="size-5"
-                filled={Boolean(item.shareAmount)}
+                filled={Boolean(item.share)}
                 hasGift={Boolean(item.gifts)}
               />
-              # {item.basketId}
+              # {item.index}
             </div>
           </CarouselItem>
         ))}

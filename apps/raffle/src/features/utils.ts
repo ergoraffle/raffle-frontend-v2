@@ -1,4 +1,4 @@
-import type { GetRaffleParams } from '@ergo-raffle/client';
+import type { GetRaffleParams, RaffleDetailResponseAmount } from '@ergo-raffle/client';
 
 export const getRafflesParamsTransformer = (searchParams: {
   [key: string]: string | string[] | undefined;
@@ -57,12 +57,15 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   );
 };
 
+export const getAmountPercentage = (amount: number) => amount / 10;
+
 export const validatedAddress = (address: string): boolean => Boolean(address);
-export const getWinnerPot = (shareWinner: number): number => shareWinner / 10;
+
 export const getSoldTicketCount = (raisedAmount: number, ticketPrice: number): number =>
   raisedAmount / ticketPrice;
+
 export const getMissionFund = (amounts: Record<string, number>): number =>
-  (1000 - Object.values(amounts).reduce((sum, value) => sum + value, 0)) / 10;
+  getAmountPercentage(1000 - Object.values(amounts).reduce((sum, value) => sum + value, 0));
 
 export const formatDuration = (minutes: number) => {
   const units = [
@@ -82,4 +85,11 @@ export const formatDuration = (minutes: number) => {
   }
 
   return '0 minutes';
+};
+
+export const getPercentageOfAmount = (amount: number, percent: number) => (amount * percent) / 100;
+
+export const getWinnerPotShareAmount = (amount: RaffleDetailResponseAmount, percent: number) => {
+  const amountToCalc = amount.raised > amount.goal ? amount.raised : amount.goal;
+  return getPercentageOfAmount(amountToCalc, percent);
 };

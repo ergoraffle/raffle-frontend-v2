@@ -1,19 +1,38 @@
-import type { WinnerBasket } from '@ergo-raffle/client';
+import { getAmountPercentage, getPercentageOfAmount } from '@/features/utils';
+import type {
+  RaffleDetailResponseToken,
+  TokenSummary,
+  WinnerBasketSummary
+} from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
-import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import {
+  BasketStatus,
+  Button,
+  Card,
+  CardContent,
+  getDecimalString,
+  Skeleton,
+  Typography
+} from '@ergo-raffle/ui-kit';
 
 export type RaffleWinnerBasketItemProps = {
-  basket?: WinnerBasket;
+  basket?: WinnerBasketSummary;
   loading?: boolean;
-  handleOpenAddGiftDialog?: (basketId?: string) => void;
-  handleOpenInfoDialog?: (basketId: string) => void;
+  raffleToken?: RaffleDetailResponseToken;
+  handleOpenAddGiftDialog?: (basketIndex?: number) => void;
+  handleOpenInfoDialog?: (basketIndex: number) => void;
+  winnerPotShareAmount?: number;
+  giftTokens?: TokenSummary[];
 };
 
 export const RaffleWinnerBasketItem = ({
   basket,
   loading,
   handleOpenAddGiftDialog,
-  handleOpenInfoDialog
+  handleOpenInfoDialog,
+  raffleToken,
+  winnerPotShareAmount,
+  giftTokens
 }: RaffleWinnerBasketItemProps) => (
   <Card className="group p-0">
     <CardContent className="flex items-center p-0">
@@ -36,12 +55,12 @@ export const RaffleWinnerBasketItem = ({
           {/* biome-ignore lint/a11y: using div as button intentionally */}
           <div
             className="flex py-4 grow items-center min-h-19 group-hover:bg-black-4 rounded-lg cursor-pointer"
-            onClick={() => handleOpenInfoDialog?.(basket.basketId)}
+            onClick={() => handleOpenInfoDialog?.(basket.index)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                handleOpenInfoDialog?.(basket.basketId);
+                handleOpenInfoDialog?.(basket.index);
               }
             }}
           >
@@ -49,19 +68,25 @@ export const RaffleWinnerBasketItem = ({
               <BasketStatus
                 className="size-7"
                 hasGift={Boolean(basket.gifts?.length)}
-                filled={Boolean(basket.sharePercent)}
+                filled={Boolean(basket.share)}
               />
-              <Typography variant="heading-3">{basket.basketId}</Typography>
+              <Typography variant="heading-3">{basket.index}</Typography>
             </div>
             <div className="px-4 flex-2">
-              <Typography variant="body-lg">{basket.sharePercent ?? 0}%</Typography>
-              {basket.shareAmount ? (
+              <Typography variant="body-lg">{getAmountPercentage(basket.share)}%</Typography>
+              {basket.share ? (
                 <Typography
                   variant="subtitle-md"
                   data-slot="share-amount"
                   className="text-gray-2 h-0 overflow-hidden transition-all transition-duration-300 group-hover:h-4"
                 >
-                  = {basket.shareAmount}
+                  ={' '}
+                  {!!(winnerPotShareAmount && raffleToken?.decimals) &&
+                    getDecimalString(
+                      getPercentageOfAmount(winnerPotShareAmount, basket.share),
+                      raffleToken?.decimals
+                    )}{' '}
+                  {raffleToken?.name}
                 </Typography>
               ) : null}
             </div>
@@ -69,11 +94,14 @@ export const RaffleWinnerBasketItem = ({
               {basket.gifts ? (
                 <>
                   <div className="hidden sm:block">
-                    {basket.gifts.slice(0, 2).map((gift) => (
-                      <Typography key={gift.asset} variant="subtitle-md">
-                        {gift.amount}X {gift.asset}
-                      </Typography>
-                    ))}
+                    {basket.gifts.slice(0, 2).map((gift) => {
+                      const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
+                      return (
+                        <Typography key={gift.amount} variant="subtitle-md">
+                          {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
+                        </Typography>
+                      );
+                    })}
 
                     {basket.gifts.length > 2 ? (
                       <Typography className="text-gray-2 underline" variant="subtitle-md">
@@ -95,7 +123,7 @@ export const RaffleWinnerBasketItem = ({
               variant="plain"
               size="icon-xs"
               className="text-primary-1"
-              onClick={() => handleOpenAddGiftDialog?.(basket.basketId)}
+              onClick={() => handleOpenAddGiftDialog?.(basket.index)}
             >
               <Plus />
             </Button>

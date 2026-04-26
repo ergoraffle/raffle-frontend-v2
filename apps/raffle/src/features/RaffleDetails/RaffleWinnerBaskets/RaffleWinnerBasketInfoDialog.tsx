@@ -24,7 +24,7 @@ import { WinnerBasketCarousel } from './WinnerBasketCarousel';
 export type RaffleWinnerBasketInfoDialogProps = {
   open: boolean;
   raffleId: string;
-  initialBasketId: string;
+  initialBasketId: number;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -35,7 +35,7 @@ export const RaffleWinnerBasketInfoDialog = ({
   onOpenChange
 }: RaffleWinnerBasketInfoDialogProps) => {
   const { isMobile } = useBreakpoint();
-  const [activeBasketId, setActiveBasketId] = useState<string>(initialBasketId);
+  const [activeBasketId, setActiveBasketId] = useState<number>(initialBasketId);
   const [step, setStep] = useState<1 | 2>(1);
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>

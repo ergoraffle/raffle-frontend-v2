@@ -43,7 +43,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
           items?.map((item) => <RaffleActivityItem key={item.id} activity={item} />)
         )}
       </div>
-      {!isLoading && items && total ? (
+      {/* {!isLoading && items && total ? (
         <Pagination
           page={pagination.page}
           perPage={pagination.perPage}
@@ -53,7 +53,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
           align="side"
           className="mt-4"
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 };

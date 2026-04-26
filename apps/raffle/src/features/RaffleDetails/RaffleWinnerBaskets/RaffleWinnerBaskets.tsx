@@ -21,26 +21,44 @@ import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
 import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';
 import { RaffleWinnerBasketItem } from './RaffleWinnerBasketItem';
 import { RaffleWinnerBasketsFilters } from './RaffleWinnerBasketsFilters';
+import type {
+  InfoBlockchainResponse,
+  RaffleDetailResponseToken,
+  TokenSummary
+} from '@ergo-raffle/client';
 
-export type RaffleWinnerBasketsProps = { raffleId: string };
+export type RaffleWinnerBasketsProps = {
+  raffleId: string;
+  raffleToken: RaffleDetailResponseToken;
+  winnerPotShareAmount: number;
+  infoBlockchainData: InfoBlockchainResponse;
+  tokensList: TokenSummary[];
+};
 
-export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
-  const [basketInfoDialog, setBasketInfoDialog] = useState<string | null>(null);
+export const RaffleWinnerBaskets = ({
+  raffleId,
+  raffleToken,
+  winnerPotShareAmount,
+  tokensList,
+  infoBlockchainData
+}: RaffleWinnerBasketsProps) => {
+  const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
     open: boolean;
-    initialBasketNumber?: string;
+    initialBasketNumber?: number;
   }>({ open: false });
   const handleAddGiftDialogOpen = (open: boolean) => {
     setAddGiftDialog({ open });
   };
-  const openAddGiftDialog = (initialBasketNumber?: string) => {
+  const openAddGiftDialog = (initialBasketNumber?: number) => {
     setAddGiftDialog({
       open: true,
       initialBasketNumber
     });
   };
-  const { items, total, isLoading } = useFetchWinnerBaskets(raffleId);
-  const { pagination, onChangePage, onChangePerPage } = useWinnerBasketsParams();
+  const { pagination, onChangePage, onChangePerPage, params, onTypeFilterChange } =
+    useWinnerBasketsParams();
+  const { items, total, isLoading } = useFetchWinnerBaskets(raffleId, params);
 
   if (!isLoading && !items?.length) {
     return (
@@ -74,7 +92,11 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center my-3">
-          <RaffleWinnerBasketsFilters isLoading={isLoading} />
+          <RaffleWinnerBasketsFilters
+            isLoading={isLoading}
+            params={params}
+            onTypeFilterChange={onTypeFilterChange}
+          />
           <div className="hidden sm:block">
             {isLoading ? (
               <Skeleton className="h-10 w-24" />
@@ -107,9 +129,11 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                 : firstColumn?.map((basket) => (
                     <RaffleWinnerBasketItem
                       basket={basket}
-                      key={basket.basketId}
+                      key={basket.index}
                       handleOpenAddGiftDialog={openAddGiftDialog}
                       handleOpenInfoDialog={setBasketInfoDialog}
+                      raffleToken={raffleToken}
+                      winnerPotShareAmount={winnerPotShareAmount}
                     />
                   ))}
             </div>
@@ -135,9 +159,14 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
                   : firstColumn?.map((basket) => (
                       <RaffleWinnerBasketItem
                         basket={basket}
-                        key={basket.basketId}
+                        key={basket.index}
                         handleOpenAddGiftDialog={openAddGiftDialog}
                         handleOpenInfoDialog={setBasketInfoDialog}
+                        raffleToken={raffleToken}
+                        winnerPotShareAmount={winnerPotShareAmount}
+                        giftTokens={tokensList.filter((i) =>
+                          basket.gifts.map((g) => g.tokenId).includes(i.id)
+                        )}
                       />
                     ))}
               </div>
@@ -161,6 +190,8 @@ export const RaffleWinnerBaskets = ({ raffleId }: RaffleWinnerBasketsProps) => {
               open={addGiftDialog.open}
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
+              tokensList={tokensList}
+              infoBlockchainData={infoBlockchainData}
             />
             {basketInfoDialog ? (
               <RaffleWinnerBasketInfoDialog
