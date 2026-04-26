@@ -101,7 +101,11 @@ export const RaffleAddGiftForm = ({
     const winnerIndex = data.winnerIndex;
 
     const tokens = data.tokens.map((token) => {
-      const amount = token.amount.toString();
+      const amount = token.amount.toLocaleString('en', {
+        useGrouping: false,
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 20,
+      });
 
       const decimal = assets.find((asset) => asset.id === token.tokenId)?.decimals || 0;
 
