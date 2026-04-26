@@ -147,7 +147,15 @@ const isLinkMode = (
 ): props is PaginationLinkMode => typeof (props as PaginationLinkMode).getPageHref === 'function';
 
 export const Pagination = (props: PaginationProps) => {
-  const { page, perPage, total, align = 'center', onChangePerPage, className } = props;
+  const {
+    page,
+    perPage,
+    total,
+    align = 'center',
+    onChangePerPage,
+    className,
+    ...restProps
+  } = props;
   const totalPages = Math.ceil(total / perPage);
   const pages: (number | 'ellipsis')[] = [];
   const perPageItems = getPerPageOptions(perPage);
@@ -164,8 +172,12 @@ export const Pagination = (props: PaginationProps) => {
 
   if (totalPages < 1) return null;
 
+  const divProps = Object.entries(restProps).filter(
+    (o) => o[0] !== 'getPageHref' && o[0] !== 'onChangePage'
+  );
+
   return (
-    <div {...props} className={cn('flex items-center', className)}>
+    <div {...divProps} className={cn('flex items-center', className)}>
       {align === 'center' && <div className="flex-1 hidden lg:block" />}
       <PaginationWrapper
         className={`w-full lg:w-auto lg:flex-1 ${align === 'center' ? 'justify-center' : ''}`}

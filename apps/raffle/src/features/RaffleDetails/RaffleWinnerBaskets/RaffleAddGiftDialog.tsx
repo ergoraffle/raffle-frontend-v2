@@ -11,13 +11,11 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 
 export type RaffleAddGiftDialogProps = {
   open: boolean;
   initialBasketNumber?: number;
   onOpenChange: (open: boolean) => void;
-  infoBlockchainData: InfoBlockchainResponse;
   basketsCount?: number;
   raffleId: string;
 };

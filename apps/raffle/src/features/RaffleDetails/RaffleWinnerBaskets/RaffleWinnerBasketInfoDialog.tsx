@@ -69,7 +69,7 @@ export const RaffleWinnerBasketInfoDialog = ({
         {step === 2 ? (
           <div className="space-y-5">
             <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
-            <RaffleAddGiftForm initialBasketNumber={activeBasketId} />
+            <RaffleAddGiftForm initialBasketNumber={activeBasketId} raffleId={raffleId} />
           </div>
         ) : (
           <>

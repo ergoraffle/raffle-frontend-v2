@@ -217,13 +217,16 @@ paths:
   /tokens:
     get:
       parameters:
-        - in: path
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                maxItems: 100
+              - type: string
+          in: query
           name: tokenIds
           required: true
-          schema:
-            type: array
-            items:
-              type: string
       responses:
         '200':
           description: tokens list

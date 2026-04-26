@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   BasketStatus,
   Carousel,
@@ -19,7 +21,8 @@ export const WinnerBasketCarousel = ({
   raffleId,
   setActiveBasketId
 }: WinnerBasketCarouselProps) => {
-  const { items, isLoading } = useFetchWinnerBaskets(raffleId, {});
+  const params = useMemo(() => ({}), []);
+  const { items, isLoading } = useFetchWinnerBaskets(raffleId, params);
   const onSlideChange = (index: number) => {
     if (items && setActiveBasketId) {
       const foundedBasket = items[index];

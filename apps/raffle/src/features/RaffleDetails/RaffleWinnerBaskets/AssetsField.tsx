@@ -2,6 +2,8 @@
 
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
+import type { WalletToken } from '@ergo-raffle/base-wallet';
+import { Search } from '@ergo-raffle/icons';
 import {
   Combobox,
   ComboboxChip,
@@ -12,9 +14,9 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxValue,
+  InputGroupAddon,
   useComboboxAnchor
 } from '@ergo-raffle/ui-kit';
-import type { WalletToken } from '@ergo-raffle/base-wallet';
 
 export type assetsValueType = {
   tokenId: string;
@@ -73,12 +75,24 @@ export const AssetsField = ({ values, onValueChange, tokens }: AssetsFieldProps)
           value={selectedIds}
           onValueChange={handleValueChange}
         >
-          <ComboboxChips ref={anchor}>
+          <ComboboxChips
+            ref={anchor}
+            className="max-w-full flex-col sm:flex-row items-start p-2 h-auto sm:h-auto"
+          >
             <ComboboxValue>
-              {selectedIds.map((id) => (
-                <ComboboxChip key={id}>{tokenMap.get(id)?.name ?? id}</ComboboxChip>
-              ))}
-              <ComboboxChipsInput placeholder="Choose assets" />
+              {!!selectedIds.length && (
+                <div className="sm:max-w-2/3 flex items-center min-h-10 flex-wrap gap-2 order-2 sm:order-1">
+                  {selectedIds.map((id) => (
+                    <ComboboxChip key={id}>{tokenMap.get(id)?.name ?? id}</ComboboxChip>
+                  ))}
+                </div>
+              )}
+              <div className="flex p-1 sm:p-0 w-full sm:w-auto sm:grow order-1 sm:order-2">
+                <ComboboxChipsInput placeholder="Choose assets" />
+                <InputGroupAddon align="inline-end">
+                  <Search className="size-5" />
+                </InputGroupAddon>
+              </div>
             </ComboboxValue>
           </ComboboxChips>
           {containerReady ? (

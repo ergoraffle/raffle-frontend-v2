@@ -12,12 +12,13 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import {
+  getAmountPercentage,
   getDeadlineAmount,
   getMissionFund,
   getSoldTicketCount,
-  getAmountPercentage,
   getWinnerPotShareAmount
 } from '@/features/utils';
+
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
@@ -33,8 +34,6 @@ export type RaffleDetailsProps = {
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   const raffle = await getRaffleRaffleId(raffleId);
   const infoData = await getInfoBlockchain();
-  // const tokensList = await getTokens();
-  const tokensList = { items: [{ id: 'erg', name: 'Erg', verified: true, decimals: 6 }] };
 
   if (!raffle) return notFound();
 
@@ -86,8 +85,6 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
         raffleId={raffleId}
         raffleToken={raffle.token}
         winnerPotShareAmount={winnerPotShareAmount}
-        infoBlockchainData={infoData}
-        tokensList={tokensList.items}
       />
       <div className="flex flex-col lg:flex-row gap-9.5">
         <Card className="flex-1">

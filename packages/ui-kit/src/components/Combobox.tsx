@@ -149,9 +149,6 @@ export const ComboboxChips = ({ className, children, ...props }: ComboboxChipsPr
         size="sm"
       >
         {children}
-        <InputGroupAddon align="inline-end">
-          <Search className="size-5" />
-        </InputGroupAddon>
       </InputGroup>
     }
   />

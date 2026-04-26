@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import type { RaffleDetailResponseToken } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
 import {
   Button,
@@ -21,26 +22,17 @@ import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
 import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';
 import { RaffleWinnerBasketItem } from './RaffleWinnerBasketItem';
 import { RaffleWinnerBasketsFilters } from './RaffleWinnerBasketsFilters';
-import type {
-  InfoBlockchainResponse,
-  RaffleDetailResponseToken,
-  TokenSummary
-} from '@ergo-raffle/client';
 
 export type RaffleWinnerBasketsProps = {
   raffleId: string;
   raffleToken: RaffleDetailResponseToken;
   winnerPotShareAmount: number;
-  infoBlockchainData: InfoBlockchainResponse;
-  tokensList: TokenSummary[];
 };
 
 export const RaffleWinnerBaskets = ({
   raffleId,
   raffleToken,
-  winnerPotShareAmount,
-  tokensList,
-  infoBlockchainData
+  winnerPotShareAmount
 }: RaffleWinnerBasketsProps) => {
   const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
@@ -134,9 +126,6 @@ export const RaffleWinnerBaskets = ({
                       handleOpenInfoDialog={setBasketInfoDialog}
                       raffleToken={raffleToken}
                       winnerPotShareAmount={winnerPotShareAmount}
-                      giftTokens={tokensList.filter((i) =>
-                        basket.gifts.map((g) => g.tokenId).includes(i.id)
-                      )}
                     />
                   ))}
             </div>
@@ -167,9 +156,6 @@ export const RaffleWinnerBaskets = ({
                         handleOpenInfoDialog={setBasketInfoDialog}
                         raffleToken={raffleToken}
                         winnerPotShareAmount={winnerPotShareAmount}
-                        giftTokens={tokensList.filter((i) =>
-                          basket.gifts.map((g) => g.tokenId).includes(i.id)
-                        )}
                       />
                     ))}
               </div>
@@ -193,7 +179,6 @@ export const RaffleWinnerBaskets = ({
               open={addGiftDialog.open}
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
-              infoBlockchainData={infoBlockchainData}
               basketsCount={items?.length}
               raffleId={raffleId}
             />

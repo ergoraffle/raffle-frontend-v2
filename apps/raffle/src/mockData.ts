@@ -1,8 +1,4 @@
-import type {
-  RaffleActivityResponse,
-  WinnerBasketDetailResponse,
-  WinnerBasketListResponse
-} from '@ergo-raffle/client';
+import type { RaffleActivityResponse, WinnerBasketDetailResponse } from '@ergo-raffle/client';
 
 export const raffleActivity: RaffleActivityResponse = {
   items: [
@@ -65,37 +61,6 @@ export const raffleActivity: RaffleActivityResponse = {
     }
   ],
   total: 6
-};
-
-export const winnerBaskets: WinnerBasketListResponse = {
-  items: [
-    {
-      basketId: '1',
-      shareAmount: 50,
-      sharePercent: 20,
-      gifts: [],
-      type: 'empty'
-    },
-    {
-      basketId: '2',
-      shareAmount: 50,
-      sharePercent: 10,
-      type: 'shared',
-      gifts: [
-        {
-          asset: 'btc',
-          amount: 10,
-          verified: true
-        },
-        {
-          asset: 'ada',
-          amount: 10,
-          verified: true
-        }
-      ]
-    }
-  ],
-  total: 2
 };
 
 export const winnerBasketDetail: WinnerBasketDetailResponse = {

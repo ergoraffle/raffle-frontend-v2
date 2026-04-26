@@ -1,5 +1,8 @@
 'use client';
 
+import { useCallback, useEffect, useState } from 'react';
+
+import type { WalletToken } from '@ergo-raffle/base-wallet';
 import { Dice, UpLeft } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -11,22 +14,23 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
+  Spinner,
   Token,
-  Typography
+  Typography,
+  toast
 } from '@ergo-raffle/ui-kit';
-
-import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useFieldArray, useForm } from 'react-hook-form';
+
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
-import { AssetsField } from './AssetsField';
-import { getRandomItem } from '@/lib';
+import { addGiftRaffle } from '@/features/services';
+import { getNonDecimalString } from '@/features/utils';
 import { useWallet } from '@/hooks';
-import { useCallback, useEffect, useState } from 'react';
-import type { WalletToken } from '@ergo-raffle/base-wallet';
 import { useFetchInfoBlockchain } from '@/hooks/useFetchInfoBlockchain';
 import { useFetchRaffle } from '@/hooks/useFetchRaffle';
-import { getNonDecimalString } from '@/features/utils';
-import { addGiftRaffle } from '@/features/services';
+import { getRandomItem } from '@/lib';
+
+import { AssetsField } from './AssetsField';
 
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
@@ -45,7 +49,7 @@ export const RaffleAddGiftForm = ({
     handleSubmit,
     register,
     watch,
-    formState: { errors },
+    formState: { errors, isLoading },
     control,
     setValue
   } = useForm<AddGiftForm>({
@@ -85,8 +89,7 @@ export const RaffleAddGiftForm = ({
         setAssets(result);
       })
       .catch(() => {
-        // biome-ignore lint/suspicious/noAlert: TODO
-        alert('TODO');
+        toast.error('Something went wrong with loading wallet data! Please try again later.');
       });
   }, [load]);
 
@@ -104,7 +107,7 @@ export const RaffleAddGiftForm = ({
       const amount = token.amount.toLocaleString('en', {
         useGrouping: false,
         minimumFractionDigits: 1,
-        maximumFractionDigits: 20,
+        maximumFractionDigits: 20
       });
 
       const decimal = assets.find((asset) => asset.id === token.tokenId)?.decimals || 0;
@@ -118,18 +121,23 @@ export const RaffleAddGiftForm = ({
     });
 
     try {
-      const txId = await addGiftRaffle({ winnerIndex, tokens}, wallet, infoBlockchain.data, raffle.data);
-      // biome-ignore lint/suspicious/noConsole: TODO
-      console.log(txId);
+      const txId = await addGiftRaffle(
+        { winnerIndex, tokens },
+        wallet,
+        infoBlockchain.data,
+        raffle.data
+      );
+      toast.success(`Gifts added successfully with id: ${txId}`);
     } catch (error) {
-      // biome-ignore lint/suspicious/noConsole: TODO
-      console.log(error);
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to add Gift. Please try again later.'
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-end space-x-2">
         <Field>
           <FieldLabel>Basket's Number</FieldLabel>
           <InputGroup variant="bordered">
@@ -211,7 +219,8 @@ export const RaffleAddGiftForm = ({
       </div>
 
       <div className="mt-4 flex flex-col">
-        <Button variant="primary" size="sm" type="submit">
+        <Button variant="primary" size="sm" type="submit" disabled={isLoading}>
+          {!!isLoading && <Spinner className="size-7" />}
           Add Gift
         </Button>
       </div>

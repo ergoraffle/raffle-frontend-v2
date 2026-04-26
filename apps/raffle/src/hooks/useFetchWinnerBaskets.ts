@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { GetRaffleRaffleIdBasketParams, WinnerBasketListResponse } from '@ergo-raffle/client';
+
 import { getRaffleBaskets } from '@/actions';
 
 export const useFetchWinnerBaskets = (raffleId: string, params: GetRaffleRaffleIdBasketParams) => {
@@ -11,10 +12,13 @@ export const useFetchWinnerBaskets = (raffleId: string, params: GetRaffleRaffleI
 
   useEffect(() => {
     setIsLoading(true);
-    getRaffleBaskets(raffleId, params).then((res) => {
-      setData(res);
-      setIsLoading(false);
-    });
+    getRaffleBaskets(raffleId, params)
+      .then((res) => {
+        setData(res);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [raffleId, params]);
 
   return { ...data, isLoading };

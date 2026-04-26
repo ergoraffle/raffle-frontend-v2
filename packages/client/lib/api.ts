@@ -313,6 +313,10 @@ export const GetActivitiesType = {
   gift_added: 'gift_added'
 } as const;
 
+export type GetTokensParams = {
+  tokenIds: string[] | string;
+};
+
 /**
  * @summary Get startup configuration
  */
@@ -361,7 +365,8 @@ export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: num
     method: 'GET'
   });
 
-export const getTokens = () => httpClient<TokensResponse>({ url: `/tokens`, method: 'GET' });
+export const getTokens = (params: GetTokensParams) =>
+  httpClient<TokensResponse>({ url: `/tokens`, method: 'GET', params });
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
