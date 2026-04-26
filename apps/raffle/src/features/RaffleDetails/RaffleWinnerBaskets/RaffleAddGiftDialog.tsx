@@ -11,28 +11,26 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
-import type { InfoBlockchainResponse, TokenSummary } from '@ergo-raffle/client';
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 
 export type RaffleAddGiftDialogProps = {
   open: boolean;
   initialBasketNumber?: number;
   onOpenChange: (open: boolean) => void;
-  tokensList: TokenSummary[];
   infoBlockchainData: InfoBlockchainResponse;
 };
 
 export const RaffleAddGiftDialog = ({
   open,
   initialBasketNumber,
-  onOpenChange,
-  tokensList
+  onOpenChange
 }: RaffleAddGiftDialogProps) => {
   const { isMobile } = useBreakpoint();
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title="Which Basket do you want to add Gift to?">
-        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} tokensList={tokensList} />
+        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} />
       </SheetContent>
     </Sheet>
   ) : (
@@ -41,7 +39,7 @@ export const RaffleAddGiftDialog = ({
         <DialogHeader>
           <DialogTitle>Which Basket do you want to add Gift to?</DialogTitle>
         </DialogHeader>
-        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} tokensList={tokensList} />
+        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} />
       </DialogContent>
     </Dialog>
   );

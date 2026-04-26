@@ -1,22 +1,21 @@
 'use client';
 
-import type { BasketGiftDetail } from '@ergo-raffle/client';
+import type { BasketGift, TokenSummary } from '@ergo-raffle/client';
 import { Verified } from '@ergo-raffle/icons';
-import { Typography } from '@ergo-raffle/ui-kit';
+import { getDecimalString, Typography } from '@ergo-raffle/ui-kit';
 
 export type GiftItemProps = {
-  gift: BasketGiftDetail;
+  gift: BasketGift;
+  giftToken?: TokenSummary;
 };
 
-export const GiftItem = ({ gift }: GiftItemProps) => (
+export const GiftItem = ({ gift, giftToken }: GiftItemProps) => (
   <div>
-    {gift.assets.map((asset) => (
-      <div className="flex items-center gap-2" key={asset.tokenId}>
-        <Typography variant="body-lg">
-          {asset.amount}X {asset.tokenName}
-        </Typography>
-        {!!gift.verified && <Verified className="text-primary-1 size-6" />}
-      </div>
-    ))}
+    <div className="flex items-center gap-2" key={gift.tokenId}>
+      <Typography variant="body-lg">
+        {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
+      </Typography>
+      {!!giftToken?.verified && <Verified className="text-primary-1 size-6" />}
+    </div>
   </div>
 );

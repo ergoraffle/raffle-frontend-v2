@@ -14,7 +14,7 @@ import {
   ComboboxValue,
   useComboboxAnchor
 } from '@ergo-raffle/ui-kit';
-import type { TokenSummary } from '@ergo-raffle/client';
+import type { WalletToken } from '@ergo-raffle/base-wallet';
 
 export type assetsValueType = {
   tokenId: string;
@@ -24,7 +24,7 @@ export type assetsValueType = {
 export type AssetsFieldProps = {
   values: assetsValueType[];
   onValueChange: (values: assetsValueType[]) => void;
-  tokens: TokenSummary[];
+  tokens: (WalletToken & { balance?: string })[];
 };
 
 export const AssetsField = ({ values, onValueChange, tokens }: AssetsFieldProps) => {

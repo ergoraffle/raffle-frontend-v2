@@ -19,7 +19,7 @@ export const WinnerBasketCarousel = ({
   raffleId,
   setActiveBasketId
 }: WinnerBasketCarouselProps) => {
-  const { items, isLoading } = useFetchWinnerBaskets(raffleId);
+  const { items, isLoading } = useFetchWinnerBaskets(raffleId, {});
   const onSlideChange = (index: number) => {
     if (items && setActiveBasketId) {
       const foundedBasket = items[index];
