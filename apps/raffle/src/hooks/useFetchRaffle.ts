@@ -17,5 +17,5 @@ export const useFetchRaffle = (raffleId: string) => {
     });
   }, [raffleId]);
 
-  return { ...data, isLoading };
+  return { data, isLoading };
 };

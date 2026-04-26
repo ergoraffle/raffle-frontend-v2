@@ -17,5 +17,5 @@ export const useFetchInfoBlockchain = () => {
     });
   }, []);
 
-  return { ...data, isLoading };
+  return { data, isLoading };
 };
