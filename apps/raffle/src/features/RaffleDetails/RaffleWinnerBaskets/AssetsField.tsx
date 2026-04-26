@@ -18,7 +18,7 @@ import type { WalletToken } from '@ergo-raffle/base-wallet';
 
 export type assetsValueType = {
   tokenId: string;
-  amount: bigint;
+  amount: number;
 };
 
 export type AssetsFieldProps = {
@@ -55,7 +55,7 @@ export const AssetsField = ({ values, onValueChange, tokens }: AssetsFieldProps)
         ...next,
         ...added.map((id) => ({
           tokenId: id,
-          amount: 0n
+          amount: 0
         }))
       ];
     }

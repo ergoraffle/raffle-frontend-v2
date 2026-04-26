@@ -23,13 +23,22 @@ import { getRandomItem } from '@/lib';
 import { useWallet } from '@/hooks';
 import { useCallback, useEffect, useState } from 'react';
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import { useFetchInfoBlockchain } from '@/hooks/useFetchInfoBlockchain';
+import { useFetchRaffle } from '@/hooks/useFetchRaffle';
 
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
-  baskets?: number[];
+  basketsCount?: number;
+  raffleId: string;
 };
 
-export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGiftFormProps) => {
+export const RaffleAddGiftForm = ({
+  initialBasketNumber,
+  basketsCount,
+  raffleId
+}: RaffleAddGiftFormProps) => {
+  const infoBlockchain = useFetchInfoBlockchain();
+  const raffle = useFetchRaffle(raffleId);
   const {
     handleSubmit,
     register,
@@ -80,8 +89,8 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
   }, [load]);
 
   const setRandomBasket = () => {
-    if (baskets && baskets.length > 0) {
-      const randomIndex = getRandomItem(baskets);
+    if (basketsCount && basketsCount > 0) {
+      const randomIndex = getRandomItem(basketsCount);
       setValue('winnerIndex', randomIndex);
     }
   };
@@ -148,8 +157,10 @@ export const RaffleAddGiftForm = ({ initialBasketNumber, baskets }: RaffleAddGif
             <div className="flex items-center space-x-2">
               <InputGroup variant="bordered" size="sm">
                 <InputGroupInput
+                  type="number"
+                  step="any"
                   {...register(`tokens.${index}.amount`, {
-                    setValueAs: (v) => (v === '' ? undefined : BigInt(v))
+                    setValueAs: (v) => (v === '' ? undefined : Number(v))
                   })}
                 />
                 <InputGroupAddon align="inline-end">

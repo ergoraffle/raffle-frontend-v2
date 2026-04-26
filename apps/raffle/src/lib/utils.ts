@@ -44,7 +44,7 @@ export const formatDateTime = (date: string | Date | number) => {
   });
 };
 
-export const getRandomItem = (arr: number[]): number => {
-  const randomIndex = Math.floor(Math.random() * arr.length);
-  return arr[randomIndex];
+export const getRandomItem = (length: number): number => {
+  const randomIndex = Math.floor(Math.random() * length);
+  return randomIndex;
 };

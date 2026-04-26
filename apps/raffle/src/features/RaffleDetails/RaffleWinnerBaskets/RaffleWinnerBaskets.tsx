@@ -194,6 +194,8 @@ export const RaffleWinnerBaskets = ({
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
               infoBlockchainData={infoBlockchainData}
+              basketsCount={items?.length}
+              raffleId={raffleId}
             />
             {basketInfoDialog ? (
               <RaffleWinnerBasketInfoDialog

@@ -18,19 +18,27 @@ export type RaffleAddGiftDialogProps = {
   initialBasketNumber?: number;
   onOpenChange: (open: boolean) => void;
   infoBlockchainData: InfoBlockchainResponse;
+  basketsCount?: number;
+  raffleId: string;
 };
 
 export const RaffleAddGiftDialog = ({
   open,
   initialBasketNumber,
-  onOpenChange
+  onOpenChange,
+  basketsCount,
+  raffleId
 }: RaffleAddGiftDialogProps) => {
   const { isMobile } = useBreakpoint();
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title="Which Basket do you want to add Gift to?">
-        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} />
+        <RaffleAddGiftForm
+          initialBasketNumber={initialBasketNumber}
+          basketsCount={basketsCount}
+          raffleId={raffleId}
+        />
       </SheetContent>
     </Sheet>
   ) : (
@@ -39,7 +47,11 @@ export const RaffleAddGiftDialog = ({
         <DialogHeader>
           <DialogTitle>Which Basket do you want to add Gift to?</DialogTitle>
         </DialogHeader>
-        <RaffleAddGiftForm initialBasketNumber={initialBasketNumber} />
+        <RaffleAddGiftForm
+          initialBasketNumber={initialBasketNumber}
+          basketsCount={basketsCount}
+          raffleId={raffleId}
+        />
       </DialogContent>
     </Dialog>
   );
