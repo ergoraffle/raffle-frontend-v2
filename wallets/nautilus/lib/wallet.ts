@@ -101,7 +101,7 @@ export class NautilusWallet extends Wallet<
 
     const responses = await Promise.allSettled(
       idsToFetch.map((id) =>
-        fetch(`https://api.ergoplatform.com/api/v1/tokens/${id}`).then((response) => {
+        fetch(`${this.config.explorerApi}/tokens/${id}`).then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }
@@ -134,7 +134,7 @@ export class NautilusWallet extends Wallet<
       throw new Error(`[${this.name}] Failed to fetch ${failedCount} token(s) from Ergo API.`);
     }
 
-    return mergedTokens;
+    return mergedTokens.filter((token) => ids.includes(token.id));
   };
 
   fetchBoxes = async (): Promise<ErgoBoxProxy[]> => {

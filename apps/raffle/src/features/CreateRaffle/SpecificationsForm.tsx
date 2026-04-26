@@ -42,9 +42,10 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
   const images = getValues('images');
   const uploader = useUploader({
     files: images || [],
-    maxFileSize: 1024 * (1024 * 1.75),
+    maxFileSize: 1024 * 1024,
     allowedFileTypes: ['.jpg', '.png', '.jpeg'],
-    maxNumberOfFiles: 4
+    maxNumberOfFiles: 4,
+    endpoint: process.env.NEXT_PUBLIC_IMAGE_UPLOAD_URL
   });
   const tags = watch('tags');
   const onSubmit = async () => {

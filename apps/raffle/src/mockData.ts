@@ -131,7 +131,6 @@ export const winnerBasketDetail: WinnerBasketDetailResponse = {
   ]
 };
 
-export const tokens = [{ value: 'erg', label: 'ERG' }];
 export const activities: RaffleActivityResponse = {
   items: [
     {

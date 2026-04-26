@@ -7,15 +7,7 @@ import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig: NextConfig = {
   transpilePackages: ['@ergo-raffle/ui-kit'],
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'tusd.tusdemo.net',
-        port: '',
-        pathname: '/**',
-        search: ''
-      }
-    ]
+    remotePatterns: [new URL(`${process.env.NEXT_PUBLIC_IMAGE_URL}/**`)]
   }
 };
 

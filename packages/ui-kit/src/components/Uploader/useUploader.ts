@@ -17,6 +17,7 @@ export type UseUploaderProps = {
   maxTotalFileSize?: number;
   maxNumberOfFiles?: number;
   minNumberOfFiles?: number;
+  endpoint?: string;
 };
 
 export const useUploader = ({
@@ -26,7 +27,8 @@ export const useUploader = ({
   maxNumberOfFiles,
   maxTotalFileSize,
   minFileSize,
-  minNumberOfFiles
+  minNumberOfFiles,
+  endpoint
 }: UseUploaderProps = {}) => {
   const [uppy] = useState(() =>
     new Uppy({
@@ -46,7 +48,7 @@ export const useUploader = ({
           autoCropArea: 1.57
         }
       })
-      .use(Tus, { endpoint: 'https://tusd.tusdemo.net/files/' })
+      .use(Tus, { endpoint })
   );
 
   const [editing, setEditing] = useState<UppyFile<Meta, Record<string, never>>>();
