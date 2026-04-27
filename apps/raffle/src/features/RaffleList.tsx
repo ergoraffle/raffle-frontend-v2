@@ -44,7 +44,7 @@ export const RaffleList = async ({ params, limit, pined }: Props) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 w-full clear-both">
         {items.map((raffle) => {
-          const deadline = getDeadlineAmount(raffle.deadline, infoData.height);
+          const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
 
           return <RaffleCard key={raffle.id} raffle={raffle} deadline={deadline} />;
         })}

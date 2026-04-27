@@ -110,6 +110,12 @@ const raffleAgreementSchema = z.object({
     message: 'Please confirm your eligibility to continue.'
   })
 });
+export const raffleDonateSchema = z.object({
+  tickets: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+  terms: z.boolean().refine((val) => val === true, {
+    message: 'You must agree to the terms'
+  })
+});
 
 export const raffleSchema = raffleAgreementSchema
   .and(raffleSpecificationsSchema)
@@ -120,3 +126,4 @@ export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema
 export type RaffleDonationGoalForm = z.infer<typeof raffleDonationGoalSchema>;
 export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
 export type RaffleForm = z.infer<typeof raffleSchema>;
+export type RaffleDonateForm = z.infer<typeof raffleDonateSchema>;
