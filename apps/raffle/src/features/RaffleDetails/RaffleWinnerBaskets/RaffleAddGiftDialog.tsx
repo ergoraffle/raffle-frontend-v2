@@ -10,6 +10,8 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
+import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
+
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 
 export type RaffleAddGiftDialogProps = {
@@ -17,7 +19,7 @@ export type RaffleAddGiftDialogProps = {
   initialBasketNumber?: number;
   onOpenChange: (open: boolean) => void;
   basketsCount?: number;
-  raffleId: string;
+  raffle: RaffleDetailView;
 };
 
 export const RaffleAddGiftDialog = ({
@@ -25,7 +27,7 @@ export const RaffleAddGiftDialog = ({
   initialBasketNumber,
   onOpenChange,
   basketsCount,
-  raffleId
+  raffle
 }: RaffleAddGiftDialogProps) => {
   const { isMobile } = useBreakpoint();
 
@@ -35,7 +37,7 @@ export const RaffleAddGiftDialog = ({
         <RaffleAddGiftForm
           initialBasketNumber={initialBasketNumber}
           basketsCount={basketsCount}
-          raffleId={raffleId}
+          raffle={raffle}
           onCloseDialog={() => onOpenChange(false)}
         />
       </SheetContent>
@@ -49,7 +51,7 @@ export const RaffleAddGiftDialog = ({
         <RaffleAddGiftForm
           initialBasketNumber={initialBasketNumber}
           basketsCount={basketsCount}
-          raffleId={raffleId}
+          raffle={raffle}
           onCloseDialog={() => onOpenChange(false)}
         />
       </DialogContent>

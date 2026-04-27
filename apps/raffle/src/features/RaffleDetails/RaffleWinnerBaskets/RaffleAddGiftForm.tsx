@@ -22,11 +22,11 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
 import { getNonDecimalString } from '@/features/utils';
 import { useWallet } from '@/hooks';
-import { useFetchRaffle } from '@/hooks/useFetchRaffle';
 import { getErrorMessage, getRandomItem } from '@/lib';
 
 import { AssetsField } from './AssetsField';
@@ -34,18 +34,17 @@ import { AssetsField } from './AssetsField';
 export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
   basketsCount?: number;
-  raffleId: string;
   onCloseDialog: () => void;
+  raffle: RaffleDetailView;
 };
 
 export const RaffleAddGiftForm = ({
   initialBasketNumber,
   basketsCount,
-  raffleId,
+  raffle,
   onCloseDialog
 }: RaffleAddGiftFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const raffle = useFetchRaffle(raffleId);
   const {
     handleSubmit,
     register,
@@ -128,7 +127,7 @@ export const RaffleAddGiftForm = ({
 
     try {
       setIsLoading(true);
-      const txId = await addGiftRaffle({ winnerIndex, tokens }, wallet, raffle.data);
+      const txId = await addGiftRaffle({ winnerIndex, tokens }, wallet, raffle);
       toast.success(`Gifts added successfully with id: ${txId}`);
       onCloseDialog();
     } catch (error) {

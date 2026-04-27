@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { type RaffleDetailResponse, RaffleSummaryStatus } from '@ergo-raffle/client';
+import { RaffleSummaryStatus } from '@ergo-raffle/client';
 import {
   Badge,
   Card,
@@ -17,22 +17,14 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { raffleStatusMap } from '../raffleStatusRenderMap';
+import type { RaffleDetailView } from './raffleToViewModel';
 
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
-  serviceFee?: number;
-  winnerPot?: number;
-  missionFund?: number;
-  raffle?: Pick<RaffleDetailResponse, 'pictures' | 'name' | 'addresses' | 'status'>;
+  raffle?: RaffleDetailView;
 };
 
-export const RaffleDetailsImageCard = ({
-  loading,
-  serviceFee,
-  winnerPot,
-  missionFund,
-  raffle
-}: RaffleDetailsImageCardProps) => (
+export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => (
   <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false}>
     {loading || !raffle?.pictures || !raffle?.pictures.length ? (
       <CardImageWrapper loading={loading} className="sm:h-81" />
@@ -74,7 +66,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{missionFund || 0}%</span>
+                <span>{raffle?.missionFund || 0}%</span>
               </Typography>
             )}
           </div>
@@ -103,7 +95,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{winnerPot || 0}%</span>
+                <span>{raffle?.winnerPotShare.percent || 0}%</span>
               </Typography>
             )}
           </div>
@@ -119,7 +111,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{serviceFee || 0}%</span>
+                <span>{raffle?.serviceFee || 0}%</span>
               </Typography>
             )}
           </div>

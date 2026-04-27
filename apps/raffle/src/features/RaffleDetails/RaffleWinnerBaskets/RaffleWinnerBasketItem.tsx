@@ -1,8 +1,4 @@
-import type {
-  RaffleDetailResponseToken,
-  TokenSummary,
-  WinnerBasketSummary
-} from '@ergo-raffle/client';
+import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -16,14 +12,14 @@ import {
 
 import { getAmountPercentage, getPercentageOfAmount } from '@/features/utils';
 
+import type { RaffleDetailView } from '../raffleToViewModel';
+
 export type RaffleWinnerBasketItemProps = {
   basket?: WinnerBasketSummary;
   loading?: boolean;
-  raffleToken?: RaffleDetailResponseToken;
   handleOpenAddGiftDialog?: (basketIndex?: number) => void;
   handleOpenInfoDialog?: (basketIndex: number) => void;
-  winnerPotShareAmount?: number;
-  raffleIsActive?: boolean;
+  raffle?: RaffleDetailView;
   giftTokens?: TokenSummary[];
 };
 
@@ -32,9 +28,7 @@ export const RaffleWinnerBasketItem = ({
   loading,
   handleOpenAddGiftDialog,
   handleOpenInfoDialog,
-  raffleToken,
-  winnerPotShareAmount,
-  raffleIsActive,
+  raffle,
   giftTokens
 }: RaffleWinnerBasketItemProps) => {
   return (
@@ -85,12 +79,12 @@ export const RaffleWinnerBasketItem = ({
                     className="text-gray-2 h-0 overflow-hidden transition-all transition-duration-300 group-hover:h-4"
                   >
                     ={' '}
-                    {!!(winnerPotShareAmount && raffleToken?.decimals) &&
+                    {!!(raffle?.winnerPotShare.amount && raffle.token?.decimals) &&
                       getDecimalString(
-                        getPercentageOfAmount(winnerPotShareAmount, basket.share),
-                        raffleToken?.decimals
+                        getPercentageOfAmount(raffle.winnerPotShare.amount, basket.share),
+                        raffle.token.decimals
                       )}{' '}
-                    {raffleToken?.name}
+                    {raffle?.token.name}
                   </Typography>
                 ) : null}
               </div>
@@ -122,7 +116,7 @@ export const RaffleWinnerBasketItem = ({
                 ) : null}
               </div>
             </div>
-            {!!raffleIsActive && (
+            {raffle?.status === 'active' && (
               <div className="sm:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 group-hover:w-10">
                 <Button
                   variant="plain"

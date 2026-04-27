@@ -17,20 +17,22 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
+import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
+
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 import { RaffleWinnerBasketInfo } from './RaffleWinnerBasketInfo';
 import { WinnerBasketCarousel } from './WinnerBasketCarousel';
 
 export type RaffleWinnerBasketInfoDialogProps = {
   open: boolean;
-  raffleId: string;
+  raffle: RaffleDetailView;
   initialBasketId: number;
   onOpenChange: (open: boolean) => void;
 };
 
 export const RaffleWinnerBasketInfoDialog = ({
   open,
-  raffleId,
+  raffle,
   initialBasketId,
   onOpenChange
 }: RaffleWinnerBasketInfoDialogProps) => {
@@ -61,7 +63,7 @@ export const RaffleWinnerBasketInfoDialog = ({
               </Button>
             ) : (
               <div className="mx-auto md:w-1/2">
-                <WinnerBasketCarousel raffleId={raffleId} setActiveBasketId={setActiveBasketId} />
+                <WinnerBasketCarousel raffleId={raffle.id} setActiveBasketId={setActiveBasketId} />
               </div>
             )}
           </DialogTitle>
@@ -71,7 +73,7 @@ export const RaffleWinnerBasketInfoDialog = ({
             <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
             <RaffleAddGiftForm
               initialBasketNumber={activeBasketId}
-              raffleId={raffleId}
+              raffle={raffle}
               onCloseDialog={() => onOpenChange(false)}
             />
           </div>

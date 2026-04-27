@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react';
 
-import type { RaffleDetailResponseToken } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
 import {
   Button,
@@ -16,6 +15,7 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { useFetchWinnerBaskets, useWinnerBasketsParams } from '@/hooks';
 import { useFetchTokens } from '@/hooks/useFetchTokens';
 
@@ -25,18 +25,10 @@ import { RaffleWinnerBasketItem } from './RaffleWinnerBasketItem';
 import { RaffleWinnerBasketsFilters } from './RaffleWinnerBasketsFilters';
 
 export type RaffleWinnerBasketsProps = {
-  raffleId: string;
-  raffleToken: RaffleDetailResponseToken;
-  winnerPotShareAmount: number;
-  raffleIsActive: boolean;
+  raffle: RaffleDetailView;
 };
 
-export const RaffleWinnerBaskets = ({
-  raffleId,
-  raffleToken,
-  winnerPotShareAmount,
-  raffleIsActive
-}: RaffleWinnerBasketsProps) => {
+export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
   const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
     open: boolean;
@@ -53,7 +45,7 @@ export const RaffleWinnerBaskets = ({
   };
   const { pagination, onChangePage, onChangePerPage, params, onTypeFilterChange, type } =
     useWinnerBasketsParams();
-  const { items, total, isLoading } = useFetchWinnerBaskets(raffleId, params);
+  const { items, total, isLoading } = useFetchWinnerBaskets(raffle.id, params);
 
   const firstColumn = items?.slice(0, 5);
   const secondColumn = items?.slice(5, 10);
@@ -72,7 +64,7 @@ export const RaffleWinnerBaskets = ({
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           Winner Baskets
-          {!!raffleIsActive && (
+          {raffle.status === 'active' && (
             <div className="sm:hidden">
               {isLoading ? (
                 <Skeleton className="h-10 w-24" />
@@ -97,7 +89,7 @@ export const RaffleWinnerBaskets = ({
             type={type}
             onTypeFilterChange={onTypeFilterChange}
           />
-          {!!raffleIsActive && (
+          {raffle.status === 'active' && (
             <div className="hidden sm:block">
               {isLoading ? (
                 <Skeleton className="h-10 w-24" />
@@ -145,9 +137,7 @@ export const RaffleWinnerBaskets = ({
                         key={basket.index}
                         handleOpenAddGiftDialog={openAddGiftDialog}
                         handleOpenInfoDialog={setBasketInfoDialog}
-                        raffleToken={raffleToken}
-                        winnerPotShareAmount={winnerPotShareAmount}
-                        raffleIsActive={raffleIsActive}
+                        raffle={raffle}
                         giftTokens={giftTokens?.items}
                       />
                     ))}
@@ -177,9 +167,7 @@ export const RaffleWinnerBaskets = ({
                           key={basket.index}
                           handleOpenAddGiftDialog={openAddGiftDialog}
                           handleOpenInfoDialog={setBasketInfoDialog}
-                          raffleToken={raffleToken}
-                          winnerPotShareAmount={winnerPotShareAmount}
-                          raffleIsActive={raffleIsActive}
+                          raffle={raffle}
                           giftTokens={giftTokens?.items}
                         />
                       ))}
@@ -206,14 +194,14 @@ export const RaffleWinnerBaskets = ({
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
               basketsCount={items?.length}
-              raffleId={raffleId}
+              raffle={raffle}
             />
             {basketInfoDialog ? (
               <RaffleWinnerBasketInfoDialog
                 open={Boolean(basketInfoDialog)}
                 onOpenChange={() => setBasketInfoDialog(null)}
                 initialBasketId={basketInfoDialog}
-                raffleId={raffleId}
+                raffle={raffle}
               />
             ) : null}
           </>
