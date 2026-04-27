@@ -8,7 +8,24 @@ let axiosInstance: AxiosInstance = axios.create();
  */
 export const configureClient = (config: { baseURL?: string }) => {
   axiosInstance = axios.create({
-    baseURL: config.baseURL
+    baseURL: config.baseURL,
+    paramsSerializer: (params) => {
+      const searchParams = new URLSearchParams();
+
+      Object.entries(params || {}).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.forEach((v) => {
+            if (v !== undefined && v !== null) {
+              searchParams.append(key, String(v));
+            }
+          });
+        } else if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+
+      return searchParams.toString();
+    },
   });
 };
 
