@@ -14,6 +14,7 @@ export const useFetchTokens = (params: GetTokensParams) => {
     setIsLoading(true);
     if (params.tokenIds.length <= 0) {
       setData(undefined);
+      setIsLoading(false);
     } else {
       getTokens(params).then((res) => {
         setData(res);

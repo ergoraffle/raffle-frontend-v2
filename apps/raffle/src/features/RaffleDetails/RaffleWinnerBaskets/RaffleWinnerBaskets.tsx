@@ -48,19 +48,9 @@ export const RaffleWinnerBaskets = ({
       initialBasketNumber
     });
   };
-  const { pagination, onChangePage, onChangePerPage, params, onTypeFilterChange } =
+  const { pagination, onChangePage, onChangePerPage, params, onTypeFilterChange, type } =
     useWinnerBasketsParams();
   const { items, total, isLoading } = useFetchWinnerBaskets(raffleId, params);
-
-  if (!isLoading && !items?.length) {
-    return (
-      <div className="flex justify-center items-center grow my-9">
-        <Empty>
-          <Typography variant="heading-3">No matching results found.</Typography>
-        </Empty>
-      </div>
-    );
-  }
 
   const firstColumn = items?.slice(0, 5);
   const secondColumn = items?.slice(5, 10);
@@ -74,7 +64,11 @@ export const RaffleWinnerBaskets = ({
             {isLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : (
-              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
+              <Button
+                variant="primary-soft"
+                onClick={() => handleAddGiftDialogOpen(true)}
+                disabled={!items?.length}
+              >
                 <Plus />
                 Add Gift
               </Button>
@@ -86,51 +80,32 @@ export const RaffleWinnerBaskets = ({
         <div className="flex justify-between items-center my-3">
           <RaffleWinnerBasketsFilters
             isLoading={isLoading}
-            params={params}
+            type={type}
             onTypeFilterChange={onTypeFilterChange}
           />
           <div className="hidden sm:block">
             {isLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : (
-              <Button variant="primary-soft" onClick={() => handleAddGiftDialogOpen(true)}>
+              <Button
+                variant="primary-soft"
+                onClick={() => handleAddGiftDialogOpen(true)}
+                disabled={!items?.length}
+              >
                 <Plus />
                 Add Gift
               </Button>
             )}
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className="sm:flex-1">
-            <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
-              <Typography className="px-4 flex-1" variant="body-lg">
-                Basket
-              </Typography>
-              <Typography className="px-4 flex-2" variant="body-lg">
-                Share of Winners pot
-              </Typography>
-              <Typography className="px-4 flex-7" variant="body-lg">
-                Additional Gifts
-              </Typography>
-            </div>
-            <div className="space-y-2.5 pr-1.25">
-              {isLoading
-                ? Array.from({ length: 5 }).map((_, index) => (
-                    <RaffleWinnerBasketItem key={index.toString()} loading />
-                  ))
-                : firstColumn?.map((basket) => (
-                    <RaffleWinnerBasketItem
-                      basket={basket}
-                      key={basket.index}
-                      handleOpenAddGiftDialog={openAddGiftDialog}
-                      handleOpenInfoDialog={setBasketInfoDialog}
-                      raffleToken={raffleToken}
-                      winnerPotShareAmount={winnerPotShareAmount}
-                    />
-                  ))}
-            </div>
+        {!isLoading && !items?.length ? (
+          <div className="flex justify-center items-center grow my-9">
+            <Empty>
+              <Typography variant="heading-3">No matching results found.</Typography>
+            </Empty>
           </div>
-          {(secondColumn && secondColumn.length > 0) || isLoading ? (
+        ) : (
+          <div className="flex flex-col sm:flex-row">
             <div className="sm:flex-1">
               <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
                 <Typography className="px-4 flex-1" variant="body-lg">
@@ -143,7 +118,7 @@ export const RaffleWinnerBaskets = ({
                   Additional Gifts
                 </Typography>
               </div>
-              <div className="space-y-2.5 pl-1.25">
+              <div className="space-y-2.5 pr-1.25">
                 {isLoading
                   ? Array.from({ length: 5 }).map((_, index) => (
                       <RaffleWinnerBasketItem key={index.toString()} loading />
@@ -160,8 +135,39 @@ export const RaffleWinnerBaskets = ({
                     ))}
               </div>
             </div>
-          ) : null}
-        </div>
+            {(secondColumn && secondColumn.length > 0) || isLoading ? (
+              <div className="sm:flex-1">
+                <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
+                  <Typography className="px-4 flex-1" variant="body-lg">
+                    Basket
+                  </Typography>
+                  <Typography className="px-4 flex-2" variant="body-lg">
+                    Share of Winners pot
+                  </Typography>
+                  <Typography className="px-4 flex-7" variant="body-lg">
+                    Additional Gifts
+                  </Typography>
+                </div>
+                <div className="space-y-2.5 pl-1.25">
+                  {isLoading
+                    ? Array.from({ length: 5 }).map((_, index) => (
+                        <RaffleWinnerBasketItem key={index.toString()} loading />
+                      ))
+                    : firstColumn?.map((basket) => (
+                        <RaffleWinnerBasketItem
+                          basket={basket}
+                          key={basket.index}
+                          handleOpenAddGiftDialog={openAddGiftDialog}
+                          handleOpenInfoDialog={setBasketInfoDialog}
+                          raffleToken={raffleToken}
+                          winnerPotShareAmount={winnerPotShareAmount}
+                        />
+                      ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
         {!isLoading && (
           <>
             {items && total ? (

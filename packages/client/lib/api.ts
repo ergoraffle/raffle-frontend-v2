@@ -285,9 +285,28 @@ export const GetRaffleOrder = {
 export type GetRaffleRaffleIdBasketParams = {
   offset?: number;
   limit?: number;
-  withShare?: boolean;
-  withGift?: boolean;
+  share?: GetRaffleRaffleIdBasketShare;
+  gift?: GetRaffleRaffleIdBasketGift;
+  index?: number;
 };
+
+export type GetRaffleRaffleIdBasketShare =
+  (typeof GetRaffleRaffleIdBasketShare)[keyof typeof GetRaffleRaffleIdBasketShare];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRaffleRaffleIdBasketShare = {
+  'non-empty': 'non-empty',
+  empty: 'empty'
+} as const;
+
+export type GetRaffleRaffleIdBasketGift =
+  (typeof GetRaffleRaffleIdBasketGift)[keyof typeof GetRaffleRaffleIdBasketGift];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRaffleRaffleIdBasketGift = {
+  'non-empty': 'non-empty',
+  empty: 'empty'
+} as const;
 
 export type GetActivitiesParams = {
   raffleId?: string;

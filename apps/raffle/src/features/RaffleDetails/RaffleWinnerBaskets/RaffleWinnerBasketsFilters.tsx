@@ -1,55 +1,56 @@
 'use client';
 
 import { Badge, BasketStatus } from '@ergo-raffle/ui-kit';
-import type { GetRaffleRaffleIdBasketParams } from '@ergo-raffle/client';
+
+import type { WinnerBasketsTypeFilter } from '@/hooks';
 
 export type RaffleWinnerBasketsFiltersProps = {
   isLoading?: boolean;
-  params: GetRaffleRaffleIdBasketParams;
-  onTypeFilterChange: (withShare: boolean, withGift: boolean) => void;
+  type?: WinnerBasketsTypeFilter;
+  onTypeFilterChange: (type: WinnerBasketsTypeFilter) => void;
 };
 
 export const RaffleWinnerBasketsFilters = ({
   isLoading,
-  params,
+  type,
   onTypeFilterChange
 }: RaffleWinnerBasketsFiltersProps) => (
   <div className="space-x-2 space-y-2">
     <Badge
-      variant={params.withShare && !params.withGift ? 'secondary' : 'elevated'}
+      variant={type === 'share' ? 'secondary' : 'elevated'}
       size="lg"
       className="cursor-pointer"
-      onClick={() => onTypeFilterChange(true, false)}
+      onClick={() => onTypeFilterChange('share')}
       aria-disabled={isLoading}
     >
       <BasketStatus filled />
       Share
     </Badge>
     <Badge
-      variant={params.withShare === false && params.withGift === false ? 'secondary' : 'elevated'}
+      variant={type === 'empty' ? 'secondary' : 'elevated'}
       size="lg"
       className="cursor-pointer"
-      onClick={() => onTypeFilterChange(false, false)}
+      onClick={() => onTypeFilterChange('empty')}
       aria-disabled={isLoading}
     >
       <BasketStatus />
       Empty
     </Badge>
     <Badge
-      variant={params.withGift && !params.withShare ? 'secondary' : 'elevated'}
+      variant={type === 'gift' ? 'secondary' : 'elevated'}
       size="lg"
       className="cursor-pointer"
-      onClick={() => onTypeFilterChange(false, true)}
+      onClick={() => onTypeFilterChange('gift')}
       aria-disabled={isLoading}
     >
       <BasketStatus hasGift />
       Gift
     </Badge>
     <Badge
-      variant={params.withGift && params.withShare ? 'secondary' : 'elevated'}
+      variant={type === 'share-gift' ? 'secondary' : 'elevated'}
       size="lg"
       className="cursor-pointer"
-      onClick={() => onTypeFilterChange(true, true)}
+      onClick={() => onTypeFilterChange('share-gift')}
       aria-disabled={isLoading}
     >
       <BasketStatus filled hasGift />

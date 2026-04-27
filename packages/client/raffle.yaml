@@ -110,34 +110,39 @@ paths:
     get:
       summary: Get winner baskets of a raffle
       parameters:
-        - in: path
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: share
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: gift
+        - schema:
+            type: number
+          in: query
+          name: index
+        - schema:
+            type: string
+          in: path
           name: raffleId
           required: true
-          schema:
-            type: string
-
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            default: 0
-
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 20
-
-        - in: query
-          name: withShare
-          schema:
-            type: boolean
-            
-        - in: query
-          name: withGift
-          schema:
-            type: boolean
-
       responses:
         '200':
           description: Winner baskets list
