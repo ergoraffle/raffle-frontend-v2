@@ -36,6 +36,7 @@ export const RaffleAddGiftDialog = ({
           initialBasketNumber={initialBasketNumber}
           basketsCount={basketsCount}
           raffleId={raffleId}
+          onCloseDialog={() => onOpenChange(false)}
         />
       </SheetContent>
     </Sheet>
@@ -49,6 +50,7 @@ export const RaffleAddGiftDialog = ({
           initialBasketNumber={initialBasketNumber}
           basketsCount={basketsCount}
           raffleId={raffleId}
+          onCloseDialog={() => onOpenChange(false)}
         />
       </DialogContent>
     </Dialog>

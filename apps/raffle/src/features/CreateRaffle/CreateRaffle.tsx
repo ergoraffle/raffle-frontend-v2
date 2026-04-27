@@ -12,6 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
@@ -93,9 +94,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
       toast.success('Raffle created successfully!');
       resetForm();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to create raffle. Please try again later.'
-      );
+      toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));
     }
   };
   return (

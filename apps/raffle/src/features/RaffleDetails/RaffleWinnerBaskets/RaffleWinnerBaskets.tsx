@@ -27,12 +27,14 @@ export type RaffleWinnerBasketsProps = {
   raffleId: string;
   raffleToken: RaffleDetailResponseToken;
   winnerPotShareAmount: number;
+  raffleIsActive: boolean;
 };
 
 export const RaffleWinnerBaskets = ({
   raffleId,
   raffleToken,
-  winnerPotShareAmount
+  winnerPotShareAmount,
+  raffleIsActive
 }: RaffleWinnerBasketsProps) => {
   const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
@@ -60,20 +62,22 @@ export const RaffleWinnerBaskets = ({
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           Winner Baskets
-          <div className="sm:hidden">
-            {isLoading ? (
-              <Skeleton className="h-10 w-24" />
-            ) : (
-              <Button
-                variant="primary-soft"
-                onClick={() => handleAddGiftDialogOpen(true)}
-                disabled={!items?.length}
-              >
-                <Plus />
-                Add Gift
-              </Button>
-            )}
-          </div>
+          {!!raffleIsActive && (
+            <div className="sm:hidden">
+              {isLoading ? (
+                <Skeleton className="h-10 w-24" />
+              ) : (
+                <Button
+                  variant="primary-soft"
+                  onClick={() => handleAddGiftDialogOpen(true)}
+                  disabled={!items?.length}
+                >
+                  <Plus />
+                  Add Gift
+                </Button>
+              )}
+            </div>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -83,20 +87,22 @@ export const RaffleWinnerBaskets = ({
             type={type}
             onTypeFilterChange={onTypeFilterChange}
           />
-          <div className="hidden sm:block">
-            {isLoading ? (
-              <Skeleton className="h-10 w-24" />
-            ) : (
-              <Button
-                variant="primary-soft"
-                onClick={() => handleAddGiftDialogOpen(true)}
-                disabled={!items?.length}
-              >
-                <Plus />
-                Add Gift
-              </Button>
-            )}
-          </div>
+          {!!raffleIsActive && (
+            <div className="hidden sm:block">
+              {isLoading ? (
+                <Skeleton className="h-10 w-24" />
+              ) : (
+                <Button
+                  variant="primary-soft"
+                  onClick={() => handleAddGiftDialogOpen(true)}
+                  disabled={!items?.length}
+                >
+                  <Plus />
+                  Add Gift
+                </Button>
+              )}
+            </div>
+          )}
         </div>
         {!isLoading && !items?.length ? (
           <div className="flex justify-center items-center grow my-9">
@@ -131,6 +137,7 @@ export const RaffleWinnerBaskets = ({
                         handleOpenInfoDialog={setBasketInfoDialog}
                         raffleToken={raffleToken}
                         winnerPotShareAmount={winnerPotShareAmount}
+                        raffleIsActive={raffleIsActive}
                       />
                     ))}
               </div>
@@ -153,7 +160,7 @@ export const RaffleWinnerBaskets = ({
                     ? Array.from({ length: 5 }).map((_, index) => (
                         <RaffleWinnerBasketItem key={index.toString()} loading />
                       ))
-                    : firstColumn?.map((basket) => (
+                    : secondColumn?.map((basket) => (
                         <RaffleWinnerBasketItem
                           basket={basket}
                           key={basket.index}
@@ -161,6 +168,7 @@ export const RaffleWinnerBaskets = ({
                           handleOpenInfoDialog={setBasketInfoDialog}
                           raffleToken={raffleToken}
                           winnerPotShareAmount={winnerPotShareAmount}
+                          raffleIsActive={raffleIsActive}
                         />
                       ))}
                 </div>

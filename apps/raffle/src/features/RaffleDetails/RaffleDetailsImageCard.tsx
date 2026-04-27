@@ -1,8 +1,10 @@
 import Image from 'next/image';
 
-import type { RaffleDetailResponse } from '@ergo-raffle/client';
+import { type RaffleDetailResponse, RaffleSummaryStatus } from '@ergo-raffle/client';
 import {
+  Badge,
   Card,
+  CardAction,
   CardContent,
   CardImageWrapper,
   Carousel,
@@ -14,12 +16,14 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { raffleStatusMap } from '../raffleStatusRenderMap';
+
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
   serviceFee?: number;
   winnerPot?: number;
   missionFund?: number;
-  raffle?: Pick<RaffleDetailResponse, 'pictures' | 'name' | 'addresses'>;
+  raffle?: Pick<RaffleDetailResponse, 'pictures' | 'name' | 'addresses' | 'status'>;
 };
 
 export const RaffleDetailsImageCard = ({
@@ -51,6 +55,13 @@ export const RaffleDetailsImageCard = ({
         </CarouselContent>
         {raffle?.pictures && raffle.pictures.length > 1 ? <CarouselDots /> : null}
       </Carousel>
+    )}
+    {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
+      <CardAction>
+        <Badge variant={raffleStatusMap[raffle.status]?.variant || 'white-outline'} size="sm">
+          {raffleStatusMap[raffle.status]?.label || raffle?.status}
+        </Badge>
+      </CardAction>
     )}
     <CardContent className="flex flex-col gap-1.5 p-0 justify-stretch grow">
       <Card border={false}>

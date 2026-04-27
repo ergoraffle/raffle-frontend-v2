@@ -28,7 +28,7 @@ import { getNonDecimalString } from '@/features/utils';
 import { useWallet } from '@/hooks';
 import { useFetchInfoBlockchain } from '@/hooks/useFetchInfoBlockchain';
 import { useFetchRaffle } from '@/hooks/useFetchRaffle';
-import { getRandomItem } from '@/lib';
+import { getErrorMessage, getRandomItem } from '@/lib';
 
 import { AssetsField } from './AssetsField';
 
@@ -36,20 +36,23 @@ export type RaffleAddGiftFormProps = {
   initialBasketNumber?: number;
   basketsCount?: number;
   raffleId: string;
+  onCloseDialog: () => void;
 };
 
 export const RaffleAddGiftForm = ({
   initialBasketNumber,
   basketsCount,
-  raffleId
+  raffleId,
+  onCloseDialog
 }: RaffleAddGiftFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const infoBlockchain = useFetchInfoBlockchain();
   const raffle = useFetchRaffle(raffleId);
   const {
     handleSubmit,
     register,
     watch,
-    formState: { errors, isLoading },
+    formState: { errors },
     control,
     setValue
   } = useForm<AddGiftForm>({
@@ -121,6 +124,7 @@ export const RaffleAddGiftForm = ({
     });
 
     try {
+      setIsLoading(true);
       const txId = await addGiftRaffle(
         { winnerIndex, tokens },
         wallet,
@@ -128,10 +132,11 @@ export const RaffleAddGiftForm = ({
         raffle.data
       );
       toast.success(`Gifts added successfully with id: ${txId}`);
+      onCloseDialog();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to add Gift. Please try again later.'
-      );
+      toast.error(getErrorMessage(error, 'Failed to add Gift. Please try again later.'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -176,7 +181,9 @@ export const RaffleAddGiftForm = ({
             });
           }}
         />
-        {!!errors.tokens && <FieldError>{errors.tokens.message}</FieldError>}
+        {!!errors.tokens && (
+          <FieldError>{errors.tokens.message || !!errors.tokens?.root?.message}</FieldError>
+        )}
       </Field>
       <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">
         {tokenFields.map((asset, index) => (

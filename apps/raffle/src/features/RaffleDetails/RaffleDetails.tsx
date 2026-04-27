@@ -33,7 +33,7 @@ export type RaffleDetailsProps = {
 };
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   try {
-      const raffle = await getRaffleRaffleId(raffleId);
+    const raffle = await getRaffleRaffleId(raffleId);
     const infoData = await getInfoBlockchain();
 
     if (!raffle) return notFound();
@@ -87,6 +87,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           raffleId={raffleId}
           raffleToken={raffle.token}
           winnerPotShareAmount={winnerPotShareAmount}
+          raffleIsActive={raffle.status === 'active'}
         />
         <div className="flex flex-col lg:flex-row gap-9.5">
           <Card className="flex-1">
@@ -107,8 +108,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
         </div>
       </div>
     );
-  }
-  catch (error) {
-    return (<div>{JSON.stringify(error, null, 2)}</div>)
+  } catch (error) {
+    return <div>{JSON.stringify(error, null, 2)}</div>;
   }
 };

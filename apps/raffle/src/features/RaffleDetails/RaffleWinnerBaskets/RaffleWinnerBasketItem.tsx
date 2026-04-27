@@ -22,6 +22,7 @@ export type RaffleWinnerBasketItemProps = {
   handleOpenAddGiftDialog?: (basketIndex?: number) => void;
   handleOpenInfoDialog?: (basketIndex: number) => void;
   winnerPotShareAmount?: number;
+  raffleIsActive?: boolean;
 };
 
 export const RaffleWinnerBasketItem = ({
@@ -30,7 +31,8 @@ export const RaffleWinnerBasketItem = ({
   handleOpenAddGiftDialog,
   handleOpenInfoDialog,
   raffleToken,
-  winnerPotShareAmount
+  winnerPotShareAmount,
+  raffleIsActive
 }: RaffleWinnerBasketItemProps) => {
   const basketGiftsTokens = useMemo(() => basket?.gifts.map((i) => i.tokenId), [basket]);
   const { data: giftTokens } = useFetchTokens({ tokenIds: basketGiftsTokens ?? [] });
@@ -119,16 +121,18 @@ export const RaffleWinnerBasketItem = ({
                 ) : null}
               </div>
             </div>
-            <div className="sm:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 group-hover:w-10">
-              <Button
-                variant="plain"
-                size="icon-xs"
-                className="text-primary-1"
-                onClick={() => handleOpenAddGiftDialog?.(basket.index)}
-              >
-                <Plus />
-              </Button>
-            </div>
+            {!!raffleIsActive && (
+              <div className="sm:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 group-hover:w-10">
+                <Button
+                  variant="plain"
+                  size="icon-xs"
+                  className="text-primary-1"
+                  onClick={() => handleOpenAddGiftDialog?.(basket.index)}
+                >
+                  <Plus />
+                </Button>
+              </div>
+            )}
           </>
         ) : null}
       </CardContent>

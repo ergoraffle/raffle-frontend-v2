@@ -48,3 +48,24 @@ export const getRandomItem = (length: number): number => {
   const randomIndex = Math.floor(Math.random() * length);
   return randomIndex;
 };
+
+export const getErrorMessage = (error: unknown, initialMessage?: string): string => {
+  const defaultMessage = initialMessage || 'Something went wrong!';
+  if (error === null || error === undefined) return defaultMessage;
+  if (typeof error === 'string') {
+    return error;
+  }
+  if (error instanceof Error) {
+    if (error.cause instanceof Error) {
+      return error.cause.message;
+    }
+    if (error.message) {
+      return error.message;
+    }
+  }
+  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  return defaultMessage;
+};

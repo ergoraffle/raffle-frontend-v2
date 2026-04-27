@@ -136,6 +136,7 @@ export const addGiftSchema = z.object({
       })
     )
     .min(1, 'At least one asset is required')
+    .nonempty('At least one asset is required')
 });
 
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
