@@ -20,6 +20,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
+import { useInfoBlockchain } from '@/app/(providers)/InfoBlockchainProvider';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
@@ -30,10 +31,10 @@ import { FieldTitle } from './FieldTitle';
 export type DonationGoalFormProps = {
   handleNext: () => void;
   handleBack: () => void;
-  serviceFee?: number;
 };
 
-export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: DonationGoalFormProps) => {
+export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormProps) => {
+  const { serviceFee } = useInfoBlockchain();
   const {
     formState: { errors },
     register,

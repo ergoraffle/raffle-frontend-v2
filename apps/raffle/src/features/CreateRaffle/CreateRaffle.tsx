@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import Image from 'next/image';
 
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -19,11 +18,7 @@ import { DonationGoalForm } from './DonationGoalForm';
 import { Finish } from './Finish';
 import { SpecificationsForm } from './SpecificationsForm';
 
-export type CreateRaffleProps = {
-  infoBlockchainData?: InfoBlockchainResponse;
-};
-
-export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
+export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const wallet = useWallet();
@@ -57,12 +52,6 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     setActiveStepIndex(0);
   };
 
-  const serviceFee = useMemo(
-    () =>
-      infoBlockchainData ? infoBlockchainData.fee.service + infoBlockchainData.fee.implementer : 0,
-    [infoBlockchainData]
-  );
-
   const steps = [
     {
       title: 'Specifications',
@@ -71,9 +60,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     },
     {
       title: 'Donation Goal',
-      content: (
-        <DonationGoalForm handleNext={handleNext} handleBack={handleBack} serviceFee={serviceFee} />
-      ),
+      content: <DonationGoalForm handleNext={handleNext} handleBack={handleBack} />,
       fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
     },
     {
@@ -83,7 +70,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     },
     {
       title: 'Overview & Agreement',
-      content: <Finish handleBack={handleBack} serviceFee={serviceFee} />
+      content: <Finish handleBack={handleBack} />
     }
   ];
 

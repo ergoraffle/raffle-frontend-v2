@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   type AnchorComponent,
   FrameworkProvider,
@@ -15,14 +16,23 @@ import {
 
 import { WalletProvider } from '@/hooks';
 
+import { InfoBlockchainProvider } from './InfoBlockchainProvider';
+
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
 const ImageComponent: ImageComponentType = (props) => <Image {...props} />;
 
-export const AppProviders = ({ children }: { children: ReactNode }) => (
+type AppProvidersProps = {
+  children: ReactNode;
+  infoBlockchain: InfoBlockchainResponse;
+};
+
+export const AppProviders = ({ children, infoBlockchain }: AppProvidersProps) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
     <Toaster />
     <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>
-      <WalletProvider>{children}</WalletProvider>
+      <InfoBlockchainProvider infoBlockchain={infoBlockchain}>
+        <WalletProvider>{children}</WalletProvider>
+      </InfoBlockchainProvider>
     </FrameworkProvider>
   </ThemeProvider>
 );

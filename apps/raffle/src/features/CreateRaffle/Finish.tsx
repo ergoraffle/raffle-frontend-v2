@@ -20,6 +20,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
+import { useInfoBlockchain } from '@/app/(providers)/InfoBlockchainProvider';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
@@ -27,10 +28,10 @@ import type { RaffleForm } from '../schemas';
 
 export type FinishProps = {
   handleBack: () => void;
-  serviceFee?: number;
 };
 
-export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
+export const Finish = ({ handleBack }: FinishProps) => {
+  const { serviceFee } = useInfoBlockchain();
   const [token, setToken] = useState<WalletToken>();
 
   const {
