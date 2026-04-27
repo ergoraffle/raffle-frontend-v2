@@ -12,11 +12,18 @@ import type { WalletContextValue } from '@/hooks';
 
 import type { RaffleForm } from './schemas';
 
-export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue | undefined) => {
-  const infoBlockchainData = await getInfoBlockchain();
-  if (!infoBlockchainData) {
-    throw new Error('Failed to create raffle. Please try again later.');
+const getInfoBlockchainData = async () => {
+  try {
+    return await getInfoBlockchain();
   }
+  catch {
+    throw new Error('Unable to load blockchain data. Please try again.');
+  }
+}
+
+export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue | undefined) => {
+  const infoBlockchainData = await getInfoBlockchainData();
+
   if (wallet?.selected?.name !== 'Nautilus') {
     throw new Error('Must be connected to Nautilus wallet.');
   }
@@ -130,10 +137,7 @@ export const donateRaffle = async (
   wallet: WalletContextValue | undefined,
   raffle: RaffleDetailResponse
 ) => {
-  const infoBlockchainData = await getInfoBlockchain();
-  if (!infoBlockchainData) {
-    throw new Error('Failed to donate raffle. Please try again later.');
-  }
+  const infoBlockchainData = await getInfoBlockchainData();
 
   if (wallet?.selected?.name !== 'Nautilus') {
     throw new Error('Must be connected to Nautilus wallet.');
@@ -198,11 +202,7 @@ export const addGiftRaffle = async (
     throw new Error('Failed to donate raffle. Please try again later.');
   }
 
-  const infoBlockchainData = await getInfoBlockchain();
-
-  if (!infoBlockchainData) {
-    throw new Error('Failed to donate raffle. Please try again later.');
-  }
+  const infoBlockchainData = await getInfoBlockchainData();
 
   if (wallet?.selected?.name !== 'Nautilus') {
     throw new Error('Must be connected to Nautilus wallet.');
