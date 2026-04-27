@@ -1,4 +1,4 @@
-import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
+import type { RaffleDetailResponse } from '@ergo-raffle/client';
 import type { NautilusWalletAddresses, UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 import {
   AddGiftProxyTxBuilder,
@@ -6,16 +6,14 @@ import {
   DonationProxyTxBuilder
 } from '@ergo-raffle/proxy-transactions';
 
+import { getInfoBlockchain } from '@/actions';
 import { getNonDecimalString } from '@/features/utils';
 import type { WalletContextValue } from '@/hooks';
 
 import type { RaffleForm } from './schemas';
 
-export const createRaffle = async (
-  data: RaffleForm,
-  wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse | undefined
-) => {
+export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue | undefined) => {
+  const infoBlockchainData = await getInfoBlockchain();
   if (!infoBlockchainData) {
     throw new Error('Failed to create raffle. Please try again later.');
   }
@@ -130,9 +128,9 @@ export const donateRaffle = async (
     tickets: number;
   },
   wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse | undefined,
   raffle: RaffleDetailResponse
 ) => {
+  const infoBlockchainData = await getInfoBlockchain();
   if (!infoBlockchainData) {
     throw new Error('Failed to donate raffle. Please try again later.');
   }
@@ -194,12 +192,13 @@ export const addGiftRaffle = async (
     }[];
   },
   wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse | undefined,
   raffle: RaffleDetailResponse | undefined
 ) => {
   if (!raffle) {
     throw new Error('Failed to donate raffle. Please try again later.');
   }
+
+  const infoBlockchainData = await getInfoBlockchain();
 
   if (!infoBlockchainData) {
     throw new Error('Failed to donate raffle. Please try again later.');

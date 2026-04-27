@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
+import type { RaffleDetailResponse } from '@ergo-raffle/client';
 import {
   Button,
   Card,
@@ -35,11 +35,10 @@ import { donateRaffle } from '../services';
 import { RaffleDonateMessage } from './RaffleDonateMessage';
 
 export type RaffleDonateProps = {
-  infoBlockchain?: InfoBlockchainResponse;
   raffle: RaffleDetailResponse;
 };
 
-export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
+export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const wallet = useWallet();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
@@ -76,7 +75,7 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
       setIsLoading(true);
-      const result = await donateRaffle({ tickets }, wallet, infoBlockchain, raffle);
+      const result = await donateRaffle({ tickets }, wallet, raffle);
 
       toast.success('Raffle donated successfully!');
 

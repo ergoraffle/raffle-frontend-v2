@@ -26,7 +26,6 @@ import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
 import { getNonDecimalString } from '@/features/utils';
 import { useWallet } from '@/hooks';
-import { useFetchInfoBlockchain } from '@/hooks/useFetchInfoBlockchain';
 import { useFetchRaffle } from '@/hooks/useFetchRaffle';
 import { getErrorMessage, getRandomItem } from '@/lib';
 
@@ -46,7 +45,6 @@ export const RaffleAddGiftForm = ({
   onCloseDialog
 }: RaffleAddGiftFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const infoBlockchain = useFetchInfoBlockchain();
   const raffle = useFetchRaffle(raffleId);
   const {
     handleSubmit,
@@ -130,12 +128,7 @@ export const RaffleAddGiftForm = ({
 
     try {
       setIsLoading(true);
-      const txId = await addGiftRaffle(
-        { winnerIndex, tokens },
-        wallet,
-        infoBlockchain.data,
-        raffle.data
-      );
+      const txId = await addGiftRaffle({ winnerIndex, tokens }, wallet, raffle.data);
       toast.success(`Gifts added successfully with id: ${txId}`);
       onCloseDialog();
     } catch (error) {

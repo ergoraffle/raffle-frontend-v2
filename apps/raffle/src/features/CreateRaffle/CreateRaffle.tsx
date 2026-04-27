@@ -89,7 +89,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
 
   const onSubmit = async (data: RaffleForm) => {
     try {
-      await createRaffle(data, wallet, infoBlockchainData);
+      await createRaffle(data, wallet);
 
       toast.success('Raffle created successfully!');
       resetForm();

@@ -71,7 +71,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
               backerCount={raffle?.backerCount}
             />
           </div>
-          <RaffleDonate infoBlockchain={infoData} raffle={raffle} />
+          <RaffleDonate raffle={raffle} />
         </div>
         <div className="order-3 sm:hidden">
           <RaffleDetailsIconBox
