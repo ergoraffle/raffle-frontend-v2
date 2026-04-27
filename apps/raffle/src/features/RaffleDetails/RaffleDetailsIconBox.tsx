@@ -8,14 +8,14 @@ export type RaffleDetailsIconBoxProps = {
   loading?: boolean;
   deadline?: number;
   soldTicketCount?: number;
-  backers?: RaffleDetailResponse['backers'];
+  backerCount?: RaffleDetailResponse['backerCount'];
 };
 
 export const RaffleDetailsIconBox = ({
   loading,
   deadline,
   soldTicketCount,
-  backers
+  backerCount
 }: RaffleDetailsIconBoxProps) => (
   <Card padding="lg">
     <CardContent className="flex justify-between sm:py-2 sm:px-5.5 text-center">
@@ -49,7 +49,7 @@ export const RaffleDetailsIconBox = ({
             <Skeleton className="h-4 w-16" />
           </div>
         ) : (
-          <Typography variant="subtitle-lg">{backers ?? 0} Backer</Typography>
+          <Typography variant="subtitle-lg">{backerCount ?? 0} Backer</Typography>
         )}
       </div>
     </CardContent>

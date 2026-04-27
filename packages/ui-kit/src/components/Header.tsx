@@ -45,11 +45,9 @@ export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: Hea
       className={`py-3 lg:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 mb-6.5 lg:mb-11 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
     >
       <div className="container flex items-center justify-between">
-        <Link href="/" className="hidden lg:flex">
-          <Logo className="h-12" />
-        </Link>
-        <Link href="/" className="lg:hidden">
-          <Logo className="h-9" variant="icon" />
+        <Link href="/">
+          <Logo className="h-12 hidden lg:flex" />
+          <Logo className="h-9 lg:hidden" variant="icon" />
         </Link>
         <ul className="items-center gap-x-10 hidden lg:flex">
           {links.map((link) => (

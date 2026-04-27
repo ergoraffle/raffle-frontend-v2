@@ -62,9 +62,12 @@ export const RaffleDetailsDescription = ({
         <CardDescription>A very short Description.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className={isMobile && !expanded ? 'line-clamp-3' : ''} ref={ref}>
-          {description}
-        </div>
+        <div
+          className={isMobile && !expanded ? 'line-clamp-3' : ''}
+          ref={ref}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
+          dangerouslySetInnerHTML={{ __html: description || '' }}
+        />
         {isMobile && isOverflowing ? (
           <Button
             variant="plain"

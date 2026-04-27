@@ -30,28 +30,24 @@ export const RaffleDetailsImageCard = ({
   raffle
 }: RaffleDetailsImageCardProps) => (
   <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:h-130" border={false}>
-    {loading ? (
-      <CardImageWrapper loading={loading} />
+    {loading || !raffle?.pictures || !raffle?.pictures.length ? (
+      <CardImageWrapper loading={loading} className="sm:h-81" />
     ) : (
       <Carousel>
         <CarouselContent>
-          {raffle?.pictures && raffle?.pictures.length > 0 ? (
-            raffle.pictures.map((picture) => (
-              <CarouselItem key={picture}>
-                <CardImageWrapper>
-                  <Image
-                    src={picture}
-                    priority
-                    alt={raffle.name}
-                    className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
-                    fill
-                  />
-                </CardImageWrapper>
-              </CarouselItem>
-            ))
-          ) : (
-            <CardImageWrapper />
-          )}
+          {raffle.pictures.map((picture) => (
+            <CarouselItem key={picture}>
+              <CardImageWrapper>
+                <Image
+                  src={picture}
+                  priority
+                  alt={raffle.name}
+                  className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
+                  fill
+                />
+              </CardImageWrapper>
+            </CarouselItem>
+          ))}
         </CarouselContent>
         {raffle?.pictures && raffle.pictures.length > 1 ? <CarouselDots /> : null}
       </Carousel>

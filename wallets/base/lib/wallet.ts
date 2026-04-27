@@ -34,9 +34,7 @@ export abstract class Wallet<
   abstract fetchTokens: () => Promise<WalletToken[]>;
   abstract fetchBoxes: () => Promise<Box[]>;
   abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
-  abstract fetchBalance: (
-    tokenId: string,
-  ) => Promise<bigint | number | string | undefined>;
+  abstract fetchBalance: (tokenId: string) => Promise<bigint | number | string | undefined>;
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
