@@ -1,6 +1,6 @@
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
 import type { NautilusWalletAddresses, UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
-import { CreationProxyTxBuilder } from '@ergo-raffle/proxy-transactions';
+import { CreationProxyTxBuilder, DonationProxyTxBuilder } from '@ergo-raffle/proxy-transactions';
 
 import { getNonDecimalString } from '@/features/utils';
 import type { WalletContextValue } from '@/hooks';
@@ -113,6 +113,66 @@ export const createRaffle = async (
   // if the raffle is a token-goal raffle, set the collecting token id
   if (token.id.toLowerCase() !== 'erg') {
     builder = builder.setCollectingTokenId(token.id);
+  }
+
+  const unsignedTx = await builder.build();
+  const eip12Object = unsignedTx?.toEIP12Object();
+
+  return await wallet.selected.transfer(eip12Object as UnsignedErgoTxProxy);
+};
+
+export const donateRaffle = async (
+  data: {
+    tickets: number;
+  },
+  wallet: WalletContextValue | undefined,
+  infoBlockchainData: InfoBlockchainResponse | undefined,
+  raffle: RaffleDetailResponse
+) => {
+  if (!infoBlockchainData) {
+    throw new Error('Failed to donate raffle. Please try again later.');
+  }
+
+  if (wallet?.selected?.name !== 'Nautilus') {
+    throw new Error('Must be connected to Nautilus wallet.');
+  }
+
+  // Current chain height
+  const chainHeight = infoBlockchainData.height;
+
+  // Donator UTXO boxes the selector may spend for value, tokens, and fee
+  const feeBoxes = (await wallet.selected.getBoxes()).values();
+
+  // Donator Ergo address (also receives change)
+  const donatorAddress = (wallet.addresses as NautilusWalletAddresses).main; // user address
+
+  // block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
+  const expirationHeight =
+    infoBlockchainData.height + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT);
+
+  // Price per ticket in nanoERG or collecting-token smallest units
+  const ticketPrice = BigInt(raffle.ticketPrice);
+
+  // Raffle deadline height written into the proxy box
+  const raffleDeadline = raffle.deadline;
+
+  // // Miner fee in nanoERG
+  const txFee = BigInt(infoBlockchainData.fee.tx);
+
+  let builder = new DonationProxyTxBuilder()
+    .setChainHeight(chainHeight)
+    .setFeeBoxes(feeBoxes)
+    .setDonatorAddress(donatorAddress)
+    .setTicketCount(BigInt(data.tickets))
+    .setExpirationHeight(expirationHeight)
+    .setTicketPrice(ticketPrice)
+    .setRaffleDeadline(raffleDeadline)
+    .setTxFee(txFee)
+    .setRaffleId(raffle.id);
+
+  // if the raffle is a token-goal raffle, set the collecting token id
+  if (raffle.token.id.toLowerCase() !== 'erg') {
+    builder = builder.setCollectingTokenId(raffle.token.id);
   }
 
   const unsignedTx = await builder.build();

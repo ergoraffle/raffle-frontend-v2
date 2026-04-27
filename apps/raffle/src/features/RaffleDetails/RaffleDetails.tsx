@@ -34,13 +34,14 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
   const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
   const missionFund = getMissionFund(raffle.share);
   const winnerPot = getWinnerPot(raffle.share.winner);
+  const serviceFee = infoData.fee.implementer + infoData.fee.service;
 
   return (
     <div className="flex flex-col gap-9.5">
       <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
         <RaffleDetailsImageCard
           raffle={raffle}
-          serviceFee={infoData.fee.implementer}
+          serviceFee={serviceFee}
           winnerPot={winnerPot}
           missionFund={missionFund}
         />
@@ -59,16 +60,16 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <RaffleDetailsIconBox
               deadline={deadline}
               soldTicketCount={soldTicketCount}
-              backers={raffle?.backers}
+              backerCount={raffle?.backerCount}
             />
           </div>
-          <RaffleDonate />
+          <RaffleDonate infoBlockchain={infoData} raffle={raffle} />
         </div>
         <div className="order-3 sm:hidden">
           <RaffleDetailsIconBox
             deadline={deadline}
             soldTicketCount={soldTicketCount}
-            backers={raffle?.backers}
+            backerCount={raffle?.backerCount}
           />
         </div>
       </div>
