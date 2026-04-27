@@ -93,6 +93,8 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
       toast.success('Raffle created successfully!');
       resetForm();
     } catch (error) {
+      // biome-ignore lint/suspicious/noConsole: remove
+      console.log(123, error);
       toast.error(
         error instanceof Error ? error.message : 'Failed to create raffle. Please try again later.'
       );
