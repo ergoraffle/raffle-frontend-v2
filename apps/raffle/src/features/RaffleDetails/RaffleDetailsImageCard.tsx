@@ -33,7 +33,7 @@ export const RaffleDetailsImageCard = ({
   missionFund,
   raffle
 }: RaffleDetailsImageCardProps) => (
-  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:h-130" border={false}>
+  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false}>
     {loading || !raffle?.pictures || !raffle?.pictures.length ? (
       <CardImageWrapper loading={loading} className="sm:h-81" />
     ) : (
@@ -41,7 +41,7 @@ export const RaffleDetailsImageCard = ({
         <CarouselContent>
           {raffle.pictures.map((picture) => (
             <CarouselItem key={picture}>
-              <CardImageWrapper>
+              <CardImageWrapper className="sm:h-81">
                 <Image
                   src={picture}
                   priority

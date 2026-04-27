@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
-
-import type { RaffleDetailResponseToken, WinnerBasketSummary } from '@ergo-raffle/client';
+import type {
+  RaffleDetailResponseToken,
+  TokenSummary,
+  WinnerBasketSummary
+} from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -13,7 +15,6 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { getAmountPercentage, getPercentageOfAmount } from '@/features/utils';
-import { useFetchTokens } from '@/hooks/useFetchTokens';
 
 export type RaffleWinnerBasketItemProps = {
   basket?: WinnerBasketSummary;
@@ -23,6 +24,7 @@ export type RaffleWinnerBasketItemProps = {
   handleOpenInfoDialog?: (basketIndex: number) => void;
   winnerPotShareAmount?: number;
   raffleIsActive?: boolean;
+  giftTokens?: TokenSummary[];
 };
 
 export const RaffleWinnerBasketItem = ({
@@ -32,11 +34,9 @@ export const RaffleWinnerBasketItem = ({
   handleOpenInfoDialog,
   raffleToken,
   winnerPotShareAmount,
-  raffleIsActive
+  raffleIsActive,
+  giftTokens
 }: RaffleWinnerBasketItemProps) => {
-  const basketGiftsTokens = useMemo(() => basket?.gifts.map((g) => g.tokenId), [basket]);
-  const { data: giftTokens } = useFetchTokens({ tokenIds: basketGiftsTokens ?? [] });
-
   return (
     <Card className="group p-0">
       <CardContent className="flex items-center p-0">
@@ -99,7 +99,7 @@ export const RaffleWinnerBasketItem = ({
                   <>
                     <div className="hidden sm:block">
                       {basket.gifts.slice(0, 2).map((gift) => {
-                        const giftToken = giftTokens?.items?.find((t) => t.id === gift.tokenId);
+                        const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
                         return (
                           <Typography key={gift.amount} variant="subtitle-md">
                             {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}

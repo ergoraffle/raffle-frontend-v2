@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import type { RaffleDetailResponseToken } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
@@ -17,6 +17,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { useFetchWinnerBaskets, useWinnerBasketsParams } from '@/hooks';
+import { useFetchTokens } from '@/hooks/useFetchTokens';
 
 import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
 import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';
@@ -56,6 +57,15 @@ export const RaffleWinnerBaskets = ({
 
   const firstColumn = items?.slice(0, 5);
   const secondColumn = items?.slice(5, 10);
+
+  const fetchTokensParams = useMemo(
+    () => ({
+      tokenIds: items?.flatMap((b) => b.gifts.map((g) => g.tokenId)) ?? []
+    }),
+    [items]
+  );
+
+  const { data: giftTokens } = useFetchTokens(fetchTokensParams);
 
   return (
     <Card>
@@ -138,6 +148,7 @@ export const RaffleWinnerBaskets = ({
                         raffleToken={raffleToken}
                         winnerPotShareAmount={winnerPotShareAmount}
                         raffleIsActive={raffleIsActive}
+                        giftTokens={giftTokens?.items}
                       />
                     ))}
               </div>
@@ -169,6 +180,7 @@ export const RaffleWinnerBaskets = ({
                           raffleToken={raffleToken}
                           winnerPotShareAmount={winnerPotShareAmount}
                           raffleIsActive={raffleIsActive}
+                          giftTokens={giftTokens?.items}
                         />
                       ))}
                 </div>
