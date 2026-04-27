@@ -36,7 +36,7 @@ export const WinnerBasketCarousel = ({
       <CarouselContent>
         {items?.map((item) => (
           <CarouselItem key={item.index}>
-            <div className="flex items-center gap-1 px-10 justify-center">
+            <div className="flex items-center gap-1 justify-center">
               <BasketStatus
                 className="size-5"
                 filled={Boolean(item.share)}

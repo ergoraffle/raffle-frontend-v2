@@ -55,17 +55,22 @@ export const RaffleWinnerBasketInfoDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="md:min-w-125 lg:min-w-3xl">
         <DialogHeader>
-          <DialogTitle>
-            {step === 2 ? (
-              <Button variant="plain" onClick={() => setStep(1)} size="sm">
-                <Left className="size-6" />
-                Add Gift
-              </Button>
-            ) : (
-              <div className="mx-auto md:w-1/2">
-                <WinnerBasketCarousel raffleId={raffle.id} setActiveBasketId={setActiveBasketId} />
-              </div>
-            )}
+          <DialogTitle asChild>
+            <div className="w-full">
+              {step === 2 ? (
+                <Button variant="plain" onClick={() => setStep(1)} size="sm">
+                  <Left className="size-6" />
+                  Add Gift
+                </Button>
+              ) : (
+                <div className="mx-auto md:w-1/2">
+                  <WinnerBasketCarousel
+                    raffleId={raffle.id}
+                    setActiveBasketId={setActiveBasketId}
+                  />
+                </div>
+              )}
+            </div>
           </DialogTitle>
         </DialogHeader>
         {step === 2 ? (
