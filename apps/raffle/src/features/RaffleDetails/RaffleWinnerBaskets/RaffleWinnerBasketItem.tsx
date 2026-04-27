@@ -34,8 +34,9 @@ export const RaffleWinnerBasketItem = ({
   winnerPotShareAmount,
   raffleIsActive
 }: RaffleWinnerBasketItemProps) => {
-  const basketGiftsTokens = useMemo(() => basket?.gifts.map((i) => i.tokenId), [basket]);
+  const basketGiftsTokens = useMemo(() => basket?.gifts.map((g) => g.tokenId), [basket]);
   const { data: giftTokens } = useFetchTokens({ tokenIds: basketGiftsTokens ?? [] });
+
   return (
     <Card className="group p-0">
       <CardContent className="flex items-center p-0">

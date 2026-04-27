@@ -21,6 +21,7 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import type { RaffleForm } from '../schemas';
 
@@ -49,8 +50,8 @@ export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
         const token = tokens.find((token) => token.id === data.tokenId);
         setToken(token);
       })
-      .catch(() => {
-        toast.error('Failed to load token info. Please try again later.');
+      .catch((error) => {
+        toast.error(getErrorMessage(error, 'Failed to load token info. Please try again later.'));
       });
   }, [data.tokenId, wallet.selected]);
 

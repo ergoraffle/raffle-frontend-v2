@@ -49,23 +49,32 @@ export const getRandomItem = (length: number): number => {
   return randomIndex;
 };
 
-export const getErrorMessage = (error: unknown, initialMessage?: string): string => {
-  const defaultMessage = initialMessage || 'Something went wrong!';
-  if (error === null || error === undefined) return defaultMessage;
-  if (typeof error === 'string') {
-    return error;
-  }
+export const getErrorMessage = (error: unknown, fallback = 'Something went wrong!'): string => {
+  if (error === null) return fallback;
+
+  if (typeof error === 'string') return error;
+
   if (error instanceof Error) {
-    if (error.cause instanceof Error) {
-      return error.cause.message;
-    }
+    const parts: string[] = [];
+
     if (error.message) {
-      return error.message;
+      parts.push(error.message);
     }
+
+    if (error.cause) {
+      parts.push(getErrorMessage(error.cause, fallback));
+    }
+
+    return parts.length ? parts.join(' - ') : fallback;
   }
+
   if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
     return error.message;
   }
 
-  return defaultMessage;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return fallback;
+  }
 };

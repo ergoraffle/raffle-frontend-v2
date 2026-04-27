@@ -27,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import { DONATE_TRANSACTIONS_STORAGE_KEY } from '../constants';
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
@@ -83,9 +84,7 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
       setDonateTransactionId(result);
       resetForm();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to donate raffle. Please try again later.'
-      );
+      toast.error(getErrorMessage(error, 'Failed to donate raffle. Please try again later.'));
     } finally {
       setIsLoading(false);
     }

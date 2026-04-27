@@ -10,7 +10,9 @@ import {
   useState
 } from 'react';
 
-import { type WalletInstance, type WalletName, wallets } from '@/lib';
+import { toast } from '@ergo-raffle/ui-kit';
+
+import { getErrorMessage, type WalletInstance, type WalletName, wallets } from '@/lib';
 
 export type WalletContextValue = {
   addresses?: Record<string, string>;
@@ -119,8 +121,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setSelected(wallet);
 
         setAgreed(true);
-      } catch {
-        //
+      } catch (error) {
+        toast.error(getErrorMessage(error));
       }
 
       setConnecting(false);

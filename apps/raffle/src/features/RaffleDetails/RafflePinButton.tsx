@@ -6,6 +6,7 @@ import { Pin } from '@ergo-raffle/icons';
 import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 
 import { PINED_RAFFLES_STORAGE_KEY } from '@/features/constants';
+import { getErrorMessage } from '@/lib';
 
 export type RafflePinButtonProps = {
   loading?: boolean;
@@ -48,8 +49,8 @@ export const RafflePinButton = ({ loading, raffleId }: RafflePinButtonProps) => 
       }
 
       localStorage.setItem(PINED_RAFFLES_STORAGE_KEY, JSON.stringify(updated));
-    } catch {
-      toast.error('Something went wrong, please try again later!');
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Something went wrong, please try again later!'));
     }
   };
 

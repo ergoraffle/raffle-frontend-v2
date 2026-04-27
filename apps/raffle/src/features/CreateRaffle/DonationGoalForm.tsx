@@ -21,6 +21,7 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
@@ -49,8 +50,8 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
     wallet.selected
       ?.fetchTokens()
       .then((tokens) => setTokens(tokens))
-      .catch(() => {
-        toast.error('Failed to get wallet.');
+      .catch((error) => {
+        toast.error(getErrorMessage(error, 'Failed to get wallet.'));
       });
   }, [wallet.selected]);
 

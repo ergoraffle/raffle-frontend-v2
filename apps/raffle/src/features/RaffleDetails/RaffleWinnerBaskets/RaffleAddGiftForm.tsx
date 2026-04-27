@@ -91,8 +91,13 @@ export const RaffleAddGiftForm = ({
       .then((result) => {
         setAssets(result);
       })
-      .catch(() => {
-        toast.error('Something went wrong with loading wallet data! Please try again later.');
+      .catch((error) => {
+        toast.error(
+          getErrorMessage(
+            error,
+            'Something went wrong with loading wallet data! Please try again later.'
+          )
+        );
       });
   }, [load]);
 
