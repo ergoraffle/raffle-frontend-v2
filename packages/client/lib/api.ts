@@ -121,7 +121,7 @@ export interface RaffleDetailResponse {
   amount: RaffleDetailResponseAmount;
   addresses: RaffleDetailResponseAddresses;
   share: RaffleDetailResponseShare;
-  backers: number;
+  backerCount: number;
   status: RaffleDetailResponseStatus;
 }
 
