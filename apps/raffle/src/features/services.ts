@@ -7,19 +7,18 @@ import {
 } from '@ergo-raffle/proxy-transactions';
 
 import { getInfoBlockchain } from '@/actions';
-import { getNonDecimalString } from '@/features/utils';
 import type { WalletContextValue } from '@/hooks';
+import { getNonDecimalString } from '@/lib';
 
 import type { RaffleForm } from './schemas';
 
 const getInfoBlockchainData = async () => {
   try {
     return await getInfoBlockchain();
-  }
-  catch {
+  } catch {
     throw new Error('Unable to load blockchain data. Please try again.');
   }
-}
+};
 
 export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue | undefined) => {
   const infoBlockchainData = await getInfoBlockchainData();

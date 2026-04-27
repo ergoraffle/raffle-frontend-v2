@@ -95,7 +95,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{raffle?.winnerPotShare.percent || 0}%</span>
+                <span>{raffle?.winnerPotSharePercent || 0}%</span>
               </Typography>
             )}
           </div>

@@ -1,16 +1,21 @@
 'use server';
 
 import {
-  type GetRaffleRaffleIdBasketParams,
-  type GetTokensParams,
+  configureClient,
   getInfoBlockchain as getInfoBlockchainApi,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
   getTokens as getTokensApi
 } from '@ergo-raffle/client';
 
-export const getRaffle = async (raffleId: string) => await getRaffleRaffleId(raffleId);
-export const getRaffleBaskets = async (raffleId: string, params: GetRaffleRaffleIdBasketParams) =>
-  await getRaffleRaffleIdBasket(raffleId, params);
-export const getInfoBlockchain = async () => await getInfoBlockchainApi();
-export const getTokens = async (params: GetTokensParams) => await getTokensApi(params);
+configureClient({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
+});
+
+export const getRaffle = getRaffleRaffleId;
+export const getRaffleBaskets = getRaffleRaffleIdBasket;
+export const getInfoBlockchain = getInfoBlockchainApi;
+export const getTokens: typeof getTokensApi = async (params) => {
+  if (!params.tokenIds?.length) return { items: [] };
+  return await getTokensApi(params);
+};

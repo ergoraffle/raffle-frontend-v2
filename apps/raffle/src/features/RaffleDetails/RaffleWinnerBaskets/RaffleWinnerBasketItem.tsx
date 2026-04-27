@@ -10,8 +10,6 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { getAmountPercentage, getPercentageOfAmount } from '@/features/utils';
-
 import type { RaffleDetailView } from '../raffleToViewModel';
 
 export type RaffleWinnerBasketItemProps = {
@@ -71,7 +69,7 @@ export const RaffleWinnerBasketItem = ({
                 <Typography variant="heading-3">{basket.index}</Typography>
               </div>
               <div className="px-4 flex-2">
-                <Typography variant="body-lg">{getAmountPercentage(basket.share)}%</Typography>
+                <Typography variant="body-lg">{basket.share / 10}%</Typography>
                 {basket.share ? (
                   <Typography
                     variant="subtitle-md"
@@ -79,9 +77,9 @@ export const RaffleWinnerBasketItem = ({
                     className="text-gray-2 h-0 overflow-hidden transition-all transition-duration-300 group-hover:h-4"
                   >
                     ={' '}
-                    {!!(raffle?.winnerPotShare.amount && raffle.token?.decimals) &&
+                    {!!(raffle?.winnerPotShareAmount && raffle.token?.decimals) &&
                       getDecimalString(
-                        getPercentageOfAmount(raffle.winnerPotShare.amount, basket.share),
+                        (raffle.winnerPotShareAmount * basket.share) / 100,
                         raffle.token.decimals
                       )}{' '}
                     {raffle?.token.name}

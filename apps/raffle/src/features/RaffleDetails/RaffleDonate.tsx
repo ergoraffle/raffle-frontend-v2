@@ -26,10 +26,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { DONATE_TRANSACTIONS_STORAGE_KEY } from '@/constants';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
-import { DONATE_TRANSACTIONS_STORAGE_KEY } from '../constants';
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
 import { RaffleDonateMessage } from './RaffleDonateMessage';

@@ -25,9 +25,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
-import { getNonDecimalString } from '@/features/utils';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getRandomItem } from '@/lib';
+import { getErrorMessage, getNonDecimalString } from '@/lib';
 
 import { AssetsField } from './AssetsField';
 
@@ -100,8 +99,7 @@ export const RaffleAddGiftForm = ({
 
   const setRandomBasket = () => {
     if (basketsCount && basketsCount > 0) {
-      const randomIndex = getRandomItem(basketsCount);
-      setValue('winnerIndex', randomIndex);
+      setValue('winnerIndex', Math.floor(Math.random() * basketsCount));
     }
   };
 

@@ -10,7 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
-import { useWallet } from '@/hooks';
+import { useInfoBlockchain, useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
@@ -22,6 +22,8 @@ export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const wallet = useWallet();
+
+  const infoBlockchain = useInfoBlockchain();
 
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
@@ -43,6 +45,7 @@ export const CreateRaffle = () => {
 
     setActiveStepIndex((prev) => prev + 1);
   };
+
   const handleBack = () => {
     setActiveStepIndex((prev) => prev - 1);
   };
@@ -51,28 +54,6 @@ export const CreateRaffle = () => {
     form.reset();
     setActiveStepIndex(0);
   };
-
-  const steps = [
-    {
-      title: 'Specifications',
-      content: <SpecificationsForm handleNext={handleNext} />,
-      fields: ['name', 'description', 'tags', 'deadline', 'images'] as const
-    },
-    {
-      title: 'Donation Goal',
-      content: <DonationGoalForm handleNext={handleNext} handleBack={handleBack} />,
-      fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
-    },
-    {
-      title: 'Baskets',
-      content: <BasketsForm handleNext={handleNext} handleBack={handleBack} />,
-      fields: ['emptyBaskets', 'details'] as const
-    },
-    {
-      title: 'Overview & Agreement',
-      content: <Finish handleBack={handleBack} />
-    }
-  ];
 
   const onSubmit = async (data: RaffleForm) => {
     try {
@@ -84,6 +65,37 @@ export const CreateRaffle = () => {
       toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));
     }
   };
+
+  if (!infoBlockchain.data) return null;
+
+  const steps = [
+    {
+      title: 'Specifications',
+      content: <SpecificationsForm handleNext={handleNext} />,
+      fields: ['name', 'description', 'tags', 'deadline', 'images'] as const
+    },
+    {
+      title: 'Donation Goal',
+      content: (
+        <DonationGoalForm
+          handleNext={handleNext}
+          handleBack={handleBack}
+          infoBlockchain={infoBlockchain.data}
+        />
+      ),
+      fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
+    },
+    {
+      title: 'Baskets',
+      content: <BasketsForm handleNext={handleNext} handleBack={handleBack} />,
+      fields: ['emptyBaskets', 'details'] as const
+    },
+    {
+      title: 'Overview & Agreement',
+      content: <Finish handleBack={handleBack} infoBlockchain={infoBlockchain.data} />
+    }
+  ];
+
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-5 py-3.5 mb-7">

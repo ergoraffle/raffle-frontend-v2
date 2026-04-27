@@ -45,16 +45,16 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
   };
   const { pagination, onChangePage, onChangePerPage, params, onTypeFilterChange, type } =
     useWinnerBasketsParams();
-  const { items, total, isLoading } = useFetchWinnerBaskets(raffle.id, params);
+  const { data, isLoading } = useFetchWinnerBaskets(raffle.id, params);
 
-  const firstColumn = items?.slice(0, 5);
-  const secondColumn = items?.slice(5, 10);
+  const firstColumn = data?.items?.slice(0, 5);
+  const secondColumn = data?.items?.slice(5, 10);
 
   const fetchTokensParams = useMemo(
     () => ({
-      tokenIds: items?.flatMap((b) => b.gifts.map((g) => g.tokenId)) ?? []
+      tokenIds: data?.items?.flatMap((b) => b.gifts.map((g) => g.tokenId)) ?? []
     }),
-    [items]
+    [data?.items]
   );
 
   const { data: giftTokens } = useFetchTokens(fetchTokensParams);
@@ -72,7 +72,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                 <Button
                   variant="primary-soft"
                   onClick={() => handleAddGiftDialogOpen(true)}
-                  disabled={!items?.length}
+                  disabled={!data?.items?.length}
                 >
                   <Plus />
                   Add Gift
@@ -97,7 +97,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                 <Button
                   variant="primary-soft"
                   onClick={() => handleAddGiftDialogOpen(true)}
-                  disabled={!items?.length}
+                  disabled={!data?.items?.length}
                 >
                   <Plus />
                   Add Gift
@@ -106,7 +106,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
             </div>
           )}
         </div>
-        {!isLoading && !items?.length ? (
+        {!isLoading && !data?.items?.length ? (
           <div className="flex justify-center items-center grow my-9">
             <Empty>
               <Typography variant="heading-3">No matching results found.</Typography>
@@ -178,13 +178,13 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
         )}
         {!isLoading && (
           <>
-            {items && total ? (
+            {data?.items && data?.total ? (
               <Pagination
                 page={pagination.page}
                 perPage={pagination.perPage}
                 onChangePerPage={onChangePage}
                 onChangePage={onChangePerPage}
-                total={total}
+                total={data?.total}
                 align="side"
                 className="mt-4"
               />
@@ -193,7 +193,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               open={addGiftDialog.open}
               onOpenChange={handleAddGiftDialogOpen}
               initialBasketNumber={addGiftDialog.initialBasketNumber}
-              basketsCount={items?.length}
+              basketsCount={data?.items?.length}
               raffle={raffle}
             />
             {basketInfoDialog ? (

@@ -22,10 +22,10 @@ export const WinnerBasketCarousel = ({
   setActiveBasketId
 }: WinnerBasketCarouselProps) => {
   const params = useMemo(() => ({}), []);
-  const { items, isLoading } = useFetchWinnerBaskets(raffleId, params);
+  const { data, isLoading } = useFetchWinnerBaskets(raffleId, params);
   const onSlideChange = (index: number) => {
-    if (items && setActiveBasketId) {
-      const foundedBasket = items[index];
+    if (data?.items && setActiveBasketId) {
+      const foundedBasket = data?.items[index];
       setActiveBasketId(foundedBasket.index);
     }
   };
@@ -34,7 +34,7 @@ export const WinnerBasketCarousel = ({
   ) : (
     <Carousel onChangeSlide={onSlideChange}>
       <CarouselContent>
-        {items?.map((item) => (
+        {data?.items?.map((item) => (
           <CarouselItem key={item.index}>
             <div className="flex items-center gap-1 justify-center">
               <BasketStatus

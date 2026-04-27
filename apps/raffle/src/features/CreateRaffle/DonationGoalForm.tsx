@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   Button,
   Field,
@@ -20,7 +21,6 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import { useInfoBlockchain } from '@/app/(providers)/InfoBlockchainProvider';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
@@ -31,10 +31,14 @@ import { FieldTitle } from './FieldTitle';
 export type DonationGoalFormProps = {
   handleNext: () => void;
   handleBack: () => void;
+  infoBlockchain: InfoBlockchainResponse;
 };
 
-export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormProps) => {
-  const { serviceFee } = useInfoBlockchain();
+export const DonationGoalForm = ({
+  handleNext,
+  handleBack,
+  infoBlockchain
+}: DonationGoalFormProps) => {
   const {
     formState: { errors },
     register,
@@ -42,6 +46,8 @@ export const DonationGoalForm = ({ handleNext, handleBack }: DonationGoalFormPro
     getValues,
     setValue
   } = useFormContext<RaffleDonationGoalForm>();
+
+  const serviceFee = infoBlockchain.fee.service + infoBlockchain.fee.implementer;
 
   const [tokens, setTokens] = useState<WalletToken[]>([]);
 

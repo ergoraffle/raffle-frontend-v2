@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react';
 
 import type { Metadata } from 'next';
 
-import { configureClient, getInfoBlockchain } from '@ergo-raffle/client';
+import { configureClient } from '@ergo-raffle/client';
 import { LayoutBackground } from '@ergo-raffle/ui-kit';
 
 import { Footer, Header } from '@/components';
@@ -20,28 +20,25 @@ configureClient({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
 });
 
-const RootLayout = async ({ children }: PropsWithChildren) => {
-  const infoBlockchain = await getInfoBlockchain();
-  return (
-    <html
-      lang="en"
-      className={`
+const RootLayout = async ({ children }: PropsWithChildren) => (
+  <html
+    lang="en"
+    className={`
         ${fraunces.variable}
         ${poppins.variable}
         ${karla.variable} 
       `}
-      suppressHydrationWarning
-    >
-      <body className="antialiased">
-        <AppProviders infoBlockchain={infoBlockchain}>
-          <LayoutBackground>
-            <Header />
-            <div className="container min-h-dvh">{children}</div>
-            <Footer />
-          </LayoutBackground>
-        </AppProviders>
-      </body>
-    </html>
-  );
-};
+    suppressHydrationWarning
+  >
+    <body className="antialiased">
+      <AppProviders>
+        <LayoutBackground>
+          <Header />
+          <div className="container min-h-dvh">{children}</div>
+          <Footer />
+        </LayoutBackground>
+      </AppProviders>
+    </body>
+  </html>
+);
 export default RootLayout;

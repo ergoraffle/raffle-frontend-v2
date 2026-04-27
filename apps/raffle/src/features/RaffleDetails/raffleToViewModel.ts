@@ -1,43 +1,35 @@
 import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
 
-import {
-  getAmountPercentage,
-  getDeadlineAmount,
-  getMissionFund,
-  getSoldTicketCount,
-  getWinnerPotShareAmount
-} from '@/features/utils';
-
 export type RaffleDetailView = RaffleDetailResponse & {
   soldTicketCount: number;
   deadlineAmount: number;
   missionFund: number;
   serviceFee: number;
-  winnerPotShare: {
-    percent: number;
-    amount: number;
-  };
+  winnerPotSharePercent: number;
+  winnerPotShareAmount: number;
 };
 
 export const raffleToViewModel = (
-  raffleServer: RaffleDetailResponse,
+  raffle: RaffleDetailResponse,
   infoBlockchain: InfoBlockchainResponse
 ): RaffleDetailView => {
-  const soldTicketCount = getSoldTicketCount(raffleServer.amount.raised, raffleServer.ticketPrice);
-  const deadlineAmount = getDeadlineAmount(infoBlockchain.height, raffleServer.deadline);
-  const missionFund = getMissionFund(raffleServer.share);
-  const winnerPotSharePercent = getAmountPercentage(raffleServer.share.winner);
-  const winnerPotShareAmount = getWinnerPotShareAmount(raffleServer.amount, winnerPotSharePercent);
+  const soldTicketCount = raffle.amount.raised / raffle.ticketPrice;
+  const deadlineAmount = raffle.deadline - infoBlockchain.height;
+  const missionFund =
+    (1000 - Object.values(raffle.share).reduce((sum, value) => sum + value, 0)) / 10;
+  const winnerPotSharePercent = raffle.share.winner / 10;
+  const winnerPotShareAmount =
+    ((raffle.amount.raised > raffle.amount.goal ? raffle.amount.raised : raffle.amount.goal) *
+      winnerPotSharePercent) /
+    100;
   const serviceFee = infoBlockchain.fee.implementer + infoBlockchain.fee.service;
   return {
-    ...raffleServer,
+    ...raffle,
     soldTicketCount,
     deadlineAmount,
     missionFund,
     serviceFee,
-    winnerPotShare: {
-      percent: winnerPotSharePercent,
-      amount: winnerPotShareAmount
-    }
+    winnerPotSharePercent,
+    winnerPotShareAmount
   };
 };

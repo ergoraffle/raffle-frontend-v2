@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   BasketStatus,
   Button,
@@ -20,7 +21,6 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
-import { useInfoBlockchain } from '@/app/(providers)/InfoBlockchainProvider';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
@@ -28,10 +28,12 @@ import type { RaffleForm } from '../schemas';
 
 export type FinishProps = {
   handleBack: () => void;
+  infoBlockchain: InfoBlockchainResponse;
 };
 
-export const Finish = ({ handleBack }: FinishProps) => {
-  const { serviceFee } = useInfoBlockchain();
+export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
+  const serviceFee = infoBlockchain.fee.service + infoBlockchain.fee.implementer;
+
   const [token, setToken] = useState<WalletToken>();
 
   const {
