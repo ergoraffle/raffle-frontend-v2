@@ -87,8 +87,8 @@ export const useUploader = ({
         name: file.name,
         url: file.uploadURL ?? ''
       }))
-      .filter((file, index, files) =>
-        files.findIndex((current) => current.id === file.id) === index
+      .filter(
+        (file, index, files) => files.findIndex((current) => current.id === file.id) === index
       );
   };
 

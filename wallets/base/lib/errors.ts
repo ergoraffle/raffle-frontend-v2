@@ -24,10 +24,10 @@ export class AddressRetrievalError extends WalletError {
 export class BalanceFetchError extends WalletError {
   constructor(
     public wallet: string,
-    public cause?: unknown,
+    public cause?: unknown
   ) {
     super(`Failed to fetch wallet balance from the [${wallet}] wallet`, {
-      cause,
+      cause
     });
   }
 }

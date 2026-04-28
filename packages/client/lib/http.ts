@@ -25,7 +25,7 @@ export const configureClient = (config: { baseURL?: string }) => {
       });
 
       return searchParams.toString();
-    },
+    }
   });
 };
 
