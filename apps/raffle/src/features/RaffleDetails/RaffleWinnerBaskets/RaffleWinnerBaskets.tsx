@@ -182,8 +182,8 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               <Pagination
                 page={pagination.page}
                 perPage={pagination.perPage}
-                onChangePerPage={onChangePage}
-                onChangePage={onChangePerPage}
+                onChangePage={onChangePage}
+                onChangePerPage={onChangePerPage}
                 total={data?.total}
                 align="side"
                 className="mt-4"

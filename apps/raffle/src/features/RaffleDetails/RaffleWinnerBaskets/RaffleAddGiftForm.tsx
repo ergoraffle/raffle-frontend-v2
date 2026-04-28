@@ -56,7 +56,8 @@ export const RaffleAddGiftForm = ({
   } = useForm<AddGiftForm>({
     resolver: zodResolver(addGiftSchema),
     defaultValues: {
-      winnerIndex: initialBasketNumber
+      winnerIndex: initialBasketNumber,
+      tokens: []
     }
   });
   const { fields: tokenFields } = useFieldArray({
@@ -190,7 +191,7 @@ export const RaffleAddGiftForm = ({
           }}
         />
         {!!errors.tokens && (
-          <FieldError>{errors.tokens.message || !!errors.tokens?.root?.message}</FieldError>
+          <FieldError>{errors.tokens.message || errors.tokens?.root?.message}</FieldError>
         )}
       </Field>
       <div className="min-h-36 md:min-h-auto max-h-36 overflow-y-auto scrollbar-hide space-y-4">

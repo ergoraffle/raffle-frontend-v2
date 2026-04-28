@@ -20,15 +20,7 @@ export const Toaster = ({ ...props }: ToasterProps) => (
     }
     toastOptions={{
       classNames: {
-        toast: `cn-toast
-            bg-background
-            text-foreground
-
-            data-[type=success]:bg-success-hover
-            data-[type=success]:text-success-hover-foreground
-
-            data-[type=error]:bg-error-light
-            data-[type=error]:text-error-light-foreground`
+        toast: 'cn-toast'
       }
     }}
     {...props}

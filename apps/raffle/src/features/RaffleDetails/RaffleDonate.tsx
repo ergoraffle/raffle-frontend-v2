@@ -104,7 +104,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   }, [isMobile]);
 
   return (
-    <div className="grow w-full relative">
+    <div className="grow w-full relative md:h-66.5 lg:h-auto">
       {raffle.status === 'active' && (
         <Collapsible
           open={openCollapsible}

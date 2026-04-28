@@ -62,6 +62,7 @@ const PaginationTrigger = ({ className, isActive, ...props }: PaginationTriggerP
         asChild
         variant="plain"
         size="icon-xs"
+        type="button"
         className={cn('aria-disabled:opacity-50 aria-disabled:pointer-events-none', className)}
       >
         <Link
@@ -159,7 +160,6 @@ export const Pagination = (props: PaginationProps) => {
   const totalPages = Math.ceil(total / perPage);
   const pages: (number | 'ellipsis')[] = [];
   const perPageItems = getPerPageOptions(perPage);
-
   const isLink = isLinkMode(props);
 
   for (let i = 1; i <= totalPages; i++) {
@@ -200,8 +200,8 @@ export const Pagination = (props: PaginationProps) => {
                   ) : (
                     <PaginationTrigger
                       {...(isLink
-                        ? { href: props.getPageHref(page) }
-                        : { onClick: () => props.onChangePage(page) })}
+                        ? { href: props.getPageHref(p) }
+                        : { onClick: () => props.onChangePage(p) })}
                       isActive={p === page}
                       aria-disabled={p === page}
                     >
