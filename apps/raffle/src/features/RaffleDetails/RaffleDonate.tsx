@@ -75,7 +75,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
       setIsLoading(true);
-      const txId = await donateRaffle({ tickets }, wallet, raffle);
+      const txId = await donateRaffle(raffle.id, { tickets }, wallet);
 
       toast.success(
         <>

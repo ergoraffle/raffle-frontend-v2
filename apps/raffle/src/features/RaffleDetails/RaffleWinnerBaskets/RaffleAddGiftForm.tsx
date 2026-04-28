@@ -128,7 +128,7 @@ export const RaffleAddGiftForm = ({
         };
       });
 
-      const txId = await addGiftRaffle({ winnerIndex, tokens }, wallet, raffle);
+      const txId = await addGiftRaffle(raffle.id, { winnerIndex, tokens }, wallet);
 
       toast.success(
         <>
