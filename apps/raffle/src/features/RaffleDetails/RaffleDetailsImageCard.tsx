@@ -16,6 +16,8 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { getAddressUrl } from '@/lib';
+
 import { raffleStatusMap } from '../raffleStatusRenderMap';
 import type { RaffleDetailView } from './raffleToViewModel';
 
@@ -77,7 +79,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
             <div className="w-1/2">
               <Identifier
                 value={raffle?.addresses.project}
-                href={raffle?.addresses.project}
+                href={getAddressUrl(raffle?.addresses.project)}
                 size="lg"
                 loading={loading}
               />

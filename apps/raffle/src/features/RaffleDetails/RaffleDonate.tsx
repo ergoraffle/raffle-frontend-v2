@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 
 import { DONATE_TRANSACTIONS_STORAGE_KEY } from '@/constants';
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
+import { getErrorMessage, getTxURL } from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -75,12 +75,22 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
       setIsLoading(true);
-      const result = await donateRaffle({ tickets }, wallet, raffle);
+      const txId = await donateRaffle({ tickets }, wallet, raffle);
 
-      toast.success('Raffle donated successfully!');
+      toast.success(
+        <>
+          Raffle donated successfully! Click{' '}
+          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+            here
+          </Link>{' '}
+          to see details.
+        </>
+      );
 
-      saveTransactionId(result);
-      setDonateTransactionId(result);
+      saveTransactionId(txId);
+
+      setDonateTransactionId(txId);
+
       resetForm();
     } catch (error) {
       toast.error(getErrorMessage(error, 'Failed to donate raffle. Please try again later.'));

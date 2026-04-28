@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import Link from 'next/link';
+
 import type { WalletToken } from '@ergo-raffle/base-wallet';
 import { Dice, UpLeft } from '@ergo-raffle/icons';
 import {
@@ -26,7 +28,7 @@ import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewMode
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getNonDecimalString } from '@/lib';
+import { getErrorMessage, getNonDecimalString, getTxURL } from '@/lib';
 
 import { AssetsField } from './AssetsField';
 
@@ -106,27 +108,38 @@ export const RaffleAddGiftForm = ({
   const onSubmit = async (data: AddGiftForm) => {
     const winnerIndex = data.winnerIndex;
 
-    const tokens = data.tokens.map((token) => {
-      const amount = token.amount.toLocaleString('en', {
-        useGrouping: false,
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 20
-      });
-
-      const decimal = assets.find((asset) => asset.id === token.tokenId)?.decimals || 0;
-
-      const value = getNonDecimalString(amount, decimal);
-
-      return {
-        amount: BigInt(value),
-        tokenId: token.tokenId
-      };
-    });
-
     try {
       setIsLoading(true);
+
+      const tokens = data.tokens.map((token) => {
+        const amount = token.amount.toLocaleString('en', {
+          useGrouping: false,
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 20
+        });
+
+        const decimal = assets.find((asset) => asset.id === token.tokenId)?.decimals || 0;
+
+        const value = getNonDecimalString(amount, decimal);
+
+        return {
+          amount: BigInt(Number(value)),
+          tokenId: token.tokenId
+        };
+      });
+
       const txId = await addGiftRaffle({ winnerIndex, tokens }, wallet, raffle);
-      toast.success(`Gifts added successfully with id: ${txId}`);
+
+      toast.success(
+        <>
+          Gifts added successfully! Click{' '}
+          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+            here
+          </Link>{' '}
+          to see details.
+        </>
+      );
+
       onCloseDialog();
     } catch (error) {
       toast.error(getErrorMessage(error, 'Failed to add Gift. Please try again later.'));

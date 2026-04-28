@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
+import { getErrorMessage, getTxURL } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
@@ -57,9 +58,17 @@ export const CreateRaffle = () => {
 
   const onSubmit = async (data: RaffleForm) => {
     try {
-      await createRaffle(data, wallet);
+      const tx = await createRaffle(data, wallet);
 
-      toast.success('Raffle created successfully!');
+      toast.success(
+        <>
+          Raffle created successfully! Click{' '}
+          <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
+            here
+          </Link>{' '}
+          to see details.
+        </>
+      );
       resetForm();
     } catch (error) {
       toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));

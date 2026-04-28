@@ -110,3 +110,13 @@ export const getNonDecimalString = (value: string, decimals: number) => {
     '$1'
   );
 };
+
+export const getAddressUrl = (address?: string): string | undefined => {
+  if (!address) return;
+  return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/addresses/${address}`;
+};
+
+export const getTxURL = (tx?: string): string | undefined => {
+  if (!tx) return;
+  return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/transactions/${tx}`;
+};
