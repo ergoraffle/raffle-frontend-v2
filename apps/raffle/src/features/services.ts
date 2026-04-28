@@ -15,7 +15,7 @@ const getRaffleData = async (raffleId: string) => {
   try {
     return await getRaffle(raffleId);
   } catch {
-    throw new Error('Failed to donate raffle. Please try again later.');
+    throw new Error('Failed to load raffle data. Please try again later.');
   }
 };
 

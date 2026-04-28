@@ -12,12 +12,14 @@ import {
   Empty,
   Pagination,
   Skeleton,
-  Typography
+  Typography,
+  toast
 } from '@ergo-raffle/ui-kit';
 
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
-import { useFetchWinnerBaskets, useWinnerBasketsParams } from '@/hooks';
+import { useFetchWinnerBaskets, useWallet, useWinnerBasketsParams } from '@/hooks';
 import { useFetchTokens } from '@/hooks/useFetchTokens';
+import { getErrorMessage } from '@/lib';
 
 import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
 import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';
@@ -29,6 +31,7 @@ export type RaffleWinnerBasketsProps = {
 };
 
 export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
+  const { ensureConnected } = useWallet();
   const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
     open: boolean;
@@ -59,6 +62,15 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
 
   const { data: giftTokens } = useFetchTokens(fetchTokensParams);
 
+  const handleClickAddGift = (initialBasketNumber?: number) => {
+    try {
+      ensureConnected('Nautilus');
+      openAddGiftDialog(initialBasketNumber);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -71,7 +83,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               ) : (
                 <Button
                   variant="primary-soft"
-                  onClick={() => handleAddGiftDialogOpen(true)}
+                  onClick={() => handleClickAddGift(undefined)}
                   disabled={!data?.items?.length}
                 >
                   <Plus />
@@ -96,7 +108,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               ) : (
                 <Button
                   variant="primary-soft"
-                  onClick={() => handleAddGiftDialogOpen(true)}
+                  onClick={() => handleClickAddGift(undefined)}
                   disabled={!data?.items?.length}
                 >
                   <Plus />
@@ -135,7 +147,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                       <RaffleWinnerBasketItem
                         basket={basket}
                         key={basket.index}
-                        handleOpenAddGiftDialog={openAddGiftDialog}
+                        handleOpenAddGiftDialog={handleClickAddGift}
                         handleOpenInfoDialog={setBasketInfoDialog}
                         raffle={raffle}
                         giftTokens={giftTokens?.items}
@@ -165,7 +177,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                         <RaffleWinnerBasketItem
                           basket={basket}
                           key={basket.index}
-                          handleOpenAddGiftDialog={openAddGiftDialog}
+                          handleOpenAddGiftDialog={handleClickAddGift}
                           handleOpenInfoDialog={setBasketInfoDialog}
                           raffle={raffle}
                           giftTokens={giftTokens?.items}
