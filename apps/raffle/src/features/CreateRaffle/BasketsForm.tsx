@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { Info } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -43,6 +45,12 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
 
   const winnerPotShare = watch('winnerPotShare', 0);
 
+  const details = watch('details');
+  const filledSharePercent = useMemo(
+    () => details.reduce((sum, item) => sum + item.percent * item.count, 0),
+    [details]
+  );
+
   return (
     <div className="space-y-8">
       <div>
@@ -58,7 +66,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             Winners Pot: {winnerPotShare}% of Total Fund
           </Typography>
         </div>
-        <Progress variant="box" value={winnerPotShare} max={100} />
+        <Progress variant="box" value={filledSharePercent} max={100} />
         <div className="flex flex-col lg:flex-row  gap-x-5 gap-y-3">
           <Field className="sm:max-w-1/2 md:max-w-auto flex-1">
             <FieldLabel>Share Baskets</FieldLabel>

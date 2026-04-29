@@ -9,14 +9,17 @@ import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-k
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { ServerError } from '@/components/Errors/ServerError';
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
 import { getErrorMessage, getTxURL } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
+import { CreateRaffleSkeleton } from './CreateRaffleSkeleton';
 import { DonationGoalForm } from './DonationGoalForm';
 import { Finish } from './Finish';
+import { NoActiveWallet } from './NoActiveWallet';
 import { SpecificationsForm } from './SpecificationsForm';
 
 export const CreateRaffle = () => {
@@ -75,7 +78,10 @@ export const CreateRaffle = () => {
     }
   };
 
-  if (!infoBlockchain.data) return null;
+  if (infoBlockchain.isLoading || wallet.connecting) return <CreateRaffleSkeleton />;
+  if (!infoBlockchain.data) return <ServerError />;
+
+  const hasNoActiveWallet = !wallet.connecting && wallet?.selected?.name !== 'Nautilus';
 
   const steps = [
     {
@@ -116,17 +122,25 @@ export const CreateRaffle = () => {
           className="hidden sm:block"
         />
         <Typography variant="heading-1">Ready to create a new raffle?</Typography>
-        <Stepper steps={steps.map((s) => s.title)} activeStepIndex={activeStepIndex} />
+        <Stepper
+          steps={steps.map((s) => s.title)}
+          activeStepIndex={activeStepIndex}
+          disabled={hasNoActiveWallet}
+        />
       </div>
-      <Card className="py-7">
-        <CardContent>
-          <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="mx-auto max-w-7xl">{steps[activeStepIndex]?.content}</div>
-            </form>
-          </FormProvider>
-        </CardContent>
-      </Card>
+      {hasNoActiveWallet ? (
+        <NoActiveWallet />
+      ) : (
+        <Card className="py-7">
+          <CardContent>
+            <FormProvider {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="mx-auto max-w-7xl">{steps[activeStepIndex]?.content}</div>
+              </form>
+            </FormProvider>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };
