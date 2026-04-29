@@ -14,10 +14,13 @@ import {
   SheetContent,
   SheetFooter,
   Typography,
+  toast,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
+import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 import { RaffleWinnerBasketInfo } from './RaffleWinnerBasketInfo';
@@ -37,8 +40,19 @@ export const RaffleWinnerBasketInfoDialog = ({
   onOpenChange
 }: RaffleWinnerBasketInfoDialogProps) => {
   const { isMobile } = useBreakpoint();
+  const { ensureConnected } = useWallet();
   const [activeBasketId, setActiveBasketId] = useState<number>(initialBasketId);
   const [step, setStep] = useState<1 | 2>(1);
+
+  const handleClickAddGift = () => {
+    try {
+      ensureConnected('Nautilus');
+      setStep(2);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title="Which Basket do you want to add Gift to?">
@@ -67,6 +81,7 @@ export const RaffleWinnerBasketInfoDialog = ({
                   <WinnerBasketCarousel
                     raffleId={raffle.id}
                     setActiveBasketId={setActiveBasketId}
+                    initialBasketId={initialBasketId}
                   />
                 </div>
               )}
@@ -86,7 +101,7 @@ export const RaffleWinnerBasketInfoDialog = ({
           <>
             <RaffleWinnerBasketInfo basketId={activeBasketId} />
             <DialogFooter>
-              <Button className="w-1/2 mx-auto" onClick={() => setStep(2)}>
+              <Button className="w-1/2 mx-auto" onClick={handleClickAddGift}>
                 <Plus className="size-6" />
                 Add Gift
               </Button>

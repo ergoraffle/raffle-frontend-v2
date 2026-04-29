@@ -15,11 +15,13 @@ import { useFetchWinnerBaskets } from '@/hooks/useFetchWinnerBaskets';
 export type WinnerBasketCarouselProps = {
   raffleId: string;
   setActiveBasketId?: (basketId: number) => void;
+  initialBasketId: number;
 };
 
 export const WinnerBasketCarousel = ({
   raffleId,
-  setActiveBasketId
+  setActiveBasketId,
+  initialBasketId
 }: WinnerBasketCarouselProps) => {
   const params = useMemo(() => ({}), []);
   const { data, isLoading } = useFetchWinnerBaskets(raffleId, params);
@@ -29,10 +31,14 @@ export const WinnerBasketCarousel = ({
       setActiveBasketId(foundedBasket.index);
     }
   };
+  const defaultActiveIndex = useMemo(
+    () => data?.items?.findIndex((i) => i.index === initialBasketId) ?? 0,
+    [data?.items, initialBasketId]
+  );
   return isLoading ? (
     <Skeleton className="h-3 w-1/2 mx-auto" />
   ) : (
-    <Carousel onChangeSlide={onSlideChange}>
+    <Carousel onChangeSlide={onSlideChange} initialIndex={defaultActiveIndex}>
       <CarouselContent>
         {data?.items?.map((item) => (
           <CarouselItem key={item.index}>
