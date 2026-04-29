@@ -106,35 +106,43 @@ paths:
                 $ref: '#/components/schemas/RaffleDetailResponse'
         '404':
           description: Raffle not found
-  /raffles/{raffleId}/winner-baskets:
+  /raffle/{raffleId}/basket:
     get:
       summary: Get winner baskets of a raffle
       parameters:
-        - in: path
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: share
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: gift
+        - schema:
+            type: number
+          in: query
+          name: index
+        - schema:
+            type: string
+          in: path
           name: raffleId
           required: true
-          schema:
-            type: string
-
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            default: 0
-
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 20
-
-        - in: query
-          name: type
-          schema:
-            type: string
-            enum: [share, empty, gift, share_gift]
-          description: Basket filter type
-
       responses:
         '200':
           description: Winner baskets list
@@ -188,7 +196,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RaffleActivityResponse'
-  /raffles/{raffleId}/winner-baskets/{basketId}:
+  /raffles/{raffleId}/basket/{basketId}:
     get:
       summary: Get details of a winner basket
       parameters:
@@ -201,7 +209,7 @@ paths:
           name: basketId
           required: true
           schema:
-            type: string
+            type: number
       responses:
         '200':
           description: Winner basket details
@@ -211,6 +219,29 @@ paths:
                 $ref: '#/components/schemas/WinnerBasketDetailResponse'
         '404':
           description: Basket not found
+  /tokens:
+    get:
+      parameters:
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                maxItems: 100
+              - type: string
+          in: query
+          name: tokenIds
+          required: true
+      responses:
+        '200':
+          description: tokens list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokensResponse'
+        '404':
+          description: tokens not found
+
 components:
   schemas:
     #######################
@@ -468,91 +499,84 @@ components:
       properties:
         total:
           type: integer
-          minimum: 1
-          maximum: 1000
-          x-faker: 23
         items:
           type: array
           items:
-            $ref: '#/components/schemas/WinnerBasket'
+            $ref: '#/components/schemas/WinnerBasketSummary'
       required:
         - total
         - items
 
-    WinnerBasket:
+    #######################
+    # Winner Baskets
+    #######################
+    WinnerBasketSummary:
       type: object
       properties:
-        basketId:
-          type: string
-        type:
-          type: string
-          enum: [empty, shared]
-        shareAmount:
+        index:
           type: number
-          description: Calculated share amount
-        sharePercent:
+        share:
           type: number
-          description: Calculated share percent
         gifts:
           type: array
           items:
-            $ref: '#/components/schemas/BasketGiftSimple'
+            $ref: '#/components/schemas/BasketGift'
       required:
-        - basketId
-        - type
+        - index
+        - share
         - gifts
+
+
+
     #######################
     # Basket Gift
     #######################
     BasketGift:
       type: object
       properties:
-        id:
-          type: string
-          description: Gift Id
-        basketId:
-          type: string
-          description: Basket Id
-        assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/GiftAsset'
-      required:
-        - id
-        - basketId
-        - assets
-    
-    #######################
-    # Gift Asset
-    #######################
-    GiftAsset:
-      type: object
-      properties:
         tokenId:
           type: string
-          description: Token Id
-        tokenName:
-          type: string
-          description: Token Name
         amount:
-          type: number
-          description: Amount
+          type: integer
+          format: int64
       required:
         - tokenId
         - amount
-    BasketGiftSimple:
+    
+
+
+    #######################
+    # Tokens Response
+    #######################
+    TokensResponse:
       type: object
       properties:
-        asset:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenSummary'
+      required:
+        - items
+    #######################
+    # Token Summary
+    #######################
+    TokenSummary:
+      type: object
+      properties:
+        id:
           type: string
-        amount:
+        name:
+          type: string
+        decimals:
           type: number
+          default: 0
         verified:
           type: boolean
-      required:
-        - asset
-        - amount
+      required: 
+        - id
+        - decimals
         - verified
+
 
     #######################
     # Winner Basket Detail
@@ -560,8 +584,8 @@ components:
     WinnerBasketDetailResponse:
       type: object
       properties:
-        basketId:
-          type: string
+        index:
+          type: number
         type:
           type: string
           enum: [empty, shared]
@@ -577,7 +601,7 @@ components:
         gifts:
           type: array
           items:
-            $ref: '#/components/schemas/BasketGiftDetail'
+            $ref: '#/components/schemas/BasketGift'
         transactions:
           type: array
           items:
@@ -589,24 +613,6 @@ components:
         - transactions
         - tokenId
         - tokenName
-
-    BasketGiftDetail:
-      type: object
-      properties:
-        id:
-          type: string
-        basketId:
-          type: string
-        assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/GiftAsset'
-        verified:
-          type: boolean
-      required:
-        - id
-        - assets
-        - verified
 
     BasketTransaction:
       type: object

@@ -1,31 +1,30 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
-import { useWallet } from '@/hooks';
+import { useInfoBlockchain, useWallet } from '@/hooks';
+import { getErrorMessage, getTxURL } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { DonationGoalForm } from './DonationGoalForm';
 import { Finish } from './Finish';
 import { SpecificationsForm } from './SpecificationsForm';
 
-export type CreateRaffleProps = {
-  infoBlockchainData?: InfoBlockchainResponse;
-};
-
-export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
+export const CreateRaffle = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const wallet = useWallet();
+
+  const infoBlockchain = useInfoBlockchain();
 
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
@@ -47,6 +46,7 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
 
     setActiveStepIndex((prev) => prev + 1);
   };
+
   const handleBack = () => {
     setActiveStepIndex((prev) => prev - 1);
   };
@@ -56,11 +56,26 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     setActiveStepIndex(0);
   };
 
-  const serviceFee = useMemo(
-    () =>
-      infoBlockchainData ? infoBlockchainData.fee.service + infoBlockchainData.fee.implementer : 0,
-    [infoBlockchainData]
-  );
+  const onSubmit = async (data: RaffleForm) => {
+    try {
+      const tx = await createRaffle(data, wallet);
+
+      toast.success(
+        <>
+          Raffle created successfully! Click{' '}
+          <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
+            here
+          </Link>{' '}
+          to see details.
+        </>
+      );
+      resetForm();
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));
+    }
+  };
+
+  if (!infoBlockchain.data) return null;
 
   const steps = [
     {
@@ -71,7 +86,11 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     {
       title: 'Donation Goal',
       content: (
-        <DonationGoalForm handleNext={handleNext} handleBack={handleBack} serviceFee={serviceFee} />
+        <DonationGoalForm
+          handleNext={handleNext}
+          handleBack={handleBack}
+          infoBlockchain={infoBlockchain.data}
+        />
       ),
       fields: ['tokenId', 'count', 'amount', 'missionFund', 'winnerPotShare', 'address'] as const
     },
@@ -82,22 +101,10 @@ export const CreateRaffle = ({ infoBlockchainData }: CreateRaffleProps) => {
     },
     {
       title: 'Overview & Agreement',
-      content: <Finish handleBack={handleBack} serviceFee={serviceFee} />
+      content: <Finish handleBack={handleBack} infoBlockchain={infoBlockchain.data} />
     }
   ];
 
-  const onSubmit = async (data: RaffleForm) => {
-    try {
-      await createRaffle(data, wallet, infoBlockchainData);
-
-      toast.success('Raffle created successfully!');
-      resetForm();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to create raffle. Please try again later.'
-      );
-    }
-  };
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-5 py-3.5 mb-7">

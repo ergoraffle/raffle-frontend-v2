@@ -11,7 +11,6 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { getDeadlineAmount, getMissionFund, getSoldTicketCount, getWinnerPot } from '../utils';
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';
@@ -20,31 +19,23 @@ import { RaffleDonate } from './RaffleDonate';
 import { RafflePinButton } from './RafflePinButton';
 import { RaffleShareButton } from './RaffleShareButton';
 import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
+import { raffleToViewModel } from './raffleToViewModel';
 
 export type RaffleDetailsProps = {
   raffleId: string;
 };
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
-  const raffle = await getRaffleRaffleId(raffleId);
-  const infoData = await getInfoBlockchain();
+  const raffleServer = await getRaffleRaffleId(raffleId);
+  const infoBlockchainData = await getInfoBlockchain();
 
-  if (!raffle) return notFound();
+  if (!raffleServer) return notFound();
 
-  const soldTicketCount = getSoldTicketCount(raffle.amount.raised, raffle.ticketPrice);
-  const deadline = getDeadlineAmount(infoData.height, raffle.deadline);
-  const missionFund = getMissionFund(raffle.share);
-  const winnerPot = getWinnerPot(raffle.share.winner);
-  const serviceFee = infoData.fee.implementer + infoData.fee.service;
+  const raffle = raffleToViewModel(raffleServer, infoBlockchainData);
 
   return (
     <div className="flex flex-col gap-9.5">
       <div className="flex flex-col lg:flex-row gap-5 sm:gap-7 lg:gap-9.5">
-        <RaffleDetailsImageCard
-          raffle={raffle}
-          serviceFee={serviceFee}
-          winnerPot={winnerPot}
-          missionFund={missionFund}
-        />
+        <RaffleDetailsImageCard raffle={raffle} />
         <div className="flex flex-col gap-5 grow order-1 lg:order-2">
           <div className="flex justify-between sm:items-center max-w-full">
             <Typography variant="heading-1" asChild>
@@ -57,24 +48,16 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
           </div>
           <RaiseProgress amount={raffle.amount} token={raffle?.token} />
           <div className="hidden sm:block">
-            <RaffleDetailsIconBox
-              deadline={deadline}
-              soldTicketCount={soldTicketCount}
-              backerCount={raffle?.backerCount}
-            />
+            <RaffleDetailsIconBox raffle={raffle} />
           </div>
-          <RaffleDonate infoBlockchain={infoData} raffle={raffle} />
+          <RaffleDonate raffle={raffle} />
         </div>
         <div className="order-3 sm:hidden">
-          <RaffleDetailsIconBox
-            deadline={deadline}
-            soldTicketCount={soldTicketCount}
-            backerCount={raffle?.backerCount}
-          />
+          <RaffleDetailsIconBox raffle={raffle} />
         </div>
       </div>
-      <RaffleDetailsDescription description={raffle.description} />
-      <RaffleWinnerBaskets raffleId={raffleId} />
+      <RaffleDetailsDescription raffle={raffle} />
+      <RaffleWinnerBaskets raffle={raffle} />
       <div className="flex flex-col lg:flex-row gap-9.5">
         <Card className="flex-1">
           <CardHeader>

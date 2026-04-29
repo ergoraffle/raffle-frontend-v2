@@ -1,8 +1,10 @@
 import Image from 'next/image';
 
-import type { RaffleDetailResponse } from '@ergo-raffle/client';
+import { RaffleSummaryStatus } from '@ergo-raffle/client';
 import {
+  Badge,
   Card,
+  CardAction,
   CardContent,
   CardImageWrapper,
   Carousel,
@@ -14,22 +16,18 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { getAddressUrl } from '@/lib';
+
+import { raffleStatusMap } from '../raffleStatusRenderMap';
+import type { RaffleDetailView } from './raffleToViewModel';
+
 export type RaffleDetailsImageCardProps = {
   loading?: boolean;
-  serviceFee?: number;
-  winnerPot?: number;
-  missionFund?: number;
-  raffle?: Pick<RaffleDetailResponse, 'pictures' | 'name' | 'addresses'>;
+  raffle?: RaffleDetailView;
 };
 
-export const RaffleDetailsImageCard = ({
-  loading,
-  serviceFee,
-  winnerPot,
-  missionFund,
-  raffle
-}: RaffleDetailsImageCardProps) => (
-  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:h-130" border={false}>
+export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => (
+  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false}>
     {loading || !raffle?.pictures || !raffle?.pictures.length ? (
       <CardImageWrapper loading={loading} className="sm:h-81" />
     ) : (
@@ -37,7 +35,7 @@ export const RaffleDetailsImageCard = ({
         <CarouselContent>
           {raffle.pictures.map((picture) => (
             <CarouselItem key={picture}>
-              <CardImageWrapper>
+              <CardImageWrapper className="sm:h-81">
                 <Image
                   src={picture}
                   priority
@@ -52,6 +50,13 @@ export const RaffleDetailsImageCard = ({
         {raffle?.pictures && raffle.pictures.length > 1 ? <CarouselDots /> : null}
       </Carousel>
     )}
+    {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
+      <CardAction>
+        <Badge variant={raffleStatusMap[raffle.status]?.variant || 'white-outline'} size="sm">
+          {raffleStatusMap[raffle.status]?.label || raffle?.status}
+        </Badge>
+      </CardAction>
+    )}
     <CardContent className="flex flex-col gap-1.5 p-0 justify-stretch grow">
       <Card border={false}>
         <CardContent className="flex flex-col">
@@ -63,7 +68,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{missionFund || 0}%</span>
+                <span>{raffle?.missionFund || 0}%</span>
               </Typography>
             )}
           </div>
@@ -74,7 +79,7 @@ export const RaffleDetailsImageCard = ({
             <div className="w-1/2">
               <Identifier
                 value={raffle?.addresses.project}
-                href={raffle?.addresses.project}
+                href={getAddressUrl(raffle?.addresses.project)}
                 size="lg"
                 loading={loading}
               />
@@ -92,7 +97,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{winnerPot || 0}%</span>
+                <span>{raffle?.winnerPotSharePercent || 0}%</span>
               </Typography>
             )}
           </div>
@@ -108,7 +113,7 @@ export const RaffleDetailsImageCard = ({
               <Skeleton className="h-2 w-10" />
             ) : (
               <Typography variant="heading-3" asChild>
-                <span>{serviceFee || 0}%</span>
+                <span>{raffle?.serviceFee || 0}%</span>
               </Typography>
             )}
           </div>

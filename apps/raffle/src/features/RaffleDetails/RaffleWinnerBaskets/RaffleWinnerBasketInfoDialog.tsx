@@ -17,25 +17,27 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
+import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
+
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 import { RaffleWinnerBasketInfo } from './RaffleWinnerBasketInfo';
 import { WinnerBasketCarousel } from './WinnerBasketCarousel';
 
 export type RaffleWinnerBasketInfoDialogProps = {
   open: boolean;
-  raffleId: string;
-  initialBasketId: string;
+  raffle: RaffleDetailView;
+  initialBasketId: number;
   onOpenChange: (open: boolean) => void;
 };
 
 export const RaffleWinnerBasketInfoDialog = ({
   open,
-  raffleId,
+  raffle,
   initialBasketId,
   onOpenChange
 }: RaffleWinnerBasketInfoDialogProps) => {
   const { isMobile } = useBreakpoint();
-  const [activeBasketId, setActiveBasketId] = useState<string>(initialBasketId);
+  const [activeBasketId, setActiveBasketId] = useState<number>(initialBasketId);
   const [step, setStep] = useState<1 | 2>(1);
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -53,23 +55,32 @@ export const RaffleWinnerBasketInfoDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="md:min-w-125 lg:min-w-3xl">
         <DialogHeader>
-          <DialogTitle>
-            {step === 2 ? (
-              <Button variant="plain" onClick={() => setStep(1)} size="sm">
-                <Left className="size-6" />
-                Add Gift
-              </Button>
-            ) : (
-              <div className="mx-auto md:w-1/2">
-                <WinnerBasketCarousel raffleId={raffleId} setActiveBasketId={setActiveBasketId} />
-              </div>
-            )}
+          <DialogTitle asChild>
+            <div className="w-full">
+              {step === 2 ? (
+                <Button variant="plain" onClick={() => setStep(1)} size="sm">
+                  <Left className="size-6" />
+                  Add Gift
+                </Button>
+              ) : (
+                <div className="mx-auto md:w-1/2">
+                  <WinnerBasketCarousel
+                    raffleId={raffle.id}
+                    setActiveBasketId={setActiveBasketId}
+                  />
+                </div>
+              )}
+            </div>
           </DialogTitle>
         </DialogHeader>
         {step === 2 ? (
           <div className="space-y-5">
             <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
-            <RaffleAddGiftForm initialBasketNumber={activeBasketId} />
+            <RaffleAddGiftForm
+              initialBasketNumber={activeBasketId}
+              raffle={raffle}
+              onCloseDialog={() => onOpenChange(false)}
+            />
           </div>
         ) : (
           <>

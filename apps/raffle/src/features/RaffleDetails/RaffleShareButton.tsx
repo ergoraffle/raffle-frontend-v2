@@ -3,6 +3,8 @@
 import { Share } from '@ergo-raffle/icons';
 import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 
+import { getErrorMessage } from '@/lib';
+
 export type RaffleShareButtonProps = { loading?: boolean };
 
 export const RaffleShareButton = ({ loading }: RaffleShareButtonProps) => {
@@ -14,8 +16,8 @@ export const RaffleShareButton = ({ loading }: RaffleShareButtonProps) => {
       .then(() => {
         toast.success('Copied!');
       })
-      .catch(() => {
-        toast.error('Copy failed!');
+      .catch((error) => {
+        toast.error(getErrorMessage(error, 'Copy failed!'));
       });
   };
 

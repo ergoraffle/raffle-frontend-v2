@@ -1,25 +1,38 @@
-import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
-import type { NautilusWalletAddresses, UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
-import { CreationProxyTxBuilder, DonationProxyTxBuilder } from '@ergo-raffle/proxy-transactions';
+import type { UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
+import {
+  AddGiftProxyTxBuilder,
+  CreationProxyTxBuilder,
+  DonationProxyTxBuilder
+} from '@ergo-raffle/proxy-transactions';
 
-import { getNonDecimalString } from '@/features/utils';
+import { getInfoBlockchain, getRaffle } from '@/actions';
 import type { WalletContextValue } from '@/hooks';
+import { getNonDecimalString } from '@/lib';
 
 import type { RaffleForm } from './schemas';
 
-export const createRaffle = async (
-  data: RaffleForm,
-  wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse | undefined
-) => {
-  if (!infoBlockchainData) {
-    throw new Error('Failed to create raffle. Please try again later.');
+const getRaffleData = async (raffleId: string) => {
+  try {
+    return await getRaffle(raffleId);
+  } catch {
+    throw new Error('Failed to load raffle data. Please try again later.');
   }
-  if (wallet?.selected?.name !== 'Nautilus') {
-    throw new Error('Must be connected to Nautilus wallet.');
-  }
+};
 
-  const tokens = await wallet.selected.fetchTokens();
+const getInfoBlockchainData = async () => {
+  try {
+    return await getInfoBlockchain();
+  } catch {
+    throw new Error('Unable to load blockchain data. Please try again.');
+  }
+};
+
+export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue) => {
+  const infoBlockchainData = await getInfoBlockchainData();
+
+  const walletInstance = wallet.ensureConnected('Nautilus');
+
+  const tokens = await walletInstance.fetchTokens();
 
   const token = tokens.find((token) => token.id === data.tokenId);
 
@@ -31,10 +44,10 @@ export const createRaffle = async (
   const chainHeight = infoBlockchainData.height;
 
   // Organizer UTXO boxes the selector may spend
-  const feeBoxes = (await wallet.selected.getBoxes()).values();
+  const feeBoxes = (await walletInstance.getBoxes()).values();
 
   // organizer address is the wallet address that is creating the raffle and will receive the change
-  const organizerAddress = (wallet.addresses as NautilusWalletAddresses).main;
+  const organizerAddress = (await walletInstance.getAddresses()).main;
 
   // implementer address is the address of the service that is implementing the raffle
   const implementerAddress = process.env.NEXT_PUBLIC_IMPLEMENTER_ADDRESS || '';
@@ -118,33 +131,30 @@ export const createRaffle = async (
   const unsignedTx = await builder.build();
   const eip12Object = unsignedTx?.toEIP12Object();
 
-  return await wallet.selected.transfer(eip12Object as UnsignedErgoTxProxy);
+  return await walletInstance.transfer(eip12Object as UnsignedErgoTxProxy);
 };
 
 export const donateRaffle = async (
+  raffleId: string,
   data: {
     tickets: number;
   },
-  wallet: WalletContextValue | undefined,
-  infoBlockchainData: InfoBlockchainResponse | undefined,
-  raffle: RaffleDetailResponse
+  wallet: WalletContextValue
 ) => {
-  if (!infoBlockchainData) {
-    throw new Error('Failed to donate raffle. Please try again later.');
-  }
+  const raffle = await getRaffleData(raffleId);
 
-  if (wallet?.selected?.name !== 'Nautilus') {
-    throw new Error('Must be connected to Nautilus wallet.');
-  }
+  const infoBlockchainData = await getInfoBlockchainData();
+
+  const walletInstance = wallet.ensureConnected('Nautilus');
 
   // Current chain height
   const chainHeight = infoBlockchainData.height;
 
   // Donator UTXO boxes the selector may spend for value, tokens, and fee
-  const feeBoxes = (await wallet.selected.getBoxes()).values();
+  const feeBoxes = (await walletInstance.getBoxes()).values();
 
   // Donator Ergo address (also receives change)
-  const donatorAddress = (wallet.addresses as NautilusWalletAddresses).main; // user address
+  const donatorAddress = (await walletInstance.getAddresses()).main; // user address
 
   // block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
   const expirationHeight =
@@ -178,5 +188,69 @@ export const donateRaffle = async (
   const unsignedTx = await builder.build();
   const eip12Object = unsignedTx?.toEIP12Object();
 
-  return await wallet.selected.transfer(eip12Object as UnsignedErgoTxProxy);
+  return await walletInstance.transfer(eip12Object as UnsignedErgoTxProxy);
+};
+
+export const addGiftRaffle = async (
+  raffleId: string,
+  data: {
+    winnerIndex: number;
+    tokens: {
+      tokenId: string;
+      amount: bigint;
+    }[];
+  },
+  wallet: WalletContextValue
+) => {
+  const raffle = await getRaffleData(raffleId);
+
+  const infoBlockchainData = await getInfoBlockchainData();
+
+  const walletInstance = wallet.ensureConnected('Nautilus');
+
+  // // Current chain height
+  const chainHeight = infoBlockchainData.height; // current height should be fetched from the info api
+
+  // Gift giver UTXO boxes the selector may spend
+  const feeBoxes = (await walletInstance.getBoxes()).values(); // box iterator from wallet
+
+  // Gift giver address (change output)
+  const giftGiverAddress = (await walletInstance.getAddresses()).main; // gift giver address (user wallet address)
+
+  // Proxy expiration height
+  const expirationHeight =
+    infoBlockchainData.height + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT); // block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
+
+  // Raffle deadline height
+  const raffleDeadline = raffle.deadline;
+
+  // Miner fee in nanoERG
+  const txFee = BigInt(infoBlockchainData.fee.tx);
+
+  // Index of the winner receiving the gift
+  const winnerIndex = data.winnerIndex; // index of the winner receiving the gift
+
+  // Gift value in nanoERG (must be at least `4n * txFee`)
+  const giftValue = BigInt(infoBlockchainData.fee.tx * 4);
+
+  let builder = new AddGiftProxyTxBuilder()
+    .setChainHeight(chainHeight)
+    .setFeeBoxes(feeBoxes)
+    .setGiftGiverAddress(giftGiverAddress)
+    .setWinnerIndex(winnerIndex)
+    .setGiftValue(giftValue)
+    .setExpirationHeight(expirationHeight)
+    .setRaffleDeadline(raffleDeadline)
+    .setTxFee(txFee)
+    .setRaffleId(raffle.id);
+
+  // if the gift tokens are provided, add them to the builder
+  if (data.tokens !== undefined && data.tokens.length > 0) {
+    builder = builder.setGiftTokens(data.tokens); // array of gift tokens
+  }
+
+  const unsignedTx = await builder.build();
+  const eip12Object = unsignedTx?.toEIP12Object();
+
+  return await walletInstance.transfer(eip12Object as UnsignedErgoTxProxy);
 };

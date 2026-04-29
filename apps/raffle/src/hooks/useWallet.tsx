@@ -10,6 +10,9 @@ import {
   useState
 } from 'react';
 
+import type { NautilusWallet } from '@ergo-raffle/nautilus-wallet';
+import type { XverseWallet } from '@ergo-raffle/xverse-wallet';
+
 import { type WalletInstance, type WalletName, wallets } from '@/lib';
 
 export type WalletContextValue = {
@@ -26,6 +29,9 @@ export type WalletContextValue = {
   connect: (name: WalletName | undefined) => Promise<void>;
   disconnect: () => Promise<void>;
   agree: () => void;
+
+  ensureConnected(name: 'Nautilus'): NautilusWallet;
+  ensureConnected(name: 'Xverse'): XverseWallet;
 };
 
 const WalletContext = createContext<WalletContextValue | null>(null);
@@ -91,6 +97,22 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       .catch(setError);
   }, [selected]);
 
+  const ensureConnected = useCallback(
+    (name: WalletName) => {
+      if (selected?.name !== name) {
+        throw new Error(`Must be connected to ${name} wallet.`);
+      }
+
+      if (!selected) {
+        throw new Error(`No wallet is connected`);
+      }
+
+      // biome-ignore lint/suspicious/noExplicitAny: make this better
+      return selected as any;
+    },
+    [selected]
+  );
+
   useEffect(() => {
     (async () => {
       const name = localStorage.getItem('raffle:wallet');
@@ -141,7 +163,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       wallets,
       disconnect,
       connect,
-      agree
+      agree,
+      ensureConnected
     }),
     [
       addresses,
@@ -153,7 +176,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       selected,
       ergoAddress,
       disconnect,
-      connect
+      connect,
+      ensureConnected
     ]
   );
 

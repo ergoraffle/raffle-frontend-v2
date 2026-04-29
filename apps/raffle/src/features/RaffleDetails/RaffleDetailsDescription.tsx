@@ -13,12 +13,11 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
-export type RaffleDetailsDescriptionProps = { description?: string; loading?: boolean };
+import type { RaffleDetailView } from './raffleToViewModel';
 
-export const RaffleDetailsDescription = ({
-  description,
-  loading
-}: RaffleDetailsDescriptionProps) => {
+export type RaffleDetailsDescriptionProps = { raffle?: RaffleDetailView; loading?: boolean };
+
+export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescriptionProps) => {
   const [expanded, setExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
@@ -55,7 +54,7 @@ export const RaffleDetailsDescription = ({
         <Skeleton className="h-3 w-1/2" />
       </CardContent>
     </Card>
-  ) : description ? (
+  ) : raffle?.description ? (
     <Card shadow>
       <CardHeader>
         <CardTitle>Description:</CardTitle>
@@ -66,7 +65,7 @@ export const RaffleDetailsDescription = ({
           className={isMobile && !expanded ? 'line-clamp-3' : ''}
           ref={ref}
           // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
-          dangerouslySetInnerHTML={{ __html: description || '' }}
+          dangerouslySetInnerHTML={{ __html: raffle.description || '' }}
         />
         {isMobile && isOverflowing ? (
           <Button

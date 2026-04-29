@@ -133,52 +133,29 @@ export interface RafflePrize {
 }
 
 export interface WinnerBasketListResponse {
-  /**
-   * @minimum 1
-   * @maximum 1000
-   */
   total: number;
-  items: WinnerBasket[];
+  items: WinnerBasketSummary[];
 }
 
-export type WinnerBasketType = (typeof WinnerBasketType)[keyof typeof WinnerBasketType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const WinnerBasketType = {
-  empty: 'empty',
-  shared: 'shared'
-} as const;
-
-export interface WinnerBasket {
-  basketId: string;
-  type: WinnerBasketType;
-  /** Calculated share amount */
-  shareAmount?: number;
-  /** Calculated share percent */
-  sharePercent?: number;
-  gifts: BasketGiftSimple[];
+export interface WinnerBasketSummary {
+  index: number;
+  share: number;
+  gifts: BasketGift[];
 }
 
 export interface BasketGift {
-  /** Gift Id */
-  id: string;
-  /** Basket Id */
-  basketId: string;
-  assets: GiftAsset[];
-}
-
-export interface GiftAsset {
-  /** Token Id */
   tokenId: string;
-  /** Token Name */
-  tokenName?: string;
-  /** Amount */
   amount: number;
 }
 
-export interface BasketGiftSimple {
-  asset: string;
-  amount: number;
+export interface TokensResponse {
+  items: TokenSummary[];
+}
+
+export interface TokenSummary {
+  id: string;
+  name?: string;
+  decimals: number;
   verified: boolean;
 }
 
@@ -192,21 +169,14 @@ export const WinnerBasketDetailResponseType = {
 } as const;
 
 export interface WinnerBasketDetailResponse {
-  basketId: string;
+  index?: number;
   type: WinnerBasketDetailResponseType;
   tokenId: string;
   tokenName: string;
   sharePercent?: number;
   shareAmount?: number;
-  gifts: BasketGiftDetail[];
+  gifts: BasketGift[];
   transactions: BasketTransaction[];
-}
-
-export interface BasketGiftDetail {
-  id: string;
-  basketId?: string;
-  assets: GiftAsset[];
-  verified: boolean;
 }
 
 export type BasketTransactionType =
@@ -312,24 +282,30 @@ export const GetRaffleOrder = {
   deadline: 'deadline'
 } as const;
 
-export type GetRafflesRaffleIdWinnerBasketsParams = {
+export type GetRaffleRaffleIdBasketParams = {
   offset?: number;
   limit?: number;
-  /**
-   * Basket filter type
-   */
-  type?: GetRafflesRaffleIdWinnerBasketsType;
+  share?: GetRaffleRaffleIdBasketShare;
+  gift?: GetRaffleRaffleIdBasketGift;
+  index?: number;
 };
 
-export type GetRafflesRaffleIdWinnerBasketsType =
-  (typeof GetRafflesRaffleIdWinnerBasketsType)[keyof typeof GetRafflesRaffleIdWinnerBasketsType];
+export type GetRaffleRaffleIdBasketShare =
+  (typeof GetRaffleRaffleIdBasketShare)[keyof typeof GetRaffleRaffleIdBasketShare];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetRafflesRaffleIdWinnerBasketsType = {
-  share: 'share',
-  empty: 'empty',
-  gift: 'gift',
-  share_gift: 'share_gift'
+export const GetRaffleRaffleIdBasketShare = {
+  'non-empty': 'non-empty',
+  empty: 'empty'
+} as const;
+
+export type GetRaffleRaffleIdBasketGift =
+  (typeof GetRaffleRaffleIdBasketGift)[keyof typeof GetRaffleRaffleIdBasketGift];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRaffleRaffleIdBasketGift = {
+  'non-empty': 'non-empty',
+  empty: 'empty'
 } as const;
 
 export type GetActivitiesParams = {
@@ -355,6 +331,10 @@ export const GetActivitiesType = {
   voted: 'voted',
   gift_added: 'gift_added'
 } as const;
+
+export type GetTokensParams = {
+  tokenIds: string[] | string;
+};
 
 /**
  * @summary Get startup configuration
@@ -382,12 +362,9 @@ export const getRaffleRaffleId = (raffleId: string) =>
 /**
  * @summary Get winner baskets of a raffle
  */
-export const getRafflesRaffleIdWinnerBaskets = (
-  raffleId: string,
-  params?: GetRafflesRaffleIdWinnerBasketsParams
-) =>
+export const getRaffleRaffleIdBasket = (raffleId: string, params?: GetRaffleRaffleIdBasketParams) =>
   httpClient<WinnerBasketListResponse>({
-    url: `/raffles/${raffleId}/winner-baskets`,
+    url: `/raffle/${raffleId}/basket`,
     method: 'GET',
     params
   });
@@ -401,11 +378,14 @@ export const getActivities = (params?: GetActivitiesParams) =>
 /**
  * @summary Get details of a winner basket
  */
-export const getRafflesRaffleIdWinnerBasketsBasketId = (raffleId: string, basketId: string) =>
+export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: number) =>
   httpClient<WinnerBasketDetailResponse>({
-    url: `/raffles/${raffleId}/winner-baskets/${basketId}`,
+    url: `/raffles/${raffleId}/basket/${basketId}`,
     method: 'GET'
   });
+
+export const getTokens = (params: GetTokensParams) =>
+  httpClient<TokensResponse>({ url: `/tokens`, method: 'GET', params });
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -415,10 +395,11 @@ export type GetStartupResult = NonNullable<Awaited<ReturnType<typeof getStartup>
 export type GetInfoBlockchainResult = NonNullable<Awaited<ReturnType<typeof getInfoBlockchain>>>;
 export type GetRaffleResult = NonNullable<Awaited<ReturnType<typeof getRaffle>>>;
 export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRaffleRaffleId>>>;
-export type GetRafflesRaffleIdWinnerBasketsResult = NonNullable<
-  Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBaskets>>
+export type GetRaffleRaffleIdBasketResult = NonNullable<
+  Awaited<ReturnType<typeof getRaffleRaffleIdBasket>>
 >;
 export type GetActivitiesResult = NonNullable<Awaited<ReturnType<typeof getActivities>>>;
-export type GetRafflesRaffleIdWinnerBasketsBasketIdResult = NonNullable<
-  Awaited<ReturnType<typeof getRafflesRaffleIdWinnerBasketsBasketId>>
+export type GetRafflesRaffleIdBasketBasketIdResult = NonNullable<
+  Awaited<ReturnType<typeof getRafflesRaffleIdBasketBasketId>>
 >;
+export type GetTokensResult = NonNullable<Awaited<ReturnType<typeof getTokens>>>;

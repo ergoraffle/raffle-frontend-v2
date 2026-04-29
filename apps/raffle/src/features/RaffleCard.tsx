@@ -18,33 +18,13 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
+import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';
 
 export type RafflesContentProps = {
   raffle?: RaffleSummary;
   loading?: boolean;
   deadline?: number;
-};
-
-const raffleStatusMap: Record<
-  RaffleSummaryStatus,
-  {
-    variant: 'success' | 'error' | 'white-outline';
-    label: string;
-  }
-> = {
-  [RaffleSummaryStatus.successful]: {
-    variant: 'success',
-    label: 'Successful'
-  },
-  [RaffleSummaryStatus.failed]: {
-    variant: 'error',
-    label: 'Failed'
-  },
-  [RaffleSummaryStatus.active]: {
-    variant: 'white-outline',
-    label: 'Active'
-  }
 };
 
 export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) => (
@@ -56,8 +36,7 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
       <CardImageWrapper loading={loading}>
         {raffle?.picture ? (
           <Image
-            // src={raffle.image}
-            src="/sample.png"
+            src={raffle.picture}
             priority
             alt={raffle.name}
             className="h-55.75 w-full object-cover rounded-tl-md rounded-tr-md"

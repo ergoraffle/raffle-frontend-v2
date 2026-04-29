@@ -62,6 +62,7 @@ const PaginationTrigger = ({ className, isActive, ...props }: PaginationTriggerP
         asChild
         variant="plain"
         size="icon-xs"
+        type="button"
         className={cn('aria-disabled:opacity-50 aria-disabled:pointer-events-none', className)}
       >
         <Link
@@ -147,11 +148,18 @@ const isLinkMode = (
 ): props is PaginationLinkMode => typeof (props as PaginationLinkMode).getPageHref === 'function';
 
 export const Pagination = (props: PaginationProps) => {
-  const { page, perPage, total, align = 'center', onChangePerPage, className } = props;
+  const {
+    page,
+    perPage,
+    total,
+    align = 'center',
+    onChangePerPage,
+    className,
+    ...restProps
+  } = props;
   const totalPages = Math.ceil(total / perPage);
   const pages: (number | 'ellipsis')[] = [];
   const perPageItems = getPerPageOptions(perPage);
-
   const isLink = isLinkMode(props);
 
   for (let i = 1; i <= totalPages; i++) {
@@ -164,8 +172,12 @@ export const Pagination = (props: PaginationProps) => {
 
   if (totalPages < 1) return null;
 
+  const divProps = Object.entries(restProps).filter(
+    (o) => o[0] !== 'getPageHref' && o[0] !== 'onChangePage'
+  );
+
   return (
-    <div {...props} className={cn('flex items-center', className)}>
+    <div {...divProps} className={cn('flex items-center', className)}>
       {align === 'center' && <div className="flex-1 hidden lg:block" />}
       <PaginationWrapper
         className={`w-full lg:w-auto lg:flex-1 ${align === 'center' ? 'justify-center' : ''}`}
@@ -188,8 +200,8 @@ export const Pagination = (props: PaginationProps) => {
                   ) : (
                     <PaginationTrigger
                       {...(isLink
-                        ? { href: props.getPageHref(page) }
-                        : { onClick: () => props.onChangePage(page) })}
+                        ? { href: props.getPageHref(p) }
+                        : { onClick: () => props.onChangePage(p) })}
                       isActive={p === page}
                       aria-disabled={p === page}
                     >

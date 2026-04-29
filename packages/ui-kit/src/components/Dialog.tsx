@@ -59,7 +59,7 @@ export const DialogContent = ({
     <DialogPrimitive.Content
       data-slot="dialog-content"
       className={cn(
-        'bg-white-2 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 grid max-w-[calc(100%-2rem)] gap-4 rounded-md p-4 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-110 w-full -translate-x-1/2 -translate-y-1/2 not-has-data-[slot=dialog-header]:has-data-[slot=dialog-top-close]:pt-14 [&_[data-slot=dialog-header]]:pr-11 has-[&_[data-slot=dialog-top-close]]',
+        'bg-white-1 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 grid max-w-[calc(100%-2rem)] gap-4 rounded-md p-4 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-110 w-full -translate-x-1/2 -translate-y-1/2 not-has-data-[slot=dialog-header]:has-data-[slot=dialog-top-close]:pt-14 [&_[data-slot=dialog-header]]:pr-11 has-[&_[data-slot=dialog-top-close]]',
         className
       )}
       {...props}

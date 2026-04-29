@@ -2,6 +2,7 @@ export * from './useActivityParams';
 export * from './useFetchActivity';
 export * from './useFetchWinnerBasket';
 export * from './useFetchWinnerBaskets';
+export * from './useInfoBlockchain';
 export * from './useRafflesParams';
 export * from './useWallet';
 export * from './useWinnerBasketsParams';

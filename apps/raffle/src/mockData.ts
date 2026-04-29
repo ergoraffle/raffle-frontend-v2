@@ -1,8 +1,4 @@
-import type {
-  RaffleActivityResponse,
-  WinnerBasketDetailResponse,
-  WinnerBasketListResponse
-} from '@ergo-raffle/client';
+import type { RaffleActivityResponse, WinnerBasketDetailResponse } from '@ergo-raffle/client';
 
 export const raffleActivity: RaffleActivityResponse = {
   items: [
@@ -67,39 +63,8 @@ export const raffleActivity: RaffleActivityResponse = {
   total: 6
 };
 
-export const winnerBaskets: WinnerBasketListResponse = {
-  items: [
-    {
-      basketId: '1',
-      shareAmount: 50,
-      sharePercent: 20,
-      gifts: [],
-      type: 'empty'
-    },
-    {
-      basketId: '2',
-      shareAmount: 50,
-      sharePercent: 10,
-      type: 'shared',
-      gifts: [
-        {
-          asset: 'btc',
-          amount: 10,
-          verified: true
-        },
-        {
-          asset: 'ada',
-          amount: 10,
-          verified: true
-        }
-      ]
-    }
-  ],
-  total: 2
-};
-
 export const winnerBasketDetail: WinnerBasketDetailResponse = {
-  basketId: '2',
+  index: 2,
   sharePercent: 60,
   shareAmount: 100,
   type: 'shared',
@@ -107,19 +72,8 @@ export const winnerBasketDetail: WinnerBasketDetailResponse = {
   tokenName: 'erg',
   gifts: [
     {
-      id: 'gift1',
-      basketId: '2',
-      assets: [
-        { tokenId: 'erg', tokenName: 'erg', amount: 10 },
-        { tokenId: 'btc', tokenName: 'btc', amount: 20 }
-      ],
-      verified: true
-    },
-    {
-      id: 'gift2',
-      basketId: '2',
-      assets: [{ tokenId: 'erg', tokenName: 'erg', amount: 10 }],
-      verified: false
+      tokenId: 'sfsdfsdfsfsfsf',
+      amount: 50
     }
   ],
   transactions: [
