@@ -15,7 +15,7 @@ import { GiftItem } from './GiftItem';
 import { TransactionItem } from './TransactionItem';
 
 export type RaffleWinnerBasketInfoDialogProps = {
-  basketId: string;
+  basketId: number;
 };
 
 export const RaffleWinnerBasketInfo = ({ basketId }: RaffleWinnerBasketInfoDialogProps) => {
@@ -49,7 +49,7 @@ export const RaffleWinnerBasketInfo = ({ basketId }: RaffleWinnerBasketInfoDialo
               <CollapsibleContent className="px-3 pb-2">
                 <div className="bg-white-1 text-white-1-foreground px-2 py-1.5 rounded-sm">
                   {data.gifts.map((gift) => (
-                    <GiftItem gift={gift} key={gift.id} />
+                    <GiftItem gift={gift} key={gift.amount} />
                   ))}
                 </div>
               </CollapsibleContent>

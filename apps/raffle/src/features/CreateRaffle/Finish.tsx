@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   BasketStatus,
   Button,
@@ -21,15 +22,18 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import type { RaffleForm } from '../schemas';
 
 export type FinishProps = {
   handleBack: () => void;
-  serviceFee?: number;
+  infoBlockchain: InfoBlockchainResponse;
 };
 
-export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
+export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
+  const serviceFee = infoBlockchain.fee.service + infoBlockchain.fee.implementer;
+
   const [token, setToken] = useState<WalletToken>();
 
   const {
@@ -49,8 +53,8 @@ export const Finish = ({ handleBack, serviceFee }: FinishProps) => {
         const token = tokens.find((token) => token.id === data.tokenId);
         setToken(token);
       })
-      .catch(() => {
-        toast.error('Failed to load token info. Please try again later.');
+      .catch((error) => {
+        toast.error(getErrorMessage(error, 'Failed to load token info. Please try again later.'));
       });
   }, [data.tokenId, wallet.selected]);
 

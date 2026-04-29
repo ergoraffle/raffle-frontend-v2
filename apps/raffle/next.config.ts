@@ -7,7 +7,10 @@ import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig: NextConfig = {
   transpilePackages: ['@ergo-raffle/ui-kit'],
   images: {
-    remotePatterns: [new URL(`${process.env.NEXT_PUBLIC_IMAGE_URL}/**`)]
+    remotePatterns: [
+      new URL(`${process.env.NEXT_PUBLIC_IMAGE_URL}/**`),
+      new URL(`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/**`)
+    ]
   }
 };
 

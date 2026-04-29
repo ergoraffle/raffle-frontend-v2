@@ -122,8 +122,26 @@ export const raffleSchema = raffleAgreementSchema
   .and(raffleDonationGoalSchema)
   .and(raffleBasketsSchema);
 
+export const addGiftSchema = z.object({
+  winnerIndex: z.number({ message: 'Can not be empty' }),
+  tokens: z
+    .array(
+      z.object({
+        tokenId: z.string({ message: 'Can not be empty' }),
+        amount: z
+          .number({
+            message: 'Can not be empty'
+          })
+          .refine((value) => value > 0, { message: 'Must be more than 0' })
+      })
+    )
+    .min(1, 'At least one asset is required')
+    .nonempty('At least one asset is required')
+});
+
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
 export type RaffleDonationGoalForm = z.infer<typeof raffleDonationGoalSchema>;
 export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
+export type AddGiftForm = z.infer<typeof addGiftSchema>;
 export type RaffleForm = z.infer<typeof raffleSchema>;
 export type RaffleDonateForm = z.infer<typeof raffleDonateSchema>;

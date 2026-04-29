@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
+import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   Button,
   Field,
@@ -21,6 +22,7 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import type { RaffleDonationGoalForm } from '../schemas';
 import { DistributionBar } from './DistributionBar';
@@ -29,10 +31,14 @@ import { FieldTitle } from './FieldTitle';
 export type DonationGoalFormProps = {
   handleNext: () => void;
   handleBack: () => void;
-  serviceFee?: number;
+  infoBlockchain: InfoBlockchainResponse;
 };
 
-export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: DonationGoalFormProps) => {
+export const DonationGoalForm = ({
+  handleNext,
+  handleBack,
+  infoBlockchain
+}: DonationGoalFormProps) => {
   const {
     formState: { errors },
     register,
@@ -40,6 +46,8 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
     getValues,
     setValue
   } = useFormContext<RaffleDonationGoalForm>();
+
+  const serviceFee = infoBlockchain.fee.service + infoBlockchain.fee.implementer;
 
   const [tokens, setTokens] = useState<WalletToken[]>([]);
 
@@ -49,8 +57,8 @@ export const DonationGoalForm = ({ handleNext, handleBack, serviceFee }: Donatio
     wallet.selected
       ?.fetchTokens()
       .then((tokens) => setTokens(tokens))
-      .catch(() => {
-        toast.error('Failed to get wallet.');
+      .catch((error) => {
+        toast.error(getErrorMessage(error, 'Failed to get wallet.'));
       });
   }, [wallet.selected]);
 

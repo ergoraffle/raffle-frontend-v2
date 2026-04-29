@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
+import type { RaffleDetailResponse } from '@ergo-raffle/client';
 import {
   Button,
   Card,
@@ -26,19 +26,19 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { DONATE_TRANSACTIONS_STORAGE_KEY } from '@/constants';
 import { useWallet } from '@/hooks';
+import { getErrorMessage, getTxURL } from '@/lib';
 
-import { DONATE_TRANSACTIONS_STORAGE_KEY } from '../constants';
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
 import { RaffleDonateMessage } from './RaffleDonateMessage';
 
 export type RaffleDonateProps = {
-  infoBlockchain?: InfoBlockchainResponse;
   raffle: RaffleDetailResponse;
 };
 
-export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
+export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const wallet = useWallet();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
@@ -75,17 +75,25 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
       setIsLoading(true);
-      const result = await donateRaffle({ tickets }, wallet, infoBlockchain, raffle);
+      const txId = await donateRaffle(raffle.id, { tickets }, wallet);
 
-      toast.success('Raffle donated successfully!');
+      toast.success(
+        <>
+          Raffle donated successfully! Click{' '}
+          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+            here
+          </Link>{' '}
+          to see details.
+        </>
+      );
 
-      saveTransactionId(result);
-      setDonateTransactionId(result);
+      saveTransactionId(txId);
+
+      setDonateTransactionId(txId);
+
       resetForm();
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Failed to donate raffle. Please try again later.'
-      );
+      toast.error(getErrorMessage(error, 'Failed to donate raffle. Please try again later.'));
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +104,7 @@ export const RaffleDonate = ({ infoBlockchain, raffle }: RaffleDonateProps) => {
   }, [isMobile]);
 
   return (
-    <div className="grow w-full relative">
+    <div className="grow w-full relative md:h-66.5 lg:h-auto">
       {raffle.status === 'active' && (
         <Collapsible
           open={openCollapsible}

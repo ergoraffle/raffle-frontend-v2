@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { Identifier, Typography } from '@ergo-raffle/ui-kit';
 
+import { getTxURL } from '@/lib';
+
 export type RaffleDonateMessageProps = {
   transactionId: string;
 };
@@ -12,7 +14,7 @@ export const RaffleDonateMessage = ({ transactionId }: RaffleDonateMessageProps)
       Thanks for Contributing
     </Typography>
     <Typography variant="body-md">Transaction Id:</Typography>
-    <Identifier value={transactionId} href={transactionId} size="lg" />
+    <Identifier value={transactionId} href={getTxURL(transactionId)} size="lg" />
     <Typography variant="body-md">
       Follow up in{' '}
       <Link href="/activities" className="underline hover:text-secondary-1">

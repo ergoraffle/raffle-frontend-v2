@@ -21,7 +21,7 @@ import {
 import { useFormContext } from 'react-hook-form';
 
 import type { RaffleSpecificationsForm } from '@/features/schemas';
-import { formatDuration } from '@/features/utils';
+import { formatDuration } from '@/lib';
 
 import { FieldTitle } from './FieldTitle';
 

@@ -6,6 +6,7 @@ import { Wallet as WalletIcon } from '@ergo-raffle/icons';
 import { Button, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
 
 import { useWallet } from '@/hooks';
+import { getErrorMessage } from '@/lib';
 
 import { Agreement } from './Agreement';
 import { ChooseWallet } from './ChooseWallet';
@@ -21,7 +22,7 @@ export const WalletButton = () => {
   useEffect(() => {
     if (!wallet.error) return;
 
-    toast.error(String(wallet.error));
+    toast.error(getErrorMessage(wallet.error));
 
     setOpen(false);
   }, [wallet.error]);
