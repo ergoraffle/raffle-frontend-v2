@@ -76,7 +76,10 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
                 <BasketStatus className="size-6" filled />
               </InputGroupAddon>
               <InputGroupAddon align="inline-end">
-                <Tooltip content="Share Baskets." disabled>
+                <Tooltip
+                  content="These baskets include a share of the raffle, and anyone can add gifts to them during the Raffle."
+                  disabled
+                >
                   <Info className="size-6" />
                 </Tooltip>
               </InputGroupAddon>
@@ -140,7 +143,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
               <BasketStatus className="size-6" />
             </InputGroupAddon>
             <InputGroupAddon align="inline-end">
-              <Tooltip content="Empty Baskets.">
+              <Tooltip content="These baskets do NOT include any share of the raffle, but anyone can add gifts to them during the Raffle.">
                 <Info className="size-6" />
               </Tooltip>
             </InputGroupAddon>

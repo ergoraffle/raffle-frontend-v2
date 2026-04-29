@@ -28,7 +28,7 @@ import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewMode
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getNonDecimalString, getTxURL } from '@/lib';
+import { getErrorMessage, getNonDecimalString, getTxURL, saveTransactionId } from '@/lib';
 
 import { AssetsField } from './AssetsField';
 
@@ -140,7 +140,7 @@ export const RaffleAddGiftForm = ({
           to see details.
         </>
       );
-
+      saveTransactionId(txId);
       onCloseDialog();
     } catch (error) {
       toast.error(getErrorMessage(error, 'Failed to add Gift. Please try again later.'));

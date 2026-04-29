@@ -9,7 +9,6 @@ import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-k
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ServerError } from '@/components/Errors/ServerError';
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
@@ -79,7 +78,7 @@ export const CreateRaffle = () => {
   };
 
   if (infoBlockchain.isLoading || wallet.connecting) return <CreateRaffleSkeleton />;
-  if (!infoBlockchain.data) return <ServerError />;
+  if (!infoBlockchain.data) return null;
 
   const hasNoActiveWallet = !wallet.connecting && wallet?.selected?.name !== 'Nautilus';
 

@@ -1,3 +1,5 @@
+import { TRANSACTIONS_STORAGE_KEY } from '@/constants';
+
 export const toQueryString = (params: Record<string, unknown>): string => {
   const cleanedParams = structuredClone(params);
   const searchParams = new URLSearchParams();
@@ -119,4 +121,12 @@ export const getAddressUrl = (address?: string): string | undefined => {
 export const getTxURL = (tx?: string): string | undefined => {
   if (!tx) return;
   return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/transactions/${tx}`;
+};
+
+export const saveTransactionId = (value: string) => {
+  const stored = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
+  let items: string[] = stored ? JSON.parse(stored) : [];
+  if (!Array.isArray(items)) items = [];
+  items.push(value);
+  localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(items));
 };
