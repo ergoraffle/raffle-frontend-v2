@@ -12,7 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { type RaffleForm, raffleSchema } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL } from '@/lib';
+import { getErrorMessage, getTxURL, sanitize } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { CreateRaffleSkeleton } from './CreateRaffleSkeleton';
@@ -60,7 +60,9 @@ export const CreateRaffle = () => {
 
   const onSubmit = async (data: RaffleForm) => {
     try {
-      const tx = await createRaffle(data, wallet);
+      const { description, ...formData } = data;
+      const cleanedHtmlDescription = sanitize(description);
+      const tx = await createRaffle({ ...formData, description: cleanedHtmlDescription }, wallet);
 
       toast.success(
         <>

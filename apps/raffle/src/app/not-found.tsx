@@ -1,6 +1,6 @@
 'use client';
 
-import { NotFoundError } from '@/components';
+import { NotFoundError } from '@ergo-raffle/ui-kit';
 
 const NotFoundErrorPage = () => <NotFoundError />;
 export default NotFoundErrorPage;
