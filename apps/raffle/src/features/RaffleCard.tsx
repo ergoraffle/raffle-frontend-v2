@@ -91,8 +91,11 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
               <Skeleton className="w-1/2 h-3 mb-1" />
             </>
           ) : (
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
-            <div dangerouslySetInnerHTML={{ __html: raffle?.description || '' }} />
+            <div
+              className="max-h-30 lg:max-h-20 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
+              dangerouslySetInnerHTML={{ __html: raffle?.description || '' }}
+            />
           )}
         </div>
         <div className="flex items-center gap-x-1 gap-y-1.5 my-3 flex-wrap">

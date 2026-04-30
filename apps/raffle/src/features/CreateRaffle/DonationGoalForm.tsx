@@ -6,6 +6,7 @@ import type { WalletToken } from '@ergo-raffle/base-wallet';
 import type { InfoBlockchainResponse } from '@ergo-raffle/client';
 import {
   Button,
+  DistributionBar,
   Field,
   FieldError,
   FieldLabel,
@@ -21,11 +22,10 @@ import {
 } from '@ergo-raffle/ui-kit';
 import { useFormContext } from 'react-hook-form';
 
+import type { RaffleDonationGoalForm } from '@/features/schemas';
 import { useWallet } from '@/hooks';
 import { getErrorMessage } from '@/lib';
 
-import type { RaffleDonationGoalForm } from '../schemas';
-import { DistributionBar } from './DistributionBar';
 import { FieldTitle } from './FieldTitle';
 
 export type DonationGoalFormProps = {
@@ -70,11 +70,11 @@ export const DonationGoalForm = ({
   );
 
   useEffect(() => {
-    setValue('missionFund', missionFund || 0, {
+    setValue('missionFund', missionFund || 100 - serviceFee, {
       shouldValidate: true,
       shouldDirty: true
     });
-  }, [missionFund, setValue]);
+  }, [missionFund, setValue, serviceFee]);
 
   return (
     <div className="space-y-8">
@@ -157,6 +157,7 @@ export const DonationGoalForm = ({
               <Input
                 variant="bordered"
                 disabled
+                defaultValue={100 - serviceFee}
                 {...register('missionFund', { valueAsNumber: true })}
               />
               {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
@@ -167,7 +168,8 @@ export const DonationGoalForm = ({
                 variant="bordered"
                 type="number"
                 min={0}
-                max={serviceFee ? 100 - serviceFee : 100}
+                defaultValue={0}
+                max={100 - serviceFee}
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}

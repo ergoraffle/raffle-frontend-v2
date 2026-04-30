@@ -7,9 +7,16 @@ import { Typography } from './Typography';
 export type StepperProps = ComponentProps<'div'> & {
   steps: Array<string>;
   activeStepIndex: number;
+  disabled?: boolean;
 };
 
-export const Stepper = ({ steps, activeStepIndex, className, ...props }: StepperProps) => (
+export const Stepper = ({
+  steps,
+  activeStepIndex,
+  className,
+  disabled,
+  ...props
+}: StepperProps) => (
   <div className={cn('flex flex-col items-center justify-center gap-2.5 w-full ', className)}>
     <div className="flex items-center gap-1.5 w-full max-w-225 mx-auto" {...props}>
       {steps.map((step, index) => (
@@ -17,11 +24,13 @@ export const Stepper = ({ steps, activeStepIndex, className, ...props }: Stepper
           key={step}
           className={cn(
             'flex-1 rounded-sm h-2',
-            index === activeStepIndex ? 'bg-primary-1' : 'bg-black-4'
+            index === activeStepIndex && !disabled ? 'bg-primary-1' : 'bg-black-4'
           )}
         />
       ))}
     </div>
-    <Typography variant="heading-3">{steps[activeStepIndex]}</Typography>
+    <Typography variant="heading-3" className={`${disabled ? 'text-gray-3' : ''}`}>
+      {steps[activeStepIndex]}
+    </Typography>
   </div>
 );
