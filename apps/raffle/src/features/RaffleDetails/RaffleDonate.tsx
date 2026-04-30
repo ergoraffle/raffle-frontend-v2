@@ -26,9 +26,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { DONATE_TRANSACTIONS_STORAGE_KEY } from '@/constants';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL } from '@/lib';
+import { getErrorMessage, getTxURL, saveTransactionId } from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -56,14 +55,6 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
     resolver: zodResolver(raffleDonateSchema),
     defaultValues: { terms: false }
   });
-
-  const saveTransactionId = (value: string) => {
-    const stored = localStorage.getItem(DONATE_TRANSACTIONS_STORAGE_KEY);
-    let items: string[] = stored ? JSON.parse(stored) : [];
-    if (!Array.isArray(items)) items = [];
-    items.push(value);
-    localStorage.setItem(DONATE_TRANSACTIONS_STORAGE_KEY, JSON.stringify(items));
-  };
 
   const resetForm = () => {
     setTimeout(() => {

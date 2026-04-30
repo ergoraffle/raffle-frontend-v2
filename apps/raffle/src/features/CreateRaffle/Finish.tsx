@@ -12,10 +12,13 @@ import {
   CarouselContent,
   CarouselDots,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
   Checkbox,
   Field,
   FieldError,
   FieldLabel,
+  StyledTextPreview,
   Typography,
   toast
 } from '@ergo-raffle/ui-kit';
@@ -84,15 +87,20 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            {data.images.length > 1 ? <CarouselDots /> : null}
+            {data.images.length > 1 ? (
+              <>
+                <CarouselDots />
+                <CarouselPrevious />
+                <CarouselNext />
+              </>
+            ) : null}
           </Carousel>
         </div>
       ) : null}
       {!!data.description && (
         <div className="space-y-1">
           <Typography variant="body-button">Description:</Typography>
-          {/* biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass */}
-          <div dangerouslySetInnerHTML={{ __html: data.description }} />
+          <StyledTextPreview text={data.description} />
         </div>
       )}
       <div>

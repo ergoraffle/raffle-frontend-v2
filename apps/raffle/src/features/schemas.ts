@@ -7,7 +7,7 @@ const raffleSpecificationsSchema = z.object({
     .nonempty('Can not be empty')
     .min(2, 'Name is too short')
     .max(50, 'Name is too long'),
-  description: z.string({ message: 'Can not be empty' }).max(1024, 'Description is too long'),
+  description: z.string({ message: 'Can not be empty' }).max(2024, 'Description is too long'),
   tags: z.array(z.string()).max(5, 'Can not be more than 5').optional(),
   images: z
     .array(

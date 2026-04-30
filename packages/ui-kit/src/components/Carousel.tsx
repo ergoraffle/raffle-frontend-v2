@@ -31,10 +31,19 @@ export const useCarousel = () => {
   return context;
 };
 
-export type CarouselProps = ComponentProps<'div'> & { onChangeSlide?: (index: number) => void };
+export type CarouselProps = ComponentProps<'div'> & {
+  onChangeSlide?: (index: number) => void;
+  initialIndex?: number;
+};
 
-export const Carousel = ({ className, onChangeSlide, children, ...props }: CarouselProps) => {
-  const [carouselRef, api] = useEmblaCarousel();
+export const Carousel = ({
+  className,
+  onChangeSlide,
+  initialIndex = 0,
+  children,
+  ...props
+}: CarouselProps) => {
+  const [carouselRef, api] = useEmblaCarousel({ startIndex: initialIndex });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 

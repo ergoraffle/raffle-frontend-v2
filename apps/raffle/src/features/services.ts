@@ -230,8 +230,10 @@ export const addGiftRaffle = async (
   // Index of the winner receiving the gift
   const winnerIndex = data.winnerIndex; // index of the winner receiving the gift
 
+  const ergToken = data.tokens.find((token) => token.tokenId.toLowerCase() === 'erg');
+
   // Gift value in nanoERG (must be at least `4n * txFee`)
-  const giftValue = BigInt(infoBlockchainData.fee.tx * 4);
+  const giftValue = BigInt(infoBlockchainData.fee.tx * 4) + (ergToken?.amount || 0n);
 
   let builder = new AddGiftProxyTxBuilder()
     .setChainHeight(chainHeight)
@@ -246,7 +248,8 @@ export const addGiftRaffle = async (
 
   // if the gift tokens are provided, add them to the builder
   if (data.tokens !== undefined && data.tokens.length > 0) {
-    builder = builder.setGiftTokens(data.tokens); // array of gift tokens
+    const tokens = data.tokens.filter((token) => token.tokenId.toLowerCase() !== 'erg');
+    builder = builder.setGiftTokens(tokens); // array of gift tokens
   }
 
   const unsignedTx = await builder.build();

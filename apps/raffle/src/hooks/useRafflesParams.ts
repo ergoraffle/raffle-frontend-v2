@@ -18,7 +18,7 @@ const doNotNeedResetPage = ['sort', 'sortBy', 'page'];
 export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const text = searchParams.get('text') ?? undefined;
+  const text = searchParams.get('text') ?? '';
   const [search, setSearch] = useState<string | undefined>(text);
 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
@@ -55,7 +55,8 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   };
 
   const togglePinedParam = () => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams({});
+    setSearch('');
     params.delete('status');
     if (ids.length > 0) {
       params.delete('ids');
@@ -72,12 +73,8 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   };
 
   const setStatusParamWithSwitchTabs = (status?: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (ids) {
-      params.delete('ids');
-      params.delete('pined');
-    }
-    params.delete('status');
+    const params = new URLSearchParams({});
+    setSearch('');
     if (status) params.set('status', status);
     router.push(`?${params.toString()}`);
   };
