@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
   Skeleton,
+  StyledTextPreview,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
@@ -61,11 +62,10 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
         <CardDescription>A very short Description.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div
+        <StyledTextPreview
           className={isMobile && !expanded ? 'line-clamp-3' : ''}
           ref={ref}
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
-          dangerouslySetInnerHTML={{ __html: raffle.description || '' }}
+          text={raffle.description}
         />
         {isMobile && isOverflowing ? (
           <Button

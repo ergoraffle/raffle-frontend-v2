@@ -61,7 +61,7 @@ export const PercentageDistribution = ({ items = [], onChange }: PercentageDistr
               min={0}
               value={item.count}
               size="xs"
-              className="w-6 sm:w-7 text-center"
+              className="w-7 sm:w-8 text-center"
               onChange={(event) => update(item.id, 'count', Number(event.target.value))}
             />
             <span>X</span>
@@ -73,7 +73,7 @@ export const PercentageDistribution = ({ items = [], onChange }: PercentageDistr
               max={100}
               size="xs"
               value={item.percent}
-              className="w-6 sm:w-7 text-center"
+              className="w-7 sm:w-8 text-center"
               onChange={(event) => update(item.id, 'percent', Number(event.target.value))}
             />
             <span>%</span>

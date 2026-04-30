@@ -97,7 +97,10 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <InputGroup variant="bordered">
           <InputGroupInput
             value={tagInputValue}
-            onChange={(e) => setTagInputValue(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value.replace(/,/g, '');
+              setTagInputValue(value);
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
