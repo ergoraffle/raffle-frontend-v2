@@ -15,7 +15,7 @@ export const GiftItem = ({ gift, giftToken }: GiftItemProps) => (
       <Typography variant="body-lg">
         {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
       </Typography>
-      {!!giftToken?.verified && <Verified className="text-primary-1 size-6" />}
+      {!!giftToken?.isVerified && <Verified className="text-primary-1 size-6" />}
     </div>
   </div>
 );

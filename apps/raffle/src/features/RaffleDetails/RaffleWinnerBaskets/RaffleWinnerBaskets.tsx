@@ -214,6 +214,8 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                 onOpenChange={() => setBasketInfoDialog(null)}
                 initialBasketId={basketInfoDialog}
                 raffle={raffle}
+                giftTokens={giftTokens?.items}
+                totalBaskets={data?.total}
               />
             ) : null}
           </>

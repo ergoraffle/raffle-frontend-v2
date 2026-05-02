@@ -79,7 +79,7 @@ export const RaffleWinnerBasketItem = ({
                     ={' '}
                     {!!(raffle?.winnerPotShareAmount && raffle.token?.decimals) &&
                       getDecimalString(
-                        (raffle.winnerPotShareAmount * basket.share) / 100,
+                        Math.round((raffle.winnerPotShareAmount * basket.share) / 100),
                         raffle.token.decimals
                       )}{' '}
                     {raffle?.token.name}
