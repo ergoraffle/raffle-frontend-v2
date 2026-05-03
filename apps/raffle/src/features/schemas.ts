@@ -36,7 +36,11 @@ const raffleDonationGoalSchema = z.object({
     .refine(
       (val) => {
         if (!val) return true;
-        return validateAddress(val);
+        try {
+          return validateAddress(val);
+        } catch {
+          return false;
+        }
       },
       {
         message: 'Invalid address'
