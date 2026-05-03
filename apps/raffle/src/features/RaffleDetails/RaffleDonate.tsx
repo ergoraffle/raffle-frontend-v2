@@ -24,8 +24,10 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 
+import { getTokensBridgeable } from '@/actions';
 import { useWallet } from '@/hooks';
 import { getErrorMessage, getTxURL, saveTransactionId } from '@/lib';
 
@@ -40,6 +42,7 @@ export type RaffleDonateProps = {
 export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const wallet = useWallet();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [recaptcha, setRecaptcha] = useState<string | null>(null);
   const { isMobile } = useBreakpoint();
   const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [donateTransactionId, setDonateTransactionId] = useState<string>();
@@ -63,10 +66,34 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
     }, 5000);
   };
 
+  const checkTokenIsBridgeable = async () => {
+    try {
+      setIsLoading(true);
+
+      const { bridgeable: isBridgeable } = await getTokensBridgeable({ tokenId: raffle.token.id });
+
+      setIsLoading(false);
+
+      const instance = await wallet.openDialog(
+        isBridgeable ? ['Nautilus', 'Xverse'] : ['Nautilus']
+      );
+
+      if (!instance) {
+        toast.error('TODO: you should connect to a wallet first');
+        return;
+      }
+
+      setOpenCollapsible(true);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error(getErrorMessage(error, 'TODO: Failed to load data. Please try again later.'));
+    }
+  };
+
   const onSubmit = async ({ tickets }: RaffleDonateForm) => {
     try {
       setIsLoading(true);
-      const txId = await donateRaffle(raffle.id, { tickets }, wallet);
+      const txId = await donateRaffle(raffle.id, { tickets, recaptcha }, wallet);
 
       toast.success(
         <>
@@ -148,6 +175,12 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                             </FieldLabel>
                             {!!errors.terms && <FieldError>{errors.terms.message}</FieldError>}
                           </div>
+                          {wallet.selected?.name === 'Xverse' && (
+                            <ReCAPTCHA
+                              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || ''}
+                              onChange={setRecaptcha}
+                            />
+                          )}
                         </Field>
                       </div>
                       <div className="hidden sm:block relative w-1/2">
@@ -178,8 +211,10 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
               type="button"
               variant="primary"
               className="w-full"
-              onClick={() => setOpenCollapsible(true)}
+              disabled={isLoading}
+              onClick={() => checkTokenIsBridgeable()}
             >
+              {!!isLoading && <Spinner className="size-7" />}
               Donate
             </Button>
           )}

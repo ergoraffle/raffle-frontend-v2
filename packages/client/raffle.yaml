@@ -242,6 +242,49 @@ paths:
         '404':
           description: tokens not found
 
+  /info:
+    get:
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoResponse'
+
+  /tokens/bridgeable:
+    get:
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tokenId
+          required: true
+          description: Token ID to check to be bridgeable
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokensBridgeableResponse'
+  
+  /donation:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationRequest'
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationResponse'
+
 components:
   schemas:
     #######################
@@ -701,3 +744,69 @@ components:
         - type
         - address
         - createdAt
+
+    InfoResponse:
+      type: object
+      properties:
+        siteKey:
+          type: string
+          description: Captcha site key for frontend
+        version:
+          type: string
+          description: btc-payment service version
+      required:
+        - siteKey
+        - version
+
+    TokensBridgeableResponse:
+      type: object
+      properties:
+        tokenId:
+          type: string
+          description: Requested token ID
+        bridgeable:
+          type: boolean
+          description: Whether the token is bridgeable or not
+      required:
+        - tokenId
+        - bridgeable
+
+    DonationRequest:
+      type: object
+      properties:
+        ticketCount:
+          type: number
+          exclusiveMinimum: 0
+          description: Number of tickets to buy
+        raffleId:
+          type: string
+          minLength: 1
+          description: Raffle Id to donate to
+        donatorAddress:
+          type: string
+          minLength: 1
+          description: Donator address
+        captchaToken:
+          type: string
+          minLength: 1
+          description: Captcha token when captcha validation is enabled
+      required:
+        - ticketCount
+        - raffleId
+        - donatorAddress
+
+    DonationResponse:
+      type: object
+      properties:
+        bitcoinAddress:
+          type: string
+        satoshiAmount:
+          type: string
+        tokenId:
+          type: string
+        tokenAmount:
+          type: string
+      required:
+        - success
+        - message
+        - data

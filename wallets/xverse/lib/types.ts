@@ -8,6 +8,12 @@ export type XverseWalletAddresses = {
   taprootPublicKey: string;
 };
 
+export type XverseWalletTransferParams = {
+  amount: bigint;
+  fromAddress: string;
+  toAddress: string;
+};
+
 export class NonNativeSegWitAddressError extends WalletError {
   constructor(
     public wallet: string,

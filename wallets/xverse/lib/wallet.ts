@@ -1,4 +1,11 @@
-import { Wallet, type WalletToken } from '@ergo-raffle/base-wallet';
+import {
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  type WalletToken
+} from '@ergo-raffle/base-wallet';
+import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
+import { address, Psbt } from 'bitcoinjs-lib';
 import { AddressPurpose, request } from 'sats-connect';
 
 import { ICON } from './icon';
@@ -6,10 +13,18 @@ import {
   NonNativeSegWitAddressError,
   NonTaprootAddressError,
   type XverseWalletAddresses,
-  type XverseWalletConfig
+  type XverseWalletConfig,
+  type XverseWalletTransferParams
 } from './types';
 
-export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddresses> {
+const selector = new BitcoinBoxSelection();
+
+export class XverseWallet extends Wallet<
+  XverseWalletConfig,
+  XverseWalletAddresses,
+  unknown,
+  XverseWalletTransferParams
+> {
   icon = ICON;
 
   name = 'Xverse' as const;
@@ -84,8 +99,99 @@ export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddress
 
   fetchBoxes = async (): Promise<unknown[]> => [];
 
-  performTransfer = async (): Promise<string> => {
-    throw new Error('Transfer not implemented for Xverse wallet');
+  performTransfer = async (params: XverseWalletTransferParams): Promise<string> => {
+    const fromAddressScript = address.toOutputScript(params.fromAddress);
+    const toAddressScript = address.toOutputScript(params.toAddress);
+
+    const psbt = new Psbt();
+
+    psbt.addOutput({
+      script: toAddressScript,
+      value: params.amount
+    });
+
+    const utxosRaw: Array<{ txid: string; vout: number; value: number }> = await fetch(
+      `https://blockstream.info/api/address/${params.fromAddress}/utxo`
+    ).then((response) => response.json());
+
+    const utxos = utxosRaw.map((utxo) => ({
+      txId: utxo.txid,
+      index: utxo.vout,
+      value: BigInt(utxo.value)
+    }));
+
+    const feeRatio = await fetch(`https://blockstream.info/api/fee-estimates`)
+      .then((response) => response.json())
+      .then((data) => data[6]);
+
+    const estimateFee = generateFeeEstimator(1, 42, 272, 124, feeRatio, 4);
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: params.amount,
+        tokens: []
+      },
+      [],
+      new Map(),
+      utxos.values(),
+      546n, // minSatoshi
+      undefined,
+      estimateFee
+    );
+
+    if (!coveredBoxes.covered) {
+      coveredBoxes.uncoveredAssets;
+    }
+
+    coveredBoxes.boxes.forEach((box) => {
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        witnessUtxo: {
+          script: fromAddressScript,
+          value: box.value
+        }
+      });
+    });
+
+    psbt.addOutput({
+      script: fromAddressScript,
+      value: coveredBoxes.additionalAssets.aggregated.nativeToken
+    });
+
+    let signedPsbtBase64: string;
+
+    try {
+      const response = await request('signPsbt', {
+        psbt: psbt.toBase64(),
+        signInputs: {
+          [params.fromAddress]: Array.from(Array(psbt.inputCount).keys())
+        }
+      });
+
+      if (response.status === 'error') {
+        throw response.error;
+      }
+
+      signedPsbtBase64 = response.result.psbt;
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+
+    try {
+      const psbt = Psbt.fromBase64(signedPsbtBase64);
+
+      psbt.finalizeAllInputs();
+
+      const data = await fetch(`https://blockstream.info/api/tx`, {
+        method: 'POST',
+        body: psbt.extractTransaction().toHex()
+      }).then((response) => response.text());
+
+      return data;
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 
   fetchBalance = async () => undefined;

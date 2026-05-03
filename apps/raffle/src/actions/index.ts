@@ -5,7 +5,9 @@ import {
   getInfoBlockchain as getInfoBlockchainApi,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
-  getTokens as getTokensApi
+  getTokens as getTokensApi,
+  getTokensBridgeable as getTokensBridgeableApi,
+  postDonation as postDonationApi
 } from '@ergo-raffle/client';
 
 configureClient({
@@ -19,3 +21,5 @@ export const getTokens: typeof getTokensApi = async (params) => {
   if (!params.tokenIds?.length) return { items: [] };
   return await getTokensApi(params);
 };
+export const getTokensBridgeable = getTokensBridgeableApi;
+export const postDonation = postDonationApi;

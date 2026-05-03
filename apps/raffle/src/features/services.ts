@@ -1,3 +1,6 @@
+'use client';
+
+import type { DonationResponse } from '@ergo-raffle/client';
 import type { UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 import {
   AddGiftProxyTxBuilder,
@@ -5,7 +8,7 @@ import {
   DonationProxyTxBuilder
 } from '@ergo-raffle/proxy-transactions';
 
-import { getInfoBlockchain, getRaffle } from '@/actions';
+import { getInfoBlockchain, getRaffle, getTokensBridgeable, postDonation } from '@/actions';
 import type { WalletContextValue } from '@/hooks';
 import { getNonDecimalString } from '@/lib';
 
@@ -138,10 +141,38 @@ export const donateRaffle = async (
   raffleId: string,
   data: {
     tickets: number;
+    recaptcha: string | null;
   },
   wallet: WalletContextValue
 ) => {
   const raffle = await getRaffleData(raffleId);
+
+  const { bridgeable: isBridgeable } = await getTokensBridgeable({ tokenId: raffle.token.id });
+
+  if (isBridgeable) {
+    if (wallet.selected?.name !== 'Nautilus' && wallet.selected?.name !== 'Xverse') {
+      throw new Error('should connect to nutilus or xverse');
+    }
+    if (wallet.selected.name === 'Xverse') {
+      const walletInstance = wallet.selected;
+      let donationResponse: DonationResponse | undefined;
+      try {
+        donationResponse = await postDonation({
+          donatorAddress: (await walletInstance.getAddresses()).nativeSegWit,
+          raffleId,
+          ticketCount: data.tickets,
+          captchaToken: data.recaptcha || 'TODO'
+        });
+      } catch (error) {
+        throw new Error('TODO: can not load transaction bitcoin data', { cause: error });
+      }
+      return await walletInstance.transfer({
+        fromAddress: (await walletInstance.getAddresses()).nativeSegWit,
+        toAddress: donationResponse.bitcoinAddress || 'TODO',
+        amount: BigInt(donationResponse.satoshiAmount || '0')
+      });
+    }
+  }
 
   const infoBlockchainData = await getInfoBlockchainData();
 

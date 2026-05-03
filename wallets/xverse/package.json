@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@ergo-raffle/base-wallet": "^0.0.0",
+    "@rosen-bridge/bitcoin-utxo-selection": "^2.0.3",
+    "bitcoinjs-lib": "^7.0.1",
     "sats-connect": "^3.5.0"
   },
   "engines": {
