@@ -74,7 +74,7 @@ export const RaffleWinnerBasketItem = ({
                   <Typography
                     variant="subtitle-md"
                     data-slot="share-amount"
-                    className="text-gray-2 h-0 overflow-hidden transition-all transition-duration-300 group-hover:h-4"
+                    className="text-gray-2 h-0 overflow-hidden transition-all transition-duration-300 group-hover:h-4 whitespace-nowrap"
                   >
                     ={' '}
                     {!!(raffle?.winnerPotShareAmount && raffle.token?.decimals) &&
@@ -115,7 +115,7 @@ export const RaffleWinnerBasketItem = ({
               </div>
             </div>
             {raffle?.status === 'active' && (
-              <div className="sm:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 group-hover:w-10">
+              <div className="lg:w-0 flex items-center justify-center overflow-hidden transition-all transition-duration-300 lg:group-hover:w-10">
                 <Button
                   variant="plain"
                   size="icon-xs"

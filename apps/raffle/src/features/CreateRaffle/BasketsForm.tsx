@@ -7,18 +7,11 @@ import {
   Field,
   FieldError,
   FieldLabel,
-  Input,
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   PercentageDistribution,
   Progress,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tooltip,
   Typography
 } from '@ergo-raffle/ui-kit';
@@ -31,8 +24,6 @@ export type BasketsFormProps = {
   handleNext: () => void;
   handleBack: () => void;
 };
-
-const shareSplitMethods = [{ value: 'decreasingStep', label: 'Decreasing step' }];
 
 export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   const {
@@ -67,68 +58,26 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
           </Typography>
         </div>
         <Progress variant="box" value={filledSharePercent} max={100} />
-        <div className="flex flex-col lg:flex-row  gap-x-5 gap-y-3">
-          <Field className="sm:max-w-1/2 md:max-w-auto flex-1">
-            <FieldLabel>Share Baskets</FieldLabel>
-            <InputGroup variant="bordered">
-              <InputGroupInput disabled />
-              <InputGroupAddon align="inline-start">
-                <BasketStatus className="size-6" filled />
-              </InputGroupAddon>
-              <InputGroupAddon align="inline-end">
-                <Tooltip
-                  content="These baskets include a share of the raffle, and anyone can add gifts to them during the Raffle."
-                  disabled
-                >
-                  <Info className="size-6" />
-                </Tooltip>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
-          <div className="flex-2 flex flex-col sm:flex-row gap-x-5 gap-y-3">
-            <Field className="flex-1">
-              <FieldLabel>Share split Method</FieldLabel>
-              <Select defaultValue="decreasingStep">
-                <SelectTrigger variant="bordered" disabled>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {shareSplitMethods.map((item) => (
-                      <SelectItem value={item.value} key={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
-            <Field className="flex-1">
-              <FieldLabel>Biggest Share</FieldLabel>
-              <Input variant="bordered" disabled />
-            </Field>
-          </div>
-        </div>
-        <Field>
-          <FieldLabel>Details</FieldLabel>
-          <Controller
-            name="details"
-            control={control}
-            render={({ field }) => (
-              <PercentageDistribution
-                items={field.value ?? []}
-                onChange={(val) => {
-                  setValue('details', val, {
-                    shouldValidate: false,
-                    shouldDirty: true
-                  });
-                }}
-              />
-            )}
-          />
-          {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
-        </Field>
       </div>
+      <Field>
+        <FieldLabel>Share Baskets Details</FieldLabel>
+        <Controller
+          name="details"
+          control={control}
+          render={({ field }) => (
+            <PercentageDistribution
+              items={field.value ?? []}
+              onChange={(val) => {
+                setValue('details', val, {
+                  shouldValidate: false,
+                  shouldDirty: true
+                });
+              }}
+            />
+          )}
+        />
+        {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
+      </Field>
       <div className="space-y-3">
         <FieldTitle title="Create Empty Baskets." />
         <Field>

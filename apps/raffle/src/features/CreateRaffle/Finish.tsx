@@ -18,6 +18,7 @@ import {
   Field,
   FieldError,
   FieldLabel,
+  Spinner,
   StyledTextPreview,
   Typography,
   toast
@@ -41,7 +42,7 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
 
   const {
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue
   } = useFormContext<RaffleForm>();
 
@@ -107,7 +108,7 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
           <Typography variant="body-button">Raffle deadline:</Typography>
           <Typography variant="body-lg" className="text-gray-1">
-            {data.deadline}
+            {data.deadline} blocks
           </Typography>
         </div>
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
@@ -235,8 +236,9 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
           type="submit"
           variant="primary"
           className="w-32.5 sm:w-70"
-          disabled={!!Object.keys(errors).length}
+          disabled={!!Object.keys(errors).length || isSubmitting}
         >
+          {!!isSubmitting && <Spinner />}
           Create
         </Button>
       </div>

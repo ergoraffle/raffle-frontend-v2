@@ -32,7 +32,7 @@ export type RaffleWinnerBasketsProps = {
 
 export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
   const { ensureConnected } = useWallet();
-  const [basketInfoDialog, setBasketInfoDialog] = useState<number | null>(null);
+  const [activeBasketIndexInPreview, setActiveBasketIndexInPreview] = useState<number | null>(null);
   const [addGiftDialog, setAddGiftDialog] = useState<{
     open: boolean;
     initialBasketNumber?: number;
@@ -50,8 +50,12 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
     useWinnerBasketsParams();
   const { data, isLoading } = useFetchWinnerBaskets(raffle.id, params);
 
-  const firstColumn = data?.items?.slice(0, 5);
-  const secondColumn = data?.items?.slice(5, 10);
+  const firstColumn = data
+    ? data.items.slice(0, Math.floor((data.items.length - 1) / 2) + 1)
+    : undefined;
+  const secondColumn = data
+    ? data.items.slice(Math.floor((data.items.length - 1) / 2) + 1, data.items.length)
+    : undefined;
 
   const fetchTokensParams = useMemo(
     () => ({
@@ -68,6 +72,28 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
       openAddGiftDialog(initialBasketNumber);
     } catch (error) {
       toast.error(getErrorMessage(error));
+    }
+  };
+
+  const activeBasketInPreview = useMemo(
+    () => data?.items.find((b) => b.index === activeBasketIndexInPreview),
+    [data, activeBasketIndexInPreview]
+  );
+
+  const handleNextBasketToPreview = () => {
+    if (data && activeBasketIndexInPreview && activeBasketIndexInPreview < data.total) {
+      setActiveBasketIndexInPreview(activeBasketIndexInPreview + 1);
+      if (!data.items.find((b) => b.index === activeBasketIndexInPreview + 1)) {
+        onChangePage(pagination.page + 1);
+      }
+    }
+  };
+  const handlePrevBasketToPreview = () => {
+    if (data && activeBasketIndexInPreview && activeBasketIndexInPreview > 1) {
+      setActiveBasketIndexInPreview(activeBasketIndexInPreview - 1);
+      if (!data.items.find((b) => b.index === activeBasketIndexInPreview - 1)) {
+        onChangePage(pagination.page - 1);
+      }
     }
   };
 
@@ -125,9 +151,9 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
             </Empty>
           </div>
         ) : (
-          <div className="flex flex-col sm:flex-row">
-            <div className="sm:flex-1">
-              <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
+          <div className="flex flex-col lg:flex-row">
+            <div className="lg:flex-1">
+              <div className="hidden lg:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
                 <Typography className="px-4 flex-1" variant="body-lg">
                   Basket
                 </Typography>
@@ -148,7 +174,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                         basket={basket}
                         key={basket.index}
                         handleOpenAddGiftDialog={handleClickAddGift}
-                        handleOpenInfoDialog={setBasketInfoDialog}
+                        handleOpenInfoDialog={() => setActiveBasketIndexInPreview(basket.index)}
                         raffle={raffle}
                         giftTokens={giftTokens?.items}
                       />
@@ -156,8 +182,8 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               </div>
             </div>
             {(secondColumn && secondColumn.length > 0) || isLoading ? (
-              <div className="sm:flex-1">
-                <div className="hidden sm:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
+              <div className="lg:flex-1">
+                <div className="hidden lg:flex items-end border-b border-b-gray-5 mb-2.5 py-2.5">
                   <Typography className="px-4 flex-1" variant="body-lg">
                     Basket
                   </Typography>
@@ -178,7 +204,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                           basket={basket}
                           key={basket.index}
                           handleOpenAddGiftDialog={handleClickAddGift}
-                          handleOpenInfoDialog={setBasketInfoDialog}
+                          handleOpenInfoDialog={() => setActiveBasketIndexInPreview(basket.index)}
                           raffle={raffle}
                           giftTokens={giftTokens?.items}
                         />
@@ -197,6 +223,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                 onChangePage={onChangePage}
                 onChangePerPage={onChangePerPage}
                 total={data?.total}
+                perPageStep={10}
                 align="side"
                 className="mt-4"
               />
@@ -208,18 +235,21 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
               basketsCount={data?.items?.length}
               raffle={raffle}
             />
-            {basketInfoDialog ? (
-              <RaffleWinnerBasketInfoDialog
-                open={Boolean(basketInfoDialog)}
-                onOpenChange={() => setBasketInfoDialog(null)}
-                initialBasketId={basketInfoDialog}
-                raffle={raffle}
-                giftTokens={giftTokens?.items}
-                totalBaskets={data?.total}
-              />
-            ) : null}
           </>
         )}
+        {activeBasketIndexInPreview ? (
+          <RaffleWinnerBasketInfoDialog
+            open={Boolean(activeBasketIndexInPreview)}
+            onOpenChange={() => setActiveBasketIndexInPreview(null)}
+            raffle={raffle}
+            giftTokens={giftTokens?.items}
+            basket={activeBasketInPreview}
+            hasNext={Boolean(data && activeBasketIndexInPreview < data.total)}
+            onNextSlide={handleNextBasketToPreview}
+            onPrevSlide={handlePrevBasketToPreview}
+            loading={isLoading}
+          />
+        ) : null}
       </CardContent>
     </Card>
   );

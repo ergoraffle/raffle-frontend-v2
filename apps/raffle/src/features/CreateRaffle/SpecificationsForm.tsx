@@ -85,6 +85,9 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
       </Field>
       <Field>
         <FieldTitle title="Add a Description for your Raffle" />
+        <Typography variant="subtitle-lg" className="mb-3">
+          A sample text saying only the first 200 words will be used for CEO.
+        </Typography>
         <TextEditor
           className="max-w-205"
           value={getValues('description') || ''}
@@ -93,7 +96,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         {!!errors.description && <FieldError>{errors.description.message}</FieldError>}
       </Field>
       <Field className="flex-1">
-        <FieldLabel>Add up to 5 Tags</FieldLabel>
+        <FieldLabel>Add up to 5 Tags (optional)</FieldLabel>
         <InputGroup variant="bordered">
           <InputGroupInput
             value={tagInputValue}
@@ -167,7 +170,13 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         {!!errors.deadline && <FieldError>{errors.deadline.message}</FieldError>}
       </Field>
       <div className="flex items-center justify-end">
-        <Button variant="primary" className="w-32.5 sm:w-70" onClick={onSubmit} type="button">
+        <Button
+          variant="primary"
+          className="w-32.5 sm:w-70"
+          onClick={onSubmit}
+          type="button"
+          disabled={uploader.uploading}
+        >
           Next
         </Button>
       </div>

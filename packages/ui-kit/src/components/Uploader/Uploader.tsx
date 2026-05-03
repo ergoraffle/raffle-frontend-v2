@@ -1,4 +1,4 @@
-import { Edit, Info, Plus, Trash } from '@ergo-raffle/icons';
+import { Info, Pencil, PhotoScan, Plus, Trash } from '@ergo-raffle/icons';
 import type { Body, Meta, UppyFile } from '@uppy/core';
 import { Thumbnail, UppyContextProvider } from '@uppy/react';
 
@@ -20,9 +20,11 @@ export const Uploader = ({
   instance,
   ready,
   uploading,
+  moveFileToFirst,
   maxNumberOfFiles
 }: UploaderProps) => {
   void ready;
+
   return (
     <UppyContextProvider uppy={instance}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8 lg:gap-9 xl:gap-11">
@@ -30,28 +32,51 @@ export const Uploader = ({
           const isFileLoading = !file.error && file.data?.size === 0;
           const isFileUploading = !!file.progress.uploadStarted && !file.progress.uploadComplete;
           const isFileActionsDisabled = isFileUploading || isFileLoading;
+          const isFirst = files.findIndex((f) => f.id === file.id) === 0;
 
           return (
             <div key={file.id} className="item image-uploader-item">
               <div className=" rounded-xlg overflow-hidden relative bg-gray-4 text-gray-4-foreground w-full h-full">
                 <Thumbnail file={file as UppyFile<Meta, Body>} images={!!file.data?.size} />
-                <div className="absolute right-4 bottom-4 space-x-2">
-                  <Button
-                    disabled={isFileActionsDisabled || uploading}
-                    variant="white"
-                    size="icon"
-                    onClick={() => instance.removeFile(file.id)}
-                  >
-                    <Trash className="text-error" />
-                  </Button>
-                  <Button
-                    disabled={isFileActionsDisabled || uploading}
-                    variant="white"
-                    size="icon"
-                    onClick={() => edit(file.id)}
-                  >
-                    <Edit />
-                  </Button>
+                <div
+                  className={`absolute left-0 right-0 bottom-0 space-x-2 bg-black-3 px-2  flex ${isFirst ? 'justify-end' : 'justify-between'} items-center`}
+                >
+                  {!isFirst && (
+                    <Tooltip content="Mark as cover">
+                      <Button
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => moveFileToFirst(file.id)}
+                      >
+                        <PhotoScan />
+                      </Button>
+                    </Tooltip>
+                  )}
+                  <div>
+                    <Tooltip content="Edit">
+                      <Button
+                        disabled={isFileActionsDisabled || uploading}
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => edit(file.id)}
+                      >
+                        <Pencil />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Remove">
+                      <Button
+                        disabled={isFileActionsDisabled || uploading}
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => instance.removeFile(file.id)}
+                      >
+                        <Trash />
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
 
                 {!!isFileLoading && (

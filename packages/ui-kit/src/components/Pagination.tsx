@@ -126,12 +126,11 @@ type PaginationButtonMode = {
 export type PaginationProps = ComponentProps<'div'> & {
   page: number;
   perPage: number;
+  perPageStep: number;
   total: number;
   align?: 'side' | 'center';
   onChangePerPage: (perPage: number) => void;
 } & (PaginationLinkMode | PaginationButtonMode);
-
-export const perPageItems = [12, 24, 36, 48, 60];
 
 const getPerPageOptions = (perPage: number): number[] => {
   const result: number[] = [];
@@ -151,6 +150,7 @@ export const Pagination = (props: PaginationProps) => {
   const {
     page,
     perPage,
+    perPageStep,
     total,
     align = 'center',
     onChangePerPage,
@@ -159,7 +159,7 @@ export const Pagination = (props: PaginationProps) => {
   } = props;
   const totalPages = Math.ceil(total / perPage);
   const pages: (number | 'ellipsis')[] = [];
-  const perPageItems = getPerPageOptions(perPage);
+  const perPageItems = getPerPageOptions(perPageStep);
   const isLink = isLinkMode(props);
 
   for (let i = 1; i <= totalPages; i++) {
@@ -227,9 +227,9 @@ export const Pagination = (props: PaginationProps) => {
         <Typography variant="heading-5">Item per Page:</Typography>
         <div className="w-20">
           <Select
-            value={perPage.toString() || '12'}
+            value={perPage.toString()}
             onValueChange={(value) => onChangePerPage(Number(value))}
-            disabled={total <= perPage}
+            disabled={total < perPageStep}
           >
             <SelectTrigger className="w-full max-w-48" variant="plain" size="sm">
               <SelectValue />

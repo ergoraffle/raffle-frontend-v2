@@ -45,7 +45,9 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
         ) : null}
       </CardImageWrapper>
       <CardHeader>
-        <CardTitle loading={loading}>{raffle?.name}</CardTitle>
+        <CardTitle loading={loading} className="line-clamp-2">
+          {raffle?.name}
+        </CardTitle>
       </CardHeader>
       {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
         <CardAction>
@@ -92,7 +94,7 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
             </>
           ) : (
             <div
-              className="max-h-30 lg:max-h-20 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
+              className="line-clamp-3 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
               dangerouslySetInnerHTML={{ __html: raffle?.description || '' }}
             />

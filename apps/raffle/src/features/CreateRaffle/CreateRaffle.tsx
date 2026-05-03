@@ -34,6 +34,7 @@ export const CreateRaffle = () => {
     mode: 'onChange',
     defaultValues: {
       details: [],
+      emptyBaskets: 0,
       terms: false,
       eligibility: false
     }
@@ -56,6 +57,7 @@ export const CreateRaffle = () => {
   const resetForm = () => {
     form.reset();
     setActiveStepIndex(0);
+    window.scrollTo(0, 0);
   };
 
   const onSubmit = async (data: RaffleForm) => {
@@ -63,7 +65,6 @@ export const CreateRaffle = () => {
       const { description, ...formData } = data;
       const cleanedHtmlDescription = sanitize(description);
       const tx = await createRaffle({ ...formData, description: cleanedHtmlDescription }, wallet);
-
       toast.success(
         <>
           Raffle created successfully! Click{' '}

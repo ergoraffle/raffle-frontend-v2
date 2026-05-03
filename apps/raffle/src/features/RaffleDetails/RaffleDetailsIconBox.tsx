@@ -12,8 +12,8 @@ export type RaffleDetailsIconBoxProps = {
 
 export const RaffleDetailsIconBox = ({ loading, raffle }: RaffleDetailsIconBoxProps) => (
   <Card padding="lg">
-    <CardContent className="flex justify-between sm:py-2 sm:px-5.5 text-center">
-      <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
+    <CardContent className="flex sm:py-2 sm:px-5.5 text-center">
+      <div className="flex flex-col items-center gap-1 flex-1">
         <SandClock className="size-13" />
         {loading ? (
           <div className="flex space-x-1">
@@ -26,7 +26,7 @@ export const RaffleDetailsIconBox = ({ loading, raffle }: RaffleDetailsIconBoxPr
           </Typography>
         )}
       </div>
-      <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
+      <div className="flex flex-col items-center gap-1 flex-1">
         <Ticket className="size-13" />
         {loading ? (
           <div className="flex space-x-1">
@@ -39,7 +39,7 @@ export const RaffleDetailsIconBox = ({ loading, raffle }: RaffleDetailsIconBoxPr
           </Typography>
         )}
       </div>
-      <div className="flex flex-col items-center gap-1 flex-1 sm:flex-auto">
+      <div className="flex flex-col items-center gap-1 flex-1">
         <HandCoin className="size-13" />
         {loading ? (
           <div className="flex space-x-1">

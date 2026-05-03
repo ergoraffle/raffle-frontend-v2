@@ -60,7 +60,7 @@ const raffleBasketsSchema = z.object({
         count: z.number({ message: 'Can not be empty' }).min(1, 'Can not be less than 1'),
         percent: z
           .number({ message: 'Can not be empty' })
-          .min(1, 'Can not be less than 1')
+          .min(0, 'Can not be less than 0')
           .max(100, 'Can not be more than 100')
       })
     )
@@ -68,13 +68,6 @@ const raffleBasketsSchema = z.object({
     .superRefine((items, ctx) => {
       if (items.length === 0) return;
 
-      if (items.some((i) => i.percent === 0)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Percents can not be less than 1',
-          path: []
-        });
-      }
       if (items.some((i) => i.percent > 100)) {
         ctx.addIssue({
           code: 'custom',

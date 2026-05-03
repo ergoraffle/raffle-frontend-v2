@@ -13,7 +13,7 @@ export const NotFoundError = () => {
             width={832}
             height={477}
             alt="Server Error"
-            className="-mb-5 sm:-mb-10"
+            className="sm:-mb-10"
           />
           <Typography variant="display-md">404</Typography>
           <Typography variant="heading-3">Nothing seems to be here.</Typography>

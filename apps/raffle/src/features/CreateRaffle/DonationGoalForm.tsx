@@ -62,19 +62,19 @@ export const DonationGoalForm = ({
       });
   }, [wallet.selected]);
 
-  const winnerPotShare = watch('winnerPotShare');
+  const missionFund = watch('missionFund');
 
-  const missionFund = useMemo(
-    () => (serviceFee && winnerPotShare ? 100 - (winnerPotShare + serviceFee) : 0),
-    [winnerPotShare, serviceFee]
+  const winnerPotShare = useMemo(
+    () => (serviceFee && missionFund ? 100 - (missionFund + serviceFee) : 0),
+    [missionFund, serviceFee]
   );
 
   useEffect(() => {
-    setValue('missionFund', missionFund || 100 - serviceFee, {
+    setValue('winnerPotShare', winnerPotShare || 100 - serviceFee, {
       shouldValidate: true,
       shouldDirty: true
     });
-  }, [missionFund, setValue, serviceFee]);
+  }, [winnerPotShare, setValue, serviceFee]);
 
   return (
     <div className="space-y-8">
@@ -92,8 +92,8 @@ export const DonationGoalForm = ({
               <SelectContent>
                 <SelectGroup>
                   {tokens.map((token) => (
-                    <SelectItem value={token.id} key={token.id}>
-                      <Token name={token.name} />
+                    <SelectItem value={token.id} key={token.id} className="p-2">
+                      <Token name={token.name} tokenId={token.id.toLowerCase()} />
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -123,6 +123,7 @@ export const DonationGoalForm = ({
         <div className="flex items-center gap-x-5">
           <Input
             variant="bordered"
+            step="any"
             {...register('amount', { valueAsNumber: true })}
             className="max-w-205 grow"
             type="number"
@@ -153,26 +154,26 @@ export const DonationGoalForm = ({
           </div>
           <div className="flex flex-col sm:flex-row flex-2 gap-x-2 gap-y-3">
             <Field className="flex-1">
-              <FieldLabel>Mission’s Fund</FieldLabel>
-              <Input
-                variant="bordered"
-                disabled
-                defaultValue={100 - serviceFee}
-                {...register('missionFund', { valueAsNumber: true })}
-              />
-              {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
-            </Field>
-            <Field className="flex-1">
               <FieldLabel>Winners Pot Share</FieldLabel>
               <Input
                 variant="bordered"
                 type="number"
                 min={0}
-                defaultValue={0}
+                defaultValue={100 - serviceFee}
                 max={100 - serviceFee}
+                disabled
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}
+            </Field>
+            <Field className="flex-1">
+              <FieldLabel>Mission’s Fund</FieldLabel>
+              <Input
+                variant="bordered"
+                defaultValue={0}
+                {...register('missionFund', { valueAsNumber: true })}
+              />
+              {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
             </Field>
           </div>
         </div>

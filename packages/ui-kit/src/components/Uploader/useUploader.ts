@@ -70,6 +70,29 @@ export const useUploader = ({
     setEditing(file);
   };
 
+  const moveFileToFirst = (fileId: string) => {
+    const file = uppy.getFile(fileId);
+    if (!file?.data) return;
+
+    const filesClone = uppy.getFiles();
+    const restFiles = filesClone.filter((f) => f.id !== fileId);
+
+    filesClone.map((f) => uppy.removeFile(f.id));
+    uppy.addFile({
+      name: file.name,
+      type: file.type,
+      data: file.data as File | Blob
+    });
+
+    restFiles.forEach((f) => {
+      uppy.addFile({
+        name: f.name,
+        type: f.type,
+        data: f.data as File | Blob
+      });
+    });
+  };
+
   const upload = async () => {
     const result = await uppy.upload();
 
@@ -160,6 +183,7 @@ export const useUploader = ({
     ready: !!isReady,
     upload,
     uploading: !!isUploading,
-    maxNumberOfFiles
+    maxNumberOfFiles,
+    moveFileToFirst
   };
 };

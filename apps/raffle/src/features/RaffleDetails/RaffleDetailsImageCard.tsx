@@ -11,6 +11,8 @@ import {
   CarouselContent,
   CarouselDots,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
   Identifier,
   Skeleton,
   Typography
@@ -47,7 +49,13 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
             </CarouselItem>
           ))}
         </CarouselContent>
-        {raffle?.pictures && raffle.pictures.length > 1 ? <CarouselDots /> : null}
+        {raffle.pictures.length > 1 ? (
+          <>
+            <CarouselNext />
+            <CarouselPrevious />
+            <CarouselDots />
+          </>
+        ) : null}
       </Carousel>
     )}
     {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (

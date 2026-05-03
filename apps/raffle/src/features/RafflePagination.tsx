@@ -15,6 +15,7 @@ export const RafflesPagination = ({ total }: RafflesPaginationProps) => {
     <Pagination
       page={page}
       perPage={perPage}
+      perPageStep={12}
       onChangePerPage={(value) => setParam('perPage', value.toString())}
       getPageHref={getPageLink}
       total={total}

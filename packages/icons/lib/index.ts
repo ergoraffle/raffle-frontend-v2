@@ -30,6 +30,8 @@ export { default as Loader } from './loader.svg?react';
 export { default as Loading } from './loading.svg?react';
 export { default as Menu } from './menu.svg?react';
 export { default as Moon } from './moon.svg?react';
+export { default as Pencil } from './pencil.svg?react';
+export { default as PhotoScan } from './photo-scan.svg?react';
 export { default as Pin } from './pin.svg?react';
 export { default as Plus } from './plus.svg?react';
 export { default as Recent } from './recent.svg?react';
