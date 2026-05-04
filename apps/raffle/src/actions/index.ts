@@ -2,6 +2,7 @@
 
 import {
   configureClient,
+  getInfo as getInfoApi,
   getInfoBlockchain as getInfoBlockchainApi,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
@@ -23,3 +24,4 @@ export const getTokens: typeof getTokensApi = async (params) => {
 };
 export const getTokensBridgeable = getTokensBridgeableApi;
 export const postDonation = postDonationApi;
+export const getInfo = getInfoApi;

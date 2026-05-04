@@ -27,7 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 
-import { getTokensBridgeable } from '@/actions';
+import { getInfo, getTokensBridgeable } from '@/actions';
 import { useWallet } from '@/hooks';
 import { getErrorMessage, getTxURL, saveTransactionId } from '@/lib';
 
@@ -43,6 +43,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const wallet = useWallet();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptcha, setRecaptcha] = useState<string | null>(null);
+  const [siteKey, setSiteKey] = useState<string>();
   const { isMobile } = useBreakpoint();
   const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [donateTransactionId, setDonateTransactionId] = useState<string>();
@@ -66,7 +67,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
     }, 5000);
   };
 
-  const checkTokenIsBridgeable = async () => {
+  const loadPrerequisiteData = async () => {
     try {
       setIsLoading(true);
 
@@ -83,10 +84,21 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         return;
       }
 
+      if (instance.name === 'Xverse') {
+        try {
+          const info = await getInfo();
+          setSiteKey(info.siteKey);
+        } catch {
+          toast.error('TODO: Failed to load captcha data. Please try again later.');
+          setIsLoading(false);
+          return;
+        }
+      }
+
       setOpenCollapsible(true);
-    } catch (error) {
+    } catch {
       setIsLoading(false);
-      toast.error(getErrorMessage(error, 'TODO: Failed to load data. Please try again later.'));
+      toast.error('TODO: Failed to load data. Please try again later.');
     }
   };
 
@@ -175,11 +187,8 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                             </FieldLabel>
                             {!!errors.terms && <FieldError>{errors.terms.message}</FieldError>}
                           </div>
-                          {wallet.selected?.name === 'Xverse' && (
-                            <ReCAPTCHA
-                              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY || ''}
-                              onChange={setRecaptcha}
-                            />
+                          {wallet.selected?.name === 'Xverse' && siteKey && (
+                            <ReCAPTCHA sitekey={siteKey} onChange={setRecaptcha} />
                           )}
                         </Field>
                       </div>
@@ -212,7 +221,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
               variant="primary"
               className="w-full"
               disabled={isLoading}
-              onClick={() => checkTokenIsBridgeable()}
+              onClick={() => loadPrerequisiteData()}
             >
               {!!isLoading && <Spinner className="size-7" />}
               Donate
