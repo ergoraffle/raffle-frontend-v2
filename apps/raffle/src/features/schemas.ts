@@ -26,35 +26,39 @@ const raffleSpecificationsSchema = z.object({
     .min(1, 'Deadline must be at least 1')
 });
 
-const raffleDonationGoalSchema = z.object({
-  tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
-  count: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
-  amount: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
-  address: z
-    .string({ message: 'Can not be empty' })
-    .nonempty('Can not be empty')
-    .refine(
-      (val) => {
-        if (!val) return true;
-        try {
-          return validateAddress(val);
-        } catch {
-          return false;
+const raffleDonationGoalSchema = (serviceFee?: number) =>
+  z.object({
+    tokenId: z.string({ message: 'Can not be empty, Please select a token' }),
+    count: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+    amount: z.number({ message: 'Can not be empty' }).min(0, 'Can not be less than 0'),
+    address: z
+      .string({ message: 'Can not be empty' })
+      .nonempty('Can not be empty')
+      .refine(
+        (val) => {
+          if (!val) return true;
+          try {
+            return validateAddress(val);
+          } catch {
+            return false;
+          }
+        },
+        {
+          message: 'Invalid address'
         }
-      },
-      {
-        message: 'Invalid address'
-      }
-    ),
-  missionFund: z
-    .number({ message: 'Can not be empty' })
-    .min(0, 'Can not be less than 0')
-    .max(100, 'Can not be more than 100'),
-  winnerPotShare: z
-    .number({ message: 'Can not be empty' })
-    .min(0, 'Can not be less than 0')
-    .max(100, 'Can not be more than 100')
-});
+      ),
+    missionFund: z
+      .number({ message: 'Can not be empty' })
+      .min(0, `Minimum amount: ${serviceFee ? 100 - serviceFee : 100}%`)
+      .max(
+        serviceFee ? 100 - serviceFee : 100,
+        `Maximum amount: ${serviceFee ? 100 - serviceFee : 100}%`
+      ),
+    winnerPotShare: z
+      .number({ message: 'Can not be empty' })
+      .min(0, 'Can not be less than 0')
+      .max(100, 'Can not be more than 100')
+  });
 const raffleBasketsSchema = z.object({
   emptyBaskets: z.number({ message: 'Can not be empty' }),
   details: z
@@ -114,10 +118,11 @@ export const raffleDonateSchema = z.object({
   })
 });
 
-export const raffleSchema = raffleAgreementSchema
-  .and(raffleSpecificationsSchema)
-  .and(raffleDonationGoalSchema)
-  .and(raffleBasketsSchema);
+export const createRaffleSchema = (serviceFee?: number) =>
+  raffleAgreementSchema
+    .and(raffleSpecificationsSchema)
+    .and(raffleDonationGoalSchema(serviceFee))
+    .and(raffleBasketsSchema);
 
 export const addGiftSchema = z.object({
   winnerIndex: z.number({ message: 'Can not be empty' }),
@@ -137,8 +142,8 @@ export const addGiftSchema = z.object({
 });
 
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
-export type RaffleDonationGoalForm = z.infer<typeof raffleDonationGoalSchema>;
+export type RaffleDonationGoalForm = z.infer<ReturnType<typeof raffleDonationGoalSchema>>;
 export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
 export type AddGiftForm = z.infer<typeof addGiftSchema>;
-export type RaffleForm = z.infer<typeof raffleSchema>;
+export type RaffleForm = z.infer<ReturnType<typeof createRaffleSchema>>;
 export type RaffleDonateForm = z.infer<typeof raffleDonateSchema>;

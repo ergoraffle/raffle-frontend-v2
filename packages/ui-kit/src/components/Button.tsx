@@ -30,7 +30,7 @@ export const buttonVariants = cva(
         error:
           'bg-error-light text-error-light-foreground hover:bg-error-light-hover hover:text-error-light-hover-foreground typo-body-lg',
         rounded:
-          'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground shadow-6 rounded-full sm:rounded-full'
+          'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground shadow-2 rounded-full sm:rounded-full'
       },
       size: {
         default: 'h-9 sm:h-12 px-2.5 sm:px-3',

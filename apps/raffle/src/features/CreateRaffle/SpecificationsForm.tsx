@@ -1,18 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Close } from '@ergo-raffle/icons';
 import {
-  Badge,
   Button,
   Field,
   FieldError,
   FieldLabel,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
+  TagsInput,
   TextEditor,
   Typography,
   Uploader,
@@ -30,8 +24,6 @@ export type SpecificationsFormProps = {
 };
 
 export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
-  const [tagInputValue, setTagInputValue] = useState<string>('');
-
   const {
     setValue,
     getValues,
@@ -42,7 +34,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
   const images = getValues('images');
   const uploader = useUploader({
     files: images || [],
-    maxFileSize: 1024 * 1024,
+    maxFileSize: 1024 * 512,
     allowedFileTypes: ['.jpg', '.png', '.jpeg'],
     maxNumberOfFiles: 4,
     endpoint: process.env.NEXT_PUBLIC_IMAGE_UPLOAD_URL
@@ -57,21 +49,6 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
       });
       handleNext();
     }
-  };
-
-  const handleAddTag = () => {
-    if (tagInputValue && !tags?.includes(tagInputValue)) {
-      setValue('tags', [...(tags ?? []), tagInputValue], {
-        shouldValidate: true,
-        shouldDirty: true
-      });
-      setTagInputValue('');
-    }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    const newTags = tags?.filter((t: string) => t !== tag);
-    setValue('tags', newTags);
   };
 
   const deadline = watch('deadline');
@@ -97,51 +74,15 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
       </Field>
       <Field className="flex-1">
         <FieldLabel>Add up to 5 Tags (optional)</FieldLabel>
-        <InputGroup variant="bordered">
-          <InputGroupInput
-            value={tagInputValue}
-            onChange={(e) => {
-              const value = e.target.value.replace(/,/g, '');
-              setTagInputValue(value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddTag();
-              }
-            }}
-          />
-          <InputGroupAddon align="inline-start" className="flex-wrap hidden md:flex">
-            {getValues('tags')?.map((tag) => (
-              <Badge variant="secondary" className="pr-0" key={tag}>
-                {tag}
-                <Button
-                  variant="plain"
-                  size="icon-xs"
-                  type="button"
-                  onClick={() => handleRemoveTag(tag)}
-                >
-                  <Close className="pointer-events-none size-5" />
-                </Button>
-              </Badge>
-            ))}
-          </InputGroupAddon>
-        </InputGroup>
-        <div className="flex md:hidden items-center flex-wrap gap-2">
-          {getValues('tags')?.map((tag) => (
-            <Badge variant="secondary" className="pr-0" key={tag}>
-              {tag}
-              <Button
-                variant="plain"
-                size="icon-xs"
-                type="button"
-                onClick={() => handleRemoveTag(tag)}
-              >
-                <Close className="pointer-events-none size-5" />
-              </Button>
-            </Badge>
-          ))}
-        </div>
+        <TagsInput
+          tags={tags}
+          onSetTags={(tags) =>
+            setValue('tags', tags, {
+              shouldValidate: true,
+              shouldDirty: true
+            })
+          }
+        />
         {!!errors.tags && <FieldError>{errors.tags.message}</FieldError>}
       </Field>
       <Field>

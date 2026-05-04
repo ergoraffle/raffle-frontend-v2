@@ -49,8 +49,8 @@ export const TabsTrigger = ({ className, ...props }: TabsTriggerProps) => (
     data-slot="tabs-trigger"
     className={cn(
       "gap-1.5 rounded-sm border-b-3 border-b-transparent px-2 lg:px-5 py-0.5 [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-black-1 relative inline-flex h-[calc(100%-1px)] items-center justify-center whitespace-nowrap transition-all focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-      'data-[state=active]:text-black-1',
-      'group-data-[variant=default]/tabs-list:data-[state=active]:after:bg-black-1 after:rounded-b-md group-data-[variant=primary]/tabs-list:data-[state=active]:after:bg-primary-1 after:absolute after:h-1.25 after:w-full after:opacity-0 after:transition-opacity after:inset-x-0 after:-bottom-1.25 data-[state=active]:after:opacity-100',
+      'data-[state=active]:text-black-1 hover:cursor-pointer',
+      'group-data-[variant=default]/tabs-list:data-[state=active]:after:bg-black-1 hover:group-data-[variant=default]/tabs-list:after:bg-black-1 hover:after:opacity-100 after:rounded-b-md group-data-[variant=primary]/tabs-list:data-[state=active]:after:bg-primary-1 hover:group-data-[variant=primary]/tabs-list:after:bg-primary-1 after:absolute after:h-1.25 after:w-full after:opacity-0 after:transition-opacity after:inset-x-0 after:-bottom-1.25 data-[state=active]:after:opacity-100',
       className
     )}
     {...props}

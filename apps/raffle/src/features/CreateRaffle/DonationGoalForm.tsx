@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
 import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import { Lock } from '@ergo-raffle/icons';
 import {
   Button,
   DistributionBar,
@@ -11,6 +12,9 @@ import {
   FieldError,
   FieldLabel,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
   Select,
   SelectContent,
   SelectGroup,
@@ -64,17 +68,14 @@ export const DonationGoalForm = ({
 
   const missionFund = watch('missionFund');
 
-  const winnerPotShare = useMemo(
-    () => (serviceFee && missionFund ? 100 - (missionFund + serviceFee) : 0),
-    [missionFund, serviceFee]
-  );
+  const winnerPotShare = useMemo(() => 100 - (missionFund + serviceFee), [missionFund, serviceFee]);
 
   useEffect(() => {
-    setValue('winnerPotShare', winnerPotShare || 100 - serviceFee, {
+    setValue('winnerPotShare', winnerPotShare > 0 ? winnerPotShare : 0, {
       shouldValidate: true,
       shouldDirty: true
     });
-  }, [winnerPotShare, setValue, serviceFee]);
+  }, [winnerPotShare, setValue]);
 
   return (
     <div className="space-y-8">
@@ -84,7 +85,9 @@ export const DonationGoalForm = ({
           <Field className="flex-1">
             <Select
               value={getValues('tokenId') ?? ''}
-              onValueChange={(value) => setValue('tokenId', value)}
+              onValueChange={(value) =>
+                setValue('tokenId', value, { shouldValidate: true, shouldDirty: true })
+              }
             >
               <SelectTrigger variant="bordered" className="mt-7.5" disabled={tokens.length === 0}>
                 <SelectValue />
@@ -149,7 +152,12 @@ export const DonationGoalForm = ({
           <div className="sm:w-1/2 md:w-auto flex-1">
             <Field>
               <FieldLabel>Service</FieldLabel>
-              <Input variant="bordered" disabled value={serviceFee} />
+              <InputGroup variant="bordered">
+                <InputGroupInput disabled value={serviceFee} />
+                <InputGroupAddon align="inline-end">
+                  <Lock className="size-6 text-gray-2" />
+                </InputGroupAddon>
+              </InputGroup>
             </Field>
           </div>
           <div className="flex flex-col sm:flex-row flex-2 gap-x-2 gap-y-3">
@@ -159,7 +167,6 @@ export const DonationGoalForm = ({
                 variant="bordered"
                 type="number"
                 min={0}
-                defaultValue={100 - serviceFee}
                 max={100 - serviceFee}
                 disabled
                 {...register('winnerPotShare', { valueAsNumber: true })}
@@ -168,11 +175,7 @@ export const DonationGoalForm = ({
             </Field>
             <Field className="flex-1">
               <FieldLabel>Mission’s Fund</FieldLabel>
-              <Input
-                variant="bordered"
-                defaultValue={0}
-                {...register('missionFund', { valueAsNumber: true })}
-              />
+              <Input variant="bordered" {...register('missionFund', { valueAsNumber: true })} />
               {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
             </Field>
           </div>

@@ -1,21 +1,21 @@
 import { useMemo } from 'react';
 
-import { Info } from '@ergo-raffle/icons';
+import { Close, Info, Plus } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
   Field,
   FieldError,
   FieldLabel,
+  Input,
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  PercentageDistribution,
   Progress,
   Tooltip,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import type { RaffleBasketsForm, RaffleDonationGoalForm } from '../schemas';
 import { FieldTitle } from './FieldTitle';
@@ -30,8 +30,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     formState: { errors },
     register,
     watch,
-    control,
-    setValue
+    control
   } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
 
   const winnerPotShare = watch('winnerPotShare', 0);
@@ -41,6 +40,15 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     () => details.reduce((sum, item) => sum + item.percent * item.count, 0),
     [details]
   );
+
+  const {
+    fields: detailsItems,
+    append,
+    remove
+  } = useFieldArray({
+    control,
+    name: 'details'
+  });
 
   return (
     <div className="space-y-8">
@@ -61,21 +69,57 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
       </div>
       <Field>
         <FieldLabel>Share Baskets Details</FieldLabel>
-        <Controller
-          name="details"
-          control={control}
-          render={({ field }) => (
-            <PercentageDistribution
-              items={field.value ?? []}
-              onChange={(val) => {
-                setValue('details', val, {
-                  shouldValidate: false,
-                  shouldDirty: true
-                });
-              }}
-            />
-          )}
-        />
+        <div className="flex items-center flex-wrap border border-gray-4 rounded-2xlg pt-2 pr-3 pb-2.5 pl-4 gap-2">
+          {detailsItems.map((item, index) => (
+            <div
+              key={item.id}
+              className="flex items-center bg-gray-5 text-gray-5-foreground rounded-md px-1.5 py-0.5 gap-2"
+            >
+              <div className="flex items-center gap-0.5">
+                <Input
+                  type="number"
+                  min={0}
+                  size="xs"
+                  className="w-7 sm:w-8 text-center"
+                  {...register(`details.${index}.count`, {
+                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                  })}
+                />
+                <span>X</span>
+              </div>
+              <div className="flex items-center gap-0.5">
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  size="xs"
+                  className="w-7 sm:w-8 text-center"
+                  {...register(`details.${index}.percent`, {
+                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                  })}
+                />
+                <span>%</span>
+              </div>
+              <Button variant="plain" size="icon-xs" onClick={() => remove(index)} type="button">
+                <Close />
+              </Button>
+            </div>
+          ))}
+          <Button
+            variant="plain"
+            size="icon-xs"
+            onClick={() =>
+              append({
+                id: crypto.randomUUID(),
+                count: 1,
+                percent: 0
+              })
+            }
+            type="button"
+          >
+            <Plus />
+          </Button>
+        </div>
         {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
       </Field>
       <div className="space-y-3">

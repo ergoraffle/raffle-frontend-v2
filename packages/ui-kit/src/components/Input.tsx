@@ -33,10 +33,5 @@ export const Input = ({
   variant = 'default',
   ...props
 }: InputProps) => (
-  <input
-    data-slot="input"
-    className={cn(inputVariants({ size, variant, className }))}
-    onWheel={(e) => e.preventDefault()}
-    {...props}
-  />
+  <input data-slot="input" className={cn(inputVariants({ size, variant, className }))} {...props} />
 );

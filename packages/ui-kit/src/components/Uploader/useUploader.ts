@@ -163,7 +163,16 @@ export const useUploader = ({
           uppy.setFileState(id, {
             data: blob,
             size: blob.size,
-            type: blob.type
+            type: blob.type,
+            progress: {
+              uploadStarted: 0,
+              uploadComplete: true,
+              bytesUploaded: blob.size,
+              bytesTotal: blob.size,
+              percentage: 100,
+              complete: true
+            },
+            uploadURL: file.url
           });
         })
         .catch(() => {

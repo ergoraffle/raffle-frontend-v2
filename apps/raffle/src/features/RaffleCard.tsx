@@ -33,13 +33,13 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
     className={`flex items-stretch grow ${loading ? 'pointer-events-none' : ''}`}
   >
     <Card className="relative grow w-full" hover>
-      <CardImageWrapper loading={loading}>
+      <CardImageWrapper loading={loading} className="h-46 lg:h-67.5 xl:h-68">
         {raffle?.picture ? (
           <Image
             src={raffle.picture}
             priority
             alt={raffle.name}
-            className="h-55.75 w-full object-cover rounded-tl-md rounded-tr-md"
+            className="h-46 lg:h-67.5 xl:h-68 w-full object-cover rounded-tl-md rounded-tr-md"
             fill
           />
         ) : null}

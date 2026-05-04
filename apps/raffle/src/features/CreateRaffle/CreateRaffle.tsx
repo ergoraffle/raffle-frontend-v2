@@ -9,7 +9,7 @@ import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-k
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { type RaffleForm, raffleSchema } from '@/features/schemas';
+import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
 import { getErrorMessage, getTxURL, sanitize } from '@/lib';
@@ -27,7 +27,11 @@ export const CreateRaffle = () => {
   const wallet = useWallet();
 
   const infoBlockchain = useInfoBlockchain();
-
+  const raffleSchema = createRaffleSchema(
+    infoBlockchain.data
+      ? infoBlockchain.data.fee.implementer + infoBlockchain.data.fee.service
+      : undefined
+  );
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
     shouldUnregister: false,
@@ -36,7 +40,8 @@ export const CreateRaffle = () => {
       details: [],
       emptyBaskets: 0,
       terms: false,
-      eligibility: false
+      eligibility: false,
+      missionFund: 0
     }
   });
 

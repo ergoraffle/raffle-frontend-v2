@@ -33,6 +33,7 @@ export * from './Stepper';
 export * from './StyledTextPreview';
 export * from './Switch';
 export * from './Tabs';
+export * from './TagsInput';
 export * from './TextEditor';
 export * from './Toaster';
 export * from './Token';

@@ -140,9 +140,9 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                             }}
                           />
                           <div>
-                            <FieldLabel htmlFor="checkout-terms">
+                            <FieldLabel htmlFor="checkout-terms" className="whitespace-nowrap">
                               I Agree to the{' '}
-                              <Link href="/terms" className="underline">
+                              <Link href="/terms" className="underline whitespace-nowrap">
                                 Terms of Use
                               </Link>
                             </FieldLabel>
