@@ -1,11 +1,7 @@
 import { Info } from '@ergo-raffle/icons';
+import { Progress, Skeleton, Tooltip, Typography } from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
-
-import { Progress } from './Progress';
-import { Skeleton } from './Skeleton';
-import { Tooltip } from './Tooltip';
-import { Typography } from './Typography';
 
 export type RaisedAmounts = {
   current: string;

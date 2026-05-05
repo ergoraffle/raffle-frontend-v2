@@ -72,7 +72,7 @@
   --color-error: oklch(59.15% 0.202 21.24);
   --color-error-foreground: oklch(1 0 0);
   --color-error-light: oklch(0.9604 0.0152 12.43);
-  --color-error-light-foreground: oklch(0.5915 0.202 21.24);
+  --color-error-light-foreground: oklch(0 0 0);
   --color-error-light-hover: oklch(0.8991 0.0418 10.59);
   --color-error-light-hover-foreground: oklch(0.5915 0.202 21.24);
   --color-success: oklch(64.01% 0.175 146.74);

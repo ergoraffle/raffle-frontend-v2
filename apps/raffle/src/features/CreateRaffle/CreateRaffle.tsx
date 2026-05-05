@@ -12,7 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL, sanitize } from '@/lib';
+import { getTxURL, sanitize } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { CreateRaffleSkeleton } from './CreateRaffleSkeleton';
@@ -70,18 +70,20 @@ export const CreateRaffle = () => {
       const { description, ...formData } = data;
       const cleanedHtmlDescription = sanitize(description);
       const tx = await createRaffle({ ...formData, description: cleanedHtmlDescription }, wallet);
-      toast.success(
-        <>
-          Raffle created successfully! Click{' '}
-          <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
-            here
-          </Link>{' '}
-          to see details.
-        </>
-      );
+      toast.success('Raffle created successfully!', {
+        description: (
+          <>
+            Click{' '}
+            <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
+              here
+            </Link>{' '}
+            to see details.
+          </>
+        )
+      });
       resetForm();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));
+      toast.error('Failed to create raffle. Please try again later.', { errorDetails: error });
     }
   };
 

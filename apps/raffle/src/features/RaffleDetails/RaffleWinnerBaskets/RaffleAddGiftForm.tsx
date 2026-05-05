@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
-import type { WalletToken } from '@ergo-raffle/base-wallet';
+import { WalletError, type WalletToken } from '@ergo-raffle/base-wallet';
 import { Dice, UpLeft } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -12,7 +12,6 @@ import {
   Field,
   FieldError,
   FieldLabel,
-  getDecimalString,
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
@@ -28,7 +27,7 @@ import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewMode
 import { type AddGiftForm, addGiftSchema } from '@/features/schemas';
 import { addGiftRaffle } from '@/features/services';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getNonDecimalString, getTxURL, saveTransactionId } from '@/lib';
+import { getDecimalString, getNonDecimalString, getTxURL, saveTransactionId } from '@/lib';
 
 import { AssetsField } from './AssetsField';
 
@@ -91,12 +90,9 @@ export const RaffleAddGiftForm = ({
         setAssets(result);
       })
       .catch((error) => {
-        toast.error(
-          getErrorMessage(
-            error,
-            'Something went wrong with loading wallet data! Please try again later.'
-          )
-        );
+        toast.error('Something went wrong with loading wallet data! Please try again later.', {
+          errorDetails: error
+        });
       });
   }, [load]);
 
@@ -143,7 +139,10 @@ export const RaffleAddGiftForm = ({
       saveTransactionId(txId);
       onCloseDialog();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to add Gift. Please try again later.'));
+      toast.error('Failed to add Gift.', {
+        description: error instanceof WalletError ? error.message : undefined,
+        errorDetails: error instanceof WalletError ? undefined : error
+      });
     } finally {
       setIsLoading(false);
     }

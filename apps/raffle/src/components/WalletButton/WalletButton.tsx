@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { WalletError } from '@ergo-raffle/base-wallet';
 import { Wallet as WalletIcon } from '@ergo-raffle/icons';
 import { Button, Spinner, Tooltip, Typography, toast } from '@ergo-raffle/ui-kit';
 
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
 
 import { Agreement } from './Agreement';
 import { ChooseWallet } from './ChooseWallet';
@@ -21,8 +21,10 @@ export const WalletButton = () => {
 
   useEffect(() => {
     if (!wallet.error) return;
-
-    toast.error(getErrorMessage(wallet.error));
+    toast.error('Failed to connect wallet.', {
+      description: wallet.error instanceof WalletError ? wallet.error.message : undefined,
+      errorDetails: wallet.error instanceof WalletError ? undefined : wallet.error
+    });
 
     setOpen(false);
   }, [wallet.error]);

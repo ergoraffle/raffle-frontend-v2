@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
   Empty,
+  getErrorMessage,
   Pagination,
   Skeleton,
   Typography,
@@ -19,7 +20,6 @@ import {
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { useFetchWinnerBaskets, useWallet, useWinnerBasketsParams } from '@/hooks';
 import { useFetchTokens } from '@/hooks/useFetchTokens';
-import { getErrorMessage } from '@/lib';
 
 import { RaffleAddGiftDialog } from './RaffleAddGiftDialog';
 import { RaffleWinnerBasketInfoDialog } from './RaffleWinnerBasketInfoDialog';

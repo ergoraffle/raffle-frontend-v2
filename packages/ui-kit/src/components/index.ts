@@ -23,7 +23,6 @@ export * from './MultiSelectCombobox';
 export * from './Pagination';
 export * from './PercentageDistribution';
 export * from './Progress';
-export * from './RaiseProgress';
 export * from './SeeMoreLink';
 export * from './Select';
 export * from './Sheet';

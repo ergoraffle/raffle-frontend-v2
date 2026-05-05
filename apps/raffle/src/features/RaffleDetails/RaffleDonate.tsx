@@ -16,7 +16,6 @@ import {
   Field,
   FieldError,
   FieldLabel,
-  getDecimalString,
   Input,
   Spinner,
   Typography,
@@ -27,7 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL, saveTransactionId } from '@/lib';
+import { getDecimalString, getTxURL, saveTransactionId } from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -84,7 +83,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
       resetForm();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to donate raffle. Please try again later.'));
+      toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
     } finally {
       setIsLoading(false);
     }

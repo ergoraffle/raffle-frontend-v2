@@ -1,14 +1,8 @@
 import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
-import {
-  BasketStatus,
-  Button,
-  Card,
-  CardContent,
-  getDecimalString,
-  Skeleton,
-  Typography
-} from '@ergo-raffle/ui-kit';
+import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+
+import { getDecimalString } from '@/lib';
 
 import type { RaffleDetailView } from '../raffleToViewModel';
 

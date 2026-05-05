@@ -28,7 +28,6 @@ import { useFormContext } from 'react-hook-form';
 
 import type { RaffleDonationGoalForm } from '@/features/schemas';
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
 
 import { FieldTitle } from './FieldTitle';
 
@@ -62,7 +61,7 @@ export const DonationGoalForm = ({
       ?.fetchTokens()
       .then((tokens) => setTokens(tokens))
       .catch((error) => {
-        toast.error(getErrorMessage(error, 'Failed to get wallet.'));
+        toast.error('Failed to get wallet.', { errorDetails: error });
       });
   }, [wallet.selected]);
 

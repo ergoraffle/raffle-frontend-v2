@@ -6,12 +6,12 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-  getDecimalString,
   Skeleton,
   Typography
 } from '@ergo-raffle/ui-kit';
 
 import { useFetchTransactions } from '@/hooks';
+import { getDecimalString } from '@/lib';
 
 import type { RaffleDetailView } from '../raffleToViewModel';
 import { GiftItem } from './GiftItem';

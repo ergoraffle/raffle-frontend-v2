@@ -20,7 +20,7 @@ const ImageComponent: ImageComponentType = (props) => <Image {...props} />;
 
 export const AppProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-    <Toaster duration={8000} position="top-right" />
+    <Toaster />
     <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>
       <WalletProvider>{children}</WalletProvider>
     </FrameworkProvider>

@@ -1,6 +1,8 @@
 import Image from 'next/image';
 
-import { RaiseProgress, Skeleton } from '@ergo-raffle/ui-kit';
+import { Skeleton } from '@ergo-raffle/ui-kit';
+
+import { RaiseProgress } from '@/features/RaiseProgress';
 
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';
 import { RaffleDetailsIconBox } from './RaffleDetailsIconBox';

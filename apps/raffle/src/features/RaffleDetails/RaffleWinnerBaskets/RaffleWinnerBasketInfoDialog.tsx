@@ -11,6 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  getErrorMessage,
   Sheet,
   SheetContent,
   SheetFooter,
@@ -21,7 +22,6 @@ import {
 
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
 
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 import { RaffleWinnerBasketInfo } from './RaffleWinnerBasketInfo';

@@ -12,11 +12,12 @@ import {
   CardHeader,
   CardImageWrapper,
   CardTitle,
-  RaiseProgress,
   Skeleton,
   Token,
   Typography
 } from '@ergo-raffle/ui-kit';
+
+import { RaiseProgress } from '@/features/RaiseProgress';
 
 import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';

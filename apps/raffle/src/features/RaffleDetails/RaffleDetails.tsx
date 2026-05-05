@@ -7,9 +7,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  RaiseProgress,
   Typography
 } from '@ergo-raffle/ui-kit';
+
+import { RaiseProgress } from '@/features/RaiseProgress';
 
 import { RaffleActivity } from './RaffleActivity';
 import { RaffleDetailsDescription } from './RaffleDetailsDescription';

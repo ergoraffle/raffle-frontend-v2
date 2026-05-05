@@ -6,6 +6,7 @@ export { default as Basket } from './basket.svg?react';
 export { default as BasketGift } from './basket-gift.svg?react';
 export { default as Bold } from './bold.svg?react';
 export { default as Check } from './check.svg?react';
+export { default as Clipboard } from './clipboard.svg?react';
 export { default as Close } from './close.svg?react';
 export { default as Dice } from './dice.svg?react';
 export { default as Discord } from './discord.svg?react';

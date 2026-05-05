@@ -61,34 +61,28 @@ export const formatDuration = (minutes: number) => {
   return '0 minutes';
 };
 
-export const getErrorMessage = (error: unknown, fallback = 'Something went wrong!'): string => {
-  if (error === null) return fallback;
+export const getDecimalString = (
+  value?: bigint | number | string,
+  decimals?: number,
+  truncateLength?: number
+): string => {
+  const valueString = (value ?? 0).toString();
 
-  if (typeof error === 'string') return error;
+  const safeDecimals = decimals ?? 0;
 
-  if (error instanceof Error) {
-    const parts: string[] = [];
+  if (!safeDecimals) return valueString;
 
-    if (error.message) {
-      parts.push(error.message);
-    }
+  const untrimmedResult =
+    valueString.length > safeDecimals
+      ? `${valueString.slice(0, -safeDecimals)}.${valueString.slice(-safeDecimals)}`
+      : `0.${valueString.padStart(safeDecimals, '0')}`;
 
-    if (error.cause) {
-      parts.push(getErrorMessage(error.cause, fallback));
-    }
+  const preciseResult = untrimmedResult.replace(/0+$/, '').replace(/\.$/, '') || '0';
 
-    return parts.length ? parts.join(' - ') : fallback;
-  }
-
-  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
-    return error.message;
-  }
-
-  try {
-    return JSON.stringify(error);
-  } catch {
-    return fallback;
-  }
+  return preciseResult.replace(
+    /\.(.*)/,
+    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`
+  );
 };
 
 export const getNonDecimalString = (value: string, decimals: number) => {

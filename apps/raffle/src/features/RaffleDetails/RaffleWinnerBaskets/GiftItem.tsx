@@ -2,7 +2,9 @@
 
 import type { BasketGift, TokenSummary } from '@ergo-raffle/client';
 import { Verified } from '@ergo-raffle/icons';
-import { getDecimalString, Typography } from '@ergo-raffle/ui-kit';
+import { Typography } from '@ergo-raffle/ui-kit';
+
+import { getDecimalString } from '@/lib';
 
 export type GiftItemProps = {
   gift: BasketGift;
