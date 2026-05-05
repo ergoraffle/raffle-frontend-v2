@@ -68,6 +68,18 @@ export class DisconnectionFailedError extends WalletError {
   }
 }
 
+export class InsufficientAssetsError extends Error {
+  public name = 'InsufficientAssetsError';
+  constructor(public cause?: unknown) {
+    super(
+      `The transaction cannot be completed because additional assets are required to cover fees or meet minimum box requirements.`,
+      {
+        cause
+      }
+    );
+  }
+}
+
 export class NotConnectedError extends WalletError {
   constructor(
     public wallet: string,

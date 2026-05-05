@@ -12,6 +12,10 @@ export type XverseWalletTransferParams = {
   amount: bigint;
   fromAddress: string;
   toAddress: string;
+  token?: {
+    id: string;
+    amount: bigint;
+  };
 };
 
 export class NonNativeSegWitAddressError extends WalletError {

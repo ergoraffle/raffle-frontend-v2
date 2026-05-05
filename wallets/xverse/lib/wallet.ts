@@ -4,11 +4,12 @@ import {
   Wallet,
   type WalletToken
 } from '@ergo-raffle/base-wallet';
-import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
-import { address, Psbt } from 'bitcoinjs-lib';
+import { Psbt } from 'bitcoinjs-lib';
 import { AddressPurpose, request } from 'sats-connect';
 
+import { generateUnsignedTx as generateUnsignedTxBitcoin } from './bitcoin';
 import { ICON } from './icon';
+import { generateUnsignedTx as generateUnsignedTxRunes } from './runes';
 import {
   NonNativeSegWitAddressError,
   NonTaprootAddressError,
@@ -16,9 +17,6 @@ import {
   type XverseWalletConfig,
   type XverseWalletTransferParams
 } from './types';
-
-const selector = new BitcoinBoxSelection();
-
 export class XverseWallet extends Wallet<
   XverseWalletConfig,
   XverseWalletAddresses,
@@ -100,73 +98,37 @@ export class XverseWallet extends Wallet<
   fetchBoxes = async (): Promise<unknown[]> => [];
 
   performTransfer = async (params: XverseWalletTransferParams): Promise<string> => {
-    const fromAddressScript = address.toOutputScript(params.fromAddress);
-    const toAddressScript = address.toOutputScript(params.toAddress);
+    let generateUnsignedTx: {
+      psbt: Psbt;
+      signInputs: Record<string, number[]>;
+    };
 
-    const psbt = new Psbt();
-
-    psbt.addOutput({
-      script: toAddressScript,
-      value: params.amount
-    });
-
-    const utxosRaw: Array<{ txid: string; vout: number; value: number }> = await fetch(
-      `https://blockstream.info/api/address/${params.fromAddress}/utxo`
-    ).then((response) => response.json());
-
-    const utxos = utxosRaw.map((utxo) => ({
-      txId: utxo.txid,
-      index: utxo.vout,
-      value: BigInt(utxo.value)
-    }));
-
-    const feeRatio = await fetch(`https://blockstream.info/api/fee-estimates`)
-      .then((response) => response.json())
-      .then((data) => data[6]);
-
-    const estimateFee = generateFeeEstimator(1, 42, 272, 124, feeRatio, 4);
-
-    const coveredBoxes = await selector.getCoveringBoxes(
-      {
-        nativeToken: params.amount,
-        tokens: []
-      },
-      [],
-      new Map(),
-      utxos.values(),
-      546n, // minSatoshi
-      undefined,
-      estimateFee
-    );
-
-    if (!coveredBoxes.covered) {
-      coveredBoxes.uncoveredAssets;
+    // runes
+    if (params.token) {
+      generateUnsignedTx = await generateUnsignedTxRunes(
+        params.amount,
+        params.fromAddress,
+        params.toAddress,
+        params.token.id,
+        params.token.amount
+      );
     }
-
-    coveredBoxes.boxes.forEach((box) => {
-      psbt.addInput({
-        hash: box.txId,
-        index: box.index,
-        witnessUtxo: {
-          script: fromAddressScript,
-          value: box.value
-        }
-      });
-    });
-
-    psbt.addOutput({
-      script: fromAddressScript,
-      value: coveredBoxes.additionalAssets.aggregated.nativeToken
-    });
+    // bitcoin
+    else {
+      generateUnsignedTx = await generateUnsignedTxBitcoin(
+        params.amount,
+        params.fromAddress,
+        params.toAddress
+      );
+    }
 
     let signedPsbtBase64: string;
 
+    // sign
     try {
       const response = await request('signPsbt', {
-        psbt: psbt.toBase64(),
-        signInputs: {
-          [params.fromAddress]: Array.from(Array(psbt.inputCount).keys())
-        }
+        psbt: generateUnsignedTx.psbt.toBase64(),
+        signInputs: generateUnsignedTx.signInputs
       });
 
       if (response.status === 'error') {
@@ -178,6 +140,7 @@ export class XverseWallet extends Wallet<
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
+    // submit
     try {
       const psbt = Psbt.fromBase64(signedPsbtBase64);
 
