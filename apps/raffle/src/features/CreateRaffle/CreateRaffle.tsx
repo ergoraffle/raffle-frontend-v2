@@ -12,7 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
-import { getTxURL, sanitize } from '@/lib';
+import { getTxURL, htmlToMarkdown } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { CreateRaffleSkeleton } from './CreateRaffleSkeleton';
@@ -68,8 +68,8 @@ export const CreateRaffle = () => {
   const onSubmit = async (data: RaffleForm) => {
     try {
       const { description, ...formData } = data;
-      const cleanedHtmlDescription = sanitize(description);
-      const tx = await createRaffle({ ...formData, description: cleanedHtmlDescription }, wallet);
+      const markdownDescription = htmlToMarkdown(description);
+      const tx = await createRaffle({ ...formData, description: markdownDescription }, wallet);
       toast.success('Raffle created successfully!', {
         description: (
           <>

@@ -18,7 +18,7 @@ export const Stepper = ({
   ...props
 }: StepperProps) => (
   <div className={cn('flex flex-col items-center justify-center gap-3 w-full ', className)}>
-    <div className="flex items-center gap-1.5 w-full max-w-225 mx-auto" {...props}>
+    <div className="flex items-center gap-3 w-full max-w-225 mx-auto" {...props}>
       {steps.map((step, index) => (
         <div
           key={step}

@@ -21,7 +21,6 @@ export * from './LayoutBackground';
 export * from './Logo';
 export * from './MultiSelectCombobox';
 export * from './Pagination';
-export * from './PercentageDistribution';
 export * from './Progress';
 export * from './SeeMoreLink';
 export * from './Select';

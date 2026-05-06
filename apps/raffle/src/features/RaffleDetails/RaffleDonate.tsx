@@ -126,6 +126,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                           <Input
                             type="number"
                             min={1}
+                            aria-invalid={!!errors.tickets}
                             {...register('tickets', { valueAsNumber: true })}
                           />
                           {!!errors.tickets && <FieldError>{errors.tickets.message}</FieldError>}

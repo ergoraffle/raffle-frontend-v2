@@ -57,7 +57,12 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
     <div className="space-y-8">
       <Field>
         <FieldTitle title="Set Raffle’s Title/What is the mission of this Raffle?" />
-        <Input variant="bordered" className="max-w-205" {...register('name')} />
+        <Input
+          variant="bordered"
+          className="max-w-205"
+          aria-invalid={!!errors.name}
+          {...register('name')}
+        />
         {!!errors.name && <FieldError>{errors.name.message}</FieldError>}
       </Field>
       <Field>
@@ -68,6 +73,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <TextEditor
           className="max-w-205"
           value={getValues('description') || ''}
+          aria-invalid={!!errors.description}
           onChange={(value) => setValue('description', value as string, { shouldDirty: true })}
         />
         {!!errors.description && <FieldError>{errors.description.message}</FieldError>}
@@ -76,6 +82,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <FieldLabel>Add up to 5 Tags (optional)</FieldLabel>
         <TagsInput
           tags={tags}
+          aria-invalid={!!errors.tags}
           onSetTags={(tags) =>
             setValue('tags', tags, {
               shouldValidate: true,
@@ -97,6 +104,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
             className="max-w-205 grow"
             type="number"
             min={0}
+            aria-invalid={!!errors.deadline}
             placeholder="Blocks to go"
             {...register('deadline', {
               valueAsNumber: true

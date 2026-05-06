@@ -156,6 +156,7 @@ export const RaffleAddGiftForm = ({
           <InputGroup variant="bordered">
             <InputGroupInput
               min={1}
+              aria-invalid={!!errors.winnerIndex}
               {...register('winnerIndex', {
                 setValueAs: (v) => (v === '' ? undefined : Number(v))
               })}
@@ -206,6 +207,7 @@ export const RaffleAddGiftForm = ({
                 <InputGroupInput
                   type="number"
                   step="any"
+                  aria-invalid={!!errors.tokens && !!errors.tokens[index]?.amount}
                   {...register(`tokens.${index}.amount`, {
                     setValueAs: (v) => (v === '' ? undefined : Number(v))
                   })}

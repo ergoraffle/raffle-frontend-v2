@@ -69,7 +69,10 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
       </div>
       <Field>
         <FieldLabel>Share Baskets Details</FieldLabel>
-        <div className="flex items-center flex-wrap border border-gray-4 rounded-2xlg pt-2 pr-3 pb-2.5 pl-4 gap-2">
+        <div
+          className="flex items-center flex-wrap border border-gray-4 rounded-lg aria-invalid:border-error pt-2 pr-3 pb-2.5 pl-4 gap-2"
+          aria-invalid={!!errors.details}
+        >
           {detailsItems.map((item, index) => (
             <div
               key={item.id}
@@ -126,7 +129,11 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
         <FieldTitle title="Create Empty Baskets." />
         <Field>
           <FieldLabel>Empty Baskets</FieldLabel>
-          <InputGroup className="max-w-70 w-full" variant="bordered">
+          <InputGroup
+            className="max-w-70 w-full"
+            variant="bordered"
+            aria-invalid={!!errors.emptyBaskets}
+          >
             <InputGroupInput
               {...register('emptyBaskets', { valueAsNumber: true })}
               type="number"

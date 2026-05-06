@@ -1,12 +1,12 @@
-import { type ComponentProps, useState } from 'react';
+import { useState } from 'react';
 
 import { Close } from '@ergo-raffle/icons';
 
 import { Badge } from './Badge';
 import { Button } from './Button';
-import { InputGroup, InputGroupAddon, InputGroupInput } from './InputGroup';
+import { InputGroup, InputGroupAddon, InputGroupInput, type InputGroupProps } from './InputGroup';
 
-export type TagsInputProps = ComponentProps<'div'> & {
+export type TagsInputProps = InputGroupProps & {
   tags?: string[];
   onSetTags: (tags: string[] | undefined) => void;
 };
@@ -26,8 +26,8 @@ export const TagsInput = ({ onSetTags, tags, ...props }: TagsInputProps) => {
     onSetTags(newTags);
   };
   return (
-    <div {...props}>
-      <InputGroup variant="bordered">
+    <>
+      <InputGroup variant="bordered" {...props}>
         <InputGroupInput
           value={tagInputValue}
           onChange={(e) => {
@@ -76,6 +76,6 @@ export const TagsInput = ({ onSetTags, tags, ...props }: TagsInputProps) => {
           </Badge>
         ))}
       </div>
-    </div>
+    </>
   );
 };

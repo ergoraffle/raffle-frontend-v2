@@ -104,7 +104,13 @@ export const TextEditor = ({
   };
 
   return (
-    <div {...props} className={cn('ql-wrapper border-gray-4 border rounded-3xlg', className)}>
+    <div
+      {...props}
+      className={cn(
+        'ql-wrapper border-gray-4 border rounded-3xlg aria-invalid:border-error',
+        className
+      )}
+    >
       <div id="toolbar" className="px-4 py-3 flex items-center flex-wrap gap-x-3">
         <Button variant="plain" size="icon-xs" className="ql-bold" type="button">
           <Bold />
