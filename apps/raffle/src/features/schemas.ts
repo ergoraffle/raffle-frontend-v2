@@ -138,6 +138,20 @@ export const addGiftSchema = z.object({
     .min(1, 'At least one asset is required')
     .nonempty('At least one asset is required')
 });
+export const purchaseSchema = z.object({
+  address: z
+    .string()
+    .nonempty('Can not be empty')
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return validateAddress(val);
+      },
+      {
+        message: 'Invalid address'
+      }
+    )
+});
 
 export type RaffleSpecificationsForm = z.infer<typeof raffleSpecificationsSchema>;
 export type RaffleDonationGoalForm = z.infer<typeof raffleDonationGoalSchema>;
@@ -145,3 +159,4 @@ export type RaffleBasketsForm = z.infer<typeof raffleBasketsSchema>;
 export type AddGiftForm = z.infer<typeof addGiftSchema>;
 export type RaffleForm = z.infer<typeof raffleSchema>;
 export type RaffleDonateForm = z.infer<typeof raffleDonateSchema>;
+export type PurchaseForm = z.infer<typeof purchaseSchema>;
