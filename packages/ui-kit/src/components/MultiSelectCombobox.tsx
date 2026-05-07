@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -13,6 +13,8 @@ import {
   ComboboxTrigger,
   ComboboxValue
 } from './Combobox';
+import { Spinner } from './Spinner';
+import { Typography } from './Typography';
 
 export type MultiSelectComboboxItem = { value: string; label: string };
 
@@ -22,6 +24,9 @@ export type MultiSelectComboboxProps = {
   onChange: (values: string[]) => void;
   placeholder?: string;
   searchable?: boolean;
+  query?: string;
+  onQueryChange?: (query: string) => void;
+  isLoading?: boolean;
   closeOnChange?: boolean;
   className?: string;
 };
@@ -33,14 +38,18 @@ export const MultiSelectCombobox = ({
   placeholder,
   searchable,
   closeOnChange,
-  className
+  className,
+  query,
+  onQueryChange,
+  isLoading
 }: MultiSelectComboboxProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLDivElement>(null);
 
-  const displayValue = selected
-    .map((val) => items.find((i) => i.value === val)?.label || val)
-    .join(', ');
+  const displayValue = useMemo(
+    () => selected.map((val) => items.find((i) => i.value === val)?.label || val).join(', '),
+    [items, selected]
+  );
 
   const hasSelected = displayValue.length > 0;
 
@@ -53,10 +62,6 @@ export const MultiSelectCombobox = ({
     }
   };
 
-  const toggleOpen = () => {
-    setOpen((prev) => !prev);
-  };
-
   return (
     <Combobox
       items={items}
@@ -64,7 +69,7 @@ export const MultiSelectCombobox = ({
       value={selected}
       onValueChange={onValueChange}
       open={closeOnChange ? open : undefined}
-      onOpenChange={closeOnChange ? toggleOpen : undefined}
+      onOpenChange={closeOnChange ? setOpen : undefined}
     >
       <div className={cn('flex items-center gap-1 relative', className)} ref={anchorRef}>
         <ComboboxTrigger
@@ -85,13 +90,28 @@ export const MultiSelectCombobox = ({
         ) : null}
       </div>
       <ComboboxContent anchor={anchorRef}>
-        {searchable ? <ComboboxInput placeholder={`Search ${placeholder}`} /> : null}
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        {searchable ? (
+          <ComboboxInput
+            placeholder={`Search ${placeholder}`}
+            value={query}
+            onChange={(e) => onQueryChange?.(e.target.value)}
+          />
+        ) : null}
+        {!isLoading && !(!onQueryChange || (!!onQueryChange && !query)) && (
+          <ComboboxEmpty>No items found.</ComboboxEmpty>
+        )}
         <ComboboxList>
-          {(item) => (
-            <ComboboxItem key={item.value} value={item.value}>
-              {item.label}
-            </ComboboxItem>
+          {isLoading ? (
+            <div className="p-4 flex space-x-2 items-center text-gray-1">
+              <Spinner className="size-5" />
+              <Typography variant="subtitle-sm">Loading...</Typography>
+            </div>
+          ) : (
+            (item) => (
+              <ComboboxItem key={item.value} value={item.value}>
+                {item.label}
+              </ComboboxItem>
+            )
           )}
         </ComboboxList>
       </ComboboxContent>

@@ -17,6 +17,8 @@ import {
 
 import { useRafflesQuery } from '@/hooks';
 
+import { TokensFilter } from './TokensFilter';
+
 const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
   {
     value: 'active',
@@ -30,11 +32,6 @@ const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
     value: 'successful',
     label: 'Successful'
   }
-];
-const tokenFilterItems = [
-  { value: 'erg', label: 'ERG' },
-  { value: 'btc', label: 'BTC' },
-  { value: 'ada', label: 'ADA' }
 ];
 
 export const RafflesFilters = () => {
@@ -119,13 +116,9 @@ export const RafflesFilters = () => {
             closeOnChange
             className="flex-1 lg:flex-auto"
           />
-          <MultiSelectCombobox
-            items={tokenFilterItems}
-            selected={params.tokenIds ?? []}
-            onChange={(values) => setParam('tokenIds', values as string[])}
-            placeholder="Token"
-            closeOnChange
-            className="flex-1 lg:flex-auto"
+          <TokensFilter
+            value={params.tokenIds ?? []}
+            onChange={(values) => setParam('tokenIds', values)}
           />
         </div>
         <div className="w-full lg:w-auto">
