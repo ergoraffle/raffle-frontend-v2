@@ -1,4 +1,6 @@
-import { Info, Pencil, PhotoScan, Plus, Trash } from '@ergo-raffle/icons';
+import type { DragEvent } from 'react';
+
+import { FolderOpen, Info, Pencil, PhotoScan, Trash } from '@ergo-raffle/icons';
 import type { Body, Meta, UppyFile } from '@uppy/core';
 import { Thumbnail, UppyContextProvider } from '@uppy/react';
 
@@ -21,9 +23,17 @@ export const Uploader = ({
   ready,
   uploading,
   moveFileToFirst,
-  maxNumberOfFiles
+  maxNumberOfFiles,
+  addFiles
 }: UploaderProps) => {
   void ready;
+
+  const onDragAndDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    addFiles(droppedFiles);
+  };
 
   return (
     <UppyContextProvider uppy={instance}>
@@ -110,9 +120,21 @@ export const Uploader = ({
           );
         })}
         {(!maxNumberOfFiles || files.length < maxNumberOfFiles) && (
-          <UploaderBrowse className="item flex items-center justify-center image-uploader-item bg-gray-4 text-gray-4-foreground rounded-xlg cursor-pointer">
-            <Plus className="size-10" />
-          </UploaderBrowse>
+          // biome-ignore lint/a11y/noStaticElementInteractions: Drag and drop container
+          <div
+            className="item image-uploader-item"
+            onDragOver={(e) => {
+              e.preventDefault();
+            }}
+            onDrop={onDragAndDrop}
+          >
+            <UploaderBrowse>
+              <Typography variant="body-lg" className="max-w-38 text-gray-2">
+                Drag and drop or choose from files
+              </Typography>
+              <FolderOpen className="size-12 text-gray-3" />
+            </UploaderBrowse>
+          </div>
         )}
       </div>
       {!!editing && <ImageEditorDialog file={editing} onClose={() => edit(undefined)} />}

@@ -93,6 +93,20 @@ export const useUploader = ({
     });
   };
 
+  const addFiles = (files: File[]) => {
+    const existingNames = new Set(uppy.getFiles().map((f) => f.name));
+
+    files.forEach((file) => {
+      if (existingNames.has(file.name)) return;
+
+      uppy.addFile({
+        name: file.name,
+        type: file.type,
+        data: file
+      });
+    });
+  };
+
   const upload = async () => {
     const result = await uppy.upload();
 
@@ -193,6 +207,7 @@ export const useUploader = ({
     upload,
     uploading: !!isUploading,
     maxNumberOfFiles,
-    moveFileToFirst
+    moveFileToFirst,
+    addFiles
   };
 };

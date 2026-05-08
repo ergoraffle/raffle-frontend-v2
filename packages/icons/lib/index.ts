@@ -17,6 +17,7 @@ export { default as Downvote } from './downvote.svg?react';
 export { default as Ergo } from './ergo.svg?react';
 export { default as ExternalLink } from './external-link.svg?react';
 export { default as FlipVertical } from './flip-vertical.svg?react';
+export { default as FolderOpen } from './folder-open.svg?react';
 export { default as Gift } from './gift.svg?react';
 export { default as GiftPlus } from './gift-plus.svg?react';
 export { default as HandCoin } from './hand-coin.svg?react';
