@@ -45,8 +45,8 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
 
   // Current chain height
   const chainHeight = Math.max(
-    infoBlockchainData.height
-    // ...Array.from(feeBoxes).map((walletUtxo) => walletUtxo.creationHeight)
+    infoBlockchainData.height,
+    ...Array.from(feeBoxes).map((walletUtxo) => walletUtxo.creationHeight)
   );
 
   // organizer address is the wallet address that is creating the raffle and will receive the change

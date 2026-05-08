@@ -65,19 +65,31 @@ export const RaffleWinnerBasketInfoDialog = ({
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title="Which Basket do you want to add Gift to?">
-        {basket ? (
+      <SheetContent title="Basket">
+        {step === 2 ? (
+          <div className="space-y-5">
+            <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
+            <RaffleAddGiftForm
+              initialBasketNumber={basket?.index}
+              raffle={raffle}
+              onCloseDialog={() => onOpenChange(false)}
+            />
+          </div>
+        ) : (
           <>
-            <RaffleWinnerBasketInfo basket={basket} basketLoading={loading} raffle={raffle} />
+            <RaffleWinnerBasketInfo
+              basket={basket}
+              basketLoading={loading}
+              raffle={raffle}
+              giftTokens={giftTokens}
+            />
             <SheetFooter>
-              <Button onClick={() => setStep(2)}>
+              <Button className="w-1/2 mx-auto" onClick={handleClickAddGift} disabled={loading}>
                 <Plus className="size-6" />
                 Add Gift
               </Button>
             </SheetFooter>
           </>
-        ) : (
-          'not found'
         )}
       </SheetContent>
     </Sheet>

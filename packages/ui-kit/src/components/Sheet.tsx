@@ -89,7 +89,7 @@ type SheetTitleProps = ComponentProps<typeof SheetPrimitive.Title>;
 const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
   <SheetPrimitive.Title
     data-slot="sheet-title"
-    className="group-data-[side=right]/content:text-right pr-6 group-data-[side=right]/content:pl-6 group-data-[side=right]/content:pr-0 typo-heading-4"
+    className="group-data-[side=right]/content:text-right pr-6 grow group-data-[side=right]/content:pl-6 group-data-[side=right]/content:pr-0 typo-heading-4"
     {...props}
   />
 );
