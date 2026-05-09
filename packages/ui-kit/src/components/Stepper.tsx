@@ -17,14 +17,14 @@ export const Stepper = ({
   disabled,
   ...props
 }: StepperProps) => (
-  <div className={cn('flex flex-col items-center justify-center gap-2.5 w-full ', className)}>
-    <div className="flex items-center gap-1.5 w-full max-w-225 mx-auto" {...props}>
-      {steps.map((step, index) => (
+  <div className={cn('flex flex-col items-center justify-center gap-3 w-full ', className)}>
+    <div className="flex items-center gap-3 w-full max-w-225 mx-auto" {...props}>
+      {steps.map((_, index) => (
         <div
-          key={step}
+          key={String(index)}
           className={cn(
             'flex-1 rounded-sm h-2',
-            index === activeStepIndex && !disabled ? 'bg-primary-1' : 'bg-black-4'
+            index <= activeStepIndex && !disabled ? 'bg-primary-1' : 'bg-black-4'
           )}
         />
       ))}

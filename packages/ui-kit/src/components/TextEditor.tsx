@@ -1,4 +1,4 @@
-import { type ComponentProps, useEffect, useRef } from 'react';
+import { type ComponentProps, useEffect, useRef, useState } from 'react';
 
 import {
   AlignCenter,
@@ -42,6 +42,7 @@ export const TextEditor = ({
 }: TextEditorProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
+  const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -65,6 +66,8 @@ export const TextEditor = ({
       quill.root.innerHTML = value;
 
       quill.on('text-change', () => {
+        const textLength = quill.getLength() - 1;
+        setCharCount(textLength);
         onChange?.(quill.root.innerHTML);
       });
 
@@ -101,7 +104,13 @@ export const TextEditor = ({
   };
 
   return (
-    <div {...props} className={cn('ql-wrapper border-gray-4 border rounded-3xlg', className)}>
+    <div
+      {...props}
+      className={cn(
+        'ql-wrapper border-gray-4 border rounded-3xlg aria-invalid:border-error',
+        className
+      )}
+    >
       <div id="toolbar" className="px-4 py-3 flex items-center flex-wrap gap-x-3">
         <Button variant="plain" size="icon-xs" className="ql-bold" type="button">
           <Bold />
@@ -145,6 +154,9 @@ export const TextEditor = ({
         </Button>
       </div>
       <div ref={editorRef} className="min-h-50 border-0 typo-body-md px-4 py-3" />
+      <div className="text-xs text-gray-500 px-6 py-2 text-right border-t border-t-gray-4">
+        {charCount} characters
+      </div>
     </div>
   );
 };

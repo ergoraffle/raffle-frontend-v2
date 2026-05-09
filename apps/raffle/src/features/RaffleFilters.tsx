@@ -81,10 +81,10 @@ export const RafflesFilters = () => {
   const onTabChange = (value: string) => {
     switch (value) {
       case RAFFLE_LIST_TABS.ACTIVE:
-        setStatusParamWithSwitchTabs('active');
+        setStatusParamWithSwitchTabs('all');
         break;
       case RAFFLE_LIST_TABS.HISTORY:
-        setStatusParamWithSwitchTabs('failed');
+        setStatusParamWithSwitchTabs('history');
         break;
       case RAFFLE_LIST_TABS.PINED:
         togglePinedParam();

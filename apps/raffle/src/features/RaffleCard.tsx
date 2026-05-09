@@ -12,11 +12,13 @@ import {
   CardHeader,
   CardImageWrapper,
   CardTitle,
-  RaiseProgress,
   Skeleton,
   Token,
   Typography
 } from '@ergo-raffle/ui-kit';
+
+import { RaiseProgress } from '@/features/RaiseProgress';
+import { markdownToHtml } from '@/lib';
 
 import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';
@@ -33,19 +35,21 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
     className={`flex items-stretch grow ${loading ? 'pointer-events-none' : ''}`}
   >
     <Card className="relative grow w-full" hover>
-      <CardImageWrapper loading={loading}>
+      <CardImageWrapper loading={loading} className="h-46 lg:h-67.5 xl:h-68">
         {raffle?.picture ? (
           <Image
             src={raffle.picture}
             priority
             alt={raffle.name}
-            className="h-55.75 w-full object-cover rounded-tl-md rounded-tr-md"
+            className="h-46 lg:h-67.5 xl:h-68 w-full object-cover rounded-tl-md rounded-tr-md"
             fill
           />
         ) : null}
       </CardImageWrapper>
       <CardHeader>
-        <CardTitle loading={loading}>{raffle?.name}</CardTitle>
+        <CardTitle loading={loading} className="line-clamp-2">
+          {raffle?.name}
+        </CardTitle>
       </CardHeader>
       {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
         <CardAction>
@@ -92,9 +96,9 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
             </>
           ) : (
             <div
-              className="max-h-30 lg:max-h-20 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
+              className="line-clamp-3 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
-              dangerouslySetInnerHTML={{ __html: raffle?.description || '' }}
+              dangerouslySetInnerHTML={{ __html: markdownToHtml(raffle?.description || '') }}
             />
           )}
         </div>

@@ -20,6 +20,8 @@ configureClient({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
 });
 
+export const revalidate = 30;
+
 const RootLayout = async ({ children }: PropsWithChildren) => (
   <html
     lang="en"

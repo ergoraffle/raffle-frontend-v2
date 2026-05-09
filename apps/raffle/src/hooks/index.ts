@@ -1,6 +1,6 @@
 export * from './useActivityParams';
 export * from './useFetchActivity';
-export * from './useFetchWinnerBasket';
+export * from './useFetchTransactions';
 export * from './useFetchWinnerBaskets';
 export * from './useInfoBlockchain';
 export * from './useRafflesParams';

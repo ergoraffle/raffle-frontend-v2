@@ -12,7 +12,7 @@ enum RAFFLE_TABS {
 }
 
 export const RaffleTabs = () => (
-  <Tabs defaultValue={RAFFLE_TABS.ALL} className="mb-50 w-full">
+  <Tabs defaultValue={RAFFLE_TABS.ACTIVE} className="mb-50 w-full">
     <TabsList variant="primary">
       <TabsTrigger key={RAFFLE_TABS.ALL} value={RAFFLE_TABS.ALL}>
         {RAFFLE_TABS.ALL}
@@ -36,7 +36,7 @@ export const RaffleTabs = () => (
     </TabsContent>
     <TabsContent value={RAFFLE_TABS.HISTORY}>
       <Suspense fallback={<RaffleListSkeleton />}>
-        <RaffleList limit={3} params={{ status: ['failed'] }} />
+        <RaffleList limit={3} params={{ status: ['failed', 'successful'] }} />
       </Suspense>
     </TabsContent>
   </Tabs>

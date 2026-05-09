@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
 import { Left, Plus } from '@ergo-raffle/icons';
 import {
   Button,
@@ -10,6 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  getErrorMessage,
   Sheet,
   SheetContent,
   SheetFooter,
@@ -20,29 +22,37 @@ import {
 
 import type { RaffleDetailView } from '@/features/RaffleDetails/raffleToViewModel';
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
 
 import { RaffleAddGiftForm } from './RaffleAddGiftForm';
 import { RaffleWinnerBasketInfo } from './RaffleWinnerBasketInfo';
-import { WinnerBasketCarousel } from './WinnerBasketCarousel';
+import { WinnerBasketSlider } from './WinnerBasketSlider';
 
 export type RaffleWinnerBasketInfoDialogProps = {
   open: boolean;
   raffle: RaffleDetailView;
-  initialBasketId: number;
   onOpenChange: (open: boolean) => void;
+  onNextSlide: () => void;
+  onPrevSlide: () => void;
+  hasNext: boolean;
+  giftTokens?: TokenSummary[];
+  basket?: WinnerBasketSummary;
+  loading?: boolean;
 };
 
 export const RaffleWinnerBasketInfoDialog = ({
   open,
   raffle,
-  initialBasketId,
-  onOpenChange
+  onNextSlide,
+  onPrevSlide,
+  hasNext,
+  onOpenChange,
+  giftTokens,
+  basket,
+  loading
 }: RaffleWinnerBasketInfoDialogProps) => {
   const { isMobile } = useBreakpoint();
-  const { ensureConnected } = useWallet();
-  const [activeBasketId, setActiveBasketId] = useState<number>(initialBasketId);
   const [step, setStep] = useState<1 | 2>(1);
+  const { ensureConnected } = useWallet();
 
   const handleClickAddGift = () => {
     try {
@@ -55,14 +65,32 @@ export const RaffleWinnerBasketInfoDialog = ({
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title="Which Basket do you want to add Gift to?">
-        <RaffleWinnerBasketInfo basketId={activeBasketId} />
-        <SheetFooter>
-          <Button onClick={() => setStep(2)}>
-            <Plus className="size-6" />
-            Add Gift
-          </Button>
-        </SheetFooter>
+      <SheetContent title="Basket">
+        {step === 2 ? (
+          <div className="space-y-5">
+            <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
+            <RaffleAddGiftForm
+              initialBasketNumber={basket?.index}
+              raffle={raffle}
+              onCloseDialog={() => onOpenChange(false)}
+            />
+          </div>
+        ) : (
+          <>
+            <RaffleWinnerBasketInfo
+              basket={basket}
+              basketLoading={loading}
+              raffle={raffle}
+              giftTokens={giftTokens}
+            />
+            <SheetFooter>
+              <Button className="w-1/2 mx-auto" onClick={handleClickAddGift} disabled={loading}>
+                <Plus className="size-6" />
+                Add Gift
+              </Button>
+            </SheetFooter>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   ) : (
@@ -77,13 +105,13 @@ export const RaffleWinnerBasketInfoDialog = ({
                   Add Gift
                 </Button>
               ) : (
-                <div className="mx-auto md:w-1/2">
-                  <WinnerBasketCarousel
-                    raffleId={raffle.id}
-                    setActiveBasketId={setActiveBasketId}
-                    initialBasketId={initialBasketId}
-                  />
-                </div>
+                <WinnerBasketSlider
+                  onNextSlide={onNextSlide}
+                  onPrevSlide={onPrevSlide}
+                  hasNext={hasNext}
+                  basket={basket}
+                  loading={loading}
+                />
               )}
             </div>
           </DialogTitle>
@@ -92,16 +120,21 @@ export const RaffleWinnerBasketInfoDialog = ({
           <div className="space-y-5">
             <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>
             <RaffleAddGiftForm
-              initialBasketNumber={activeBasketId}
+              initialBasketNumber={basket?.index}
               raffle={raffle}
               onCloseDialog={() => onOpenChange(false)}
             />
           </div>
         ) : (
           <>
-            <RaffleWinnerBasketInfo basketId={activeBasketId} />
+            <RaffleWinnerBasketInfo
+              basket={basket}
+              basketLoading={loading}
+              raffle={raffle}
+              giftTokens={giftTokens}
+            />
             <DialogFooter>
-              <Button className="w-1/2 mx-auto" onClick={handleClickAddGift}>
+              <Button className="w-1/2 mx-auto" onClick={handleClickAddGift} disabled={loading}>
                 <Plus className="size-6" />
                 Add Gift
               </Button>

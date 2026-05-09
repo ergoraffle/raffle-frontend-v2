@@ -41,7 +41,7 @@ export type RaffleSummaryToken = {
   id: string;
   name: string;
   decimals: number;
-  verified: boolean;
+  isVerified: boolean;
 };
 
 export type RaffleSummaryAmount = {
@@ -77,7 +77,7 @@ export type RaffleDetailResponseToken = {
   id: string;
   name: string;
   decimals: number;
-  verified: boolean;
+  isVerified: boolean;
 };
 
 export type RaffleDetailResponseAmount = {
@@ -156,7 +156,7 @@ export interface TokenSummary {
   id: string;
   name?: string;
   decimals: number;
-  verified: boolean;
+  isVerified: boolean;
 }
 
 export type WinnerBasketDetailResponseType =

@@ -72,10 +72,24 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     router.push(`?${params.toString()}`);
   };
 
-  const setStatusParamWithSwitchTabs = (status?: string) => {
+  const setStatusParamWithSwitchTabs = (tab?: string) => {
     const params = new URLSearchParams({});
     setSearch('');
-    if (status) params.set('status', status);
+    if (tab) {
+      switch (tab) {
+        case 'all':
+          params.set('status', 'active');
+
+          break;
+        case 'history':
+          params.append('status', 'failed');
+          params.append('status', 'successful');
+          break;
+
+        default:
+          break;
+      }
+    }
     router.push(`?${params.toString()}`);
   };
 

@@ -16,7 +16,6 @@ import {
   Field,
   FieldError,
   FieldLabel,
-  getDecimalString,
   Input,
   Spinner,
   Typography,
@@ -29,7 +28,7 @@ import { useForm } from 'react-hook-form';
 
 import { getInfo, getTokensBridgeable } from '@/actions';
 import { useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL, saveTransactionId } from '@/lib';
+import { getDecimalString, getTxURL, saveTransactionId } from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -123,7 +122,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
       resetForm();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to donate raffle. Please try again later.'));
+      toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
     } finally {
       setIsLoading(false);
     }
@@ -166,6 +165,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                           <Input
                             type="number"
                             min={1}
+                            aria-invalid={!!errors.tickets}
                             {...register('tickets', { valueAsNumber: true })}
                           />
                           {!!errors.tickets && <FieldError>{errors.tickets.message}</FieldError>}
@@ -179,9 +179,9 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                             }}
                           />
                           <div>
-                            <FieldLabel htmlFor="checkout-terms">
+                            <FieldLabel htmlFor="checkout-terms" className="whitespace-nowrap">
                               I Agree to the{' '}
-                              <Link href="/terms" className="underline">
+                              <Link href="/terms" className="underline whitespace-nowrap">
                                 Terms of Use
                               </Link>
                             </FieldLabel>

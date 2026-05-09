@@ -70,6 +70,43 @@ export const useUploader = ({
     setEditing(file);
   };
 
+  const moveFileToFirst = (fileId: string) => {
+    const file = uppy.getFile(fileId);
+    if (!file?.data) return;
+
+    const filesClone = uppy.getFiles();
+    const restFiles = filesClone.filter((f) => f.id !== fileId);
+
+    filesClone.map((f) => uppy.removeFile(f.id));
+    uppy.addFile({
+      name: file.name,
+      type: file.type,
+      data: file.data as File | Blob
+    });
+
+    restFiles.forEach((f) => {
+      uppy.addFile({
+        name: f.name,
+        type: f.type,
+        data: f.data as File | Blob
+      });
+    });
+  };
+
+  const addFiles = (files: File[]) => {
+    const existingNames = new Set(uppy.getFiles().map((f) => f.name));
+
+    files.forEach((file) => {
+      if (existingNames.has(file.name)) return;
+
+      uppy.addFile({
+        name: file.name,
+        type: file.type,
+        data: file
+      });
+    });
+  };
+
   const upload = async () => {
     const result = await uppy.upload();
 
@@ -140,7 +177,16 @@ export const useUploader = ({
           uppy.setFileState(id, {
             data: blob,
             size: blob.size,
-            type: blob.type
+            type: blob.type,
+            progress: {
+              uploadStarted: 0,
+              uploadComplete: true,
+              bytesUploaded: blob.size,
+              bytesTotal: blob.size,
+              percentage: 100,
+              complete: true
+            },
+            uploadURL: file.url
           });
         })
         .catch(() => {
@@ -160,6 +206,8 @@ export const useUploader = ({
     ready: !!isReady,
     upload,
     uploading: !!isUploading,
-    maxNumberOfFiles
+    maxNumberOfFiles,
+    moveFileToFirst,
+    addFiles
   };
 };

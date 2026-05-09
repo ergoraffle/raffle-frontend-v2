@@ -43,11 +43,14 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
     throw new Error('Failed to get wallet tokens.');
   }
 
-  // Current chain height
-  const chainHeight = infoBlockchainData.height;
-
   // Organizer UTXO boxes the selector may spend
   const feeBoxes = (await walletInstance.getBoxes()).values();
+
+  // Current chain height
+  const chainHeight = Math.max(
+    infoBlockchainData.height,
+    ...Array.from(feeBoxes).map((walletUtxo) => walletUtxo.creationHeight)
+  );
 
   // organizer address is the wallet address that is creating the raffle and will receive the change
   const organizerAddress = (await walletInstance.getAddresses()).main;
@@ -56,8 +59,7 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
   const implementerAddress = process.env.NEXT_PUBLIC_IMPLEMENTER_ADDRESS || '';
 
   // block height at which the proxy box expires (configure a value for expiration period and add it to the current network height)
-  const expirationHeight =
-    infoBlockchainData.height + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT);
+  const expirationHeight = chainHeight + Number(process.env.NEXT_PUBLIC_EXPIRATION_HEIGHT);
 
   const name = data.name;
 
@@ -95,7 +97,7 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
   }
 
   // Raffle deadline height
-  const deadline = infoBlockchainData.height + data.deadline;
+  const deadline = chainHeight + data.deadline;
 
   // Optional project address (defaults to organizer when omitted)
   const projectAddress = data.address;

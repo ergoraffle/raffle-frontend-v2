@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
 import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import { Lock } from '@ergo-raffle/icons';
 import {
   Button,
   DistributionBar,
@@ -11,6 +12,9 @@ import {
   FieldError,
   FieldLabel,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
   Select,
   SelectContent,
   SelectGroup,
@@ -24,7 +28,6 @@ import { useFormContext } from 'react-hook-form';
 
 import type { RaffleDonationGoalForm } from '@/features/schemas';
 import { useWallet } from '@/hooks';
-import { getErrorMessage } from '@/lib';
 
 import { FieldTitle } from './FieldTitle';
 
@@ -58,23 +61,20 @@ export const DonationGoalForm = ({
       ?.fetchTokens()
       .then((tokens) => setTokens(tokens))
       .catch((error) => {
-        toast.error(getErrorMessage(error, 'Failed to get wallet.'));
+        toast.error('Failed to get wallet.', { errorDetails: error });
       });
   }, [wallet.selected]);
 
-  const winnerPotShare = watch('winnerPotShare');
+  const missionFund = watch('missionFund');
 
-  const missionFund = useMemo(
-    () => (serviceFee && winnerPotShare ? 100 - (winnerPotShare + serviceFee) : 0),
-    [winnerPotShare, serviceFee]
-  );
+  const winnerPotShare = useMemo(() => 100 - (missionFund + serviceFee), [missionFund, serviceFee]);
 
   useEffect(() => {
-    setValue('missionFund', missionFund || 100 - serviceFee, {
+    setValue('winnerPotShare', winnerPotShare > 0 ? winnerPotShare : 0, {
       shouldValidate: true,
       shouldDirty: true
     });
-  }, [missionFund, setValue, serviceFee]);
+  }, [winnerPotShare, setValue]);
 
   return (
     <div className="space-y-8">
@@ -84,16 +84,23 @@ export const DonationGoalForm = ({
           <Field className="flex-1">
             <Select
               value={getValues('tokenId') ?? ''}
-              onValueChange={(value) => setValue('tokenId', value)}
+              onValueChange={(value) =>
+                setValue('tokenId', value, { shouldValidate: true, shouldDirty: true })
+              }
             >
-              <SelectTrigger variant="bordered" className="mt-7.5" disabled={tokens.length === 0}>
+              <SelectTrigger
+                variant="bordered"
+                className="mt-7.5"
+                disabled={tokens.length === 0}
+                aria-invalid={!!errors.tokenId}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {tokens.map((token) => (
-                    <SelectItem value={token.id} key={token.id}>
-                      <Token name={token.name} />
+                    <SelectItem value={token.id} key={token.id} className="p-2">
+                      <Token name={token.name} tokenId={token.id.toLowerCase()} />
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -112,6 +119,7 @@ export const DonationGoalForm = ({
         <Input
           variant="bordered"
           className="max-w-205"
+          aria-invalid={!!errors.count}
           {...register('count', { valueAsNumber: true })}
           type="number"
           min={0}
@@ -123,6 +131,8 @@ export const DonationGoalForm = ({
         <div className="flex items-center gap-x-5">
           <Input
             variant="bordered"
+            step="any"
+            aria-invalid={!!errors.amount}
             {...register('amount', { valueAsNumber: true })}
             className="max-w-205 grow"
             type="number"
@@ -133,7 +143,12 @@ export const DonationGoalForm = ({
       </Field>
       <Field>
         <FieldTitle title="Set an address for the Mission’s Fund." />
-        <Input variant="bordered" {...register('address')} className="max-w-125" />
+        <Input
+          variant="bordered"
+          {...register('address')}
+          className="max-w-125"
+          aria-invalid={!!errors.address}
+        />
         {!!errors.address && <FieldError>{errors.address.message}</FieldError>}
       </Field>
       <div className="space-y-3">
@@ -148,31 +163,35 @@ export const DonationGoalForm = ({
           <div className="sm:w-1/2 md:w-auto flex-1">
             <Field>
               <FieldLabel>Service</FieldLabel>
-              <Input variant="bordered" disabled value={serviceFee} />
+              <InputGroup variant="bordered">
+                <InputGroupInput disabled value={serviceFee} />
+                <InputGroupAddon align="inline-end">
+                  <Lock className="size-6 text-gray-2" />
+                </InputGroupAddon>
+              </InputGroup>
             </Field>
           </div>
           <div className="flex flex-col sm:flex-row flex-2 gap-x-2 gap-y-3">
-            <Field className="flex-1">
-              <FieldLabel>Mission’s Fund</FieldLabel>
-              <Input
-                variant="bordered"
-                disabled
-                defaultValue={100 - serviceFee}
-                {...register('missionFund', { valueAsNumber: true })}
-              />
-              {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
-            </Field>
             <Field className="flex-1">
               <FieldLabel>Winners Pot Share</FieldLabel>
               <Input
                 variant="bordered"
                 type="number"
                 min={0}
-                defaultValue={0}
                 max={100 - serviceFee}
+                disabled
                 {...register('winnerPotShare', { valueAsNumber: true })}
               />
               {!!errors.winnerPotShare && <FieldError>{errors.winnerPotShare.message}</FieldError>}
+            </Field>
+            <Field className="flex-1">
+              <FieldLabel>Mission’s Fund</FieldLabel>
+              <Input
+                variant="bordered"
+                {...register('missionFund', { valueAsNumber: true })}
+                aria-invalid={!!errors.missionFund}
+              />
+              {!!errors.missionFund && <FieldError>{errors.missionFund.message}</FieldError>}
             </Field>
           </div>
         </div>
