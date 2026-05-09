@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 import TurndownService from 'turndown';
 
 import { sanitize } from './sanitize';
@@ -22,3 +23,5 @@ export const htmlToMarkdown = (dirtyHtml: string) => {
   const cleanHtml = sanitize(dirtyHtml);
   return turndown.turndown(cleanHtml);
 };
+
+export const markdownToHtml = (markdown: string) => marked.parse(markdown, { async: false });

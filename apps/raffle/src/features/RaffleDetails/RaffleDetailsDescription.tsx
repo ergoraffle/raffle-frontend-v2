@@ -14,6 +14,8 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
+import { markdownToHtml } from '@/lib';
+
 import type { RaffleDetailView } from './raffleToViewModel';
 
 export type RaffleDetailsDescriptionProps = { raffle?: RaffleDetailView; loading?: boolean };
@@ -65,7 +67,7 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
         <StyledTextPreview
           className={isMobile && !expanded ? 'line-clamp-3' : ''}
           ref={ref}
-          text={raffle.description}
+          text={markdownToHtml(raffle.description)}
         />
         {isMobile && isOverflowing ? (
           <Button

@@ -18,6 +18,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { RaiseProgress } from '@/features/RaiseProgress';
+import { markdownToHtml } from '@/lib';
 
 import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';
@@ -97,7 +98,7 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
             <div
               className="line-clamp-3 overflow-hidden **:[all:unset] [&_ *]:!text-inherit"
               // biome-ignore lint/security/noDangerouslySetInnerHtml: temporary bypass
-              dangerouslySetInnerHTML={{ __html: raffle?.description || '' }}
+              dangerouslySetInnerHTML={{ __html: markdownToHtml(raffle?.description || '') }}
             />
           )}
         </div>
