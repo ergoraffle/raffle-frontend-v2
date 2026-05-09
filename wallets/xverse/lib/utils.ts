@@ -1,0 +1,273 @@
+import type { BitcoinRunesUtxo, FeeEstimator } from '@rosen-bridge/bitcoin-runes-utxo-selection';
+import JsonBigInt from '@rosen-bridge/json-bigint';
+
+import {
+  CONFIRMATION_TARGET,
+  GET_BOX_API_LIMIT,
+  NATIVE_SEGWIT,
+  SEGWIT_INPUT_WEIGHT_UNIT,
+  SEGWIT_OUTPUT_WEIGHT_UNIT,
+  TAPROOT,
+  TAPROOT_INPUT_WEIGHT_UNIT,
+  TAPROOT_OUTPUT_WEIGHT_UNIT
+} from './contants';
+import type {
+  EsploraUtxo,
+  UnisatAddressAvailableBtcUtxos,
+  UnisatAddressBtcUtxos,
+  UnisatAddressRunesUtxos,
+  UnisatResponse
+} from './NetworkTypes';
+
+/**
+ * @returns Bitcoin fee ratio
+ */
+export const getFeeRatio = async () => {
+  // TODO: Get the endpoint from ENV
+  return await fetch(`https://mempool.space/api/fee-estimates`)
+    .then((response) => response.json())
+    .then((data) => data[CONFIRMATION_TARGET]);
+};
+
+/**
+ * gets confirmed and unspent boxes of an address that contains given rune
+ * @param address the address
+ * @param runeId the rune ID
+ * @param startOffset
+ * @param limit
+ * @returns list of boxes
+ */
+export async function* getAddressRunesUtxos(
+  address: string,
+  runeId: string,
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    try {
+      const response = await fetch(
+        `/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`
+      );
+      const data = (await response.json()) as UnisatResponse<UnisatAddressRunesUtxos | undefined>;
+      const utxos = data.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
+
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: utxo.runes.map((rune) => ({
+          runeId: rune.runeid,
+          quantity: BigInt(rune.amount)
+        }))
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // biome-ignore lint/suspicious/noExplicitAny: make it better
+    } catch (e: any) {
+      const baseError = `Failed to get UTxOs containing rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(`${baseError}${e.message}`);
+    }
+  }
+}
+
+/**
+ * gets the current address's available UTXO list that can be used for BTC spending
+ *
+ * Note: UTXOs of assets such as inscriptions, runes, and alkanes will not be included
+ * Note: UTXOs with less than 600 satoshis will not be returned to avoid potential
+ *  unspendable outputs from unrecognized asset protocols or burns
+ * @param address the address
+ * @param offset
+ * @param limit
+ * @returns list of boxes
+ */
+export async function* getAddressAvailableBtcUtxos(
+  address: string,
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    try {
+      const response = await fetch(
+        `/v1/indexer/address/${address}/available-utxo-data?cursor=${offset}&size=${limit}`
+      );
+      const data = (await response.json()) as UnisatResponse<UnisatAddressAvailableBtcUtxos>;
+      const utxos = data.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
+
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: []
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // biome-ignore lint/suspicious/noExplicitAny: make it better
+    } catch (e: any) {
+      const baseError = `Failed to get available UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(`${baseError}${e.message}`);
+    }
+  }
+}
+
+/**
+ * gets confirmed and unspent boxes of an address
+ * @param address the address
+ * @param startOffset
+ * @param limit
+ * @returns list of boxes
+ */
+export async function* getAddressAllBtcUtxos(
+  address: string,
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    try {
+      const response = await fetch(
+        `/v1/indexer/address/${address}/all-utxo-data?cursor=${offset}&size=${limit}`
+      );
+      const data = (await response.json()) as UnisatResponse<UnisatAddressBtcUtxos>;
+      const utxos = data.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
+
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: []
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // biome-ignore lint/suspicious/noExplicitAny: make it better
+    } catch (e: any) {
+      const baseError = `Failed to get all UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(`${baseError}${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(`${baseError}${e.message}`);
+    }
+  }
+}
+
+/**
+ * gets utxos by address from Esplora
+ * @param address
+ * @returns array of BitcoinRunesUtxo
+ */
+export async function* getEsploraAddressUtxos(
+  address: string
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  // TODO: this endpoint is exactly the one that is used in Bitcoin codes.
+  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+  const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
+  const response = await fetch(GET_ADDRESS_UTXOS);
+
+  const data = (await response.json()) as Array<EsploraUtxo>;
+  for (const record of data) {
+    yield {
+      txId: record.txid,
+      index: record.vout,
+      value: BigInt(record.value),
+      runes: []
+    };
+  }
+}
+
+/**
+ * generates fee estimator for tx based on the OP_RETURN data length and type of the inputs and outputs
+ *
+ * **Note: The estimator considers the change boxes as a native-segwit output**
+ * @param opReturnScriptLength
+ * @param feeRatio
+ * @param nativeSegwitInputSize
+ * @param taprootInputSize
+ * @param nativeSegwitOutputSize
+ * @param taprootOutputSize
+ * @param selectingBoxesType
+ * @returns FeeEstimator
+ */
+export const generateFeeEstimatorWithAssumptions =
+  (
+    opReturnScriptLength: number,
+    feeRatio: number,
+    nativeSegwitInputSize: number,
+    taprootInputSize: number,
+    nativeSegwitOutputSize: number,
+    taprootOutputSize: number,
+    selectingBoxesType: typeof NATIVE_SEGWIT | typeof TAPROOT
+  ): FeeEstimator<BitcoinRunesUtxo> =>
+  (selectedBoxes: Array<BitcoinRunesUtxo>, changeBoxesCount: number): bigint => {
+    const nativeSegwitInputCount =
+      selectingBoxesType === NATIVE_SEGWIT
+        ? nativeSegwitInputSize + selectedBoxes.length
+        : nativeSegwitInputSize;
+    const taprootInputCount =
+      selectingBoxesType === TAPROOT ? taprootInputSize + selectedBoxes.length : taprootInputSize;
+    const estimatedVsize = estimateTxVsize(
+      nativeSegwitInputCount,
+      taprootInputCount,
+      opReturnScriptLength,
+      nativeSegwitOutputSize + changeBoxesCount,
+      taprootOutputSize
+    );
+    return BigInt(Math.ceil(estimatedVsize * feeRatio));
+  };
+
+/**
+ * estimates the virtual size of the transaction based on the number of inputs, OP_RETURN output script, number of native segwit and taproot outputs
+ * @param taprootInputSize
+ * @param nativeSegwitInputSize
+ * @param opReturnScriptLength
+ * @param nativeSegwitOutputSize
+ * @param taprootOutputSize
+ * @returns estimated fee
+ */
+const estimateTxVsize = (
+  taprootInputSize: number,
+  nativeSegwitInputSize: number,
+  opReturnScriptLength: number,
+  nativeSegwitOutputSize: number,
+  taprootOutputSize: number
+): number => {
+  const txBaseWeight = 40 + 2; // all txs include 40W. P2WPKH txs need additional 2W
+  const opReturnWeightUnit =
+    36 + // OP_RETURN base output weight
+    opReturnScriptLength * 4; // OP_RETURN output data counts as vSize, so weight = script length * 4
+  const inputsWeight =
+    taprootInputSize * TAPROOT_INPUT_WEIGHT_UNIT + nativeSegwitInputSize * SEGWIT_INPUT_WEIGHT_UNIT;
+  const outputWeight =
+    nativeSegwitOutputSize * SEGWIT_OUTPUT_WEIGHT_UNIT +
+    taprootOutputSize * TAPROOT_OUTPUT_WEIGHT_UNIT;
+
+  return (txBaseWeight + inputsWeight + opReturnWeightUnit + outputWeight) / 4;
+};

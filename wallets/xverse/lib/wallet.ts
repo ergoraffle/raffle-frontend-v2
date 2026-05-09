@@ -103,11 +103,14 @@ export class XverseWallet extends Wallet<
       signInputs: Record<string, number[]>;
     };
 
+    const addresses = await this.getAddresses();
     // runes
     if (params.token) {
       generateUnsignedTx = await generateUnsignedTxRunes(
         params.amount,
-        params.fromAddress,
+        addresses.nativeSegWit,
+        addresses.taproot,
+        addresses.taprootPublicKey,
         params.toAddress,
         params.token.id,
         params.token.amount
@@ -117,7 +120,7 @@ export class XverseWallet extends Wallet<
     else {
       generateUnsignedTx = await generateUnsignedTxBitcoin(
         params.amount,
-        params.fromAddress,
+        addresses.nativeSegWit,
         params.toAddress
       );
     }
