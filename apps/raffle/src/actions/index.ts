@@ -21,6 +21,6 @@ export const getTokens: typeof getTokensApi = async (params) => {
   return await getTokensApi(params);
 };
 export const getTokensSearch: typeof getTokensSearchApi = async (params) => {
-  if (!params.query?.length) return { items: [], total: 0 };
+  if (!params.query?.length || params.query.length < 3) return { items: [], total: 0 };
   return await getTokensSearchApi(params);
 };

@@ -34,6 +34,7 @@ export const TokensFilter = ({ value, onChange }: TokenFilterProps) => {
       searchable
       query={tokensQuery}
       onQueryChange={setTokensQuery}
+      minQueryLength={3}
       isLoading={isLoading}
       className="flex-1 lg:flex-auto"
     />

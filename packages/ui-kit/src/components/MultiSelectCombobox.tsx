@@ -25,6 +25,7 @@ export type MultiSelectComboboxProps = {
   placeholder?: string;
   searchable?: boolean;
   query?: string;
+  minQueryLength?: number;
   onQueryChange?: (query: string) => void;
   isLoading?: boolean;
   closeOnChange?: boolean;
@@ -40,6 +41,7 @@ export const MultiSelectCombobox = ({
   closeOnChange,
   className,
   query,
+  minQueryLength,
   onQueryChange,
   isLoading
 }: MultiSelectComboboxProps) => {
@@ -98,7 +100,11 @@ export const MultiSelectCombobox = ({
           />
         ) : null}
         {!isLoading && !(!onQueryChange || (!!onQueryChange && !query)) && (
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          <ComboboxEmpty>
+            {!!minQueryLength && query && query.length < minQueryLength
+              ? `Enter ${minQueryLength} or more characters`
+              : 'No items found.'}
+          </ComboboxEmpty>
         )}
         <ComboboxList>
           {isLoading ? (
