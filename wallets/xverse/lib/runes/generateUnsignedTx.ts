@@ -32,7 +32,8 @@ export const generateUnsignedTx = async (
   _userTaprootInternalPk: string,
   _toAddress: string,
   _tokenId: string,
-  _tokenAmount: bigint
+  _tokenAmount: bigint,
+  requestUnisat: <T>(path: string) => Promise<T>
 ): Promise<{ psbt: Psbt; signInputs: Record<string, number[]> }> => {
   const p2wpkhPayment = address.toOutputScript(_userNativeSegwitAddress);
   const taprootPayment = address.toOutputScript(_userTaprootAddress);
@@ -75,7 +76,7 @@ export const generateUnsignedTx = async (
   const psbt = new Psbt();
 
   // selection step 1: cover the required Rune only
-  const runesUtxos = getAddressRunesUtxos(_userTaprootAddress, _tokenId);
+  const runesUtxos = getAddressRunesUtxos(requestUnisat, _userTaprootAddress, _tokenId);
   const boxSelection = new BitcoinRunesBoxSelection();
   const coveredRunesBoxes = await boxSelection.getCoveringBoxes(
     {
@@ -141,7 +142,7 @@ export const generateUnsignedTx = async (
         : estimatedFee;
 
     // generate an iterator on available BTC UTxOs
-    const btcUtxos = getAddressAvailableBtcUtxos(_userTaprootAddress);
+    const btcUtxos = getAddressAvailableBtcUtxos(requestUnisat, _userTaprootAddress);
     const step2FeeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
@@ -259,7 +260,7 @@ export const generateUnsignedTx = async (
 
     // get all utxos
     // generate an iterator on user remaining taproot UTxOs
-    const remainingTaprootUtxos = getAddressAllBtcUtxos(_userTaprootAddress);
+    const remainingTaprootUtxos = getAddressAllBtcUtxos(requestUnisat, _userTaprootAddress);
     const step4FeeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,

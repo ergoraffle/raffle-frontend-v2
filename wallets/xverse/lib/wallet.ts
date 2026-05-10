@@ -114,7 +114,8 @@ export class XverseWallet extends Wallet<
         addresses.taprootPublicKey,
         params.toAddress,
         params.token.id,
-        params.token.amount
+        params.token.amount,
+        this.config.requestUnisat
       );
     }
     // bitcoin

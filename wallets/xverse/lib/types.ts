@@ -1,6 +1,8 @@
 import { type WalletConfig, WalletError } from '@ergo-raffle/base-wallet';
 
-export type XverseWalletConfig = WalletConfig & {};
+export type XverseWalletConfig = WalletConfig & {
+  requestUnisat: <T>(path: string) => Promise<T>;
+};
 
 export type XverseWalletAddresses = {
   nativeSegWit: string;

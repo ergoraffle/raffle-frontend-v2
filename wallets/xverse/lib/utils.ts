@@ -22,28 +22,6 @@ import type {
 } from './NetworkTypes';
 
 /**
- * submits a get request to unisat api
- * @param path
- * @returns UnisatResponse
- */
-export const requestUnisat = async <T>(path: string): Promise<UnisatResponse<T | undefined>> => {
-  const headers = { 'Content-Type': 'application/json' };
-
-  if (process.env.BITCOIN_UNISAT_API_KEY) {
-    Object.assign(headers, {
-      Authorization: `Bearer ${process.env.BITCOIN_UNISAT_API_KEY}`
-    });
-  }
-
-  const response = await Axios.get<UnisatResponse<T | undefined>>(
-    `${process.env.BITCOIN_UNISAT_API}${path}`,
-    { headers }
-  );
-
-  return response.data;
-};
-
-/**
  * @returns Bitcoin fee ratio
  */
 export const getFeeRatio = async (): Promise<number> => {
@@ -61,6 +39,7 @@ export const getFeeRatio = async (): Promise<number> => {
  * @returns list of boxes
  */
 export async function* getAddressRunesUtxos(
+  requestUnisat: <T>(path: string) => Promise<T>,
   address: string,
   runeId: string,
   startOffset: number = 0,
@@ -71,10 +50,10 @@ export async function* getAddressRunesUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await requestUnisat<UnisatAddressRunesUtxos>(
+      const response = await requestUnisat<UnisatResponse<UnisatAddressRunesUtxos>>(
         `/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`
       );
-      const utxos = response.data?.utxo ?? [];
+      const utxos = response.data.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
@@ -115,6 +94,7 @@ export async function* getAddressRunesUtxos(
  * @returns list of boxes
  */
 export async function* getAddressAvailableBtcUtxos(
+  requestUnisat: <T>(path: string) => Promise<T>,
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT
@@ -124,10 +104,10 @@ export async function* getAddressAvailableBtcUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await requestUnisat<UnisatAddressAvailableBtcUtxos>(
+      const response = await requestUnisat<UnisatResponse<UnisatAddressAvailableBtcUtxos>>(
         `/v1/indexer/address/${address}/available-utxo-data?cursor=${offset}&size=${limit}`
       );
-      const utxos = response.data?.utxo ?? [];
+      const utxos = response.data.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
@@ -161,6 +141,7 @@ export async function* getAddressAvailableBtcUtxos(
  * @returns list of boxes
  */
 export async function* getAddressAllBtcUtxos(
+  requestUnisat: <T>(path: string) => Promise<T>,
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT
@@ -170,10 +151,10 @@ export async function* getAddressAllBtcUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await requestUnisat<UnisatAddressBtcUtxos>(
+      const response = await requestUnisat<UnisatResponse<UnisatAddressBtcUtxos>>(
         `/v1/indexer/address/${address}/all-utxo-data?cursor=${offset}&size=${limit}`
       );
-      const utxos = response.data?.utxo ?? [];
+      const utxos = response.data.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
