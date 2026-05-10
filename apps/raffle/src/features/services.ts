@@ -149,7 +149,7 @@ export const donateRaffle = async (
   walletInstance?: WalletInstance
 ) => {
   if (!walletInstance) {
-    throw new Error('TODO: should connect to a wallet first');
+    throw new Error('Must be connected to a wallet.');
   }
 
   const raffle = await getRaffleData(raffleId);
@@ -165,7 +165,7 @@ export const donateRaffle = async (
         captchaToken: data.recaptcha || ''
       });
     } catch (error) {
-      throw new Error('TODO: can not load transaction bitcoin data', { cause: error });
+      throw new Error('Failed to load transaction bitcoin data.', { cause: error });
     }
 
     return await walletInstance.transfer({
@@ -180,7 +180,7 @@ export const donateRaffle = async (
   }
 
   if (walletInstance.name !== 'Nautilus') {
-    throw new Error('TODO: can not operate with this wallet ');
+    throw new Error('Failed to donate raffle. Please connect to the Nautilus wallet.');
   }
 
   const infoBlockchainData = await getInfoBlockchainData();

@@ -89,7 +89,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         setSiteKey(infoResponse.siteKey);
       })
       .catch((error) => {
-        toast.error('TODO 1', { errorDetails: error });
+        toast.error('Failed to load donation data.', { errorDetails: error });
       })
       .finally(() => {
         setIsLoading(false);
