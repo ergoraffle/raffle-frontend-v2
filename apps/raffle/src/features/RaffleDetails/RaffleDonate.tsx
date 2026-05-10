@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { RaffleDetailResponse, TokensBridgeableResponse } from '@ergo-raffle/client';
+import { Ergo, Right } from '@ergo-raffle/icons';
 import {
   Button,
   Card,
@@ -15,6 +16,8 @@ import {
   CollapsibleContent,
   Dialog,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
   Field,
   FieldError,
   FieldLabel,
@@ -124,6 +127,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         if (!walletInstance) {
           await wallet.closeDialog();
           setIsOpen(false);
+          setNetwork(undefined);
         }
         if (walletInstance?.name === 'Nautilus') {
           setIsOpen(false);
@@ -148,15 +152,17 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           walletInstance || wallet.selected
         );
 
-        toast.success(
-          <>
-            Raffle donated successfully! Click{' '}
-            <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
-              here
-            </Link>{' '}
-            to see details.
-          </>
-        );
+        toast.success('Raffle donated successfully!', {
+          description: (
+            <>
+              Click{' '}
+              <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+                here
+              </Link>{' '}
+              to see details.
+            </>
+          )
+        });
 
         saveTransactionId(txId);
 
@@ -214,6 +220,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                         </div>
                         <Field>
                           <Input
+                            variant="bordered"
                             type="number"
                             min={1}
                             aria-invalid={!!errors.tickets}
@@ -286,36 +293,100 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         />
       </div>
       <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>
-        <DialogContent>
-          {needCaptcha && (
+        <DialogContent className="min-w-xl">
+          <DialogHeader>
+            <DialogTitle>Buying {getValues('tickets')} Ticket</DialogTitle>
+          </DialogHeader>
+
+          {needCaptcha && !!network && (
             <>
-              {!!isLoading && <div>loading</div>}
-              {!isLoading && (
-                <ReCAPTCHA
-                  sitekey={siteKey || ''}
-                  onChange={(token) => setRecaptcha(token || undefined)}
-                />
+              {!!isLoading && (
+                <div className="flex items-center justify-center">
+                  <Spinner className="ml-2 mr-1 size-4" />
+                  <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                    <span>loading...</span>
+                  </Typography>
+                </div>
               )}
-              <button disabled={isLoading || isSubmitting} type="button" onClick={() => submit()}>
+              {!isLoading && (
+                <>
+                  <Typography variant="body-lg" className="mb-1">
+                    Please complete the reCAPTCHA to proceed with the purchase.
+                  </Typography>
+                  <ReCAPTCHA
+                    sitekey={siteKey || ''}
+                    onChange={(token) => setRecaptcha(token || undefined)}
+                  />
+                </>
+              )}
+              <Button
+                disabled={isLoading || isSubmitting || !recaptcha}
+                type="button"
+                onClick={() => submit()}
+              >
                 submit
-              </button>
+              </Button>
             </>
           )}
           {!network && (
             <>
+              <div>
+                <Typography variant="body-lg">
+                  You are about to purchase {getValues('tickets')} tickets for the raffle “
+                  {raffle.name}” how do you wish to proceed?
+                </Typography>
+                <Typography variant="body-sm">
+                  Price per ticket:{' '}
+                  <Typography variant="body-md" asChild>
+                    <span>{`${getDecimalString(raffle.ticketPrice, raffle.token.decimals)} ${raffle.token.name}`}</span>
+                  </Typography>
+                </Typography>
+                <Typography variant="body-sm">
+                  Total:{' '}
+                  <Typography variant="body-md" asChild>
+                    <span>{`${getDecimalString(raffle.ticketPrice * getValues('tickets'), raffle.token.decimals)} ${raffle.token.name}`}</span>
+                  </Typography>
+                </Typography>
+              </div>
               <button
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5"
                 disabled={isLoading || !bridgeableData}
                 type="button"
                 onClick={() => selectNetwork('ergo')}
               >
-                ergo {!!isLoading && <div>loading</div>}
+                <div className="flex items-center gap-2">
+                  <Ergo className="size-6" />
+                  Ergopay{' '}
+                  {!!isLoading && (
+                    <>
+                      <Spinner className="ml-2 mr-1 size-4" />
+                      <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                        <span>loading...</span>
+                      </Typography>
+                    </>
+                  )}
+                </div>
+                <Right className="size-6" />
               </button>
               <button
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5"
                 disabled={isLoading || !bridgeableData || !bridgeableData.bridgeable}
                 type="button"
                 onClick={() => selectNetwork('bitcoin')}
               >
-                bitcoin {!!isLoading && <div>loading</div>}
+                <div className="flex items-center gap-2">
+                  <Image src="/icons/bitcoin.svg" alt="Bitcoin" width={24} height={24} />
+                  Bitcoin Pay{' '}
+                  {!!isLoading && (
+                    <>
+                      <Spinner className="ml-2 mr-1 size-4" />
+                      <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                        <span>loading...</span>
+                      </Typography>
+                    </>
+                  )}
+                </div>
+                <Right className="size-6" />
               </button>
             </>
           )}
