@@ -2,7 +2,7 @@ export * from './useActivityParams';
 export * from './useDebounceString';
 export * from './useFetchActivity';
 export * from './useFetchTokensSearch';
-export * from './useFetchWinnerBasket';
+export * from './useFetchTransactions';
 export * from './useFetchWinnerBaskets';
 export * from './useInfoBlockchain';
 export * from './useRafflesParams';

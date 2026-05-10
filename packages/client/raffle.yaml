@@ -394,9 +394,9 @@ components:
             decimals:
               type: number
               default: 0
-            verified:
+            isVerified:
               type: boolean
-          required: [id, name, decimals, verified]
+          required: [id, name, decimals, isVerified]
         winnersCount:
           type: number
         giftCount:
@@ -457,9 +457,9 @@ components:
             decimals:
               type: number
               default: 0
-            verified:
+            isVerified:
               type: boolean
-          required: [id, name, decimals, verified]
+          required: [id, name, decimals, isVerified]
         tags:
           type: array
           items:
@@ -623,12 +623,12 @@ components:
         decimals:
           type: number
           default: 0
-        verified:
+        isVerified:
           type: boolean
       required: 
         - id
         - decimals
-        - verified
+        - isVerified
 
 
     #######################

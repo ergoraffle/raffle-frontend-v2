@@ -1,4 +1,4 @@
 export * from './createServerHook';
-export * from './sanitize';
+export * from './markdown';
 export * from './utils';
 export * from './wallets';

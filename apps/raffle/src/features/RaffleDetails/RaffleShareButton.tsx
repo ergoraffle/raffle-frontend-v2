@@ -3,22 +3,30 @@
 import { Share } from '@ergo-raffle/icons';
 import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 
-import { getErrorMessage } from '@/lib';
-
 export type RaffleShareButtonProps = { loading?: boolean };
 
 export const RaffleShareButton = ({ loading }: RaffleShareButtonProps) => {
-  const handleShareClick = () => {
+  const url = window.location.href;
+
+  const handleCopy = () => {
     if (typeof window === 'undefined') return;
-    const url = window.location.href;
     navigator.clipboard
       .writeText(url)
       .then(() => {
-        toast.success('Copied!');
+        toast.success('The page link is copied!');
       })
-      .catch((error) => {
-        toast.error(getErrorMessage(error, 'Copy failed!'));
+      .catch(() => {
+        toast.error('Copy failed!');
       });
+  };
+
+  const handleShareClick = async () => {
+    try {
+      const shareData = { url };
+      await navigator.share(shareData);
+    } catch {
+      handleCopy();
+    }
   };
 
   return loading ? (

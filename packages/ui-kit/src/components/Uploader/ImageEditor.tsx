@@ -62,7 +62,7 @@ export const ImageEditor = ({ file, onCancel }: ImageEditorProps) => {
           Save
         </Button>
         <Button
-          variant="default"
+          variant="outline"
           className="w-full md:w-32"
           {...getCancelButtonProps({ onClick: onCancel })}
         >

@@ -1,4 +1,6 @@
-import { Edit, Info, Plus, Trash } from '@ergo-raffle/icons';
+import type { DragEvent } from 'react';
+
+import { FolderOpen, Info, Pencil, PhotoScan, Trash } from '@ergo-raffle/icons';
 import type { Body, Meta, UppyFile } from '@uppy/core';
 import { Thumbnail, UppyContextProvider } from '@uppy/react';
 
@@ -20,9 +22,19 @@ export const Uploader = ({
   instance,
   ready,
   uploading,
-  maxNumberOfFiles
+  moveFileToFirst,
+  maxNumberOfFiles,
+  addFiles
 }: UploaderProps) => {
   void ready;
+
+  const onDragAndDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    addFiles(droppedFiles);
+  };
+
   return (
     <UppyContextProvider uppy={instance}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8 lg:gap-9 xl:gap-11">
@@ -30,28 +42,51 @@ export const Uploader = ({
           const isFileLoading = !file.error && file.data?.size === 0;
           const isFileUploading = !!file.progress.uploadStarted && !file.progress.uploadComplete;
           const isFileActionsDisabled = isFileUploading || isFileLoading;
+          const isFirst = files.findIndex((f) => f.id === file.id) === 0;
 
           return (
             <div key={file.id} className="item image-uploader-item">
               <div className=" rounded-xlg overflow-hidden relative bg-gray-4 text-gray-4-foreground w-full h-full">
                 <Thumbnail file={file as UppyFile<Meta, Body>} images={!!file.data?.size} />
-                <div className="absolute right-4 bottom-4 space-x-2">
-                  <Button
-                    disabled={isFileActionsDisabled || uploading}
-                    variant="white"
-                    size="icon"
-                    onClick={() => instance.removeFile(file.id)}
-                  >
-                    <Trash className="text-error" />
-                  </Button>
-                  <Button
-                    disabled={isFileActionsDisabled || uploading}
-                    variant="white"
-                    size="icon"
-                    onClick={() => edit(file.id)}
-                  >
-                    <Edit />
-                  </Button>
+                <div
+                  className={`absolute left-0 right-0 bottom-0 space-x-2 bg-black-3 px-2  flex ${isFirst ? 'justify-end' : 'justify-between'} items-center`}
+                >
+                  {!isFirst && (
+                    <Tooltip content="Mark as cover">
+                      <Button
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => moveFileToFirst(file.id)}
+                      >
+                        <PhotoScan />
+                      </Button>
+                    </Tooltip>
+                  )}
+                  <div>
+                    <Tooltip content="Edit">
+                      <Button
+                        disabled={isFileActionsDisabled || uploading}
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => edit(file.id)}
+                      >
+                        <Pencil />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Remove">
+                      <Button
+                        disabled={isFileActionsDisabled || uploading}
+                        variant="plain"
+                        size="icon"
+                        type="button"
+                        onClick={() => instance.removeFile(file.id)}
+                      >
+                        <Trash />
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
 
                 {!!isFileLoading && (
@@ -85,9 +120,21 @@ export const Uploader = ({
           );
         })}
         {(!maxNumberOfFiles || files.length < maxNumberOfFiles) && (
-          <UploaderBrowse className="item flex items-center justify-center image-uploader-item bg-gray-4 text-gray-4-foreground rounded-xlg cursor-pointer">
-            <Plus className="size-10" />
-          </UploaderBrowse>
+          // biome-ignore lint/a11y/noStaticElementInteractions: Drag and drop container
+          <div
+            className="item image-uploader-item"
+            onDragOver={(e) => {
+              e.preventDefault();
+            }}
+            onDrop={onDragAndDrop}
+          >
+            <UploaderBrowse>
+              <Typography variant="body-lg" className="max-w-38 text-gray-2">
+                Drag and drop or choose from files
+              </Typography>
+              <FolderOpen className="size-12 text-gray-3" />
+            </UploaderBrowse>
+          </div>
         )}
       </div>
       {!!editing && <ImageEditorDialog file={editing} onClose={() => edit(undefined)} />}

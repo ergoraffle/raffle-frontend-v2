@@ -210,19 +210,21 @@ export const CarouselDots = ({ className, ...props }: CarouselDotsProps) => {
   return (
     <div
       {...props}
-      className={cn('flex justify-center absolute left-0 right-0 bottom-3.25 space-x-2', className)}
+      className={cn('flex justify-center absolute left-0 right-0 bottom-3.25', className)}
     >
-      {snapPoints.map((_, index) => (
-        <Button
-          key={crypto.randomUUID()}
-          onClick={() => api?.scrollTo(index)}
-          aria-label={`Go to slide ${index + 1}`}
-          variant="plain"
-          className={cn(
-            `flex size-4.5 sm:size-4.5 p-0 sm:p-0 rounded-full transition-all hover:bg-black-1 ${index === selectedIndex ? 'bg-black-1/75' : 'bg-black-1/35'}`
-          )}
-        />
-      ))}
+      <div className="space-x-2 px-1 py-0.5 bg-white-4 rounded-base w-fit m-auto flex items-center">
+        {snapPoints.map((_, index) => (
+          <Button
+            key={crypto.randomUUID()}
+            onClick={() => api?.scrollTo(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            variant="plain"
+            className={cn(
+              `flex size-2 sm:size-2 p-0 sm:p-0 rounded-full transition-all hover:bg-black-1/75 ${index === selectedIndex ? 'bg-black-1/75' : 'bg-black-1/35'}`
+            )}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -22,8 +22,8 @@ export const badgeVariants = cva(
           'border-gray-4 text-gray-1 [&:not(:disabled):hover]:bg-gray-5 [&:not(:disabled):hover]:border-gray-5 [&:not(:disabled):hover]:text-gray-5-foreground focus-visible:bg-secondary-3 focus-visible:border-transparent focus-visible:text-secondary-3-foreground disabled:border-gray-4 disabled:text-black-1/40',
         'white-outline':
           'border-gray-5 text-gray-1 [&:not(:disabled):hover]:bg-gray-5 [&:not(:disabled):hover]:border-gray-5 [&:not(:disabled):hover]:text-gray-5-foreground focus-visible:bg-secondary-3 focus-visible:border-transparent focus-visible:text-secondary-3-foreground disabled:border-gray-4 disabled:text-black-1/40',
-        success: 'border-transparent bg-success text-success-foreground',
-        error: 'border-transparent bg-error text-error-foreground'
+        success: 'border-transparent bg-success text-success-foreground shadow-4',
+        error: 'border-transparent bg-error text-error-foreground shadow-4'
       },
       size: {
         sm: 'h-6',
