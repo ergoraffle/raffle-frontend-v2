@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { RaffleDetailResponse } from '@ergo-raffle/client';
+import type { GetRaffleRaffleId200 } from '@ergo-raffle/client';
 import {
   Button,
   Card,
@@ -33,7 +33,7 @@ import { donateRaffle } from '../services';
 import { RaffleDonateMessage } from './RaffleDonateMessage';
 
 export type RaffleDonateProps = {
-  raffle: RaffleDetailResponse;
+  raffle: GetRaffleRaffleId200;
 };
 
 export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {

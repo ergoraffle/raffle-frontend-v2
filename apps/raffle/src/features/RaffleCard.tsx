@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { type RaffleSummary, RaffleSummaryStatus } from '@ergo-raffle/client';
+import { type GetRaffle200ItemsItem, GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import { GiftPlus, SandClock } from '@ergo-raffle/icons';
 import {
   Badge,
@@ -24,7 +24,7 @@ import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';
 
 export type RafflesContentProps = {
-  raffle?: RaffleSummary;
+  raffle?: GetRaffle200ItemsItem;
   loading?: boolean;
   deadline?: number;
 };
@@ -51,7 +51,7 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
           {raffle?.name}
         </CardTitle>
       </CardHeader>
-      {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
+      {!loading && raffle?.status && raffle?.status !== GetRaffle200ItemsItemStatus.active && (
         <CardAction>
           <Badge variant={raffleStatusMap[raffle.status]?.variant || 'white-outline'} size="sm">
             {raffleStatusMap[raffle.status]?.label || raffle?.status}

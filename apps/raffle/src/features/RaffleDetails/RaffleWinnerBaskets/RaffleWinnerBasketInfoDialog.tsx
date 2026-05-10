@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 
-import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
+import type {
+  GetRaffleRaffleIdBasket200ItemsItem,
+  GetTokens200ItemsItem
+} from '@ergo-raffle/client';
 import { Left, Plus } from '@ergo-raffle/icons';
 import {
   Button,
@@ -34,8 +37,8 @@ export type RaffleWinnerBasketInfoDialogProps = {
   onNextSlide: () => void;
   onPrevSlide: () => void;
   hasNext: boolean;
-  giftTokens?: TokenSummary[];
-  basket?: WinnerBasketSummary;
+  giftTokens?: GetTokens200ItemsItem[];
+  basket?: GetRaffleRaffleIdBasket200ItemsItem;
   loading?: boolean;
 };
 

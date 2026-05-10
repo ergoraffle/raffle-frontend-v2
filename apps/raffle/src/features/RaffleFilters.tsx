@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 
-import type { GetRaffleStatusItem } from '@ergo-raffle/client';
+import type { GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import { Search } from '@ergo-raffle/icons';
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 
 import { useRafflesQuery } from '@/hooks';
 
-const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
+const statusFilterItems: { value: GetRaffle200ItemsItemStatus; label: string }[] = [
   {
     value: 'active',
     label: 'Active'
@@ -114,14 +114,16 @@ export const RafflesFilters = () => {
           <MultiSelectCombobox
             items={statusFilterItems}
             selected={(params.status as string[]) ?? []}
-            onChange={(values) => setParam('status', values as GetRaffleStatusItem[])}
+            onChange={(values) => setParam('status', values as GetRaffle200ItemsItemStatus[])}
             placeholder="Status"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />
           <MultiSelectCombobox
             items={tokenFilterItems}
-            selected={params.tokenIds ?? []}
+            selected={
+              typeof params.tokenIds === 'string' ? [params.tokenIds] : (params.tokenIds ?? [])
+            }
             onChange={(values) => setParam('tokenIds', values as string[])}
             placeholder="Token"
             closeOnChange

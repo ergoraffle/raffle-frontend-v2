@@ -1,4 +1,7 @@
-import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
+import type {
+  GetRaffleRaffleIdBasket200ItemsItem,
+  GetTokens200ItemsItem
+} from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
 import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
 
@@ -7,12 +10,12 @@ import { getDecimalString } from '@/lib';
 import type { RaffleDetailView } from '../raffleToViewModel';
 
 export type RaffleWinnerBasketItemProps = {
-  basket?: WinnerBasketSummary;
+  basket?: GetRaffleRaffleIdBasket200ItemsItem;
   loading?: boolean;
   handleOpenAddGiftDialog?: (basketIndex?: number) => void;
   handleOpenInfoDialog?: (basketIndex: number) => void;
   raffle?: RaffleDetailView;
-  giftTokens?: TokenSummary[];
+  giftTokens?: GetTokens200ItemsItem[];
 };
 
 export const RaffleWinnerBasketItem = ({

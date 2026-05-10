@@ -1,6 +1,6 @@
-import type { InfoBlockchainResponse, RaffleDetailResponse } from '@ergo-raffle/client';
+import type { GetInfoBlockchain200, GetRaffleRaffleId200 } from '@ergo-raffle/client';
 
-export type RaffleDetailView = RaffleDetailResponse & {
+export type RaffleDetailView = GetRaffleRaffleId200 & {
   soldTicketCount: number;
   deadlineAmount: number;
   missionFund: number;
@@ -10,8 +10,8 @@ export type RaffleDetailView = RaffleDetailResponse & {
 };
 
 export const raffleToViewModel = (
-  raffle: RaffleDetailResponse,
-  infoBlockchain: InfoBlockchainResponse
+  raffle: GetRaffleRaffleId200,
+  infoBlockchain: GetInfoBlockchain200
 ): RaffleDetailView => {
   const soldTicketCount = raffle.amount.raised / raffle.ticketPrice;
   const deadlineAmount = raffle.deadline - infoBlockchain.height;

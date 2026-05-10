@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { RaffleSummaryStatus } from '@ergo-raffle/client';
+import { GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import {
   Badge,
   Card,
@@ -58,7 +58,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
         ) : null}
       </Carousel>
     )}
-    {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
+    {!loading && raffle?.status && raffle?.status !== GetRaffle200ItemsItemStatus.active && (
       <CardAction>
         <Badge variant={raffleStatusMap[raffle.status]?.variant || 'white-outline'} size="sm">
           {raffleStatusMap[raffle.status]?.label || raffle?.status}

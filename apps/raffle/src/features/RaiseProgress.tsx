@@ -1,3 +1,4 @@
+import type { GetRaffle200ItemsItemToken } from '@ergo-raffle/client';
 import { Info } from '@ergo-raffle/icons';
 import { Progress, Skeleton, Tooltip, Typography } from '@ergo-raffle/ui-kit';
 
@@ -15,7 +16,7 @@ export type RaiseProgressProps = {
     raised: number;
     goal: number;
   };
-  token?: { id: string; name: string; decimals: number; isVerified: boolean };
+  token?: GetRaffle200ItemsItemToken;
 };
 
 export const RaiseProgress = ({ loading, amount, token }: RaiseProgressProps) => (
