@@ -206,7 +206,7 @@ export async function* getEsploraAddressUtxos(
 /**
  * generates fee estimator for tx based on the OP_RETURN data length and type of the inputs and outputs
  *
- * **Note: The estimator considers the change boxes as a native-segwit output**
+ * **Note: The estimator does NOT consider the change boxes**
  * @param opReturnScriptLength
  * @param feeRatio
  * @param nativeSegwitInputSize
@@ -226,7 +226,7 @@ export const generateFeeEstimatorWithAssumptions =
     taprootOutputSize: number,
     selectingBoxesType: typeof NATIVE_SEGWIT | typeof TAPROOT
   ): FeeEstimator<BitcoinRunesUtxo> =>
-  (selectedBoxes: Array<BitcoinRunesUtxo>, changeBoxesCount: number): bigint => {
+  (selectedBoxes: Array<BitcoinRunesUtxo>, _changeBoxesCount: number): bigint => {
     const nativeSegwitInputCount =
       selectingBoxesType === NATIVE_SEGWIT
         ? nativeSegwitInputSize + selectedBoxes.length
@@ -237,7 +237,7 @@ export const generateFeeEstimatorWithAssumptions =
       nativeSegwitInputCount,
       taprootInputCount,
       opReturnScriptLength,
-      nativeSegwitOutputSize + changeBoxesCount,
+      nativeSegwitOutputSize,
       taprootOutputSize
     );
     return BigInt(Math.ceil(estimatedVsize * feeRatio));
