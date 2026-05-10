@@ -12,7 +12,10 @@ export type TokenFilterProps = {
 export const TokensFilter = ({ value, onChange }: TokenFilterProps) => {
   const [tokensQuery, setTokensQuery] = useState<string>('');
   const debouncedTokensQuery = useDebounceString(tokensQuery);
-  const filters = useMemo(() => ({ query: debouncedTokensQuery }), [debouncedTokensQuery]);
+  const filters = useMemo(
+    () => ({ query: debouncedTokensQuery, limit: 100, offset: 0 }),
+    [debouncedTokensQuery]
+  );
   const { data: tokensFilterData, isLoading } = useFetchTokensSearch(filters);
 
   const tokenItems = useMemo(
@@ -35,7 +38,7 @@ export const TokensFilter = ({ value, onChange }: TokenFilterProps) => {
       query={tokensQuery}
       onQueryChange={setTokensQuery}
       minQueryLength={3}
-      isLoading={isLoading}
+      isLoading={!!tokensQuery.length && isLoading}
       className="flex-1 lg:flex-auto"
     />
   );
