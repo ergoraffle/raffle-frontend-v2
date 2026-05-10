@@ -9,10 +9,10 @@ import { Card, CardContent, Stepper, Typography, toast } from '@ergo-raffle/ui-k
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { type RaffleForm, raffleSchema } from '@/features/schemas';
+import { createRaffleSchema, type RaffleForm } from '@/features/schemas';
 import { createRaffle } from '@/features/services';
 import { useInfoBlockchain, useWallet } from '@/hooks';
-import { getErrorMessage, getTxURL, sanitize } from '@/lib';
+import { getTxURL, htmlToMarkdown } from '@/lib';
 
 import { BasketsForm } from './BasketsForm';
 import { CreateRaffleSkeleton } from './CreateRaffleSkeleton';
@@ -27,15 +27,21 @@ export const CreateRaffle = () => {
   const wallet = useWallet();
 
   const infoBlockchain = useInfoBlockchain();
-
+  const raffleSchema = createRaffleSchema(
+    infoBlockchain.data
+      ? infoBlockchain.data.fee.implementer + infoBlockchain.data.fee.service
+      : undefined
+  );
   const form = useForm<RaffleForm>({
     resolver: zodResolver(raffleSchema),
     shouldUnregister: false,
     mode: 'onChange',
     defaultValues: {
       details: [],
+      emptyBaskets: 0,
       terms: false,
-      eligibility: false
+      eligibility: false,
+      missionFund: 0
     }
   });
 
@@ -56,26 +62,28 @@ export const CreateRaffle = () => {
   const resetForm = () => {
     form.reset();
     setActiveStepIndex(0);
+    window.scrollTo(0, 0);
   };
 
   const onSubmit = async (data: RaffleForm) => {
     try {
       const { description, ...formData } = data;
-      const cleanedHtmlDescription = sanitize(description);
-      const tx = await createRaffle({ ...formData, description: cleanedHtmlDescription }, wallet);
-
-      toast.success(
-        <>
-          Raffle created successfully! Click{' '}
-          <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
-            here
-          </Link>{' '}
-          to see details.
-        </>
-      );
+      const markdownDescription = htmlToMarkdown(description);
+      const tx = await createRaffle({ ...formData, description: markdownDescription }, wallet);
+      toast.success('Raffle created successfully!', {
+        description: (
+          <>
+            Click{' '}
+            <Link className="text-primary-1" href={getTxURL(tx) || ''} target="_blank">
+              here
+            </Link>{' '}
+            to see details.
+          </>
+        )
+      });
       resetForm();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Failed to create raffle. Please try again later.'));
+      toast.error('Failed to create raffle. Please try again later.', { errorDetails: error });
     }
   };
 

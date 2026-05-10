@@ -49,6 +49,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
           perPage={pagination.perPage}
           onChangePerPage={onChangePerPage}
           onChangePage={onChangePage}
+          perPageStep={5}
           total={total}
           align="side"
           className="mt-4"

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Info } from '@ergo-raffle/icons';
+import { Close, Info, Plus } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
@@ -11,18 +11,11 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  PercentageDistribution,
   Progress,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tooltip,
   Typography
 } from '@ergo-raffle/ui-kit';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import type { RaffleBasketsForm, RaffleDonationGoalForm } from '../schemas';
 import { FieldTitle } from './FieldTitle';
@@ -32,15 +25,12 @@ export type BasketsFormProps = {
   handleBack: () => void;
 };
 
-const shareSplitMethods = [{ value: 'decreasingStep', label: 'Decreasing step' }];
-
 export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   const {
     formState: { errors },
     register,
     watch,
-    control,
-    setValue
+    control
   } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
 
   const winnerPotShare = watch('winnerPotShare', 0);
@@ -50,6 +40,15 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     () => details.reduce((sum, item) => sum + item.percent * item.count, 0),
     [details]
   );
+
+  const {
+    fields: detailsItems,
+    append,
+    remove
+  } = useFieldArray({
+    control,
+    name: 'details'
+  });
 
   return (
     <div className="space-y-8">
@@ -67,73 +66,74 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
           </Typography>
         </div>
         <Progress variant="box" value={filledSharePercent} max={100} />
-        <div className="flex flex-col lg:flex-row  gap-x-5 gap-y-3">
-          <Field className="sm:max-w-1/2 md:max-w-auto flex-1">
-            <FieldLabel>Share Baskets</FieldLabel>
-            <InputGroup variant="bordered">
-              <InputGroupInput disabled />
-              <InputGroupAddon align="inline-start">
-                <BasketStatus className="size-6" filled />
-              </InputGroupAddon>
-              <InputGroupAddon align="inline-end">
-                <Tooltip
-                  content="These baskets include a share of the raffle, and anyone can add gifts to them during the Raffle."
-                  disabled
-                >
-                  <Info className="size-6" />
-                </Tooltip>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
-          <div className="flex-2 flex flex-col sm:flex-row gap-x-5 gap-y-3">
-            <Field className="flex-1">
-              <FieldLabel>Share split Method</FieldLabel>
-              <Select defaultValue="decreasingStep">
-                <SelectTrigger variant="bordered" disabled>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {shareSplitMethods.map((item) => (
-                      <SelectItem value={item.value} key={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
-            <Field className="flex-1">
-              <FieldLabel>Biggest Share</FieldLabel>
-              <Input variant="bordered" disabled />
-            </Field>
-          </div>
-        </div>
-        <Field>
-          <FieldLabel>Details</FieldLabel>
-          <Controller
-            name="details"
-            control={control}
-            render={({ field }) => (
-              <PercentageDistribution
-                items={field.value ?? []}
-                onChange={(val) => {
-                  setValue('details', val, {
-                    shouldValidate: false,
-                    shouldDirty: true
-                  });
-                }}
-              />
-            )}
-          />
-          {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
-        </Field>
       </div>
+      <Field>
+        <FieldLabel>Share Baskets Details</FieldLabel>
+        <div
+          className="flex items-center flex-wrap border border-gray-4 rounded-lg aria-invalid:border-error pt-2 pr-3 pb-2.5 pl-4 gap-2"
+          aria-invalid={!!errors.details}
+        >
+          {detailsItems.map((item, index) => (
+            <div
+              key={item.id}
+              className="flex items-center bg-gray-5 text-gray-5-foreground rounded-md px-1.5 py-0.5 gap-2"
+            >
+              <div className="flex items-center gap-0.5">
+                <Input
+                  type="number"
+                  min={0}
+                  size="xs"
+                  className="w-7 sm:w-8 text-center"
+                  {...register(`details.${index}.count`, {
+                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                  })}
+                />
+                <span>X</span>
+              </div>
+              <div className="flex items-center gap-0.5">
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  size="xs"
+                  className="w-7 sm:w-8 text-center"
+                  {...register(`details.${index}.percent`, {
+                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                  })}
+                />
+                <span>%</span>
+              </div>
+              <Button variant="plain" size="icon-xs" onClick={() => remove(index)} type="button">
+                <Close />
+              </Button>
+            </div>
+          ))}
+          <Button
+            variant="plain"
+            size="icon-xs"
+            onClick={() =>
+              append({
+                id: crypto.randomUUID(),
+                count: 1,
+                percent: 0
+              })
+            }
+            type="button"
+          >
+            <Plus />
+          </Button>
+        </div>
+        {!!errors.details && <FieldError>{errors.details.message}</FieldError>}
+      </Field>
       <div className="space-y-3">
         <FieldTitle title="Create Empty Baskets." />
         <Field>
           <FieldLabel>Empty Baskets</FieldLabel>
-          <InputGroup className="max-w-70 w-full" variant="bordered">
+          <InputGroup
+            className="max-w-70 w-full"
+            variant="bordered"
+            aria-invalid={!!errors.emptyBaskets}
+          >
             <InputGroupInput
               {...register('emptyBaskets', { valueAsNumber: true })}
               type="number"

@@ -1,16 +1,12 @@
 import { Info } from '@ergo-raffle/icons';
+import { Progress, Skeleton, Tooltip, Typography } from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
-
-import { Progress } from './Progress';
-import { Skeleton } from './Skeleton';
-import { Tooltip } from './Tooltip';
-import { Typography } from './Typography';
 
 export type RaisedAmounts = {
   current: string;
   target: string;
-  verified: boolean;
+  isVerified: boolean;
 };
 
 export type RaiseProgressProps = {
@@ -19,7 +15,7 @@ export type RaiseProgressProps = {
     raised: number;
     goal: number;
   };
-  token?: { id: string; name: string; decimals: number; verified: boolean };
+  token?: { id: string; name: string; decimals: number; isVerified: boolean };
 };
 
 export const RaiseProgress = ({ loading, amount, token }: RaiseProgressProps) => (
@@ -31,7 +27,7 @@ export const RaiseProgress = ({ loading, amount, token }: RaiseProgressProps) =>
       <Typography variant="body-md" className="text-gray-2 flex items-center gap-x-1">
         <span className="text-black-1">{getDecimalString(amount?.raised, token?.decimals)}</span>{' '}
         {token?.name || ''}{' '}
-        {!token?.verified && (
+        {!token?.isVerified && (
           <Tooltip content="Not verified">
             <Info className="size-3.5 text-alert" />
           </Tooltip>

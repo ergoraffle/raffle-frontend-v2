@@ -2,7 +2,9 @@
 
 import type { BasketGift, TokenSummary } from '@ergo-raffle/client';
 import { Verified } from '@ergo-raffle/icons';
-import { getDecimalString, Typography } from '@ergo-raffle/ui-kit';
+import { Typography } from '@ergo-raffle/ui-kit';
+
+import { getDecimalString } from '@/lib';
 
 export type GiftItemProps = {
   gift: BasketGift;
@@ -15,7 +17,7 @@ export const GiftItem = ({ gift, giftToken }: GiftItemProps) => (
       <Typography variant="body-lg">
         {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
       </Typography>
-      {!!giftToken?.verified && <Verified className="text-primary-1 size-6" />}
+      {!!giftToken?.isVerified && <Verified className="text-primary-1 size-6" />}
     </div>
   </div>
 );

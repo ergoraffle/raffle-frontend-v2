@@ -35,7 +35,7 @@ export const RaffleList = async ({ params, limit, pined }: Props) => {
       {!limit && (
         <div className="flex justify-end lg:justify-between items-center mb-2 lg:mb-5">
           <Typography variant="heading-5" className="hidden lg:block">
-            {total > items.length && `Showing ${items.length} of ${total} Raffles:`}
+            Showing {items.length} of {total} Raffles:
           </Typography>
           <RafflesSort />
         </div>
@@ -54,7 +54,7 @@ export const RaffleList = async ({ params, limit, pined }: Props) => {
       {limit && total > limit && (
         <SeeMoreLink href={`/raffles${params ? `?${toQueryString(params)}` : ''}`} />
       )}
-      {!limit && total > items.length && <RafflesPagination total={total} />}
+      {!limit && <RafflesPagination total={total} />}
     </div>
   );
 };

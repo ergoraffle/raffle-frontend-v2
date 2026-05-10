@@ -1,4 +1,4 @@
-import type { RaffleActivityResponse, WinnerBasketDetailResponse } from '@ergo-raffle/client';
+import type { BasketTransaction, RaffleActivityResponse } from '@ergo-raffle/client';
 
 export const raffleActivity: RaffleActivityResponse = {
   items: [
@@ -63,38 +63,24 @@ export const raffleActivity: RaffleActivityResponse = {
   total: 6
 };
 
-export const winnerBasketDetail: WinnerBasketDetailResponse = {
-  index: 2,
-  sharePercent: 60,
-  shareAmount: 100,
-  type: 'shared',
-  tokenId: 'tgksfsdfjfsdjfsdncsjdncsdjfsnjfsnfdsjfnsjfnsjfnsjf',
-  tokenName: 'erg',
-  gifts: [
-    {
-      tokenId: 'sfsdfsdfsfsfsf',
-      amount: 50
-    }
-  ],
-  transactions: [
-    {
-      id: '123',
-      amount: 129,
-      type: 'asset_unwrap',
-      wallet: '9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK',
-      address: 'seffdcsfsfsfsdfsdfsdfsfsdgfhyyjhgjhujdthdgdg',
-      createdAt: '2026-03-23T00:32:00Z'
-    },
-    {
-      id: '456',
-      amount: 2,
-      type: 'ticket_won',
-      wallet: '9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK',
-      address: 'seffdcsfsfsfsdfsdfsdfsfsdgfhyyjhgjhujdthdgdg',
-      createdAt: '2026-03-23T00:32:00Z'
-    }
-  ]
-};
+export const winnerBasketTransactions: BasketTransaction[] = [
+  {
+    id: '123',
+    amount: 129,
+    type: 'asset_unwrap',
+    wallet: '9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK',
+    address: 'seffdcsfsfsfsdfsdfsdfsfsdgfhyyjhgjhujdthdgdg',
+    createdAt: '2026-03-23T00:32:00Z'
+  },
+  {
+    id: '456',
+    amount: 2,
+    type: 'ticket_won',
+    wallet: '9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK9i2AVTdK',
+    address: 'seffdcsfsfsfsdfsdfsdfsfsdgfhyyjhgjhujdthdgdg',
+    createdAt: '2026-03-23T00:32:00Z'
+  }
+];
 
 export const activities: RaffleActivityResponse = {
   items: [

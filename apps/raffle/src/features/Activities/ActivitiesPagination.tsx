@@ -15,6 +15,7 @@ export const ActivitiesPagination = ({ total }: ActivitiesPaginationProps) => {
     <Pagination
       page={page}
       perPage={perPage}
+      perPageStep={12}
       onChangePerPage={(value) => setParam('perPage', value.toString())}
       getPageHref={getPageLink}
       total={total}

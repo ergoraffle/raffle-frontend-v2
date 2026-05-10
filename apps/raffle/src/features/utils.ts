@@ -7,7 +7,7 @@ export const getRafflesParamsTransformer = (searchParams: {
 }): GetRaffleParams => {
   const { page, perPage, ...params } = searchParams;
   const limit = perPage ? Number(perPage) : 12;
-  const offset = page && perPage ? Number(page) * Number(perPage) - 1 : 0;
+  const offset = page ? (Number(page) - 1) * Number(perPage ?? 12) : 0;
   return { ...params, offset, limit };
 };
 

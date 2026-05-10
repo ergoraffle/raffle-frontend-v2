@@ -13,21 +13,23 @@ import {
 import type { NautilusWallet } from '@ergo-raffle/nautilus-wallet';
 import type { XverseWallet } from '@ergo-raffle/xverse-wallet';
 
-import { type WalletInstance, type WalletName, wallets } from '@/lib';
+import { type WalletInstance, type WalletName, wallets as walletInstances } from '@/lib';
 
 export type WalletContextValue = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
   addresses?: Record<string, string>;
   wallets: WalletInstance[];
   selected?: WalletInstance;
   connecting?: boolean;
   agreed?: boolean;
-  error?: unknown;
   ergoAddress?: string;
   candidate?: WalletName;
   setCandidate: (candidate: WalletName | undefined) => void;
   setErgoAddress: (ergoAddress: string | undefined) => void;
   connect: (name: WalletName | undefined) => Promise<void>;
-  disconnect: () => Promise<void>;
+  openDialog: (names?: WalletName[]) => Promise<WalletInstance | undefined>;
+  closeDialog: () => Promise<void>;
   agree: () => void;
 
   ensureConnected(name: 'Nautilus'): NautilusWallet;
@@ -47,55 +49,76 @@ export const useWallet = () => {
 };
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
+  const [open, setOpen] = useState(false);
+
+  const [dialogResolver, setDialogResolver] = useState<((value?: WalletInstance) => void) | null>(
+    null
+  );
+
   const [addresses, setAddresses] = useState<Record<string, string>>();
-  const [error, setError] = useState<unknown>();
   const [connecting, setConnecting] = useState<boolean>();
   const [ergoAddress, setErgoAddress] = useState<string>();
   const [candidate, setCandidate] = useState<WalletName>();
   const [agreed, setAgreed] = useState<boolean>();
   const [selected, setSelected] = useState<WalletInstance>();
+  const [wallets, setWallets] = useState<WalletInstance[]>(walletInstances);
 
   const agree = useCallback(() => {
     setAgreed(true);
   }, []);
 
-  const connect = useCallback(async (name?: WalletName) => {
-    setSelected(undefined);
+  const connect = useCallback(
+    async (name?: WalletName) => {
+      setSelected(undefined);
 
-    const wallet = wallets.find((wallet) => wallet.name === name);
+      const wallet = wallets.find((wallet) => wallet.name === name);
 
-    if (!wallet) return;
+      if (!wallet) return;
 
-    setConnecting(true);
+      setConnecting(true);
 
-    try {
-      await wallet.connect();
+      try {
+        await wallet.connect();
 
-      const addresses = await wallet.getAddresses();
+        const addresses = await wallet.getAddresses();
 
-      setAddresses(addresses);
+        setAddresses(addresses);
 
-      setSelected(wallet);
+        setSelected(wallet);
 
-      localStorage.setItem('raffle:wallet', wallet.name);
-    } catch (error) {
-      setError(error);
-    }
+        localStorage.setItem('raffle:wallet', wallet.name);
 
-    setConnecting(false);
-  }, []);
+        setOpen(false);
+        dialogResolver?.(wallet);
+        setDialogResolver(null);
 
-  const disconnect = useCallback(async () => {
-    if (!selected) return;
+        setConnecting(false);
+      } catch (error) {
+        setConnecting(false);
+        throw error;
+      }
+    },
+    [dialogResolver, wallets]
+  );
 
-    selected
-      .disconnect()
-      .then(() => {
-        setSelected(undefined);
-        localStorage.removeItem('raffle:wallet');
-      })
-      .catch(setError);
-  }, [selected]);
+  const openDialog = useCallback(
+    async (names?: WalletName[]): Promise<WalletInstance | undefined> => {
+      if (names?.length) {
+        setWallets(walletInstances.filter((wallet) => names.includes(wallet.name)));
+      }
+      setOpen(true);
+      return new Promise<WalletInstance | undefined>((resolve) => {
+        setDialogResolver(() => resolve);
+      });
+    },
+    []
+  );
+
+  const closeDialog = useCallback(async () => {
+    setOpen(false);
+    dialogResolver?.(undefined);
+    setDialogResolver(null);
+  }, [dialogResolver]);
 
   const ensureConnected = useCallback(
     (name: WalletName) => {
@@ -147,10 +170,12 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       setConnecting(false);
     })();
-  }, []);
+  }, [wallets]);
 
   const value = useMemo(
     () => ({
+      open,
+      setOpen,
       candidate,
       setCandidate,
       ergoAddress,
@@ -158,26 +183,28 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       addresses,
       agreed,
       connecting,
-      error,
       selected,
       wallets,
-      disconnect,
       connect,
+      openDialog,
       agree,
+      closeDialog,
       ensureConnected
     }),
     [
+      open,
       addresses,
       candidate,
       agreed,
       agree,
       connecting,
-      error,
       selected,
       ergoAddress,
-      disconnect,
       connect,
-      ensureConnected
+      openDialog,
+      ensureConnected,
+      closeDialog,
+      wallets
     ]
   );
 

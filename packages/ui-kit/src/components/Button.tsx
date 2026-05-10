@@ -22,7 +22,7 @@ export const buttonVariants = cva(
         white:
           'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground typo-body-lg',
         primary:
-          'bg-primary-1 text-primary-1-foreground hover:bg-primary-2 hover:text-primary-2-foreground typo-body-button-bold',
+          'bg-primary-1 text-primary-1-foreground hover:bg-primary-2 hover:text-primary-2-foreground typo-body-button-bold disabled:opacity-100 disabled:bg-primary-1/25',
         'primary-soft':
           'bg-primary-6 text-primary-6-foreground hover:bg-primary-4 hover:text-primary-4-foreground typo-heading-5',
         success:
@@ -30,11 +30,11 @@ export const buttonVariants = cva(
         error:
           'bg-error-light text-error-light-foreground hover:bg-error-light-hover hover:text-error-light-hover-foreground typo-body-lg',
         rounded:
-          'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground shadow-6 rounded-full sm:rounded-full'
+          'bg-white-2 text-white-2-foreground hover:bg-gray-5 hover:text-gray-5-foreground shadow-2 rounded-full sm:rounded-full'
       },
       size: {
         default: 'h-9 sm:h-12 px-2.5 sm:px-3',
-        sm: 'h-7 sm:h-10 px-2.5 sm:px-3',
+        sm: 'h-7.5 sm:h-10 px-2.5 sm:px-3',
         lg: "h-10 sm:h-14 px-2.5 sm:px-3 [&_svg:not([class*='size-'])]:size-6 sm:[&_svg:not([class*='size-'])]:size-7",
         icon: 'size-9 sm:size-12',
         'icon-xs': 'size-7 size-8',

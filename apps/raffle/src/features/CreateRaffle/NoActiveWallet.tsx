@@ -5,7 +5,7 @@ import { WalletButton } from '@/components';
 export const NoActiveWallet = () => (
   <div className="flex flex-col items-center justify-center space-y-4.5 text-center my-3">
     <div>
-      <Typography variant="heading-2">No Active Wallet found.</Typography>
+      <Typography variant="heading-2">No Active Wallet Found</Typography>
       <Typography variant="body-lg">Connect your Ergo wallet to proceed.</Typography>
     </div>
     <WalletButton />
