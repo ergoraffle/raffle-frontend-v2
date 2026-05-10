@@ -1,5 +1,7 @@
 import type { BitcoinRunesUtxo, FeeEstimator } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
+import Axios from 'axios';
+import type { Psbt } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
@@ -20,13 +22,34 @@ import type {
 } from './NetworkTypes';
 
 /**
+ * submits a get request to unisat api
+ * @param path
+ * @returns UnisatResponse
+ */
+export const requestUnisat = async <T>(path: string): Promise<UnisatResponse<T | undefined>> => {
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (process.env.BITCOIN_UNISAT_API_KEY) {
+    Object.assign(headers, {
+      Authorization: `Bearer ${process.env.BITCOIN_UNISAT_API_KEY}`
+    });
+  }
+
+  const response = await Axios.get<UnisatResponse<T | undefined>>(
+    `${process.env.BITCOIN_UNISAT_API}${path}`,
+    { headers }
+  );
+
+  return response.data;
+};
+
+/**
  * @returns Bitcoin fee ratio
  */
-export const getFeeRatio = async () => {
-  // TODO: Get the endpoint from ENV
-  return await fetch(`https://mempool.space/api/fee-estimates`)
-    .then((response) => response.json())
-    .then((data) => data[CONFIRMATION_TARGET]);
+export const getFeeRatio = async (): Promise<number> => {
+  const url = `${process.env.BITCOIN_ESPLORA_API}/api/fee-estimates`;
+  const response = await Axios.get<Record<string, number>>(url);
+  return response.data[CONFIRMATION_TARGET];
 };
 
 /**
@@ -48,11 +71,10 @@ export async function* getAddressRunesUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await fetch(
+      const response = await requestUnisat<UnisatAddressRunesUtxos>(
         `/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`
       );
-      const data = (await response.json()) as UnisatResponse<UnisatAddressRunesUtxos | undefined>;
-      const utxos = data.data?.utxo ?? [];
+      const utxos = response.data?.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
@@ -102,11 +124,10 @@ export async function* getAddressAvailableBtcUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await fetch(
+      const response = await requestUnisat<UnisatAddressAvailableBtcUtxos>(
         `/v1/indexer/address/${address}/available-utxo-data?cursor=${offset}&size=${limit}`
       );
-      const data = (await response.json()) as UnisatResponse<UnisatAddressAvailableBtcUtxos>;
-      const utxos = data.data?.utxo ?? [];
+      const utxos = response.data?.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
@@ -149,11 +170,10 @@ export async function* getAddressAllBtcUtxos(
 
   while (hasMorePages) {
     try {
-      const response = await fetch(
+      const response = await requestUnisat<UnisatAddressBtcUtxos>(
         `/v1/indexer/address/${address}/all-utxo-data?cursor=${offset}&size=${limit}`
       );
-      const data = (await response.json()) as UnisatResponse<UnisatAddressBtcUtxos>;
-      const utxos = data.data?.utxo ?? [];
+      const utxos = response.data?.utxo ?? [];
       if (utxos.length < limit) {
         hasMorePages = false;
       }
@@ -187,13 +207,11 @@ export async function* getAddressAllBtcUtxos(
 export async function* getEsploraAddressUtxos(
   address: string
 ): AsyncGenerator<BitcoinRunesUtxo, undefined> {
-  // TODO: this endpoint is exactly the one that is used in Bitcoin codes.
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
-  const response = await fetch(GET_ADDRESS_UTXOS);
+  const url = `${process.env.BITCOIN_ESPLORA_API}/api/address/${address}/utxo`;
 
-  const data = (await response.json()) as Array<EsploraUtxo>;
-  for (const record of data) {
+  const response = await Axios.get<Array<EsploraUtxo>>(url);
+
+  for (const record of response.data) {
     yield {
       txId: record.txid,
       index: record.vout,
@@ -202,6 +220,22 @@ export async function* getEsploraAddressUtxos(
     };
   }
 }
+
+/**
+ * gets utxos by address from Esplora
+ * @param address
+ * @returns
+ */
+export const getAddressUtxos = async (address: string) => {
+  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+  const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
+  const res = await Axios.get<Array<EsploraUtxo>>(GET_ADDRESS_UTXOS);
+  return res.data.map((utxo) => ({
+    txId: utxo.txid,
+    index: utxo.vout,
+    value: BigInt(utxo.value)
+  }));
+};
 
 /**
  * generates fee estimator for tx based on the OP_RETURN data length and type of the inputs and outputs
@@ -270,4 +304,15 @@ const estimateTxVsize = (
     taprootOutputSize * TAPROOT_OUTPUT_WEIGHT_UNIT;
 
   return (txBaseWeight + inputsWeight + opReturnWeightUnit + outputWeight) / 4;
+};
+
+/**
+ * submits a transaction
+ */
+export const submitTransaction = async (psbt: Psbt): Promise<string> => {
+  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+  const POST_TX = `${esploraUrl}/api/tx`;
+  psbt.finalizeAllInputs();
+  const res = await Axios.post<string>(POST_TX, psbt.extractTransaction().toHex());
+  return res.data;
 };

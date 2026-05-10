@@ -2,6 +2,9 @@ import { InsufficientAssetsError } from '@ergo-raffle/base-wallet';
 import { BitcoinBoxSelection, generateFeeEstimator } from '@rosen-bridge/bitcoin-utxo-selection';
 import { address, Psbt } from 'bitcoinjs-lib';
 
+import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from '../contants';
+import { getAddressUtxos, getFeeRatio } from '../utils';
+
 const selector = new BitcoinBoxSelection();
 
 export const generateUnsignedTx = async (
@@ -19,19 +22,9 @@ export const generateUnsignedTx = async (
     value: amount
   });
 
-  const utxosRaw: Array<{ txid: string; vout: number; value: number }> = await fetch(
-    `https://blockstream.info/api/address/${fromAddress}/utxo`
-  ).then((response) => response.json());
+  const utxos = await getAddressUtxos(fromAddress);
 
-  const utxos = utxosRaw.map((utxo) => ({
-    txId: utxo.txid,
-    index: utxo.vout,
-    value: BigInt(utxo.value)
-  }));
-
-  const feeRatio = await fetch(`https://blockstream.info/api/fee-estimates`)
-    .then((response) => response.json())
-    .then((data) => data[6]);
+  const feeRatio = await getFeeRatio();
 
   const estimateFee = generateFeeEstimator(1, 42, 272, 124, feeRatio, 4);
 
@@ -43,7 +36,7 @@ export const generateUnsignedTx = async (
     [],
     new Map(),
     utxos.values(),
-    546n, // minSatoshi
+    MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
     undefined,
     estimateFee
   );

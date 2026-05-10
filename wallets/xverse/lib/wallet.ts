@@ -17,6 +17,7 @@ import {
   type XverseWalletConfig,
   type XverseWalletTransferParams
 } from './types';
+import { submitTransaction } from './utils';
 export class XverseWallet extends Wallet<
   XverseWalletConfig,
   XverseWalletAddresses,
@@ -149,10 +150,7 @@ export class XverseWallet extends Wallet<
 
       psbt.finalizeAllInputs();
 
-      const data = await fetch(`https://blockstream.info/api/tx`, {
-        method: 'POST',
-        body: psbt.extractTransaction().toHex()
-      }).then((response) => response.text());
+      const data = await submitTransaction(psbt);
 
       return data;
     } catch (error) {

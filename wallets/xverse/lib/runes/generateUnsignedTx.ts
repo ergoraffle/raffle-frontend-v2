@@ -1,11 +1,12 @@
+import ecc from '@bitcoinerlab/secp256k1';
+import { InsufficientAssetsError } from '@ergo-raffle/base-wallet';
 import * as runelib from '@magiceden-oss/runestone-lib';
 import {
   type AssetBalance,
   BitcoinRunesBoxSelection,
   type BitcoinRunesUtxo
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
-import JsonBigInt from '@rosen-bridge/json-bigint';
-import { address, Psbt } from 'bitcoinjs-lib';
+import { address, initEccLib, Psbt } from 'bitcoinjs-lib';
 
 import {
   MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
@@ -21,6 +22,8 @@ import {
   getEsploraAddressUtxos,
   getFeeRatio
 } from '../utils';
+
+initEccLib(ecc);
 
 export const generateUnsignedTx = async (
   _btcAmount: bigint,
@@ -87,10 +90,7 @@ export const generateUnsignedTx = async (
     () => 0n
   );
   if (!coveredRunesBoxes.covered) {
-    // TODO: handle error in an appropriate way
-    throw new Error(
-      `NotEnoughRunes: Require [${JsonBigInt.stringify(coveredRunesBoxes.uncoveredAssets)}] more assets`
-    );
+    throw new InsufficientAssetsError();
   }
 
   const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
@@ -280,10 +280,7 @@ export const generateUnsignedTx = async (
     );
 
     if (!additionalBoxes.covered) {
-      // TODO: handle error in an appropriate way
-      throw new Error(
-        `NotEnoughBTC: Require [${JsonBigInt.stringify(coveredRunesBoxes.uncoveredAssets)}] more assets`
-      );
+      throw new InsufficientAssetsError();
     }
 
     // add selected boxes

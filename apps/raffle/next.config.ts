@@ -6,6 +6,11 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@ergo-raffle/ui-kit'],
+  env: {
+    BITCOIN_ESPLORA_API: process.env.BITCOIN_ESPLORA_API,
+    BITCOIN_UNISAT_API: process.env.BITCOIN_UNISAT_API,
+    BITCOIN_UNISAT_API_KEY: process.env.BITCOIN_UNISAT_API_KEY
+  },
   images: {
     remotePatterns: [
       new URL(`${process.env.NEXT_PUBLIC_IMAGE_URL}/**`),

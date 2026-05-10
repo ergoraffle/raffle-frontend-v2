@@ -20,11 +20,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0",
     "@ergo-raffle/base-wallet": "^0.0.0",
     "@magiceden-oss/runestone-lib": "^1.0.2",
     "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.1.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^2.0.3",
     "@rosen-bridge/json-bigint": "^1.1.0",
+    "axios": "^1.16.0",
     "bitcoinjs-lib": "^7.0.1",
     "sats-connect": "^3.5.0"
   },
