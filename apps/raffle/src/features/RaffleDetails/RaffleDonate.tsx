@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { RaffleDetailResponse } from '@ergo-raffle/client';
+import type { RaffleDetailResponse, TokensBridgeableResponse } from '@ergo-raffle/client';
 import {
   Button,
   Card,
@@ -13,6 +13,8 @@ import {
   Checkbox,
   Collapsible,
   CollapsibleContent,
+  Dialog,
+  DialogContent,
   Field,
   FieldError,
   FieldLabel,
@@ -28,7 +30,13 @@ import { useForm } from 'react-hook-form';
 
 import { getInfo, getTokensBridgeable } from '@/actions';
 import { useWallet } from '@/hooks';
-import { getDecimalString, getTxURL, saveTransactionId } from '@/lib';
+import {
+  getDecimalString,
+  getTxURL,
+  saveTransactionId,
+  type WalletInstance,
+  type WalletName
+} from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -39,13 +47,21 @@ export type RaffleDonateProps = {
 };
 
 export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
-  const wallet = useWallet();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [recaptcha, setRecaptcha] = useState<string | null>(null);
-  const [siteKey, setSiteKey] = useState<string>();
   const { isMobile } = useBreakpoint();
+
+  const wallet = useWallet();
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [bridgeableData, setBridgeableData] = useState<TokensBridgeableResponse>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [donateTransactionId, setDonateTransactionId] = useState<string>();
+  const [siteKey, setSiteKey] = useState<string>();
+  const [recaptcha, setRecaptcha] = useState<string>();
+  const [network, setNetwork] = useState<'ergo' | 'bitcoin'>();
+
+  const needCaptcha = useMemo(() => wallet.selected?.name === 'Xverse', [wallet.selected]);
 
   const {
     register,
@@ -59,73 +75,108 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
     defaultValues: { terms: false }
   });
 
-  const resetForm = () => {
+  const load = useCallback(() => {
+    setIsLoading(true);
+
+    setBridgeableData(undefined);
+
+    Promise.all([getTokensBridgeable({ tokenId: raffle.token.id }), getInfo()])
+      .then(([bridgeableResponse, infoResponse]) => {
+        setBridgeableData(bridgeableResponse);
+        setSiteKey(infoResponse.siteKey);
+      })
+      .catch((error) => {
+        toast.error('TODO 1', { errorDetails: error });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [raffle]);
+
+  const resetForm = useCallback(() => {
     setTimeout(() => {
       setDonateTransactionId(undefined);
       reset();
     }, 5000);
-  };
+  }, [reset]);
 
-  const loadPrerequisiteData = async () => {
-    try {
-      setIsLoading(true);
+  const selectNetwork = (network: 'ergo' | 'bitcoin') => {
+    setNetwork(network);
+    const names: WalletName[] = [];
 
-      const { bridgeable: isBridgeable } = await getTokensBridgeable({ tokenId: raffle.token.id });
+    if (!bridgeableData) {
+      // do noting
+    } else if (network === 'bitcoin' && bridgeableData.bridgeable) {
+      names.push('Xverse');
+    } else if (network === 'bitcoin' && !bridgeableData.bridgeable) {
+      // do noting
+    } else if (network === 'ergo' && bridgeableData.bridgeable) {
+      names.push('Nautilus');
+    } else if (network === 'ergo' && !bridgeableData.bridgeable) {
+      names.push('Nautilus');
+    }
 
-      setIsLoading(false);
+    setIsOpen(false);
 
-      const instance = await wallet.openDialog(
-        isBridgeable ? ['Nautilus', 'Xverse'] : ['Nautilus']
-      );
-
-      if (!instance) {
-        toast.error('TODO: you should connect to a wallet first');
-        return;
-      }
-
-      if (instance.name === 'Xverse') {
-        try {
-          const info = await getInfo();
-          setSiteKey(info.siteKey);
-        } catch {
-          toast.error('TODO: Failed to load captcha data. Please try again later.');
-          setIsLoading(false);
-          return;
+    wallet
+      .openDialog(names)
+      .then(async (walletInstance) => {
+        if (!walletInstance) {
+          await wallet.closeDialog();
+          setIsOpen(false);
         }
-      }
-
-      setOpenCollapsible(true);
-    } catch {
-      setIsLoading(false);
-      toast.error('TODO: Failed to load data. Please try again later.');
-    }
+        if (walletInstance?.name === 'Nautilus') {
+          setIsOpen(false);
+          setTimeout(() => submit(walletInstance), 0);
+        }
+      })
+      .finally(() => {
+        setIsOpen(true);
+      });
   };
 
-  const onSubmit = async ({ tickets }: RaffleDonateForm) => {
-    try {
-      setIsLoading(true);
-      const txId = await donateRaffle(raffle.id, { tickets, recaptcha }, wallet);
+  const submit = useCallback(
+    async (walletInstance?: WalletInstance) => {
+      try {
+        setIsOpen(false);
 
-      toast.success(
-        <>
-          Raffle donated successfully! Click{' '}
-          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
-            here
-          </Link>{' '}
-          to see details.
-        </>
-      );
+        setIsSubmitting(true);
 
-      saveTransactionId(txId);
+        const txId = await donateRaffle(
+          raffle.id,
+          { tickets: getValues().tickets, recaptcha },
+          walletInstance || wallet.selected
+        );
 
-      setDonateTransactionId(txId);
+        toast.success(
+          <>
+            Raffle donated successfully! Click{' '}
+            <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+              here
+            </Link>{' '}
+            to see details.
+          </>
+        );
 
-      resetForm();
-    } catch (error) {
-      toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
-    } finally {
-      setIsLoading(false);
-    }
+        saveTransactionId(txId);
+
+        setDonateTransactionId(txId);
+
+        resetForm();
+      } catch (error) {
+        toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [getValues, raffle, recaptcha, resetForm, wallet]
+  );
+
+  const onSubmit = () => {
+    setNetwork(undefined);
+    setBridgeableData(undefined);
+    setIsOpen(true);
+    load();
   };
 
   useEffect(() => {
@@ -187,9 +238,6 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                             </FieldLabel>
                             {!!errors.terms && <FieldError>{errors.terms.message}</FieldError>}
                           </div>
-                          {wallet.selected?.name === 'Xverse' && siteKey && (
-                            <ReCAPTCHA sitekey={siteKey} onChange={setRecaptcha} />
-                          )}
                         </Field>
                       </div>
                       <div className="hidden sm:block relative w-1/2">
@@ -208,10 +256,10 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 type="submit"
                 variant="primary"
                 className="w-full"
-                disabled={Boolean(donateTransactionId) || isLoading}
+                disabled={Boolean(donateTransactionId) || isLoading || isSubmitting}
               >
-                {!!isLoading && <Spinner className="size-7" />}
-                Donate
+                {(!!isLoading || isSubmitting) && <Spinner className="size-7" />}
+                {isSubmitting ? 'Submitting' : 'Donate'}
               </Button>
             </form>
           </CollapsibleContent>
@@ -220,10 +268,8 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
               type="button"
               variant="primary"
               className="w-full"
-              disabled={isLoading}
-              onClick={() => loadPrerequisiteData()}
+              onClick={() => setOpenCollapsible(true)}
             >
-              {!!isLoading && <Spinner className="size-7" />}
               Donate
             </Button>
           )}
@@ -239,6 +285,42 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           fill
         />
       </div>
+      <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>
+        <DialogContent>
+          {needCaptcha && (
+            <>
+              {!!isLoading && <div>loading</div>}
+              {!isLoading && (
+                <ReCAPTCHA
+                  sitekey={siteKey || ''}
+                  onChange={(token) => setRecaptcha(token || undefined)}
+                />
+              )}
+              <button disabled={isLoading || isSubmitting} type="button" onClick={() => submit()}>
+                submit
+              </button>
+            </>
+          )}
+          {!network && (
+            <>
+              <button
+                disabled={isLoading || !bridgeableData}
+                type="button"
+                onClick={() => selectNetwork('ergo')}
+              >
+                ergo {!!isLoading && <div>loading</div>}
+              </button>
+              <button
+                disabled={isLoading || !bridgeableData || !bridgeableData.bridgeable}
+                type="button"
+                onClick={() => selectNetwork('bitcoin')}
+              >
+                bitcoin {!!isLoading && <div>loading</div>}
+              </button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
