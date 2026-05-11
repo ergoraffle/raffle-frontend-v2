@@ -13,7 +13,7 @@ export const RaffleShareButton = ({ loading }: RaffleShareButtonProps) => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
-        toast.success('The page Link is copied!');
+        toast.success('The page link is copied!');
       })
       .catch(() => {
         toast.error('Copy failed!');
