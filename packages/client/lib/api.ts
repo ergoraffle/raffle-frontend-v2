@@ -336,6 +336,30 @@ export type GetTokensParams = {
   tokenIds: string[] | string;
 };
 
+export type GetTokensSearchParams = {
+  /**
+   * @minLength 2
+   */
+  query: string;
+  offset?: number;
+  /**
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type GetTokensSearch200ItemsItem = {
+  id: string;
+  name?: string;
+  decimals: number;
+  isVerified: boolean;
+};
+
+export type GetTokensSearch200 = {
+  items: GetTokensSearch200ItemsItem[];
+  total: number;
+};
+
 /**
  * @summary Get startup configuration
  */
@@ -387,6 +411,12 @@ export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: num
 export const getTokens = (params: GetTokensParams) =>
   httpClient<TokensResponse>({ url: `/tokens`, method: 'GET', params });
 
+/**
+ * Returns token information for given query
+ */
+export const getTokensSearch = (params: GetTokensSearchParams) =>
+  httpClient<GetTokensSearch200>({ url: `/tokens/search`, method: 'GET', params });
+
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
@@ -403,3 +433,4 @@ export type GetRafflesRaffleIdBasketBasketIdResult = NonNullable<
   Awaited<ReturnType<typeof getRafflesRaffleIdBasketBasketId>>
 >;
 export type GetTokensResult = NonNullable<Awaited<ReturnType<typeof getTokens>>>;
+export type GetTokensSearchResult = NonNullable<Awaited<ReturnType<typeof getTokensSearch>>>;
