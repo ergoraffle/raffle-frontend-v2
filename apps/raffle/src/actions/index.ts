@@ -1,20 +1,15 @@
 'use server';
 
 import {
-  configureClient,
   getInfo as getInfoApi,
   getInfoBlockchain as getInfoBlockchainApi,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
   getTokens as getTokensApi,
   getTokensBridgeable as getTokensBridgeableApi,
-  postDonation as postDonationApi
+  postApiDonation as postDonationApi
 } from '@ergo-raffle/client';
 import Axios from 'axios';
-
-configureClient({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL
-});
 
 export const getRaffle = getRaffleRaffleId;
 export const getRaffleBaskets = getRaffleRaffleIdBasket;

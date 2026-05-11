@@ -4,7 +4,7 @@
  * Raffle Service API
  * OpenAPI spec version: 1.0.0
  */
-import { httpClient } from './http';
+import { httpClient } from './httpMain';
 export interface StartupResponse {
   txFee: number;
   version: string;
@@ -245,49 +245,6 @@ export interface RaffleActivity {
   createdAt: number;
 }
 
-export interface InfoResponse {
-  /** Captcha site key for frontend */
-  siteKey: string;
-  /** btc-payment service version */
-  version: string;
-}
-
-export interface TokensBridgeableResponse {
-  /** Requested token ID */
-  tokenId: string;
-  /** Whether the token is bridgeable or not */
-  bridgeable: boolean;
-}
-
-export interface DonationRequest {
-  /**
-   * Number of tickets to buy
-   */
-  ticketCount: number;
-  /**
-   * Raffle Id to donate to
-   * @minLength 1
-   */
-  raffleId: string;
-  /**
-   * Donator address
-   * @minLength 1
-   */
-  donatorAddress: string;
-  /**
-   * Captcha token when captcha validation is enabled
-   * @minLength 1
-   */
-  captchaToken?: string;
-}
-
-export interface DonationResponse {
-  bitcoinAddress?: string;
-  satoshiAmount?: string;
-  tokenId?: string;
-  tokenAmount?: string;
-}
-
 export type GetRaffleParams = {
   offset?: number;
   limit?: number;
@@ -379,13 +336,6 @@ export type GetTokensParams = {
   tokenIds: string[] | string;
 };
 
-export type GetTokensBridgeableParams = {
-  /**
-   * Token ID to check to be bridgeable
-   */
-  tokenId: string;
-};
-
 /**
  * @summary Get startup configuration
  */
@@ -437,19 +387,6 @@ export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: num
 export const getTokens = (params: GetTokensParams) =>
   httpClient<TokensResponse>({ url: `/tokens`, method: 'GET', params });
 
-export const getInfo = () => httpClient<InfoResponse>({ url: `/info`, method: 'GET' });
-
-export const getTokensBridgeable = (params: GetTokensBridgeableParams) =>
-  httpClient<TokensBridgeableResponse>({ url: `/tokens/bridgeable`, method: 'GET', params });
-
-export const postDonation = (donationRequest: DonationRequest) =>
-  httpClient<DonationResponse>({
-    url: `/donation`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: donationRequest
-  });
-
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
@@ -466,8 +403,3 @@ export type GetRafflesRaffleIdBasketBasketIdResult = NonNullable<
   Awaited<ReturnType<typeof getRafflesRaffleIdBasketBasketId>>
 >;
 export type GetTokensResult = NonNullable<Awaited<ReturnType<typeof getTokens>>>;
-export type GetInfoResult = NonNullable<Awaited<ReturnType<typeof getInfo>>>;
-export type GetTokensBridgeableResult = NonNullable<
-  Awaited<ReturnType<typeof getTokensBridgeable>>
->;
-export type PostDonationResult = NonNullable<Awaited<ReturnType<typeof postDonation>>>;

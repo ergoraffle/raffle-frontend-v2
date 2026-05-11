@@ -3,3 +3,7 @@
 @source "../../../../packages/ui-kit/src";
 
 @import "@ergo-raffle/ui-kit/index.css"; 
+
+iframe[src*=recaptcha] {
+  pointer-events: auto;
+}

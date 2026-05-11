@@ -5,7 +5,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { RaffleDetailResponse, TokensBridgeableResponse } from '@ergo-raffle/client';
+import type {
+  RaffleDetailResponse,
+  GetTokensBridgeable200 as TokensBridgeableResponse
+} from '@ergo-raffle/client';
 import { Ergo, Right } from '@ergo-raffle/icons';
 import {
   Button,
@@ -148,7 +151,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
         const txId = await donateRaffle(
           raffle.id,
-          { tickets: getValues().tickets, recaptcha },
+          { tickets: getValues().tickets, recaptcha, isBridgeable: bridgeableData?.bridgeable },
           walletInstance || wallet.selected
         );
 
@@ -175,7 +178,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         setIsSubmitting(false);
       }
     },
-    [getValues, raffle, recaptcha, resetForm, wallet]
+    [getValues, raffle, recaptcha, resetForm, wallet, bridgeableData?.bridgeable]
   );
 
   const onSubmit = () => {
