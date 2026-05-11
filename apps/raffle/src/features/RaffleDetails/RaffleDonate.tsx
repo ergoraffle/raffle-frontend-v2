@@ -349,7 +349,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 </Typography>
               </div>
               <button
-                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5"
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50"
                 disabled={isLoading || !bridgeableData}
                 type="button"
                 onClick={() => selectNetwork('ergo')}
@@ -369,7 +369,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 <Right className="size-6" />
               </button>
               <button
-                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5"
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50"
                 disabled={isLoading || !bridgeableData || !bridgeableData.bridgeable}
                 type="button"
                 onClick={() => selectNetwork('bitcoin')}
