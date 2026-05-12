@@ -7,6 +7,7 @@ import {
   getRaffleRaffleIdBasket,
   getTokens as getTokensApi,
   getTokensBridgeable as getTokensBridgeableApi,
+  getTokensSearch as getTokensSearchApi,
   postApiDonation as postDonationApi
 } from '@ergo-raffle/client';
 import Axios from 'axios';
@@ -34,4 +35,9 @@ export const requestUnisat = async <T>(path: string): Promise<T> => {
   const response = await Axios.get<T>(`${process.env.BITCOIN_UNISAT_API}${path}`, { headers });
 
   return response.data;
+};
+
+export const getTokensSearch: typeof getTokensSearchApi = async (params) => {
+  if (!params.query?.length || params.query.length < 3) return { items: [], total: 0 };
+  return await getTokensSearchApi(params);
 };
