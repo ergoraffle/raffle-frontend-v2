@@ -1,6 +1,6 @@
 'use client';
 
-import type { DonationResponse } from '@ergo-raffle/client';
+import type { PostApiDonation200 as DonationResponse } from '@ergo-raffle/client';
 import type { UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 import {
   AddGiftProxyTxBuilder,
@@ -170,11 +170,11 @@ export const donateRaffle = async (
 
     return await walletInstance.transfer({
       fromAddress: (await walletInstance.getAddresses()).nativeSegWit,
-      toAddress: donationResponse.bitcoinAddress || '',
-      amount: BigInt(donationResponse.satoshiAmount || '0'),
+      toAddress: donationResponse.data.bitcoinAddress || '',
+      amount: BigInt(donationResponse.data.satoshiAmount || '0'),
       token: {
-        id: donationResponse.tokenId || '',
-        amount: BigInt(donationResponse.tokenAmount || '0')
+        id: donationResponse.data.tokenId || '',
+        amount: BigInt(donationResponse.data.tokenAmount || '0')
       }
     });
   }

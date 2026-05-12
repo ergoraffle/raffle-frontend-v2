@@ -26,32 +26,32 @@ import {
 initEccLib(ecc);
 
 export const generateUnsignedTx = async (
-  _btcAmount: bigint,
-  _userNativeSegwitAddress: string,
-  _userTaprootAddress: string,
-  _userTaprootInternalPk: string,
-  _toAddress: string,
-  _tokenId: string,
-  _tokenAmount: bigint,
+  btcAmount: bigint,
+  userNativeSegwitAddress: string,
+  userTaprootAddress: string,
+  userTaprootInternalPk: string,
+  toAddress: string,
+  tokenId: string,
+  tokenAmount: bigint,
   requestUnisat: <T>(path: string) => Promise<T>
 ): Promise<{ psbt: Psbt; signInputs: Record<string, number[]> }> => {
-  const p2wpkhPayment = address.toOutputScript(_userNativeSegwitAddress);
-  const taprootPayment = address.toOutputScript(_userTaprootAddress);
+  const p2wpkhPayment = address.toOutputScript(userNativeSegwitAddress);
+  const taprootPayment = address.toOutputScript(userTaprootAddress);
 
   const requiredAssets: AssetBalance = {
     nativeToken:
       MINIMUM_BTC_FOR_TAPROOT_OUTPUT + // min required Satoshi for Runes change UTxO
       MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT + // min required Satoshi for BTC change UTxO
-      _btcAmount, // required Satoshi for target UTxO
+      btcAmount, // required Satoshi for target UTxO
     tokens: [
       {
-        id: _tokenId,
-        value: _tokenAmount
+        id: tokenId,
+        value: tokenAmount
       }
     ]
   };
 
-  const [blockId, txIndex] = _tokenId.split(':');
+  const [blockId, txIndex] = tokenId.split(':');
   const tokenIdObj = {
     block: BigInt(blockId),
     tx: Number(txIndex)
@@ -76,7 +76,7 @@ export const generateUnsignedTx = async (
   const psbt = new Psbt();
 
   // selection step 1: cover the required Rune only
-  const runesUtxos = getAddressRunesUtxos(requestUnisat, _userTaprootAddress, _tokenId);
+  const runesUtxos = getAddressRunesUtxos(requestUnisat, userTaprootAddress, tokenId);
   const boxSelection = new BitcoinRunesBoxSelection();
   const coveredRunesBoxes = await boxSelection.getCoveringBoxes(
     {
@@ -96,8 +96,8 @@ export const generateUnsignedTx = async (
 
   const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
   const signInputs: Record<string, number[]> = {
-    [_userTaprootAddress]: [...Array(coveredRunesBoxes.boxes.length).keys()], // an array from 0 to the number of selected boxes
-    [_userNativeSegwitAddress]: []
+    [userTaprootAddress]: [...Array(coveredRunesBoxes.boxes.length).keys()], // an array from 0 to the number of selected boxes
+    [userNativeSegwitAddress]: []
   };
 
   coveredRunesBoxes.boxes.forEach((box) => {
@@ -108,7 +108,7 @@ export const generateUnsignedTx = async (
         script: taprootPayment,
         value: box.value
       },
-      tapInternalKey: Buffer.from(_userTaprootInternalPk, 'hex')
+      tapInternalKey: Buffer.from(userTaprootInternalPk, 'hex')
     });
   });
 
@@ -142,7 +142,7 @@ export const generateUnsignedTx = async (
         : estimatedFee;
 
     // generate an iterator on available BTC UTxOs
-    const btcUtxos = getAddressAvailableBtcUtxos(requestUnisat, _userTaprootAddress);
+    const btcUtxos = getAddressAvailableBtcUtxos(requestUnisat, userTaprootAddress);
     const step2FeeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
@@ -171,11 +171,11 @@ export const generateUnsignedTx = async (
           script: taprootPayment,
           value: box.value
         },
-        tapInternalKey: Buffer.from(_userTaprootInternalPk, 'hex')
+        tapInternalKey: Buffer.from(userTaprootInternalPk, 'hex')
       });
     });
 
-    signInputs[_userTaprootAddress].push(
+    signInputs[userTaprootAddress].push(
       ...[...Array(selectedBoxes.length + additionalBoxes.boxes.length).keys()].slice(
         selectedBoxes.length
       )
@@ -201,7 +201,7 @@ export const generateUnsignedTx = async (
         : estimatedFee;
 
     // generate an iterator on user native-segwit UTxOs
-    const nativeSegwitUtxos = getEsploraAddressUtxos(_userNativeSegwitAddress);
+    const nativeSegwitUtxos = getEsploraAddressUtxos(userNativeSegwitAddress);
     const step3FeeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
@@ -233,7 +233,7 @@ export const generateUnsignedTx = async (
       });
     });
 
-    signInputs[_userNativeSegwitAddress].push(
+    signInputs[userNativeSegwitAddress].push(
       ...[...Array(selectedBoxes.length + additionalBoxes.boxes.length).keys()].slice(
         selectedBoxes.length
       )
@@ -260,7 +260,7 @@ export const generateUnsignedTx = async (
 
     // get all utxos
     // generate an iterator on user remaining taproot UTxOs
-    const remainingTaprootUtxos = getAddressAllBtcUtxos(requestUnisat, _userTaprootAddress);
+    const remainingTaprootUtxos = getAddressAllBtcUtxos(requestUnisat, userTaprootAddress);
     const step4FeeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
@@ -293,11 +293,11 @@ export const generateUnsignedTx = async (
           script: taprootPayment,
           value: box.value
         },
-        tapInternalKey: Buffer.from(_userTaprootInternalPk, 'hex')
+        tapInternalKey: Buffer.from(userTaprootInternalPk, 'hex')
       });
     });
 
-    signInputs[_userTaprootAddress].push(
+    signInputs[userTaprootAddress].push(
       ...[...Array(selectedBoxes.length + additionalBoxes.boxes.length).keys()].slice(
         selectedBoxes.length
       )
@@ -323,8 +323,8 @@ export const generateUnsignedTx = async (
   });
   // target UTxO
   psbt.addOutput({
-    script: address.toOutputScript(_toAddress),
-    value: _btcAmount
+    script: address.toOutputScript(toAddress),
+    value: btcAmount
   });
   // add BTC change UTxO
   psbt.addOutput({

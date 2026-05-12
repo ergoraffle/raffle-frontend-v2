@@ -5,7 +5,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { RaffleDetailResponse, TokensBridgeableResponse } from '@ergo-raffle/client';
+import type {
+  RaffleDetailResponse,
+  GetTokensBridgeable200 as TokensBridgeableResponse
+} from '@ergo-raffle/client';
 import { Ergo, Right } from '@ergo-raffle/icons';
 import {
   Button,
@@ -36,6 +39,7 @@ import { useWallet } from '@/hooks';
 import {
   getDecimalString,
   getTxURL,
+  getTxURLForRunes,
   saveTransactionId,
   type WalletInstance,
   type WalletName
@@ -148,15 +152,17 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
         const txId = await donateRaffle(
           raffle.id,
-          { tickets: getValues().tickets, recaptcha },
+          { tickets: getValues().tickets, recaptcha, isBridgeable: bridgeableData?.bridgeable },
           walletInstance || wallet.selected
         );
+
+        const url = network === 'bitcoin' ? getTxURLForRunes(txId) : getTxURL(txId);
 
         toast.success('Raffle donated successfully!', {
           description: (
             <>
               Click{' '}
-              <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+              <Link className="text-primary-1" href={url || ''} target="_blank">
                 here
               </Link>{' '}
               to see details.
@@ -175,7 +181,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         setIsSubmitting(false);
       }
     },
-    [getValues, raffle, recaptcha, resetForm, wallet]
+    [getValues, raffle, recaptcha, resetForm, wallet, bridgeableData?.bridgeable, network]
   );
 
   const onSubmit = () => {
