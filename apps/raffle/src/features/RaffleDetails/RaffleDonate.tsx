@@ -39,6 +39,7 @@ import { useWallet } from '@/hooks';
 import {
   getDecimalString,
   getTxURL,
+  getTxURLForRunes,
   saveTransactionId,
   type WalletInstance,
   type WalletName
@@ -155,11 +156,13 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           walletInstance || wallet.selected
         );
 
+        const url = network === 'bitcoin' ? getTxURLForRunes(txId) : getTxURL(txId);
+
         toast.success('Raffle donated successfully!', {
           description: (
             <>
               Click{' '}
-              <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+              <Link className="text-primary-1" href={url || ''} target="_blank">
                 here
               </Link>{' '}
               to see details.
@@ -178,7 +181,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         setIsSubmitting(false);
       }
     },
-    [getValues, raffle, recaptcha, resetForm, wallet, bridgeableData?.bridgeable]
+    [getValues, raffle, recaptcha, resetForm, wallet, bridgeableData?.bridgeable, network]
   );
 
   const onSubmit = () => {
