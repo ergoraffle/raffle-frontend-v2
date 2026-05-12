@@ -149,8 +149,6 @@ export class XverseWallet extends Wallet<
     try {
       const psbt = Psbt.fromBase64(signedPsbtBase64);
 
-      psbt.finalizeAllInputs();
-
       const data = await submitTransaction(psbt);
 
       return data;
