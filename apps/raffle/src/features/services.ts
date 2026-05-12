@@ -145,6 +145,7 @@ export const donateRaffle = async (
     isBridgeable?: boolean;
     recaptcha?: string;
     tickets: number;
+    ergoAddress?: string;
   },
   walletInstance?: WalletInstance
 ) => {
@@ -159,7 +160,7 @@ export const donateRaffle = async (
 
     try {
       donationResponse = await postDonation({
-        donatorAddress: (await walletInstance.getAddresses()).nativeSegWit,
+        donatorAddress: data.ergoAddress || '',
         raffleId,
         ticketCount: data.tickets,
         captchaToken: data.recaptcha || ''

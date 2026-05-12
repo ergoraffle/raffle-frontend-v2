@@ -42,9 +42,8 @@ export const WalletButton = () => {
   useEffect(() => {
     if (!wallet.open) {
       wallet.setCandidate(undefined);
-      wallet.setErgoAddress(undefined);
     }
-  }, [wallet.open, wallet.setCandidate, wallet.setErgoAddress]);
+  }, [wallet.open, wallet.setCandidate]);
 
   const steps: Record<
     'agreement' | 'wallet' | 'ergoAddress' | 'qr',

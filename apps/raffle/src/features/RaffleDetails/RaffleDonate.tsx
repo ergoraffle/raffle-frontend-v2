@@ -152,7 +152,12 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
         const txId = await donateRaffle(
           raffle.id,
-          { tickets: getValues().tickets, recaptcha, isBridgeable: bridgeableData?.bridgeable },
+          {
+            tickets: getValues().tickets,
+            recaptcha,
+            isBridgeable: bridgeableData?.bridgeable,
+            ergoAddress: wallet.ergoAddress
+          },
           walletInstance || wallet.selected
         );
 
