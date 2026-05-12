@@ -16,29 +16,31 @@ export const CreateRaffleSkeleton = () => (
       <Stepper steps={Array.from({ length: 4 })} activeStepIndex={1} disabled />
     </div>
     <Card className="py-7">
-      <CardContent className="space-y-8">
-        <div className="space-y-3">
-          <Skeleton className="w-1/3 h-3" />
-          <Skeleton className="w-full sm:w-1/2 h-10" />
-        </div>
-        <div className="space-y-3">
-          <Skeleton className="w-1/3 h-3" />
-          <Skeleton className="w-full sm:w-1/2 h-35" />
-        </div>
-        <div className="space-y-3">
-          <Skeleton className="w-1/3 h-3" />
-          <Skeleton className="w-full sm:w-2/3 h-10" />
-        </div>
-        <div className="space-y-3">
-          <Skeleton className="w-50 h-3" />
-          <Skeleton className="w-1/2 sm:w-70 h-30 sm:h-45" />
-        </div>
-        <div className="space-y-3">
-          <Skeleton className="w-28 h-3" />
-          <Skeleton className="w-full sm:w-60 h-10" />
-        </div>
-        <div className="flex justify-end">
-          <Skeleton className="w-full sm:w-60 h-12" />
+      <CardContent>
+        <div className="space-y-8 mx-auto max-w-7xl">
+          <div className="space-y-3">
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-full sm:w-1/2 h-10" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-full sm:w-1/2 h-35" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-full sm:w-2/3 h-10" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="w-50 h-3" />
+            <Skeleton className="w-1/2 sm:w-70 h-30 sm:h-45" />
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="w-28 h-3" />
+            <Skeleton className="w-full sm:w-60 h-10" />
+          </div>
+          <div className="flex justify-end">
+            <Skeleton className="w-full sm:w-60 h-12" />
+          </div>
         </div>
       </CardContent>
     </Card>

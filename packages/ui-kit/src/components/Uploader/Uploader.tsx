@@ -122,7 +122,7 @@ export const Uploader = ({
         {(!maxNumberOfFiles || files.length < maxNumberOfFiles) && (
           // biome-ignore lint/a11y/noStaticElementInteractions: Drag and drop container
           <div
-            className="item image-uploader-item"
+            className="item image-uploader-item flex"
             onDragOver={(e) => {
               e.preventDefault();
             }}
