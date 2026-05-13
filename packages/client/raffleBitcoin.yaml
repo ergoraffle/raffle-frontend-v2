@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: Ergo Raffle API
+  description: API for Ergo Raffle operations
+  version: 0.0.0
+paths:
+  /api/donation:
+    post:
+      tags:
+        - Donation
+      description: Calculate required resources for buying raffle tickets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ticketCount:
+                  type: number
+                  exclusiveMinimum: 0
+                  description: Number of tickets to buy
+                raffleId:
+                  type: string
+                  minLength: 1
+                  description: Raffle Id to donate to
+                donatorAddress:
+                  type: string
+                  minLength: 1
+                  description: Donator address
+                captchaToken:
+                  type: string
+                  minLength: 1
+                  description: Captcha token when captcha validation is enabled
+              required:
+                - ticketCount
+                - raffleId
+                - donatorAddress
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      bitcoinAddress:
+                        type: string
+                      satoshiAmount:
+                        type: string
+                      tokenId:
+                        type: string
+                      tokenAmount:
+                        type: string
+                required:
+                  - success
+                  - message
+                  - data
+  /tokens/bridgeable:
+    get:
+      tags:
+        - Token
+      description: Checks if a token is bridgeable
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tokenId
+          required: true
+          description: Token ID to check to be bridgeable
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tokenId:
+                    type: string
+                    description: Requested token ID
+                  bridgeable:
+                    type: boolean
+                    description: Whether the token is bridgeable or not
+                required:
+                  - tokenId
+                  - bridgeable
+  /info:
+    get:
+      tags:
+        - Info
+      description: Returns captcha site key for frontend
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  siteKey:
+                    type: string
+                    description: Captcha site key for frontend
+                  version:
+                    type: string
+                    description: btc-payment service version
+                required:
+                  - siteKey
+                  - version

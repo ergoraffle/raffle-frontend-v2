@@ -89,13 +89,16 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem('raffle:wallet', wallet.name);
 
         setOpen(false);
+
         dialogResolver?.(wallet);
         setDialogResolver(null);
-
-        setConnecting(false);
       } catch (error) {
-        setConnecting(false);
+        dialogResolver?.(undefined);
+        setDialogResolver(null);
+
         throw error;
+      } finally {
+        setConnecting(false);
       }
     },
     [dialogResolver, wallets]
@@ -103,9 +106,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const openDialog = useCallback(
     async (names?: WalletName[]): Promise<WalletInstance | undefined> => {
-      if (names?.length) {
-        setWallets(walletInstances.filter((wallet) => names.includes(wallet.name)));
-      }
+      setWallets(walletInstances.filter((wallet) => !names || names.includes(wallet.name)));
       setOpen(true);
       return new Promise<WalletInstance | undefined>((resolve) => {
         setDialogResolver(() => resolve);

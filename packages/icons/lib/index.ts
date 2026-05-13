@@ -4,6 +4,7 @@ export { default as AlignLeft } from './align-left.svg?react';
 export { default as AlignRight } from './align-right.svg?react';
 export { default as Basket } from './basket.svg?react';
 export { default as BasketGift } from './basket-gift.svg?react';
+export { default as Bitcoin } from './bitcoin.svg?react';
 export { default as Bold } from './bold.svg?react';
 export { default as Check } from './check.svg?react';
 export { default as Clipboard } from './clipboard.svg?react';
