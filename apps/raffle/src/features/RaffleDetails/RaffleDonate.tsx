@@ -1,11 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-import type { RaffleDetailResponse } from '@ergo-raffle/client';
+import type {
+  RaffleDetailResponse,
+  GetTokensBridgeable200 as TokensBridgeableResponse
+} from '@ergo-raffle/client';
+import { Bitcoin, Ergo, Right } from '@ergo-raffle/icons';
 import {
   Button,
   Card,
@@ -13,6 +17,10 @@ import {
   Checkbox,
   Collapsible,
   CollapsibleContent,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   Field,
   FieldError,
   FieldLabel,
@@ -23,10 +31,19 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 
+import { getInfo, getTokensBridgeable } from '@/actions';
 import { useWallet } from '@/hooks';
-import { getDecimalString, getTxURL, saveTransactionId } from '@/lib';
+import {
+  getDecimalString,
+  getTxURL,
+  getTxURLForRunes,
+  saveTransactionId,
+  type WalletInstance,
+  type WalletName
+} from '@/lib';
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
@@ -37,11 +54,21 @@ export type RaffleDonateProps = {
 };
 
 export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
-  const wallet = useWallet();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
+
+  const wallet = useWallet();
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [bridgeableData, setBridgeableData] = useState<TokensBridgeableResponse>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [openCollapsible, setOpenCollapsible] = useState<boolean>(false);
   const [donateTransactionId, setDonateTransactionId] = useState<string>();
+  const [siteKey, setSiteKey] = useState<string>();
+  const [recaptcha, setRecaptcha] = useState<string>();
+  const [network, setNetwork] = useState<'ergo' | 'bitcoin'>();
+
+  const needCaptcha = useMemo(() => wallet.selected?.name === 'Xverse', [wallet.selected]);
 
   const {
     register,
@@ -55,38 +82,114 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
     defaultValues: { terms: false }
   });
 
-  const resetForm = () => {
+  const load = useCallback(() => {
+    setIsLoading(true);
+
+    setBridgeableData(undefined);
+
+    Promise.all([getTokensBridgeable({ tokenId: raffle.token.id }), getInfo()])
+      .then(([bridgeableResponse, infoResponse]) => {
+        setBridgeableData(bridgeableResponse);
+        setSiteKey(infoResponse.siteKey);
+      })
+      .catch((error) => {
+        toast.error('Failed to load donation data.', { errorDetails: error });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [raffle]);
+
+  const resetForm = useCallback(() => {
     setTimeout(() => {
       setDonateTransactionId(undefined);
       reset();
     }, 5000);
+  }, [reset]);
+
+  const selectNetwork = (network: 'ergo' | 'bitcoin') => {
+    setNetwork(network);
+
+    const names: WalletName[] = [];
+
+    if (network === 'ergo') {
+      names.push('Nautilus');
+    }
+    if (network === 'bitcoin' && bridgeableData?.bridgeable) {
+      names.push('Xverse');
+    }
+
+    setIsOpen(false);
+
+    wallet
+      .openDialog(names)
+      .then(async (walletInstance) => {
+        if (!walletInstance) {
+          await wallet.closeDialog();
+          setIsOpen(false);
+          setNetwork(undefined);
+        }
+        if (walletInstance?.name === 'Nautilus') {
+          setIsOpen(false);
+          setTimeout(() => submit(walletInstance), 0);
+        }
+      })
+      .finally(() => {
+        setIsOpen(true);
+      });
   };
 
-  const onSubmit = async ({ tickets }: RaffleDonateForm) => {
-    try {
-      setIsLoading(true);
-      const txId = await donateRaffle(raffle.id, { tickets }, wallet);
+  const submit = useCallback(
+    async (walletInstance?: WalletInstance) => {
+      try {
+        setIsOpen(false);
 
-      toast.success(
-        <>
-          Raffle donated successfully! Click{' '}
-          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
-            here
-          </Link>{' '}
-          to see details.
-        </>
-      );
+        setIsSubmitting(true);
 
-      saveTransactionId(txId);
+        const txId = await donateRaffle(
+          raffle.id,
+          {
+            tickets: getValues().tickets,
+            recaptcha,
+            isBridgeable: bridgeableData?.bridgeable,
+            ergoAddress: wallet.ergoAddress
+          },
+          walletInstance || wallet.selected
+        );
 
-      setDonateTransactionId(txId);
+        const url = network === 'bitcoin' ? getTxURLForRunes(txId) : getTxURL(txId);
 
-      resetForm();
-    } catch (error) {
-      toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
-    } finally {
-      setIsLoading(false);
-    }
+        toast.success('Raffle donated successfully!', {
+          description: (
+            <>
+              Click{' '}
+              <Link className="text-primary-1" href={url || ''} target="_blank">
+                here
+              </Link>{' '}
+              to see details.
+            </>
+          )
+        });
+
+        saveTransactionId(txId);
+
+        setDonateTransactionId(txId);
+
+        resetForm();
+      } catch (error) {
+        toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [getValues, raffle, recaptcha, resetForm, wallet, bridgeableData?.bridgeable, network]
+  );
+
+  const onSubmit = () => {
+    setNetwork(undefined);
+    setBridgeableData(undefined);
+    setIsOpen(true);
+    load();
   };
 
   useEffect(() => {
@@ -124,6 +227,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                         </div>
                         <Field>
                           <Input
+                            variant="bordered"
                             type="number"
                             min={1}
                             aria-invalid={!!errors.tickets}
@@ -166,10 +270,10 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 type="submit"
                 variant="primary"
                 className="w-full"
-                disabled={Boolean(donateTransactionId) || isLoading}
+                disabled={Boolean(donateTransactionId) || isLoading || isSubmitting}
               >
-                {!!isLoading && <Spinner className="size-7" />}
-                Donate
+                {(!!isLoading || isSubmitting) && <Spinner className="size-7" />}
+                {isSubmitting ? 'Submitting' : 'Donate'}
               </Button>
             </form>
           </CollapsibleContent>
@@ -195,6 +299,106 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           fill
         />
       </div>
+      <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>
+        <DialogContent className="min-w-xl">
+          <DialogHeader>
+            <DialogTitle>Buying {getValues('tickets')} Ticket</DialogTitle>
+          </DialogHeader>
+
+          {needCaptcha && !!network && (
+            <>
+              {!!isLoading && (
+                <div className="flex items-center justify-center">
+                  <Spinner className="ml-2 mr-1 size-4" />
+                  <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                    <span>loading...</span>
+                  </Typography>
+                </div>
+              )}
+              {!isLoading && (
+                <>
+                  <Typography variant="body-lg" className="mb-1">
+                    Please complete the reCAPTCHA to proceed with the purchase.
+                  </Typography>
+                  <ReCAPTCHA
+                    sitekey={siteKey || ''}
+                    onChange={(token) => setRecaptcha(token || undefined)}
+                  />
+                </>
+              )}
+              <Button
+                disabled={isLoading || isSubmitting || !recaptcha}
+                type="button"
+                onClick={() => submit()}
+              >
+                submit
+              </Button>
+            </>
+          )}
+          {!network && (
+            <>
+              <div>
+                <Typography variant="body-lg">
+                  You are about to purchase {getValues('tickets')} tickets for the raffle “
+                  {raffle.name}” how do you wish to proceed?
+                </Typography>
+                <Typography variant="body-sm">
+                  Price per ticket:{' '}
+                  <Typography variant="body-md" asChild>
+                    <span>{`${getDecimalString(raffle.ticketPrice, raffle.token.decimals)} ${raffle.token.name}`}</span>
+                  </Typography>
+                </Typography>
+                <Typography variant="body-sm">
+                  Total:{' '}
+                  <Typography variant="body-md" asChild>
+                    <span>{`${getDecimalString(raffle.ticketPrice * getValues('tickets'), raffle.token.decimals)} ${raffle.token.name}`}</span>
+                  </Typography>
+                </Typography>
+              </div>
+              <button
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50"
+                disabled={isLoading || !bridgeableData}
+                type="button"
+                onClick={() => selectNetwork('ergo')}
+              >
+                <div className="flex items-center gap-2">
+                  <Ergo className="size-6" />
+                  Ergopay{' '}
+                  {!!isLoading && (
+                    <>
+                      <Spinner className="ml-2 mr-1 size-4" />
+                      <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                        <span>loading...</span>
+                      </Typography>
+                    </>
+                  )}
+                </div>
+                <Right className="size-6" />
+              </button>
+              <button
+                className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50"
+                disabled={isLoading || !bridgeableData || !bridgeableData.bridgeable}
+                type="button"
+                onClick={() => selectNetwork('bitcoin')}
+              >
+                <div className="flex items-center gap-2">
+                  <Bitcoin className="size-6" />
+                  Bitcoin Pay{' '}
+                  {!!isLoading && (
+                    <>
+                      <Spinner className="ml-2 mr-1 size-4" />
+                      <Typography asChild variant="subtitle-sm" className="text-gray-2">
+                        <span>loading...</span>
+                      </Typography>
+                    </>
+                  )}
+                </div>
+                <Right className="size-6" />
+              </button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

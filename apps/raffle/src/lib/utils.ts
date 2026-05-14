@@ -117,6 +117,11 @@ export const getTxURL = (tx?: string): string | undefined => {
   return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/transactions/${tx}`;
 };
 
+export const getTxURLForRunes = (tx?: string): string | undefined => {
+  if (!tx) return;
+  return `https://uniscan.cc/tx/${tx}`;
+};
+
 export const saveTransactionId = (value: string) => {
   const stored = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
   let items: string[] = stored ? JSON.parse(stored) : [];
