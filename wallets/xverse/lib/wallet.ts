@@ -1,15 +1,29 @@
-import { Wallet, type WalletToken } from '@ergo-raffle/base-wallet';
+import {
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  type WalletToken
+} from '@ergo-raffle/base-wallet';
+import { Psbt } from 'bitcoinjs-lib';
 import { AddressPurpose, request } from 'sats-connect';
 
+import { generateUnsignedTx as generateUnsignedTxBitcoin } from './bitcoin';
 import { ICON } from './icon';
+import { generateUnsignedTx as generateUnsignedTxRunes } from './runes';
 import {
   NonNativeSegWitAddressError,
   NonTaprootAddressError,
   type XverseWalletAddresses,
-  type XverseWalletConfig
+  type XverseWalletConfig,
+  type XverseWalletTransferParams
 } from './types';
-
-export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddresses> {
+import { submitTransaction } from './utils';
+export class XverseWallet extends Wallet<
+  XverseWalletConfig,
+  XverseWalletAddresses,
+  unknown,
+  XverseWalletTransferParams
+> {
   icon = ICON;
 
   name = 'Xverse' as const;
@@ -84,8 +98,63 @@ export class XverseWallet extends Wallet<XverseWalletConfig, XverseWalletAddress
 
   fetchBoxes = async (): Promise<unknown[]> => [];
 
-  performTransfer = async (): Promise<string> => {
-    throw new Error('Transfer not implemented for Xverse wallet');
+  performTransfer = async (params: XverseWalletTransferParams): Promise<string> => {
+    let generateUnsignedTx: {
+      psbt: Psbt;
+      signInputs: Record<string, number[]>;
+    };
+
+    const addresses = await this.getAddresses();
+    // runes
+    if (params.token) {
+      generateUnsignedTx = await generateUnsignedTxRunes(
+        params.amount,
+        addresses.nativeSegWit,
+        addresses.taproot,
+        addresses.taprootPublicKey,
+        params.toAddress,
+        params.token.id,
+        params.token.amount,
+        this.config.requestUnisat
+      );
+    }
+    // bitcoin
+    else {
+      generateUnsignedTx = await generateUnsignedTxBitcoin(
+        params.amount,
+        addresses.nativeSegWit,
+        params.toAddress
+      );
+    }
+
+    let signedPsbtBase64: string;
+
+    // sign
+    try {
+      const response = await request('signPsbt', {
+        psbt: generateUnsignedTx.psbt.toBase64(),
+        signInputs: generateUnsignedTx.signInputs
+      });
+
+      if (response.status === 'error') {
+        throw response.error;
+      }
+
+      signedPsbtBase64 = response.result.psbt;
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+
+    // submit
+    try {
+      const psbt = Psbt.fromBase64(signedPsbtBase64);
+
+      const data = await submitTransaction(psbt);
+
+      return data;
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 
   fetchBalance = async () => undefined;

@@ -10,7 +10,7 @@ export const ChooseWallet = () => {
     <>
       {wallet.wallets.map((item) => (
         <button
-          className="flex items-center justify-between bg-gray-5 rounded-lg p-2.5"
+          className="flex items-center justify-between bg-gray-5 rounded-lg p-2.5 disabled:opacity-50"
           disabled={!!wallet.connecting}
           key={item.name}
           type="button"

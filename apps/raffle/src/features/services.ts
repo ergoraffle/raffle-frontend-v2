@@ -1,3 +1,6 @@
+'use client';
+
+import type { PostApiDonation200 as DonationResponse } from '@ergo-raffle/client';
 import type { UnsignedErgoTxProxy } from '@ergo-raffle/nautilus-wallet';
 import {
   AddGiftProxyTxBuilder,
@@ -5,9 +8,9 @@ import {
   DonationProxyTxBuilder
 } from '@ergo-raffle/proxy-transactions';
 
-import { getInfoBlockchain, getRaffle } from '@/actions';
+import { getInfoBlockchain, getRaffle, postDonation } from '@/actions';
 import type { WalletContextValue } from '@/hooks';
-import { getNonDecimalString } from '@/lib';
+import { getNonDecimalString, type WalletInstance } from '@/lib';
 
 import type { RaffleForm } from './schemas';
 
@@ -139,15 +142,49 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
 export const donateRaffle = async (
   raffleId: string,
   data: {
+    isBridgeable?: boolean;
+    recaptcha?: string;
     tickets: number;
+    ergoAddress?: string;
   },
-  wallet: WalletContextValue
+  walletInstance?: WalletInstance
 ) => {
+  if (!walletInstance) {
+    throw new Error('Must be connected to a wallet.');
+  }
+
   const raffle = await getRaffleData(raffleId);
 
-  const infoBlockchainData = await getInfoBlockchainData();
+  if (data.isBridgeable && walletInstance.name === 'Xverse') {
+    let donationResponse: DonationResponse | undefined;
 
-  const walletInstance = wallet.ensureConnected('Nautilus');
+    try {
+      donationResponse = await postDonation({
+        donatorAddress: data.ergoAddress || '',
+        raffleId,
+        ticketCount: data.tickets,
+        captchaToken: data.recaptcha || ''
+      });
+    } catch (error) {
+      throw new Error('Failed to load transaction bitcoin data.', { cause: error });
+    }
+
+    return await walletInstance.transfer({
+      fromAddress: (await walletInstance.getAddresses()).nativeSegWit,
+      toAddress: donationResponse.data.bitcoinAddress || '',
+      amount: BigInt(donationResponse.data.satoshiAmount || '0'),
+      token: {
+        id: donationResponse.data.tokenId || '',
+        amount: BigInt(donationResponse.data.tokenAmount || '0')
+      }
+    });
+  }
+
+  if (walletInstance.name !== 'Nautilus') {
+    throw new Error('Failed to donate raffle. Please connect to the Nautilus wallet.');
+  }
+
+  const infoBlockchainData = await getInfoBlockchainData();
 
   // Current chain height
   const chainHeight = infoBlockchainData.height;

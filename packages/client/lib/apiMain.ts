@@ -4,7 +4,7 @@
  * Raffle Service API
  * OpenAPI spec version: 1.0.0
  */
-import { httpClient } from './http';
+import { httpClient } from './httpMain';
 export interface StartupResponse {
   txFee: number;
   version: string;
