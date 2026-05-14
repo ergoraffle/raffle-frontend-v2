@@ -21,7 +21,7 @@ export const useActivityParams = (initialParams?: GetActivityParams) => {
   const [filters, setFilters] = useState<FetchActivityFilters>({
     params: initialParams,
     page: 1,
-    perPage: 5
+    perPage: 6
   });
 
   const offset = (filters.page - 1) * filters.perPage;

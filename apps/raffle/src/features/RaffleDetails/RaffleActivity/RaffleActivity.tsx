@@ -32,7 +32,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
       />
       <div className="space-y-2 mt-4">
         {isLoading ? (
-          Array.from({ length: 5 }).map((_, index) => (
+          Array.from({ length: 6 }).map((_, index) => (
             <RaffleActivityItem key={index.toString()} loading />
           ))
         ) : !isLoading && !data?.items?.length ? (
@@ -51,7 +51,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
           perPage={pagination.perPage}
           onChangePerPage={onChangePerPage}
           onChangePage={onChangePage}
-          perPageStep={5}
+          perPageStep={6}
           total={data.total}
           align="side"
           className="mt-4"
