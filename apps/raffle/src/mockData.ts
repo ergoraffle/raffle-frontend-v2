@@ -1,67 +1,4 @@
-import type { BasketTransaction, RaffleActivityResponse } from '@ergo-raffle/client';
-
-export const raffleActivity: RaffleActivityResponse = {
-  items: [
-    {
-      id: '1',
-      type: 'gift_added',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm'
-    },
-    {
-      id: '2',
-      type: 'basket_won',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm',
-      basketNumber: '5',
-      basketType: 'empty'
-    },
-    {
-      id: '10',
-      type: 'basket_won',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm',
-      basketNumber: '5',
-      basketType: 'shared'
-    },
-    {
-      id: '3',
-      type: 'upvoted',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm'
-    },
-    {
-      id: '4',
-      type: 'downvoted',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm',
-      amount: 5
-    },
-    {
-      id: '5',
-      type: 'raffle_created',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm'
-    },
-    {
-      id: '6',
-      type: 'ticket_bought',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm',
-      amount: 5
-    },
-    {
-      id: '7',
-      type: 'raising_money',
-      createdAt: Date.now(),
-      address: 'efsdvfpafdmvfspfmsvopsmvxsfbdpofmvspzmsbgm',
-      amount: 5,
-      raffleId: '123',
-      raffleName: 'xyz'
-    }
-  ],
-  total: 6
-};
+import type { BasketTransaction } from '@ergo-raffle/client';
 
 export const winnerBasketTransactions: BasketTransaction[] = [
   {
@@ -81,19 +18,3 @@ export const winnerBasketTransactions: BasketTransaction[] = [
     createdAt: '2026-03-23T00:32:00Z'
   }
 ];
-
-export const activities: RaffleActivityResponse = {
-  items: [
-    {
-      id: 'NuIPFgCNvcKlujsiCYWX',
-      type: 'raising_money',
-      address: 'hiHbbfOIxQUF',
-      amount: null,
-      basketType: 'IAGZueiICPFHPsl',
-      raffleName: 'JQQIcKIOJH',
-      raffleId: 'dtciCFPejtYBVUVf',
-      createdAt: 5041485291298592
-    }
-  ],
-  total: 1
-};

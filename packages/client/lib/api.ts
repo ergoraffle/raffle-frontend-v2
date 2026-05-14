@@ -198,53 +198,6 @@ export interface BasketTransaction {
   createdAt: string;
 }
 
-export interface RaffleActivityResponse {
-  /**
-   * @minimum 1
-   * @maximum 1000
-   */
-  total: number;
-  items: RaffleActivity[];
-}
-
-export type RaffleActivityType = (typeof RaffleActivityType)[keyof typeof RaffleActivityType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const RaffleActivityType = {
-  raffle_created: 'raffle_created',
-  ticket_bought: 'ticket_bought',
-  upvoted: 'upvoted',
-  downvoted: 'downvoted',
-  basket_won: 'basket_won',
-  gift_added: 'gift_added',
-  raising_money: 'raising_money'
-} as const;
-
-export type RaffleActivityStatus = (typeof RaffleActivityStatus)[keyof typeof RaffleActivityStatus];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const RaffleActivityStatus = {
-  successful: 'successful',
-  pending: 'pending',
-  canceled: 'canceled'
-} as const;
-
-export interface RaffleActivity {
-  id: string;
-  type: RaffleActivityType;
-  status?: RaffleActivityStatus;
-  address: string;
-  /** @nullable */
-  amount?: number | null;
-  /** @nullable */
-  basketNumber?: string | null;
-  basketType?: string;
-  /** @nullable */
-  raffleName?: string | null;
-  raffleId?: string;
-  createdAt: number;
-}
-
 export type GetRaffleParams = {
   offset?: number;
   limit?: number;
@@ -308,29 +261,70 @@ export const GetRaffleRaffleIdBasketGift = {
   empty: 'empty'
 } as const;
 
-export type GetActivitiesParams = {
+export type GetActivityParams = {
+  address?: string;
   raffleId?: string;
+  types?:
+    | GetActivityTypesAnyOfItem[]
+    | 'creation'
+    | 'donation'
+    | 'gift'
+    | 'ticket_redeem'
+    | 'gift_return';
   offset?: number;
   limit?: number;
-  /**
-   * Filter activity types
-   */
-  type?: GetActivitiesType;
-  /**
-   * Return only activities of the caller
-   */
-  address?: string;
 };
 
-export type GetActivitiesType = (typeof GetActivitiesType)[keyof typeof GetActivitiesType];
+export type GetActivityTypesAnyOfItem =
+  (typeof GetActivityTypesAnyOfItem)[keyof typeof GetActivityTypesAnyOfItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetActivitiesType = {
-  raffle_created: 'raffle_created',
-  ticket_bought: 'ticket_bought',
-  voted: 'voted',
-  gift_added: 'gift_added'
+export const GetActivityTypesAnyOfItem = {
+  creation: 'creation',
+  donation: 'donation',
+  gift: 'gift',
+  ticket_redeem: 'ticket_redeem',
+  gift_return: 'gift_return'
 } as const;
+
+export type GetActivity200ItemsItemType =
+  (typeof GetActivity200ItemsItemType)[keyof typeof GetActivity200ItemsItemType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetActivity200ItemsItemType = {
+  creation: 'creation',
+  donation: 'donation',
+  gift: 'gift',
+  ticket_redeem: 'ticket_redeem',
+  gift_return: 'gift_return'
+} as const;
+
+export type GetActivity200ItemsItemStatus =
+  (typeof GetActivity200ItemsItemStatus)[keyof typeof GetActivity200ItemsItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetActivity200ItemsItemStatus = {
+  success: 'success',
+  failed: 'failed',
+  pending: 'pending'
+} as const;
+
+export type GetActivity200ItemsItem = {
+  address: string;
+  raffleId: string;
+  type: GetActivity200ItemsItemType;
+  ticketCount?: number;
+  txId: string;
+  raffleName?: string;
+  height: number;
+  timestamp?: number;
+  status: GetActivity200ItemsItemStatus;
+};
+
+export type GetActivity200 = {
+  items: GetActivity200ItemsItem[];
+  total: number;
+};
 
 export type GetTokensParams = {
   tokenIds: string[] | string;
@@ -394,12 +388,6 @@ export const getRaffleRaffleIdBasket = (raffleId: string, params?: GetRaffleRaff
   });
 
 /**
- * @summary Get activities
- */
-export const getActivities = (params?: GetActivitiesParams) =>
-  httpClient<RaffleActivityResponse>({ url: `/activities`, method: 'GET', params });
-
-/**
  * @summary Get details of a winner basket
  */
 export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: number) =>
@@ -407,6 +395,12 @@ export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: num
     url: `/raffles/${raffleId}/basket/${basketId}`,
     method: 'GET'
   });
+
+/**
+ * Returns a paginated list of user activities
+ */
+export const getActivity = (params?: GetActivityParams) =>
+  httpClient<GetActivity200>({ url: `/activity`, method: 'GET', params });
 
 export const getTokens = (params: GetTokensParams) =>
   httpClient<TokensResponse>({ url: `/tokens`, method: 'GET', params });
@@ -428,9 +422,9 @@ export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getR
 export type GetRaffleRaffleIdBasketResult = NonNullable<
   Awaited<ReturnType<typeof getRaffleRaffleIdBasket>>
 >;
-export type GetActivitiesResult = NonNullable<Awaited<ReturnType<typeof getActivities>>>;
 export type GetRafflesRaffleIdBasketBasketIdResult = NonNullable<
   Awaited<ReturnType<typeof getRafflesRaffleIdBasketBasketId>>
 >;
+export type GetActivityResult = NonNullable<Awaited<ReturnType<typeof getActivity>>>;
 export type GetTokensResult = NonNullable<Awaited<ReturnType<typeof getTokens>>>;
 export type GetTokensSearchResult = NonNullable<Awaited<ReturnType<typeof getTokensSearch>>>;

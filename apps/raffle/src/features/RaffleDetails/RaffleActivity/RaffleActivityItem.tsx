@@ -1,10 +1,10 @@
-import type { RaffleActivity } from '@ergo-raffle/client';
+import type { GetActivity200ItemsItem } from '@ergo-raffle/client';
 import { Card, CardContent, Identifier, Skeleton, Typography } from '@ergo-raffle/ui-kit';
 
 import { activityRenderMap } from '@/features/activityRenderMap';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime } from '@/lib';
 
-export type RaffleActivityItemProps = { activity?: RaffleActivity; loading?: boolean };
+export type RaffleActivityItemProps = { activity?: GetActivity200ItemsItem; loading?: boolean };
 
 export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProps) => {
   const config = activity ? activityRenderMap[activity.type] : undefined;
@@ -41,7 +41,7 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
             <Skeleton className="h-1.5 w-10" />
           ) : (
             <Typography variant="subtitle-sm">
-              {activity ? formatDateTime(activity.createdAt) : ''}
+              {activity?.timestamp ? formatDateTime(activity.timestamp) : ''}
             </Typography>
           )}
         </CardContent>

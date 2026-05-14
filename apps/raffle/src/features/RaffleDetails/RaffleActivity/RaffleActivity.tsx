@@ -16,9 +16,10 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
     onChangePerPage,
     params,
     onTypeFilterChange,
-    onAddressFilterChange
+    onAddressFilterChange,
+    walletAddress
   } = useActivityParams({ raffleId });
-  const { items, total, isLoading } = useFetchActivity(params);
+  const { data, isLoading } = useFetchActivity(params);
 
   return (
     <>
@@ -27,30 +28,31 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
         params={params}
         onTypeFilterChange={onTypeFilterChange}
         onAddressFilterChange={onAddressFilterChange}
+        hasWalletAddress={Boolean(walletAddress)}
       />
       <div className="space-y-2 mt-4">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, index) => (
             <RaffleActivityItem key={index.toString()} loading />
           ))
-        ) : !isLoading && !items?.length ? (
+        ) : !isLoading && !data?.items?.length ? (
           <div className="flex justify-center items-center grow my-9">
             <Empty>
               <Typography variant="heading-3">No matching results found.</Typography>
             </Empty>
           </div>
         ) : (
-          items?.map((item) => <RaffleActivityItem key={item.id} activity={item} />)
+          data?.items?.map((item) => <RaffleActivityItem key={item.txId} activity={item} />)
         )}
       </div>
-      {!isLoading && items && total ? (
+      {!isLoading && data?.items && data.total ? (
         <Pagination
           page={pagination.page}
           perPage={pagination.perPage}
           onChangePerPage={onChangePerPage}
           onChangePage={onChangePage}
           perPageStep={5}
-          total={total}
+          total={data.total}
           align="side"
           className="mt-4"
         />

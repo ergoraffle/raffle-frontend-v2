@@ -1,10 +1,10 @@
-import type { RaffleActivity } from '@ergo-raffle/client';
-import { Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import type { GetActivity200ItemsItem } from '@ergo-raffle/client';
+import { Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
 
 import { activityRenderMap, activityStatusRenderMap } from '@/features/activityRenderMap';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime } from '@/lib';
 
-export type ActivityItemProps = { activity?: RaffleActivity; loading?: boolean };
+export type ActivityItemProps = { activity?: GetActivity200ItemsItem; loading?: boolean };
 
 export const ActivityItem = ({ activity, loading }: ActivityItemProps) => {
   const config = activity ? activityRenderMap[activity.type] : undefined;
@@ -34,21 +34,13 @@ export const ActivityItem = ({ activity, loading }: ActivityItemProps) => {
                 className={activityStatusRenderMap[activity.status].color}
               >
                 {activityStatusRenderMap[activity.status].text}
-                {activity.status === 'canceled' ? (
-                  <>
-                    ,{' '}
-                    <Button className="p-0 sm:p-0 h-auto sm:h-auto bg-transparent typo-subtitle-md hover:bg-transparent text-alert hover:text-alert hover:underline">
-                      request refund
-                    </Button>
-                  </>
-                ) : null}
               </Typography>
             ) : null}
             {loading ? (
               <Skeleton className="h-1.5 w-10" />
             ) : (
               <Typography variant="subtitle-sm" className="text-gray-2">
-                {activity ? formatDateTime(activity.createdAt) : ''}
+                {activity?.timestamp ? formatDateTime(activity.timestamp * 1000) : ''}
               </Typography>
             )}
           </div>

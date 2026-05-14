@@ -7,4 +7,5 @@ export * from './useFetchWinnerBaskets';
 export * from './useInfoBlockchain';
 export * from './useRafflesParams';
 export * from './useWallet';
+export * from './useWalletAddress';
 export * from './useWinnerBasketsParams';
