@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import {
+  AspectRatio,
   Badge,
   Card,
   CardAction,
@@ -30,21 +31,35 @@ export type RaffleDetailsImageCardProps = {
 
 export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => (
   <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false}>
-    {loading || !raffle?.pictures || !raffle?.pictures.length ? (
-      <CardImageWrapper loading={loading} className="sm:h-81" />
+    {loading ? (
+      <CardImageWrapper loading={loading} />
+    ) : !raffle?.pictures || !raffle?.pictures.length ? (
+      <CardImageWrapper>
+        <AspectRatio ratio={1.75 / 1}>
+          <Image
+            src="/illustrations/imagePlaceholderIllustration.svg"
+            priority
+            alt="Raffle"
+            className="w-full object-contain rounded-tl-md rounded-tr-md"
+            fill
+          />
+        </AspectRatio>
+      </CardImageWrapper>
     ) : (
       <Carousel>
         <CarouselContent>
           {raffle.pictures.map((picture) => (
             <CarouselItem key={picture}>
-              <CardImageWrapper className="sm:h-81">
-                <Image
-                  src={picture}
-                  priority
-                  alt={raffle.name}
-                  className="h-81 w-full object-cover rounded-tl-md rounded-tr-md"
-                  fill
-                />
+              <CardImageWrapper>
+                <AspectRatio ratio={1.75 / 1}>
+                  <Image
+                    src={picture}
+                    priority
+                    alt={raffle.name}
+                    className="w-full object-cover rounded-tl-md rounded-tr-md"
+                    fill
+                  />
+                </AspectRatio>
               </CardImageWrapper>
             </CarouselItem>
           ))}
