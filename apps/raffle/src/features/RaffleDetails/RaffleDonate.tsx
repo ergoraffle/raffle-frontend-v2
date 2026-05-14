@@ -109,18 +109,14 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
 
   const selectNetwork = (network: 'ergo' | 'bitcoin') => {
     setNetwork(network);
+
     const names: WalletName[] = [];
 
-    if (!bridgeableData) {
-      // do noting
-    } else if (network === 'bitcoin' && bridgeableData.bridgeable) {
+    if (network === 'ergo') {
+      names.push('Nautilus');
+    }
+    if (network === 'bitcoin' && bridgeableData?.bridgeable) {
       names.push('Xverse');
-    } else if (network === 'bitcoin' && !bridgeableData.bridgeable) {
-      // do noting
-    } else if (network === 'ergo' && bridgeableData.bridgeable) {
-      names.push('Nautilus');
-    } else if (network === 'ergo' && !bridgeableData.bridgeable) {
-      names.push('Nautilus');
     }
 
     setIsOpen(false);
