@@ -3,7 +3,15 @@ import type {
   GetTokens200ItemsItem
 } from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
-import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import {
+  BasketStatus,
+  Button,
+  Card,
+  CardContent,
+  Identifier,
+  Skeleton,
+  Typography
+} from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
 
@@ -90,8 +98,23 @@ export const RaffleWinnerBasketItem = ({
                       {basket.gifts.slice(0, 2).map((gift) => {
                         const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
                         return (
-                          <Typography key={gift.amount} variant="subtitle-md">
-                            {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
+                          <Typography
+                            key={gift.amount}
+                            variant="subtitle-md"
+                            className="flex gap-1"
+                          >
+                            {giftToken ? (
+                              <>
+                                {`${getDecimalString(gift.amount, giftToken.decimals)}X `}
+                                {giftToken.name || (
+                                  <div className="max-w-20">
+                                    <Identifier value={gift.tokenId} />
+                                  </div>
+                                )}
+                              </>
+                            ) : (
+                              <Typography variant="subtitle-md">Unknown Token Gift</Typography>
+                            )}
                           </Typography>
                         );
                       })}
