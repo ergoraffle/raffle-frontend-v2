@@ -4,10 +4,11 @@
 @import "../components/Uploader/uploader.css";
 @import "./textEditor.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* =========================
    Design Tokens
 ========================= */
-
 @theme {
   /* Shadows */
   --shadow-*: initial;

@@ -1,5 +1,5 @@
 import type { GetRaffle200ItemsItemToken } from '@ergo-raffle/client';
-import { Info } from '@ergo-raffle/icons';
+import { Info, Verified } from '@ergo-raffle/icons';
 import { Progress, Skeleton, Tooltip, Typography } from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
@@ -25,17 +25,31 @@ export const RaiseProgress = ({ loading, amount, token }: RaiseProgressProps) =>
     {loading ? (
       <Skeleton className="w-2/5 h-4 mt-1" />
     ) : (
-      <Typography variant="body-md" className="text-gray-2 flex items-center gap-x-1">
-        <span className="text-black-1">{getDecimalString(amount?.raised, token?.decimals)}</span>{' '}
-        {token?.name || ''}{' '}
-        {!token?.isVerified && (
-          <Tooltip content="Not verified">
-            <Info className="size-3.5 text-alert" />
-          </Tooltip>
-        )}{' '}
-        raised of{' '}
-        <span className="text-black-1">{getDecimalString(amount?.goal, token?.decimals)}</span>
-      </Typography>
+      <div className="flex">
+        <Tooltip
+          disabled={token?.id.toLowerCase() === 'erg'}
+          content={
+            <div className="space-y-2">
+              <Typography variant="subtitle-sm" className="text-gray-3">
+                {token?.isVerified ? 'Verified token' : 'Unverified token'}
+              </Typography>
+              <Typography variant="subtitle-sm" className="text-gray-2">
+                {token?.id}
+              </Typography>
+            </div>
+          }
+        >
+          <Typography variant="body-md" className="text-gray-2 flex items-center gap-x-1">
+            <span className="text-black-1">
+              {getDecimalString(amount?.raised, token?.decimals)}
+            </span>{' '}
+            {token?.name || ''} {!token?.isVerified && <Info className="size-3.5 text-alert" />}{' '}
+            raised of{' '}
+            <span className="text-black-1">{getDecimalString(amount?.goal, token?.decimals)}</span>{' '}
+            {!!token?.isVerified && <Verified className="size-5 text-primary-1" />}
+          </Typography>
+        </Tooltip>
+      </div>
     )}
   </div>
 );
