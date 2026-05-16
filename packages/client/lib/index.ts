@@ -1,2 +1,3 @@
-export * from './api';
-export * from './http';
+export * from './apiBitcoin';
+export * from './apiMain';
+export * from './types';

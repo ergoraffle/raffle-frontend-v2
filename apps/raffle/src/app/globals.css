@@ -5,3 +5,7 @@
 @import "@ergo-raffle/ui-kit/index.css"; 
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+iframe[src*=recaptcha] {
+  pointer-events: auto;
+}

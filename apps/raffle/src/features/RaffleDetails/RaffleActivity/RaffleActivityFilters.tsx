@@ -1,59 +1,55 @@
-import type { GetActivitiesParams, GetActivitiesType } from '@ergo-raffle/client';
-import { Gift, Ticket, Votes } from '@ergo-raffle/icons';
-import { Badge, Field, FieldLabel, Switch } from '@ergo-raffle/ui-kit';
+import type { GetActivity200ItemsItemType, GetActivityParams } from '@ergo-raffle/client';
+import { Gift, Ticket } from '@ergo-raffle/icons';
+import { Badge, Field, FieldLabel, Switch, Tooltip } from '@ergo-raffle/ui-kit';
 
 export type RaffleActivityFilersProps = {
   isLoading?: boolean;
-  params: GetActivitiesParams;
-  onTypeFilterChange: (type: GetActivitiesType) => void;
-  onAddressFilterChange: (type: string | undefined) => void;
+  params: GetActivityParams;
+  onTypeFilterChange: (type: GetActivity200ItemsItemType) => void;
+  onAddressFilterChange: () => void;
+  hasWalletAddress?: boolean;
 };
 
 export const RaffleActivityFilters = ({
   params,
   onTypeFilterChange,
   isLoading,
-  onAddressFilterChange
+  onAddressFilterChange,
+  hasWalletAddress
 }: RaffleActivityFilersProps) => (
   <div>
-    <Field orientation="horizontal">
-      <Switch
-        disabled={isLoading}
-        checked={Boolean(params.address)}
-        onClick={() => onAddressFilterChange(params.address ? undefined : 'Wallet address')}
-      />
-      <FieldLabel>Only my address</FieldLabel>
-    </Field>
+    <div className="flex">
+      <Tooltip content="Must be connected to a wallet" disabled={hasWalletAddress}>
+        <Field orientation="horizontal">
+          <Switch
+            disabled={isLoading || !hasWalletAddress}
+            checked={Boolean(params.address)}
+            onClick={() => onAddressFilterChange()}
+          />
+          <FieldLabel>Only my address</FieldLabel>
+        </Field>
+      </Tooltip>
+    </div>
     <div className="space-x-2 mt-2">
       <Badge
-        variant={params.type === 'ticket_bought' ? 'secondary' : 'elevated'}
+        variant={params.types?.includes('donation') ? 'secondary' : 'elevated'}
         size="lg"
         className="cursor-pointer"
-        onClick={() => onTypeFilterChange('ticket_bought')}
+        onClick={() => onTypeFilterChange('donation')}
         aria-disabled={isLoading}
       >
         <Ticket />
         Tickets
       </Badge>
       <Badge
-        variant={params.type === 'gift_added' ? 'secondary' : 'elevated'}
+        variant={params.types?.includes('gift') ? 'secondary' : 'elevated'}
         size="lg"
         className="cursor-pointer"
-        onClick={() => onTypeFilterChange('gift_added')}
+        onClick={() => onTypeFilterChange('gift')}
         aria-disabled={isLoading}
       >
         <Gift />
         Gifts
-      </Badge>
-      <Badge
-        variant={params.type === 'voted' ? 'secondary' : 'elevated'}
-        size="lg"
-        className="cursor-pointer"
-        onClick={() => onTypeFilterChange('voted')}
-        aria-disabled={isLoading}
-      >
-        <Votes />
-        Votes
       </Badge>
     </div>
   </div>

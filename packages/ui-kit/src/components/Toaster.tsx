@@ -21,7 +21,7 @@ export const Toaster = ({ ...props }: ToasterProps) => (
 );
 
 export const toastVariants = cva(
-  'flex items-start gap-3 w-full rounded-md px-3 py-3.5 shadow-6 [&_svg:not([class*="size-"])]:size-9',
+  'flex items-start gap-3 w-full rounded-md px-3 py-3.5 shadow-6 [&_svg:not([class*="size-"])]:size-9 z-120',
   {
     variants: {
       variant: {
