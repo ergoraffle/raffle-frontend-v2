@@ -11,7 +11,7 @@ export const useActivitiesQuery = (defaults?: { page?: number; perPage?: number 
   const router = useRouter();
 
   const page = Number(searchParams.get('page') ?? defaults?.page ?? 1);
-  const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 12);
+  const perPage = Number(searchParams.get('perPage') ?? defaults?.perPage ?? 6);
 
   const types = searchParams.getAll('types') as GetActivityTypesAnyOfItem[];
   const address = searchParams.get('address') as string;

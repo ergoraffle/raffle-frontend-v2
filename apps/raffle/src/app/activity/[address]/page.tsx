@@ -13,7 +13,7 @@ const ActivityPage = async ({
   const queryParams = await searchParams;
   const { address } = await params;
   return (
-    <Suspense key={JSON.stringify(params)} fallback={<ActivitySkeleton />}>
+    <Suspense key={JSON.stringify(queryParams)} fallback={<ActivitySkeleton />}>
       <Activities params={getActivityParamsTransformer(queryParams)} address={address} />
     </Suspense>
   );

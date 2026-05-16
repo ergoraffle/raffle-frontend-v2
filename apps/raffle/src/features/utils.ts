@@ -14,8 +14,8 @@ export const getActivityParamsTransformer = (searchParams: {
   [key: string]: string | string[] | undefined;
 }): GetActivityParams => {
   const { page, perPage, ...params } = searchParams;
-  const limit = perPage ? Number(perPage) : 12;
-  const offset = page ? (Number(page) - 1) * Number(perPage ?? 12) : 0;
+  const limit = perPage ? Number(perPage) : 6;
+  const offset = page ? (Number(page) - 1) * Number(perPage ?? 6) : 0;
   return { ...params, offset, limit };
 };
 
