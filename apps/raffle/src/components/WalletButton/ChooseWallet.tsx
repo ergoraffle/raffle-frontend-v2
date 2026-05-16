@@ -1,11 +1,27 @@
+import { WalletError } from '@ergo-raffle/base-wallet';
 import { Right } from '@ergo-raffle/icons';
-import { Spinner, Typography } from '@ergo-raffle/ui-kit';
+import { Spinner, Typography, toast } from '@ergo-raffle/ui-kit';
 
 import { useWallet } from '@/hooks';
 import type { WalletName } from '@/lib';
 
 export const ChooseWallet = () => {
   const wallet = useWallet();
+
+  const handleConnect = (name: WalletName) => {
+    if (name === 'Nautilus') {
+      wallet.connect(name).catch((error) => {
+        toast.error('Failed to connect wallet.', {
+          description: error instanceof WalletError ? error.message : undefined,
+          errorDetails: error instanceof WalletError ? undefined : error
+        });
+        wallet.closeDialog();
+      });
+    } else {
+      wallet.setCandidate(name);
+    }
+  };
+
   return (
     <>
       {wallet.wallets.map((item) => (
@@ -14,7 +30,7 @@ export const ChooseWallet = () => {
           disabled={!!wallet.connecting}
           key={item.name}
           type="button"
-          onClick={() => wallet.setCandidate(item.name as WalletName)}
+          onClick={() => handleConnect(item.name as WalletName)}
         >
           <div className="flex items-center gap-3">
             <div className="size-6">
