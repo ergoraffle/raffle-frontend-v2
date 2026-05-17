@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 type ServerHookResult<T> = {
   data: T | null;
@@ -15,33 +15,24 @@ export const createServerHook =
 
     const [error, setError] = useState<unknown>(null);
 
-    const [isLoading, setIsLoading] = useState(false);
-
-    const argsKeyRef = useRef<string>('');
+    const [isLoading, startTransition] = useTransition();
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: make it better
     useEffect(() => {
-      const key = JSON.stringify(args);
+      let mounted = true;
 
-      if (argsKeyRef.current === key) {
-        return;
-      }
+      startTransition(async () => {
+        try {
+          const result = await action(...args);
+          if (mounted) setData(result);
+        } catch (error) {
+          if (mounted) setError(error);
+        }
+      });
 
-      argsKeyRef.current = key;
-
-      setIsLoading(true);
-
-      action(...args)
-        .then((res) => {
-          setData(res);
-          setError(null);
-        })
-        .catch((err) => {
-          setError(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      return () => {
+        mounted = false;
+      };
     }, [action, ...args]);
 
     return {
