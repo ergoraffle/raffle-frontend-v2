@@ -15,17 +15,17 @@ import Axios from 'axios';
 
 import { wrap } from '@/safeServerAction';
 
-const getTokensBase: typeof getTokens = async (params) => {
+const getTokensCore: typeof getTokens = async (params) => {
   if (!params.tokenIds?.length) return { items: [] };
   return await getTokens(params);
 };
 
-const getTokensSearchBase: typeof getTokensSearch = async (params) => {
+const getTokensSearchCore: typeof getTokensSearch = async (params) => {
   if (!params.query?.length || params.query.length < 3) return { items: [], total: 0 };
   return await getTokensSearch(params);
 };
 
-export const requestUnisat = async <T>(path: string): Promise<T> => {
+const requestUnisat = async <T>(path: string): Promise<T> => {
   const headers = { 'Content-Type': 'application/json' };
 
   if (process.env.BITCOIN_UNISAT_API_KEY) {
@@ -46,5 +46,6 @@ export const getActivitySafe = wrap(getActivity, 'getActivity');
 export const getTokensBridgeableSafe = wrap(getTokensBridgeable, 'getTokensBridgeable');
 export const postDonationSafe = wrap(postApiDonation, 'postDonation');
 export const getInfoSafe = wrap(getInfo, 'getInfo');
-export const getTokensSafe = wrap(getTokensBase, 'getTokensBase');
-export const getTokensSearchSafe = wrap(getTokensSearchBase, 'getTokensSearchBase');
+export const getTokensSafe = wrap(getTokensCore, 'getTokens');
+export const getTokensSearchSafe = wrap(getTokensSearchCore, 'getTokensSearch');
+export const requestUnisatSafe = wrap(requestUnisat, 'requestUnisat');
