@@ -81,6 +81,7 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
                         alt={data.name}
                         className="object-cover"
                         fill
+                        sizes="50vw"
                       />
                     )}
                   </div>

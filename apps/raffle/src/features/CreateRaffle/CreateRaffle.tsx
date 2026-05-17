@@ -62,7 +62,7 @@ export const CreateRaffle = () => {
   const resetForm = () => {
     form.reset();
     setActiveStepIndex(0);
-    window.scrollTo(0, 0);
+    typeof window !== 'undefined' && window.scrollTo(0, 0);
   };
 
   const onSubmit = async (data: RaffleForm) => {

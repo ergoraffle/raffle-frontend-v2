@@ -122,7 +122,9 @@ export const RaffleWinnerBasketItem = ({
                                     )}
                                   </>
                                 ) : (
-                                  <Typography variant="subtitle-md">Unknown Token Gift</Typography>
+                                  <Typography variant="subtitle-md" asChild>
+                                    <span>Unknown Token Gift</span>
+                                  </Typography>
                                 )}
                               </Typography>
                             );

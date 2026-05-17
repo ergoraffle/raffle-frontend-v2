@@ -260,6 +260,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                           alt="Donate"
                           fill
                           className="object-contain"
+                          sizes="33vw"
                         />
                       </div>
                     </>
@@ -297,6 +298,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           alt="Donate"
           className={`object-contain object-bottom`}
           fill
+          sizes="33vw"
         />
       </div>
       <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>

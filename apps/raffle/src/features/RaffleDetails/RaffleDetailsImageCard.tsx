@@ -42,6 +42,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
             alt="Raffle"
             className="w-full object-contain rounded-tl-md rounded-tr-md"
             fill
+            sizes="(max-width: 1024px) 100vw,33vw"
           />
         </AspectRatio>
       </CardImageWrapper>
@@ -58,6 +59,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
                     alt={raffle.name}
                     className="w-full object-cover rounded-tl-md rounded-tr-md"
                     fill
+                    sizes="(max-width: 1024px) 100vw,33vw"
                   />
                 </AspectRatio>
               </CardImageWrapper>

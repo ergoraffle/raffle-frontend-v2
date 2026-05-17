@@ -24,11 +24,11 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
   const [expanded, setExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
-  const { isMobile } = useBreakpoint();
+  const { isMobile, isReady } = useBreakpoint();
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || typeof window === 'undefined') return;
 
     const checkOverflow = () => {
       !isOverflowing && setIsOverflowing(el.scrollHeight > el.clientHeight);
@@ -65,7 +65,7 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
       </CardHeader>
       <CardContent>
         <StyledTextPreview
-          className={isMobile && !expanded ? 'line-clamp-3' : ''}
+          className={isReady && isMobile && !expanded ? 'line-clamp-3' : ''}
           ref={ref}
           text={markdownToHtml(raffle.description)}
         />
@@ -74,7 +74,7 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
             variant="plain"
             size="sm"
             className="p-0 mt-2 typo-subtitle-md text-gray-2"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => setExpanded((prev) => !prev)}
           >
             {expanded ? 'Show less' : 'Show more'}
           </Button>

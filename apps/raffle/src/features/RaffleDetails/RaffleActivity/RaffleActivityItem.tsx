@@ -1,3 +1,5 @@
+'use client';
+
 import type { GetActivity200ItemsItem } from '@ergo-raffle/client';
 import { Card, CardContent, Identifier, Skeleton, Typography } from '@ergo-raffle/ui-kit';
 

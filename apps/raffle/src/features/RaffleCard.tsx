@@ -42,8 +42,9 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
             src={raffle?.picture || '/illustrations/imagePlaceholderIllustration.svg'}
             priority
             alt={raffle?.name || 'Raffle'}
-            className={`w-full rounded-tl-md rounded-tr-md ${raffle?.picture ? 'object-cover' : 'object-contain'}`}
+            className={`w-full rounded-tl-md rounded-tr-md ${raffle?.picture ? 'object-cover' : 'object-contain object-center'}`}
             fill
+            sizes="(max-width: 768px) 100vw,(max-width: 1024px) 50vw,33vw"
           />
         </AspectRatio>
       </CardImageWrapper>

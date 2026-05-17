@@ -11,6 +11,7 @@ export const CreateRaffleSkeleton = () => (
         width={500}
         height={190}
         className="hidden sm:block"
+        sizes="50vw"
       />
       <Typography variant="heading-1">Ready to create a new raffle?</Typography>
       <Stepper steps={Array.from({ length: 4 })} activeStepIndex={1} disabled />
