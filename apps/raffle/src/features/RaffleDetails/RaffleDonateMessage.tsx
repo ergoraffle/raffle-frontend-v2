@@ -14,7 +14,12 @@ export const RaffleDonateMessage = ({ transactionId }: RaffleDonateMessageProps)
       Thanks for Contributing
     </Typography>
     <Typography variant="body-md">Transaction Id:</Typography>
-    <Identifier value={transactionId} href={getTxURL(transactionId)} size="lg" />
+    <Identifier
+      value={transactionId}
+      href={getTxURL(transactionId)}
+      size="lg"
+      className="w-80 max-w-full"
+    />
     <Typography variant="body-md">
       Follow up in{' '}
       <Link href="/activities" className="underline hover:text-secondary-1">

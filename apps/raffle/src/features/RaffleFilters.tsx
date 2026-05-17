@@ -106,7 +106,7 @@ export const RafflesFilters = () => {
           <TabsTrigger value={RAFFLE_LIST_TABS.PINED}>{RAFFLE_LIST_TABS.PINED}</TabsTrigger>
         </TabsList>
       </Tabs>
-      <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
+      <div className="flex flex-col lg:flex-row items-center mb-8 lg:mb-16 gap-2 w-full lg:w-fit mx-auto">
         <div className="flex items-center gap-2 w-full lg:w-fit flex-wrap">
           <MultiSelectCombobox
             items={statusFilterItems}
