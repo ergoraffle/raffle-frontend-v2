@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from 'react';
 
-import { Button, Field, FieldError, FieldLabel, Input } from '@ergo-raffle/ui-kit';
+import { WalletError } from '@ergo-raffle/base-wallet';
+import { Button, Field, FieldError, FieldLabel, Input, toast } from '@ergo-raffle/ui-kit';
 import { validateAddress } from '@fleet-sdk/core';
 
 import { useWallet } from '@/hooks';
@@ -21,7 +22,15 @@ export const ErgoWalletAddress = () => {
     if (!isValid) return;
 
     wallet.setErgoAddress(address);
-  }, [address, wallet.setErgoAddress]);
+
+    wallet.connect(wallet.candidate).catch((error) => {
+      toast.error('Failed to connect wallet.', {
+        description: error instanceof WalletError ? error.message : undefined,
+        errorDetails: error instanceof WalletError ? undefined : error
+      });
+      wallet.closeDialog();
+    });
+  }, [address, wallet.candidate, wallet.closeDialog, wallet.connect, wallet.setErgoAddress]);
 
   return (
     <>
@@ -36,7 +45,7 @@ export const ErgoWalletAddress = () => {
       </Field>
       <div className="flex items-center justify-between mt-4">
         <Button type="button" className="w-48" onClick={() => wallet.setCandidate(undefined)}>
-          back
+          Back
         </Button>
         <Button
           disabled={!address}
@@ -45,7 +54,7 @@ export const ErgoWalletAddress = () => {
           onClick={handleClick}
           variant="primary-soft"
         >
-          next
+          Next
         </Button>
       </div>
     </>
