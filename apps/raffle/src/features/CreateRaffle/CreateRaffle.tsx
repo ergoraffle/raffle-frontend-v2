@@ -87,7 +87,7 @@ export const CreateRaffle = () => {
     }
   };
 
-  if (infoBlockchain.isLoading || wallet.connecting) return <CreateRaffleSkeleton />;
+  if (infoBlockchain.isLoading) return <CreateRaffleSkeleton />;
   if (!infoBlockchain.data) return null;
 
   const hasNoActiveWallet = !wallet.connecting && wallet?.selected?.name !== 'Nautilus';
