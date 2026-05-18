@@ -13,7 +13,7 @@ export const ActivitySkeleton = () => (
     <CardContent className="space-y-4">
       <ActivityFilers loading />
       <div className="w-full space-y-3">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <ActivityItem loading key={index.toString()} />
         ))}
       </div>

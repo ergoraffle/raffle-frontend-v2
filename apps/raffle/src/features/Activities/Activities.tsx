@@ -1,27 +1,23 @@
-import type { GetActivitiesParams } from '@ergo-raffle/client';
+import { type GetActivityParams, getActivity } from '@ergo-raffle/client';
 import { Card, CardContent, CardHeader, CardTitle, Empty, Typography } from '@ergo-raffle/ui-kit';
-
-import { activities } from '@/mockData';
 
 import { ActivityFilers } from './ActivitiesFilters';
 import { ActivitiesPagination } from './ActivitiesPagination';
 import { ActivityItem } from './ActivityItem';
 
 type ActivityProps = {
-  params?: GetActivitiesParams;
+  params?: GetActivityParams;
+  address?: string;
 };
 
-export const Activities = async ({ params }: ActivityProps) => {
-  // const { items, total } = await getActivities(params);
-  const { items, total } = activities;
+export const Activities = async ({ params, address }: ActivityProps) => {
+  const { items, total } = await getActivity({ ...params, address });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>
           <Typography variant="heading-1">My Activities</Typography>
-          {/* TODO: remove after connecting to api */}
-          {params?.type}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -35,7 +31,7 @@ export const Activities = async ({ params }: ActivityProps) => {
         ) : (
           <div className="space-y-3">
             {items.map((activity) => (
-              <ActivityItem activity={activity} key={activity.id} />
+              <ActivityItem activity={activity} key={activity.txId} />
             ))}
           </div>
         )}
