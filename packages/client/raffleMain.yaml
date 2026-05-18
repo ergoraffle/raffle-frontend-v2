@@ -153,49 +153,6 @@ paths:
 
         '404':
           description: Raffle not found
-  /activities:
-    get:
-      summary: Get activities
-      parameters:
-        - in: query
-          name: raffleId
-          schema:
-            type: string
-
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            default: 0
-
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 10
-
-        - in: query
-          name: type
-          description: Filter activity types
-          schema:
-            type: string
-            enum: [raffle_created, ticket_bought, voted, gift_added]
-          style: form
-          explode: false
-
-        - in: query
-          name: address
-          description: Return only activities of the caller
-          schema:
-            type: string
-
-      responses:
-        '200':
-          description: Raffle activities
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RaffleActivityResponse'
   /raffles/{raffleId}/basket/{basketId}:
     get:
       summary: Get details of a winner basket
@@ -219,6 +176,104 @@ paths:
                 $ref: '#/components/schemas/WinnerBasketDetailResponse'
         '404':
           description: Basket not found
+  /activity:
+    get:
+      tags:
+        - Activity
+      description: Returns a paginated list of user activities
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+        - schema:
+            type: string
+          in: query
+          name: raffleId
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                  enum:
+                    - creation
+                    - donation
+                    - gift
+                    - ticket_redeem
+                    - gift_return
+              - type: string
+                enum:
+                  - creation
+                  - donation
+                  - gift
+                  - ticket_redeem
+                  - gift_return
+          in: query
+          name: types
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        raffleId:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - creation
+                            - donation
+                            - gift
+                            - ticket_redeem
+                            - gift_return
+                        ticketCount:
+                          type: integer
+                          format: int64
+                        txId:
+                          type: string
+                        raffleName:
+                          type: string
+                        height:
+                          type: number
+                        timestamp:
+                          type: number
+                        status:
+                          type: string
+                          enum:
+                            - success
+                            - failed
+                            - pending
+                      required:
+                        - address
+                        - raffleId
+                        - type
+                        - txId
+                        - height
+                        - status
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
   /tokens:
     get:
       parameters:
@@ -692,65 +747,4 @@ components:
         - address
         - createdAt
 
-    #######################
-    # Raffle Activity
-    #######################
-    RaffleActivityResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          minimum: 1
-          maximum: 1000
-          x-faker: 23
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/RaffleActivity'
-      required:
-        - total
-        - items
-
-    RaffleActivity:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-            - raffle_created
-            - ticket_bought
-            - upvoted
-            - downvoted
-            - basket_won
-            - gift_added
-            - raising_money
-        status:
-          type: string
-          enum:
-            - successful
-            - pending
-            - canceled
-        address:
-          type: string
-        amount:
-          type: number
-          nullable: true
-        basketNumber:
-          type: string
-          nullable: true
-        basketType:
-          type: string
-        raffleName:
-          type: string
-          nullable: true
-        raffleId:
-          type: string
-        createdAt:
-          type: integer
-      required:
-        - id
-        - type
-        - address
-        - createdAt
+    

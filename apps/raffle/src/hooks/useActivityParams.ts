@@ -2,43 +2,58 @@
 
 import { useMemo, useState } from 'react';
 
-import type { GetActivitiesParams, GetActivitiesType } from '@ergo-raffle/client';
+import type {
+  GetActivity200ItemsItemType,
+  GetActivityParams,
+  GetActivityTypesAnyOfItem
+} from '@ergo-raffle/client';
+
+import { useWalletAddress } from './useWalletAddress';
 
 export type FetchActivityFilters = {
-  params?: GetActivitiesParams;
+  params?: GetActivityParams;
   page: number;
   perPage: number;
 };
 
-export const useActivityParams = (initialParams?: GetActivitiesParams) => {
+export const useActivityParams = (initialParams?: GetActivityParams) => {
+  const walletAddress = useWalletAddress();
   const [filters, setFilters] = useState<FetchActivityFilters>({
     params: initialParams,
     page: 1,
-    perPage: 5
+    perPage: 6
   });
 
   const offset = (filters.page - 1) * filters.perPage;
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });
-  const onTypeFilterChange = (type: GetActivitiesType) => {
-    if (filters.params?.type === type) {
-      setFilters({ ...filters, params: { ...filters.params, type: undefined } });
+  const onTypeFilterChange = (type: GetActivity200ItemsItemType) => {
+    const filterTypes = filters.params?.types;
+    const currentTypes = typeof filterTypes === 'string' ? [filterTypes] : filterTypes || [];
+    let newTypes: GetActivityTypesAnyOfItem[] = [];
+    if (currentTypes?.includes(type)) {
+      newTypes = currentTypes.filter((t) => t !== type);
     } else {
-      setFilters({ ...filters, params: { ...filters.params, type } });
+      newTypes = [type, ...currentTypes];
     }
+    setFilters({ ...filters, params: { ...filters.params, types: newTypes }, page: 1 });
   };
-  const onAddressFilterChange = (address?: string) => {
-    setFilters({ ...filters, params: { ...filters.params, address } });
+  const onAddressFilterChange = () => {
+    setFilters({
+      ...filters,
+      params: { ...filters.params, address: params.address ? undefined : walletAddress },
+      page: 1
+    });
   };
 
-  const params: GetActivitiesParams = useMemo(
+  const params: GetActivityParams = useMemo(
     () => ({
       ...filters.params,
       offset,
       limit: filters.perPage
     }),
-    [filters.params, filters.params?.type, offset, filters.perPage]
+    [filters.params, offset, filters.perPage]
   );
   return {
     params,
@@ -46,6 +61,7 @@ export const useActivityParams = (initialParams?: GetActivitiesParams) => {
     onChangePage,
     onChangePerPage,
     onTypeFilterChange,
-    onAddressFilterChange
+    onAddressFilterChange,
+    walletAddress
   };
 };

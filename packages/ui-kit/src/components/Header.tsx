@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DotMenuVertical, Recent } from '@ergo-raffle/icons';
 
@@ -19,9 +19,15 @@ export type HeaderProps = {
   links: Array<Link>;
   scrollThreshold?: number;
   connectWalletRender: () => React.ReactNode;
+  activityLink?: string;
 };
 
-export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: HeaderProps) => {
+export const Header = ({
+  links,
+  scrollThreshold = 10,
+  connectWalletRender,
+  activityLink
+}: HeaderProps) => {
   const Link = useFramework().components.Anchor;
   const ConnectWallet = connectWalletRender;
 
@@ -39,6 +45,11 @@ export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: Hea
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrollThreshold]);
+
+  const mobileLinks = useMemo(
+    () => [...(activityLink ? [{ text: 'Activity', href: activityLink }] : []), ...links],
+    [links, activityLink]
+  );
 
   return (
     <header
@@ -62,12 +73,14 @@ export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: Hea
         </ul>
         <div className="flex items-center gap-x-1 lg:gap-x-3">
           <ThemeToggle className="hidden lg:flex" />
-          <Button variant="primary-soft" className="hidden lg:inline-flex" asChild>
-            <Link href="/activity">
-              <Recent />
-              Activity
-            </Link>
-          </Button>
+          {!!activityLink && (
+            <Button variant="primary-soft" className="hidden lg:inline-flex" asChild>
+              <Link href={activityLink}>
+                <Recent />
+                Activity
+              </Link>
+            </Button>
+          )}
           <ConnectWallet />
           <Sheet>
             <SheetTrigger asChild>
@@ -80,7 +93,7 @@ export const Header = ({ links, scrollThreshold = 10, connectWalletRender }: Hea
                 <ThemeToggle />
                 <div className="no-scrollbar overflow-y-auto">
                   <ul className="flex flex-col gap-y-4.5">
-                    {links.map((link) => (
+                    {mobileLinks.map((link) => (
                       <li key={link.href}>
                         <Typography variant="heading-5" asChild>
                           <Link

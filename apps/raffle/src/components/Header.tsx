@@ -2,16 +2,14 @@
 
 import { useMemo } from 'react';
 
-import { Header as HeaderPrimitive, useBreakpoint } from '@ergo-raffle/ui-kit';
+import { Header as HeaderPrimitive } from '@ergo-raffle/ui-kit';
 
 import { WalletButton } from '@/components';
+import { useWalletAddress } from '@/hooks';
 
 export const Header = () => {
-  const { down } = useBreakpoint();
-
-  const isMobile = down('lg');
-
-  const desktopMenuLinks = useMemo(
+  const walletAddress = useWalletAddress();
+  const menuLinks = useMemo(
     () => [
       { text: 'All raffles', href: '/raffles' },
       { text: 'FAQ', href: '/faq' },
@@ -19,19 +17,13 @@ export const Header = () => {
     ],
     []
   );
-  const mobileMenuLinks = useMemo(
-    () => [
-      { text: 'Activity', href: '/activity' },
-      { text: 'All raffles', href: '/raffles' },
-      { text: 'FAQ', href: '/faq' },
-      { text: 'About/Contact', href: '/about' }
-    ],
-    []
-  );
+
+  const activityLink = walletAddress ? `/activity/${walletAddress}` : undefined;
 
   return (
     <HeaderPrimitive
-      links={isMobile ? mobileMenuLinks : desktopMenuLinks}
+      links={menuLinks}
+      activityLink={activityLink}
       connectWalletRender={() => <WalletButton />}
     />
   );
