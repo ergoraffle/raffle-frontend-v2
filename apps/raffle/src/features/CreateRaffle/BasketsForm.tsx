@@ -30,7 +30,8 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     formState: { errors },
     register,
     watch,
-    control
+    control,
+    trigger
   } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
 
   const winnerPotShare = watch('winnerPotShare', 0);
@@ -85,7 +86,8 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
                   size="xs"
                   className="w-7 sm:w-8 text-center"
                   {...register(`details.${index}.count`, {
-                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                    setValueAs: (v) => (v === '' ? undefined : Number(v)),
+                    onChange: () => trigger('details')
                   })}
                 />
                 <span>X</span>
@@ -98,7 +100,8 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
                   size="xs"
                   className="w-7 sm:w-8 text-center"
                   {...register(`details.${index}.percent`, {
-                    setValueAs: (v) => (v === '' ? undefined : Number(v))
+                    setValueAs: (v) => (v === '' ? undefined : Number(v)),
+                    onChange: () => trigger('details')
                   })}
                 />
                 <span>%</span>
