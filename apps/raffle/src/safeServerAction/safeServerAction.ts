@@ -1,11 +1,12 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: fix any types */
-
 import { addKnownErrorConstructor, deserializeError, serializeError } from 'serialize-error';
 
+// biome-ignore lint/suspicious/noExplicitAny: make it better
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
 type CreateSafeActionConfig = {
+  // biome-ignore lint/suspicious/noExplicitAny: make it better
   errors: Record<string, new (...args: any[]) => Error>;
+  // biome-ignore lint/suspicious/noExplicitAny: make it better
   onError: (error: unknown, traceKey?: string, args?: any[]) => Promise<void>;
 };
 
@@ -22,6 +23,7 @@ type Wrap = <Action extends AsyncFunction>(
 type WrapResult<Action extends AsyncFunction> = Promise<{
   cache?: number;
   result?: Awaited<ReturnType<Action>>;
+  // biome-ignore lint/suspicious/noExplicitAny: make it better
   serializedError?: any;
   traceKey: string;
 }>;
