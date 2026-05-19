@@ -105,7 +105,7 @@ export const CardImageWrapper = ({ className, loading, ...props }: CardImageWrap
     <Skeleton className="h-41.75 sm:h-55.75 w-full rounded-none" data-slot="card-image-wrapper" />
   ) : (
     <div
-      className={cn('relative h-41.75 sm:h-55.75 w-full bg-gray-3', className)}
+      className={cn('relative w-full bg-gray-3', className)}
       data-slot="card-image-wrapper"
       {...props}
     />

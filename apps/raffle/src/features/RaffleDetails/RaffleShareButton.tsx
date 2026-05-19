@@ -6,18 +6,13 @@ import { Button, Skeleton, toast } from '@ergo-raffle/ui-kit';
 export type RaffleShareButtonProps = { loading?: boolean };
 
 export const RaffleShareButton = ({ loading }: RaffleShareButtonProps) => {
-  const url = window.location.href;
+  const url = typeof window !== 'undefined' ? window.location.href : '';
 
   const handleCopy = () => {
     if (typeof window === 'undefined') return;
-    navigator.clipboard
-      .writeText(url)
-      .then(() => {
-        toast.success('The page link is copied!');
-      })
-      .catch(() => {
-        toast.error('Copy failed!');
-      });
+    navigator.clipboard.writeText(url).then(() => {
+      toast.success('The page link is copied!');
+    });
   };
 
   const handleShareClick = async () => {

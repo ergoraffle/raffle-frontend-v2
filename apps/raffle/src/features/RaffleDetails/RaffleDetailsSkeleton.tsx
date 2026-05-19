@@ -31,6 +31,7 @@ export const RaffleDetailsSkeleton = () => (
             alt="Donate"
             className="object-contain"
             fill
+            sizes="33vw"
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import type { WinnerBasketSummary } from '@ergo-raffle/client';
+import type { GetRaffleRaffleIdBasket200ItemsItem } from '@ergo-raffle/client';
 import { Left, Right } from '@ergo-raffle/icons';
 import { BasketStatus, Button, Skeleton } from '@ergo-raffle/ui-kit';
 
@@ -9,7 +9,7 @@ export type WinnerBasketSliderProps = {
   onPrevSlide: () => void;
   hasNext: boolean;
   loading?: boolean;
-  basket?: WinnerBasketSummary;
+  basket?: GetRaffleRaffleIdBasket200ItemsItem;
 };
 
 export const WinnerBasketSlider = ({

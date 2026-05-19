@@ -22,7 +22,10 @@ export const useWinnerBasketsParams = () => {
     perPage: 10
   });
 
-  const offset = (filters.page - 1) * filters.perPage;
+  const offset = useMemo(
+    () => (filters.page - 1) * filters.perPage,
+    [filters.page, filters.perPage]
+  );
 
   const onChangePage = (page: number) => setFilters({ ...filters, page });
   const onChangePerPage = (perPage: number) => setFilters({ ...filters, perPage });

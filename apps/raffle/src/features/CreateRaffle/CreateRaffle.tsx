@@ -62,7 +62,7 @@ export const CreateRaffle = () => {
   const resetForm = () => {
     form.reset();
     setActiveStepIndex(0);
-    window.scrollTo(0, 0);
+    typeof window !== 'undefined' && window.scrollTo(0, 0);
   };
 
   const onSubmit = async (data: RaffleForm) => {
@@ -87,7 +87,7 @@ export const CreateRaffle = () => {
     }
   };
 
-  if (infoBlockchain.isLoading || wallet.connecting) return <CreateRaffleSkeleton />;
+  if (infoBlockchain.isLoading) return <CreateRaffleSkeleton />;
   if (!infoBlockchain.data) return null;
 
   const hasNoActiveWallet = !wallet.connecting && wallet?.selected?.name !== 'Nautilus';

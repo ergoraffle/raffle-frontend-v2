@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { type RaffleSummary, RaffleSummaryStatus } from '@ergo-raffle/client';
+import { type GetRaffle200ItemsItem, GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import { GiftPlus, SandClock } from '@ergo-raffle/icons';
 import {
+  AspectRatio,
   Badge,
   Card,
   CardAction,
@@ -24,7 +25,7 @@ import { raffleStatusMap } from './raffleStatusRenderMap';
 import { getDeadlineString } from './utils';
 
 export type RafflesContentProps = {
-  raffle?: RaffleSummary;
+  raffle?: GetRaffle200ItemsItem;
   loading?: boolean;
   deadline?: number;
 };
@@ -35,23 +36,24 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
     className={`flex items-stretch grow ${loading ? 'pointer-events-none' : ''}`}
   >
     <Card className="relative grow w-full" hover>
-      <CardImageWrapper loading={loading} className="h-46 lg:h-67.5 xl:h-68">
-        {raffle?.picture ? (
+      <CardImageWrapper loading={loading}>
+        <AspectRatio ratio={1.75 / 1}>
           <Image
-            src={raffle.picture}
+            src={raffle?.picture || '/illustrations/imagePlaceholderIllustration.svg'}
             priority
-            alt={raffle.name}
-            className="h-46 lg:h-67.5 xl:h-68 w-full object-cover rounded-tl-md rounded-tr-md"
+            alt={raffle?.name || 'Raffle'}
+            className={`w-full rounded-tl-md rounded-tr-md ${raffle?.picture ? 'object-cover' : 'object-contain object-center'}`}
             fill
+            sizes="(max-width: 768px) 100vw,(max-width: 1024px) 50vw,33vw"
           />
-        ) : null}
+        </AspectRatio>
       </CardImageWrapper>
       <CardHeader>
         <CardTitle loading={loading} className="line-clamp-2">
           {raffle?.name}
         </CardTitle>
       </CardHeader>
-      {!loading && raffle?.status && raffle?.status !== RaffleSummaryStatus.active && (
+      {!loading && raffle?.status && raffle?.status !== GetRaffle200ItemsItemStatus.active && (
         <CardAction>
           <Badge variant={raffleStatusMap[raffle.status]?.variant || 'white-outline'} size="sm">
             {raffleStatusMap[raffle.status]?.label || raffle?.status}

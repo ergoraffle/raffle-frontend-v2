@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import type { GetInfoBlockchain200 } from '@ergo-raffle/client';
 import { Lock } from '@ergo-raffle/icons';
 import {
   Button,
@@ -34,7 +34,7 @@ import { FieldTitle } from './FieldTitle';
 export type DonationGoalFormProps = {
   handleNext: () => void;
   handleBack: () => void;
-  infoBlockchain: InfoBlockchainResponse;
+  infoBlockchain: GetInfoBlockchain200;
 };
 
 export const DonationGoalForm = ({

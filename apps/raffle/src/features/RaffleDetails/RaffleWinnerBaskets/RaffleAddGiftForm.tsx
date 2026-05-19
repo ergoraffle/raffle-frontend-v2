@@ -127,15 +127,17 @@ export const RaffleAddGiftForm = ({
 
       const txId = await addGiftRaffle(raffle.id, { winnerIndex, tokens }, wallet);
 
-      toast.success(
-        <>
-          Gifts added successfully! Click{' '}
-          <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
-            here
-          </Link>{' '}
-          to see details.
-        </>
-      );
+      toast.success('Gifts added successfully!', {
+        description: (
+          <>
+            Click{' '}
+            <Link className="text-primary-1" href={getTxURL(txId) || ''} target="_blank">
+              here
+            </Link>{' '}
+            to see details.
+          </>
+        )
+      });
       saveTransactionId(txId);
       onCloseDialog();
     } catch (error) {

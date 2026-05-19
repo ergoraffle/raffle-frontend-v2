@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { getInfoBlockchain, getRaffleRaffleId } from '@ergo-raffle/client';
+import { ApiError, getInfoBlockchain, getRaffleRaffleId } from '@ergo-raffle/client';
 import {
   Card,
   CardContent,
@@ -26,10 +26,14 @@ export type RaffleDetailsProps = {
   raffleId: string;
 };
 export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
-  const raffleServer = await getRaffleRaffleId(raffleId);
   const infoBlockchainData = await getInfoBlockchain();
 
-  if (!raffleServer) return notFound();
+  const raffleServer = await getRaffleRaffleId(raffleId).catch((error) => {
+    if (error instanceof ApiError && error.status === 404) {
+      notFound();
+    }
+    throw error;
+  });
 
   const raffle = raffleToViewModel(raffleServer, infoBlockchainData);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import type { BasketGift, TokenSummary } from '@ergo-raffle/client';
+import type { BasketGift, GetTokens200ItemsItem } from '@ergo-raffle/client';
 import { Verified } from '@ergo-raffle/icons';
 import { Typography } from '@ergo-raffle/ui-kit';
 
@@ -8,7 +8,7 @@ import { getDecimalString } from '@/lib';
 
 export type GiftItemProps = {
   gift: BasketGift;
-  giftToken?: TokenSummary;
+  giftToken?: GetTokens200ItemsItem;
 };
 
 export const GiftItem = ({ gift, giftToken }: GiftItemProps) => (

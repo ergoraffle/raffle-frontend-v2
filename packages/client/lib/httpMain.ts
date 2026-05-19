@@ -1,6 +1,8 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
+import { ApiError } from './types';
+
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.API_BASE_URL,
   paramsSerializer: (params) => {
@@ -25,5 +27,16 @@ const axiosInstance: AxiosInstance = axios.create({
 /**
  * Orval will use this for all requests
  */
-export const httpClient = <T>(config: AxiosRequestConfig): Promise<T> =>
-  axiosInstance.request<T>(config).then((res) => res.data);
+export const httpClient = async <T>(config: AxiosRequestConfig): Promise<T> => {
+  try {
+    const { data } = await axiosInstance.request<T>(config);
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new ApiError(error);
+    }
+
+    throw error;
+  }
+};

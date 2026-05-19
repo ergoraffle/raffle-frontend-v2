@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 
-type Breakpoints = {
-  sm: number;
-  md: number;
-  lg: number;
-  xl: number;
-  '2xl': number;
-};
-
-const breakpoints: Breakpoints = {
+const breakpoints = {
   sm: 640,
   md: 768,
   lg: 1024,
@@ -16,35 +8,43 @@ const breakpoints: Breakpoints = {
   '2xl': 1536
 };
 
-type BreakpointKey = keyof Breakpoints;
+type BreakpointKey = keyof typeof breakpoints;
 
 export const useBreakpoint = () => {
-  const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [width, setWidth] = useState<number | null>(null);
 
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
     handleResize();
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  const up = (bp: BreakpointKey) => width >= breakpoints[bp];
+  const up = (bp: BreakpointKey) => width !== null && width >= breakpoints[bp];
 
-  const down = (bp: BreakpointKey) => width < breakpoints[bp];
+  const down = (bp: BreakpointKey) => width !== null && width < breakpoints[bp];
 
   const between = (min: BreakpointKey, max: BreakpointKey) =>
-    width >= breakpoints[min] && width < breakpoints[max];
+    width !== null && width >= breakpoints[min] && width < breakpoints[max];
 
   return {
+    width,
     up,
     down,
     between,
-    width,
     isSm: between('sm', 'md'),
     isMd: between('md', 'lg'),
     isLg: between('lg', 'xl'),
     isXl: between('xl', '2xl'),
     is2xl: up('2xl'),
-    isMobile: down('md')
+    isMobile: width === null ? false : down('md'),
+    isReady: width !== null
   };
 };

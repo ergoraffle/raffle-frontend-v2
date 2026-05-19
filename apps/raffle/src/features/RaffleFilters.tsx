@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent } from 'react';
 
-import type { GetRaffleStatusItem } from '@ergo-raffle/client';
+import type { GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import { Search } from '@ergo-raffle/icons';
 import {
   Button,
@@ -19,7 +19,7 @@ import { useRafflesQuery } from '@/hooks';
 
 import { TokensFilter } from './TokensFilter';
 
-const statusFilterItems: { value: GetRaffleStatusItem; label: string }[] = [
+const statusFilterItems: { value: GetRaffle200ItemsItemStatus; label: string }[] = [
   {
     value: 'active',
     label: 'Active'
@@ -106,18 +106,20 @@ export const RafflesFilters = () => {
           <TabsTrigger value={RAFFLE_LIST_TABS.PINED}>{RAFFLE_LIST_TABS.PINED}</TabsTrigger>
         </TabsList>
       </Tabs>
-      <div className="flex flex-col lg:flex-row items-center mb-9 lg:mb-18 gap-2 w-full lg:w-fit mx-auto">
+      <div className="flex flex-col lg:flex-row items-center mb-8 lg:mb-16 gap-2 w-full lg:w-fit mx-auto">
         <div className="flex items-center gap-2 w-full lg:w-fit flex-wrap">
           <MultiSelectCombobox
             items={statusFilterItems}
             selected={(params.status as string[]) ?? []}
-            onChange={(values) => setParam('status', values as GetRaffleStatusItem[])}
+            onChange={(values) => setParam('status', values as GetRaffle200ItemsItemStatus[])}
             placeholder="Status"
             closeOnChange
             className="flex-1 lg:flex-auto"
           />
           <TokensFilter
-            value={params.tokenIds ?? []}
+            value={
+              typeof params.tokenIds === 'string' ? [params.tokenIds] : (params.tokenIds ?? [])
+            }
             onChange={(values) => setParam('tokenIds', values)}
           />
         </div>

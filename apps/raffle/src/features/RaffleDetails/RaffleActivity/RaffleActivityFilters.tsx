@@ -1,3 +1,5 @@
+'use client';
+
 import type { GetActivity200ItemsItemType, GetActivityParams } from '@ergo-raffle/client';
 import { Gift, Ticket } from '@ergo-raffle/icons';
 import { Badge, Field, FieldLabel, Switch, Tooltip } from '@ergo-raffle/ui-kit';
