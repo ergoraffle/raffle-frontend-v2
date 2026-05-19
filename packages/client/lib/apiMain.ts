@@ -70,6 +70,10 @@ export type GetInfoBlockchain500 = {
   message: string;
 };
 
+export type GetInfoTagsParams = {
+  query?: string;
+};
+
 export type GetRaffleParams = {
   text?: string;
   tokenIds?: string[] | string;
@@ -371,6 +375,12 @@ export const getInfoBlockchain = () =>
   httpClient<GetInfoBlockchain200>({ url: `/info/blockchain`, method: 'GET' });
 
 /**
+ * Search over tags
+ */
+export const getInfoTags = (params?: GetInfoTagsParams) =>
+  httpClient<string[]>({ url: `/info/tags`, method: 'GET', params });
+
+/**
  * Returns a list of raffles
  */
 export const getRaffle = (params?: GetRaffleParams) =>
@@ -425,6 +435,7 @@ type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 export type GetInfoVersionResult = NonNullable<Awaited<ReturnType<typeof getInfoVersion>>>;
 export type GetInfoBlockchainResult = NonNullable<Awaited<ReturnType<typeof getInfoBlockchain>>>;
+export type GetInfoTagsResult = NonNullable<Awaited<ReturnType<typeof getInfoTags>>>;
 export type GetRaffleResult = NonNullable<Awaited<ReturnType<typeof getRaffle>>>;
 export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRaffleRaffleId>>>;
 export type GetRaffleRaffleIdBasketResult = NonNullable<

@@ -68,6 +68,25 @@ paths:
                     type: string
                 required:
                   - message
+  /info/tags:
+    get:
+      tags:
+        - Info
+      description: Search over tags
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: query
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
   /raffle:
     get:
       tags:
