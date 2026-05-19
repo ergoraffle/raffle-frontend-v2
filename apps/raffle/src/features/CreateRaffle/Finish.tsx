@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { WalletToken } from '@ergo-raffle/base-wallet';
-import type { InfoBlockchainResponse } from '@ergo-raffle/client';
+import type { GetInfoBlockchain200 } from '@ergo-raffle/client';
 import {
   BasketStatus,
   Button,
@@ -31,7 +31,7 @@ import type { RaffleForm } from '../schemas';
 
 export type FinishProps = {
   handleBack: () => void;
-  infoBlockchain: InfoBlockchainResponse;
+  infoBlockchain: GetInfoBlockchain200;
 };
 
 export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
@@ -81,6 +81,7 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
                         alt={data.name}
                         className="object-cover"
                         fill
+                        sizes="50vw"
                       />
                     )}
                   </div>

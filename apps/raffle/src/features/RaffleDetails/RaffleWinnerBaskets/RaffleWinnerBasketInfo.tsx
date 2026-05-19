@@ -1,6 +1,9 @@
 'use client';
 
-import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
+import type {
+  GetRaffleRaffleIdBasket200ItemsItem,
+  GetTokens200ItemsItem
+} from '@ergo-raffle/client';
 import { Right } from '@ergo-raffle/icons';
 import {
   Collapsible,
@@ -18,10 +21,10 @@ import { GiftItem } from './GiftItem';
 import { TransactionItem } from './TransactionItem';
 
 export type RaffleWinnerBasketInfoDialogProps = {
-  basket?: WinnerBasketSummary;
+  basket?: GetRaffleRaffleIdBasket200ItemsItem;
   basketLoading?: boolean;
   raffle: RaffleDetailView;
-  giftTokens?: TokenSummary[];
+  giftTokens?: GetTokens200ItemsItem[];
 };
 
 export const RaffleWinnerBasketInfo = ({

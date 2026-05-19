@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type {
-  RaffleDetailResponse,
+  GetRaffleRaffleId200,
   GetTokensBridgeable200 as TokensBridgeableResponse
 } from '@ergo-raffle/client';
 import { Bitcoin, Ergo, Right } from '@ergo-raffle/icons';
@@ -50,7 +50,7 @@ import { donateRaffle } from '../services';
 import { RaffleDonateMessage } from './RaffleDonateMessage';
 
 export type RaffleDonateProps = {
-  raffle: RaffleDetailResponse;
+  raffle: GetRaffleRaffleId200;
 };
 
 export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
@@ -260,6 +260,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                           alt="Donate"
                           fill
                           className="object-contain"
+                          sizes="33vw"
                         />
                       </div>
                     </>
@@ -297,6 +298,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           alt="Donate"
           className={`object-contain object-bottom`}
           fill
+          sizes="33vw"
         />
       </div>
       <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>

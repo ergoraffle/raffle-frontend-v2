@@ -18,14 +18,21 @@ export const TokensFilter = ({ value, onChange }: TokenFilterProps) => {
   );
   const { data: tokensFilterData, isLoading } = useFetchTokensSearch(filters);
 
-  const tokenItems = useMemo(
-    () =>
+  const tokenItems = useMemo(() => {
+    if (tokensQuery.length < 3) return [];
+    const result =
       tokensFilterData?.items.map((item) => ({
         value: item.id,
         label: item.name ?? item.id
-      })) ?? [],
-    [tokensFilterData]
-  );
+      })) ?? [];
+    if (tokensQuery.includes('erg')) {
+      result.push({
+        value: 'erg',
+        label: 'ERG'
+      });
+    }
+    return result;
+  }, [tokensFilterData, tokensQuery]);
 
   return (
     <MultiSelectCombobox

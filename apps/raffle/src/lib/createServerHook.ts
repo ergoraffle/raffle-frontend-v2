@@ -2,9 +2,15 @@
 
 import { useEffect, useState, useTransition } from 'react';
 
-// biome-ignore lint/suspicious/noExplicitAny: make it better
-export const createServerHook = <T, A extends any[]>(action: (...args: A) => Promise<T>) => {
-  return (...args: A) => {
+type ServerHookResult<T> = {
+  data: T | null;
+  error: unknown;
+  isLoading: boolean;
+};
+
+export const createServerHook =
+  <T, A extends readonly unknown[]>(action: (...args: A) => Promise<T>) =>
+  (...args: A): ServerHookResult<T> => {
     const [data, setData] = useState<T | null>(null);
 
     const [error, setError] = useState<unknown>(null);
@@ -17,10 +23,10 @@ export const createServerHook = <T, A extends any[]>(action: (...args: A) => Pro
 
       startTransition(async () => {
         try {
-          const res = await action(...args);
-          if (mounted) setData(res);
-        } catch (e) {
-          if (mounted) setError(e);
+          const result = await action(...args);
+          if (mounted) setData(result);
+        } catch (error) {
+          if (mounted) setError(error);
         }
       });
 
@@ -29,6 +35,9 @@ export const createServerHook = <T, A extends any[]>(action: (...args: A) => Pro
       };
     }, [action, ...args]);
 
-    return { data, error, isLoading };
+    return {
+      data,
+      error,
+      isLoading
+    };
   };
-};

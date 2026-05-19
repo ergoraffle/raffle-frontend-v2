@@ -1,18 +1,30 @@
-import type { TokenSummary, WinnerBasketSummary } from '@ergo-raffle/client';
+import type {
+  GetRaffleRaffleIdBasket200ItemsItem,
+  GetTokens200ItemsItem
+} from '@ergo-raffle/client';
 import { Plus } from '@ergo-raffle/icons';
-import { BasketStatus, Button, Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
+import {
+  BasketStatus,
+  Button,
+  Card,
+  CardContent,
+  Identifier,
+  Skeleton,
+  Typography
+} from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
 
 import type { RaffleDetailView } from '../raffleToViewModel';
 
 export type RaffleWinnerBasketItemProps = {
-  basket?: WinnerBasketSummary;
+  basket?: GetRaffleRaffleIdBasket200ItemsItem;
   loading?: boolean;
+  giftTokensIsLoading?: boolean;
   handleOpenAddGiftDialog?: (basketIndex?: number) => void;
   handleOpenInfoDialog?: (basketIndex: number) => void;
   raffle?: RaffleDetailView;
-  giftTokens?: TokenSummary[];
+  giftTokens?: GetTokens200ItemsItem[];
 };
 
 export const RaffleWinnerBasketItem = ({
@@ -21,7 +33,8 @@ export const RaffleWinnerBasketItem = ({
   handleOpenAddGiftDialog,
   handleOpenInfoDialog,
   raffle,
-  giftTokens
+  giftTokens,
+  giftTokensIsLoading
 }: RaffleWinnerBasketItemProps) => {
   return (
     <Card className="group p-0">
@@ -81,31 +94,57 @@ export const RaffleWinnerBasketItem = ({
                 ) : null}
               </div>
               <div className="px-4 flex-7">
-                {basket.gifts ? (
-                  <>
-                    <div className="hidden sm:block">
-                      {basket.gifts.slice(0, 2).map((gift) => {
-                        const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
-                        return (
-                          <Typography key={gift.amount} variant="subtitle-md">
-                            {getDecimalString(gift.amount, giftToken?.decimals)}X {giftToken?.name}
-                          </Typography>
-                        );
-                      })}
+                {!!basket.gifts && (
+                  <div>
+                    {giftTokensIsLoading ? (
+                      <div className="space-y-1">
+                        <Skeleton className="w-20 h-2" />
+                        <Skeleton className="w-25 h-2" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="hidden sm:block">
+                          {basket.gifts.slice(0, 2).map((gift) => {
+                            const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
+                            return (
+                              <Typography
+                                key={gift.amount}
+                                variant="subtitle-md"
+                                className="flex gap-1"
+                              >
+                                {giftToken ? (
+                                  <>
+                                    {`${getDecimalString(gift.amount, giftToken.decimals)}X `}
+                                    {giftToken.name || (
+                                      <div className="max-w-20">
+                                        <Identifier value={gift.tokenId} />
+                                      </div>
+                                    )}
+                                  </>
+                                ) : (
+                                  <Typography variant="subtitle-md" asChild>
+                                    <span>Unknown Token Gift</span>
+                                  </Typography>
+                                )}
+                              </Typography>
+                            );
+                          })}
 
-                      {basket.gifts.length > 2 ? (
-                        <Typography className="text-gray-2 underline" variant="subtitle-md">
-                          + {basket.gifts.length - 2} more Asset
-                        </Typography>
-                      ) : null}
-                    </div>
-                    <div className="sm:hidden">
-                      <Typography className="text-gray-2 underline" variant="subtitle-md">
-                        + {basket.gifts.length} Gifts
-                      </Typography>
-                    </div>
-                  </>
-                ) : null}
+                          {basket.gifts.length > 2 ? (
+                            <Typography className="text-gray-2 underline" variant="subtitle-md">
+                              + {basket.gifts.length - 2} more Asset
+                            </Typography>
+                          ) : null}
+                        </div>
+                        <div className="sm:hidden">
+                          <Typography className="text-gray-2 underline" variant="subtitle-md">
+                            + {basket.gifts.length} Gifts
+                          </Typography>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             {raffle?.status === 'active' && (

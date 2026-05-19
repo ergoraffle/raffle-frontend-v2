@@ -8,7 +8,7 @@ import type {
   GetRaffleDirection,
   GetRaffleOrder,
   GetRaffleParams,
-  GetRaffleStatusItem
+  GetRaffleStatusAnyOfItem
 } from '@ergo-raffle/client';
 
 import { PINED_RAFFLES_STORAGE_KEY } from '@/constants';
@@ -27,7 +27,7 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   const order = (searchParams.get('order') ?? undefined) as GetRaffleOrder | undefined;
   const direction = (searchParams.get('direction') ?? undefined) as GetRaffleDirection | undefined;
 
-  const status = searchParams.getAll('status') as GetRaffleStatusItem[];
+  const status = searchParams.getAll('status') as GetRaffleStatusAnyOfItem[];
   const tokenIds = searchParams.getAll('tokenIds');
   const ids = searchParams.getAll('ids');
   const pined = searchParams.get('pined') === 'true';

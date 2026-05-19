@@ -30,7 +30,14 @@ export const ImageEditor = ({ file, onCancel }: ImageEditorProps) => {
   return (
     <>
       <div className="h-44 w-64 md:w-lg md:h-88 mx-auto">
-        {src ? <Image src={src} {...imageProps} fill /> : null}
+        {src ? (
+          <Image
+            src={src}
+            {...imageProps}
+            fill
+            sizes="(max-width: 768px) 256px,(max-width: 1024px) 352px"
+          />
+        ) : null}
       </div>
       <div className="flex items-center justify-between">
         <Typography variant="body-md">Fine Rotation: {state.angle}°</Typography>

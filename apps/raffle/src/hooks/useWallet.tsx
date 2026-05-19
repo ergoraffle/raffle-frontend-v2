@@ -17,7 +17,6 @@ import { type WalletInstance, type WalletName, wallets as walletInstances } from
 
 export type WalletContextValue = {
   open: boolean;
-  setOpen: (open: boolean) => void;
   addresses?: Record<string, string>;
   wallets: WalletInstance[];
   selected?: WalletInstance;
@@ -173,10 +172,15 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, [wallets]);
 
+  useEffect(() => {
+    if (!open) {
+      setCandidate(undefined);
+    }
+  }, [open]);
+
   const value = useMemo(
     () => ({
       open,
-      setOpen,
       candidate,
       setCandidate,
       ergoAddress,

@@ -64,7 +64,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
     [data?.items]
   );
 
-  const { data: giftTokens } = useFetchTokens(fetchTokensParams);
+  const { data: giftTokens, isLoading: giftTokensIsLoading } = useFetchTokens(fetchTokensParams);
 
   const handleClickAddGift = (initialBasketNumber?: number) => {
     try {
@@ -177,6 +177,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                         handleOpenInfoDialog={() => setActiveBasketIndexInPreview(basket.index)}
                         raffle={raffle}
                         giftTokens={giftTokens?.items}
+                        giftTokensIsLoading={giftTokensIsLoading}
                       />
                     ))}
               </div>
@@ -207,6 +208,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                           handleOpenInfoDialog={() => setActiveBasketIndexInPreview(basket.index)}
                           raffle={raffle}
                           giftTokens={giftTokens?.items}
+                          giftTokensIsLoading={giftTokensIsLoading}
                         />
                       ))}
                 </div>

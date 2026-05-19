@@ -13,6 +13,7 @@ import {
   Toaster
 } from '@ergo-raffle/ui-kit';
 
+import { WalletDialog } from '@/components';
 import { WalletProvider } from '@/hooks';
 
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
@@ -22,7 +23,10 @@ export const AppProviders = ({ children }: { children: ReactNode }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
     <Toaster />
     <FrameworkProvider components={{ Anchor, Image: ImageComponent }}>
-      <WalletProvider>{children}</WalletProvider>
+      <WalletProvider>
+        {children}
+        <WalletDialog />
+      </WalletProvider>
     </FrameworkProvider>
   </ThemeProvider>
 );
