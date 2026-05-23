@@ -6,6 +6,7 @@ import {
   getInfoBlockchain,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
+  getRaffleRaffleIdBasketWinnerIndexTransactions,
   getTokens,
   getTokensBridgeable,
   getTokensSearch,
@@ -48,3 +49,7 @@ export const postDonationSafe = wrap(postApiDonation, 'postDonation');
 export const getInfoSafe = wrap(getInfo, 'getInfo');
 export const getTokensSafe = wrap(getTokensBase, 'getTokensBase');
 export const getTokensSearchSafe = wrap(getTokensSearchBase, 'getTokensSearchBase');
+export const getRaffleWinnerBasketTransactionsSafe = wrap(
+  getRaffleRaffleIdBasketWinnerIndexTransactions,
+  'getRaffleRaffleIdBasketWinnerIndexTransactions'
+);

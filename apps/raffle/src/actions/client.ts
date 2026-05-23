@@ -8,6 +8,7 @@ import {
   getInfoSafe,
   getRaffleBasketsSafe,
   getRaffleSafe,
+  getRaffleWinnerBasketTransactionsSafe,
   getTokensBridgeableSafe,
   getTokensSafe,
   getTokensSearchSafe,
@@ -23,3 +24,4 @@ export const postDonation = unwrap(postDonationSafe);
 export const getInfo = unwrap(getInfoSafe);
 export const getTokens = unwrap(getTokensSafe);
 export const getTokensSearch = unwrap(getTokensSearchSafe);
+export const getRaffleWinnerBasketTransactions = unwrap(getRaffleWinnerBasketTransactionsSafe);
