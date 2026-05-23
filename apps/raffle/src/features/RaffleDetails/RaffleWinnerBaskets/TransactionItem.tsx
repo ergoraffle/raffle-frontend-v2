@@ -4,7 +4,7 @@ import type { GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem } from 
 import { Identifier, Typography } from '@ergo-raffle/ui-kit';
 
 import { basketTransactionRenderMap } from '@/features/basketTransactionRenderMap';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime, getTxURL } from '@/lib';
 
 export type TransactionItemProps = {
   transaction: GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem;
@@ -23,7 +23,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
         </span>
       </div>
       <div className="max-w-42">
-        <Identifier value={transaction.txId} href={transaction.txId} size="lg" />
+        <Identifier value={transaction.txId} href={getTxURL(transaction.txId)} size="lg" />
       </div>
       <Typography variant="subtitle-md" className="text-gray-2 text-right grow">
         {!!transaction.timestamp && formatDateTime(transaction.timestamp * 1000)}

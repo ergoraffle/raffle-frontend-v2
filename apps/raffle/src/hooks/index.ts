@@ -1,6 +1,7 @@
 export * from './useActivityParams';
 export * from './useDebounceString';
 export * from './useFetchActivity';
+export * from './useFetchTags';
 export * from './useFetchTokensSearch';
 export * from './useFetchWinnerBaskets';
 export * from './useFetchWinnerBasketTransactions';
