@@ -74,7 +74,7 @@ export const ComboboxContent = ({
   ...props
 }: ComboboxContentProps) => (
   <ComboboxPrimitive.Portal container={portalContainerRef?.current}>
-    <ComboboxPrimitive.Positioner anchor={anchor} className="isolate z-150">
+    <ComboboxPrimitive.Positioner anchor={anchor} className="isolate z-100">
       <ComboboxPrimitive.Popup
         data-slot="combobox-content"
         data-chips={!!anchor}

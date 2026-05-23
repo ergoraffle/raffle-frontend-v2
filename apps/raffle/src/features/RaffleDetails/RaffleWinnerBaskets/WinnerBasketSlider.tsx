@@ -19,7 +19,7 @@ export const WinnerBasketSlider = ({
   loading = true,
   basket
 }: WinnerBasketSliderProps) => (
-  <div className="flex items-center mx-auto md:w-1/2 justify-between">
+  <div className="flex items-center mx-auto w-2/3 md:w-1/2 justify-between">
     <Button
       size="icon-xs"
       variant="plain"

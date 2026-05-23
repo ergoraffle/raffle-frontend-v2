@@ -8,7 +8,6 @@ import { Agreement } from './Agreement';
 import { ChooseWallet } from './ChooseWallet';
 import { ConnectWalletDialog } from './ConnectWalletDialog';
 import { ErgoWalletAddress } from './ErgoWalletAddress';
-import { QRStep } from './QRStep';
 
 export const WalletDialog = () => {
   const wallet = useWallet();
@@ -24,16 +23,12 @@ export const WalletDialog = () => {
   }, [wallet]);
 
   const steps: Record<
-    'agreement' | 'wallet' | 'ergoAddress' | 'qr',
+    'agreement' | 'wallet' | 'ergoAddress',
     { component: React.ReactNode; title: string; description?: string }
   > = {
     agreement: {
       component: <Agreement />,
       title: 'Agreement'
-    },
-    qr: {
-      component: <QRStep />,
-      title: 'Connect via Ergopay'
     },
     wallet: {
       component: <ChooseWallet />,

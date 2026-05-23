@@ -46,7 +46,7 @@ export const TokensFilter = ({ value, onChange }: TokenFilterProps) => {
       onQueryChange={setTokensQuery}
       minQueryLength={3}
       isLoading={!!tokensQuery.length && isLoading}
-      className="flex-1 lg:flex-auto"
+      className="flex-1 lg:flex-auto min-w-52"
     />
   );
 };

@@ -22,6 +22,7 @@ import {
 import { getAddressUrl } from '@/lib';
 
 import { raffleStatusMap } from '../raffleStatusRenderMap';
+import { RaffleVoteCard } from './RaffleVoteCard';
 import type { RaffleDetailView } from './raffleToViewModel';
 
 export type RaffleDetailsImageCardProps = {
@@ -30,7 +31,7 @@ export type RaffleDetailsImageCardProps = {
 };
 
 export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCardProps) => (
-  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false}>
+  <Card className="w-full lg:w-125 order-2 lg:order-1 p-0 lg:min-h-130" border={false} shadow>
     {loading ? (
       <CardImageWrapper loading={loading} />
     ) : !raffle?.pictures || !raffle?.pictures.length ? (
@@ -144,6 +145,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
           </div>
         </CardContent>
       </Card>
+      <RaffleVoteCard loading={loading} raffle={raffle} voteCount={0} />
     </CardContent>
   </Card>
 );

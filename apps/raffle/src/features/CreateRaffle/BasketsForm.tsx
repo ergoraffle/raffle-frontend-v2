@@ -1,6 +1,4 @@
-import { useMemo } from 'react';
-
-import { Close, Info, Plus } from '@ergo-raffle/icons';
+import { Info, Plus, Trash } from '@ergo-raffle/icons';
 import {
   BasketStatus,
   Button,
@@ -37,10 +35,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   const winnerPotShare = watch('winnerPotShare', 0);
 
   const details = watch('details');
-  const filledSharePercent = useMemo(
-    () => details.reduce((sum, item) => sum + item.percent * item.count, 0),
-    [details]
-  );
+  const filledSharePercent = details.reduce((sum, item) => sum + item.percent * item.count, 0);
 
   const {
     fields: detailsItems,
@@ -107,7 +102,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
                 <span>%</span>
               </div>
               <Button variant="plain" size="icon-xs" onClick={() => remove(index)} type="button">
-                <Close />
+                <Trash className="size-5" />
               </Button>
             </div>
           ))}

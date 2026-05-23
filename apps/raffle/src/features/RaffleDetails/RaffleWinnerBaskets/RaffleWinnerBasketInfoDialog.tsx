@@ -18,6 +18,8 @@ import {
   Sheet,
   SheetContent,
   SheetFooter,
+  SheetHeader,
+  SheetTitle,
   Typography,
   toast,
   useBreakpoint
@@ -68,7 +70,27 @@ export const RaffleWinnerBasketInfoDialog = ({
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title="Basket">
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>
+            <div className="w-full">
+              {step === 2 ? (
+                <Button variant="plain" onClick={() => setStep(1)} size="sm">
+                  <Left className="size-6" />
+                  Add Gift
+                </Button>
+              ) : (
+                <WinnerBasketSlider
+                  onNextSlide={onNextSlide}
+                  onPrevSlide={onPrevSlide}
+                  hasNext={hasNext}
+                  basket={basket}
+                  loading={loading}
+                />
+              )}
+            </div>
+          </SheetTitle>
+        </SheetHeader>
         {step === 2 ? (
           <div className="space-y-5">
             <Typography variant="heading-5">Which Basket do you want to add Gift to?</Typography>

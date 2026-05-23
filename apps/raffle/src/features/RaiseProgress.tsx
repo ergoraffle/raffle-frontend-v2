@@ -30,7 +30,7 @@ export const RaiseProgress = ({ loading, amount, token }: RaiseProgressProps) =>
           disabled={token?.id.toLowerCase() === 'erg'}
           content={
             <div className="space-y-2">
-              <Typography variant="subtitle-sm" className="text-gray-3">
+              <Typography variant="subtitle-sm" className="text-gray-2">
                 {token?.isVerified ? 'Verified token' : 'Unverified token'}
               </Typography>
               <Typography variant="subtitle-sm" className="text-gray-2">
