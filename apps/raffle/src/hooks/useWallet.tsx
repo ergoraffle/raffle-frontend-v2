@@ -140,7 +140,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     (async () => {
       const name = localStorage.getItem('raffle:wallet');
 
-      const wallet = wallets.find((wallet) => wallet.name === name);
+      const wallet = walletInstances.find((wallet) => wallet.name === name);
 
       if (!wallet) return;
 
@@ -170,7 +170,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       setConnecting(false);
     })();
-  }, [wallets]);
+  }, []);
 
   useEffect(() => {
     if (!open) {

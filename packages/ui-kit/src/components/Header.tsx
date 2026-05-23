@@ -6,7 +6,7 @@ import { useFramework } from '@/providers';
 
 import { Button } from './Button';
 import { Logo } from './Logo';
-import { Sheet, SheetContent, SheetTrigger } from './Sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './Sheet';
 import { ThemeToggle } from './ThemeToggle';
 import { Typography } from './Typography';
 
@@ -56,10 +56,19 @@ export const Header = ({
       className={`py-3 lg:py-5 sticky top-0 bg-blur z-110 transition-all duration-300 mb-6.5 lg:mb-11 ${scrolled ? 'bg-white-3 shadow-1' : ''}`}
     >
       <div className="container flex items-center justify-between">
-        <Link href="/">
-          <Logo className="h-12 hidden lg:flex" />
-          <Logo className="h-9 lg:hidden" variant="icon" />
-        </Link>
+        <div className="flex items-end gap-2">
+          <Link href="/">
+            <Logo className="h-12 hidden lg:flex" />
+            <Logo className="h-9 lg:hidden" variant="icon" />
+          </Link>
+          <Typography
+            variant="subtitle-sm"
+            className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-1"
+            asChild
+          >
+            <span>Beta</span>
+          </Typography>
+        </div>
         <ul className="items-center gap-x-10 hidden lg:flex">
           {links.map((link) => (
             <li key={link.href}>
@@ -89,6 +98,9 @@ export const Header = ({
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
               <div className="mt-28 space-y-6">
                 <ThemeToggle />
                 <div className="no-scrollbar overflow-y-auto">

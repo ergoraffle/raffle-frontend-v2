@@ -90,7 +90,7 @@ export const CreateRaffle = () => {
   if (infoBlockchain.isLoading) return <CreateRaffleSkeleton />;
   if (!infoBlockchain.data) return null;
 
-  const hasNoActiveWallet = !wallet.connecting && wallet?.selected?.name !== 'Nautilus';
+  const hasNoActiveWallet = wallet?.selected?.name !== 'Nautilus';
 
   const steps = [
     {
@@ -130,12 +130,16 @@ export const CreateRaffle = () => {
           height={190}
           className="hidden sm:block"
         />
-        <Typography variant="heading-1">Ready to create a new raffle?</Typography>
-        <Stepper
-          steps={steps.map((s) => s.title)}
-          activeStepIndex={activeStepIndex}
-          disabled={hasNoActiveWallet}
-        />
+        {!hasNoActiveWallet && (
+          <>
+            <Typography variant="heading-1">Ready to create a new raffle?</Typography>
+            <Stepper
+              steps={steps.map((s) => s.title)}
+              activeStepIndex={activeStepIndex}
+              disabled={hasNoActiveWallet}
+            />
+          </>
+        )}
       </div>
       {hasNoActiveWallet ? (
         <NoActiveWallet />

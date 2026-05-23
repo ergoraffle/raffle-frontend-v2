@@ -3,7 +3,7 @@ import type { Meta, UppyFile } from '@uppy/core';
 import { useBreakpoint } from '@/hooks';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../Dialog';
-import { Sheet, SheetContent } from '../Sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../Sheet';
 import { ImageEditor } from './ImageEditor';
 
 export type ImageEditorDialogProps = {
@@ -16,7 +16,10 @@ export const ImageEditorDialog = ({ file, onClose }: ImageEditorDialogProps) => 
 
   return isMobile ? (
     <Sheet open={!!file} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent title="Edit Image">
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Edit Image</SheetTitle>
+        </SheetHeader>
         <ImageEditor file={file} onCancel={onClose} />
       </SheetContent>
     </Sheet>

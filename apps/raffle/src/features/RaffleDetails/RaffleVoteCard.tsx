@@ -2,13 +2,13 @@ import { Card, CardContent, Skeleton, TrustBar, Typography } from '@ergo-raffle/
 
 import { RaffleVote } from './RaffleVote';
 
-export type VoteCardProps = {
+export type RaffleVoteCardProps = {
   loading?: boolean;
   raffle?: { id: string; name: string };
   voteCount?: number;
 };
 
-export const VoteCard = ({ loading, raffle, voteCount }: VoteCardProps) => (
+export const RaffleVoteCard = ({ loading, raffle, voteCount }: RaffleVoteCardProps) => (
   <Card border={false}>
     <CardContent className="flex items-center justify-between">
       <div className="flex flex-col">

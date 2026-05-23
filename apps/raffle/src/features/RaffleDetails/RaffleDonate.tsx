@@ -206,7 +206,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         >
           <CollapsibleContent>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Card className="mb-2 py-8">
+              <Card className="mb-2 py-8" shadow>
                 <CardContent className="flex items-stretch">
                   {donateTransactionId ? (
                     <RaffleDonateMessage transactionId={donateTransactionId} />
@@ -365,7 +365,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
               >
                 <div className="flex items-center gap-2">
                   <Ergo className="size-6" />
-                  Ergopay{' '}
+                  Ergo{' '}
                   {!!isLoading && (
                     <>
                       <Spinner className="ml-2 mr-1 size-4" />
@@ -385,7 +385,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
               >
                 <div className="flex items-center gap-2">
                   <Bitcoin className="size-6" />
-                  Bitcoin Pay{' '}
+                  Bitcoin{' '}
                   {!!isLoading && (
                     <>
                       <Spinner className="ml-2 mr-1 size-4" />

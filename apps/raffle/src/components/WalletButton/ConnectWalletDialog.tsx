@@ -6,6 +6,9 @@ import {
   DialogTitle,
   Sheet,
   SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
@@ -27,7 +30,13 @@ export const ConnectWalletDialog = ({
   const { isMobile } = useBreakpoint();
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title={title}>{children}</SheetContent>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>{title}</SheetTitle>
+          {!!description && <SheetDescription>{description}</SheetDescription>}
+        </SheetHeader>
+        {children}
+      </SheetContent>
     </Sheet>
   ) : (
     <Dialog open={open} onOpenChange={onOpenChange}>

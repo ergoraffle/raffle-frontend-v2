@@ -14,6 +14,8 @@ import {
   Sheet,
   SheetContent,
   SheetFooter,
+  SheetHeader,
+  SheetTitle,
   Typography,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
@@ -29,12 +31,15 @@ export const RaffleVote = ({ raffleTitle }: RaffleVoteProps) => {
 
   return (
     <>
-      <Button size="icon-sm" variant="plain" onClick={() => setOpen(true)}>
+      <Button size="icon-sm" variant="plain" onClick={() => setOpen(true)} disabled>
         <Votes className="size-7" />
       </Button>
       {isMobile ? (
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetContent title={`“${raffleTitle}” Raffle`}>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>“{raffleTitle}” Raffle</SheetTitle>
+            </SheetHeader>
             <Typography className="lg:max-w-md m-auto">
               Vote this Raffle, some text: vote based on this and that, only vote up if you really
               trust the author, vote down to report spam.

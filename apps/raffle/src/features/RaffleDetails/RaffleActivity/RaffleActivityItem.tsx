@@ -14,7 +14,7 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
   return (
     <div className="flex items-stretch space-x-2">
       <Card padding="xs" className="sm:flex-2">
-        <CardContent className="flex items-center space-x-1  my-auto">
+        <CardContent className="flex items-center space-x-1 my-auto">
           {loading ? (
             <>
               <Skeleton className="size-6" />
@@ -23,27 +23,27 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
           ) : (
             <>
               {config?.icon}
-              <Typography variant="body-md" className="hidden sm:block">
+              <Typography variant="body-md" className="hidden sm:block whitespace-nowrap">
                 {config?.shortText(activity)}
               </Typography>
             </>
           )}
         </CardContent>
       </Card>
-      <Card padding="xs" className="grow">
+      <Card padding="xs" className="grow sm:flex-4">
         <CardContent className="flex items-center justify-between space-x-1 text-gray-2 my-auto">
-          <div className="max-w-30 sm:max-w-70">
+          <div className="max-w-40 xl:max-w-70">
             {loading ? (
-              <Skeleton className="h-2 w-70" />
+              <Skeleton className="h-2 w-40" />
             ) : (
-              <Identifier size="lg" value={activity?.address} />
+              <Identifier size="lg" value={activity?.address} className="mr-2" />
             )}
           </div>
           {loading ? (
             <Skeleton className="h-1.5 w-10" />
           ) : (
             <Typography variant="subtitle-sm">
-              {activity?.timestamp ? formatDateTime(activity.timestamp) : ''}
+              {activity?.timestamp ? formatDateTime(activity.timestamp * 1000) : ''}
             </Typography>
           )}
         </CardContent>
