@@ -52,15 +52,17 @@ export const Token = ({
   return (
     <span ref={ref} className={`flex items-center ${size === 'lg' ? 'space-x-1.5' : 'space-x-1'}`}>
       {!!url && isVisible && (
-        <Image
-          alt={`Token ${name}`}
-          src={url}
-          loading="lazy"
-          width={size === 'lg' ? 24 : 20}
-          height={size === 'lg' ? 24 : 20}
-          onLoad={() => setIsLoaded(true)}
-          onError={() => setIsLoaded(true)}
-        />
+        <div className="bg-gray-3 rounded-full p-0.5">
+          <Image
+            alt={`Token ${name}`}
+            src={url}
+            loading="lazy"
+            width={size === 'lg' ? 22 : 18}
+            height={size === 'lg' ? 22 : 18}
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setIsLoaded(true)}
+          />
+        </div>
       )}
 
       {!isLoading && !url && (

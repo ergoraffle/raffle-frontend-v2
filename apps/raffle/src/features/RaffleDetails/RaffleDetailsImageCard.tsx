@@ -2,7 +2,6 @@ import Image from 'next/image';
 
 import { GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import {
-  AspectRatio,
   Badge,
   Card,
   CardAction,
@@ -36,16 +35,14 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
       <CardImageWrapper loading={loading} />
     ) : !raffle?.pictures || !raffle?.pictures.length ? (
       <CardImageWrapper>
-        <AspectRatio ratio={1.75 / 1}>
-          <Image
-            src="/illustrations/imagePlaceholderIllustration.svg"
-            priority
-            alt="Raffle"
-            className="w-full object-contain rounded-tl-md rounded-tr-md"
-            fill
-            sizes="(max-width: 1024px) 100vw,33vw"
-          />
-        </AspectRatio>
+        <Image
+          src="/illustrations/imagePlaceholderIllustration.svg"
+          priority
+          alt="Raffle"
+          className="w-full object-contain rounded-tl-md rounded-tr-md"
+          fill
+          sizes="(max-width: 1024px) 100vw,33vw"
+        />
       </CardImageWrapper>
     ) : (
       <Carousel>
@@ -53,16 +50,14 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
           {raffle.pictures.map((picture) => (
             <CarouselItem key={picture}>
               <CardImageWrapper>
-                <AspectRatio ratio={1.75 / 1}>
-                  <Image
-                    src={picture}
-                    priority
-                    alt={raffle.name}
-                    className="w-full object-cover rounded-tl-md rounded-tr-md"
-                    fill
-                    sizes="(max-width: 1024px) 100vw,33vw"
-                  />
-                </AspectRatio>
+                <Image
+                  src={picture}
+                  priority
+                  alt={raffle.name}
+                  className="w-full object-cover rounded-tl-md rounded-tr-md"
+                  fill
+                  sizes="(max-width: 1024px) 100vw,33vw"
+                />
               </CardImageWrapper>
             </CarouselItem>
           ))}

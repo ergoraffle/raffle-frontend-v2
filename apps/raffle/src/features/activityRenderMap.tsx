@@ -30,13 +30,13 @@ export const activityRenderMap: Record<
     icon: <Gift className="size-6" />,
     shortText: () => 'added gift',
     text: (activity?: GetActivity200ItemsItem) =>
-      `added gift to “raising money for ${activity?.raffleName ?? ''}” Raffle`
+      `added gift to “${activity?.raffleName ?? ''}” Raffle`
   },
   gift_return: {
     icon: <Gift className="size-6" />,
     shortText: () => 'gift return',
     text: (activity?: GetActivity200ItemsItem) =>
-      `added gift to “raising money for ${activity?.raffleName ?? ''}” Raffle`
+      `Gift returned from “${activity?.raffleName ?? ''}” Raffle`
   },
   ticket_redeem: {
     icon: <BasketStatus className="size-6" />,

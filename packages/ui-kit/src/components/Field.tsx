@@ -91,3 +91,14 @@ export const FieldError = ({ className, children, errors, ...props }: FieldError
     </div>
   );
 };
+
+export type FieldAlertProps = ComponentProps<'div'>;
+
+export const FieldAlert = ({ className, ...props }: FieldAlertProps) => (
+  <div
+    role="alert"
+    data-slot="field-alert"
+    className={cn('text-alert pl-4 typo-subtitle-md', className)}
+    {...props}
+  />
+);

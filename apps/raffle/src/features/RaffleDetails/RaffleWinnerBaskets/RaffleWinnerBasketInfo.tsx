@@ -13,12 +13,11 @@ import {
   Typography
 } from '@ergo-raffle/ui-kit';
 
-import { useFetchTransactions } from '@/hooks';
 import { getDecimalString } from '@/lib';
 
 import type { RaffleDetailView } from '../raffleToViewModel';
 import { GiftItem } from './GiftItem';
-import { TransactionItem } from './TransactionItem';
+import { RaffleWinnerBasketTransactions } from './RaffleWinnerBasketTransactions';
 
 export type RaffleWinnerBasketInfoDialogProps = {
   basket?: GetRaffleRaffleIdBasket200ItemsItem;
@@ -32,81 +31,54 @@ export const RaffleWinnerBasketInfo = ({
   raffle,
   basketLoading = true,
   giftTokens
-}: RaffleWinnerBasketInfoDialogProps) => {
-  const { data: transactions, isLoading: transactionsIsLoading } = useFetchTransactions();
-  return (
-    <div className="space-y-3">
-      {basketLoading ? (
+}: RaffleWinnerBasketInfoDialogProps) => (
+  <div className="space-y-3">
+    {basketLoading ? (
+      <>
+        <Skeleton className="h-6 w-1/2" />
+        <Skeleton className="h-12.5 w-full" />
+        <Skeleton className="h-12.5 w-full" />
+      </>
+    ) : (
+      basket && (
         <>
-          <Skeleton className="h-6 w-1/2" />
-          <Skeleton className="h-12.5 w-full" />
-          <Skeleton className="h-12.5 w-full" />
-        </>
-      ) : (
-        basket && (
-          <>
-            <Typography variant="body-lg">
-              {basket.share / 10}% Share of the winners Pot{' '}
-              <Typography variant="subtitle-md" asChild>
-                <span>
-                  (
-                  {!!(raffle?.winnerPotShareAmount && raffle.token?.decimals) &&
-                    getDecimalString(
-                      Math.round((raffle.winnerPotShareAmount * basket.share) / 100),
-                      raffle.token.decimals
-                    )}{' '}
-                  {raffle?.token.name})
-                </span>
-              </Typography>
+          <Typography variant="body-lg">
+            {basket.share / 10}% Share of the winners Pot{' '}
+            <Typography variant="subtitle-md" asChild>
+              <span>
+                (
+                {!!(raffle?.winnerPotShareAmount && raffle.token?.decimals) &&
+                  getDecimalString(
+                    Math.round((raffle.winnerPotShareAmount * basket.share) / 100),
+                    raffle.token.decimals
+                  )}{' '}
+                {raffle?.token.name})
+              </span>
             </Typography>
-            {basket.gifts ? (
-              <Collapsible className="rounded-sm data-[state=open]:bg-gray-5">
-                <CollapsibleTrigger asChild>
-                  <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0">
-                    <Typography variant="body-lg">
-                      {basket.gifts.length} Additional Gifts
-                    </Typography>
-                    <Right className="size-5 group-data-[state=open]:rotate-90" />
-                  </div>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="px-3 pb-2">
-                  <div className="bg-white-1 text-white-1-foreground px-2 py-1.5 rounded-sm">
-                    {basket.gifts.map((gift, index) => {
-                      const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
-                      return (
-                        <GiftItem
-                          gift={gift}
-                          key={`${index}-${gift.amount}`}
-                          giftToken={giftToken}
-                        />
-                      );
-                    })}
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-            ) : null}
-            {transactionsIsLoading ? (
-              <Skeleton className="h-12.5 w-full" />
-            ) : transactions ? (
-              <Collapsible className="rounded-sm data-[state=open]:bg-gray-5">
-                <CollapsibleTrigger asChild>
-                  <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0">
-                    <Typography variant="body-lg">Transactions</Typography>
-                    <Right className="size-5 group-data-[state=open]:rotate-90" />
-                  </div>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="px-3 space-y-2 pb-2">
-                  <div className="max-h-32 overflow-y-auto scrollbar-hide space-y-2">
-                    {transactions.map((transaction) => (
-                      <TransactionItem transaction={transaction} key={transaction.id} />
-                    ))}
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-            ) : null}
-          </>
-        )
-      )}
-    </div>
-  );
-};
+          </Typography>
+          {basket.gifts ? (
+            <Collapsible className="rounded-sm data-[state=open]:bg-gray-5">
+              <CollapsibleTrigger asChild>
+                <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0">
+                  <Typography variant="body-lg">{basket.gifts.length} Additional Gifts</Typography>
+                  <Right className="size-5 group-data-[state=open]:rotate-90" />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="px-3 pb-2">
+                <div className="bg-white-1 text-white-1-foreground px-2 py-1.5 rounded-sm">
+                  {basket.gifts.map((gift, index) => {
+                    const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
+                    return (
+                      <GiftItem gift={gift} key={`${index}-${gift.amount}`} giftToken={giftToken} />
+                    );
+                  })}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          ) : null}
+          <RaffleWinnerBasketTransactions basket={basket} raffle={raffle} />
+        </>
+      )
+    )}
+  </div>
+);

@@ -57,8 +57,13 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
       <div className="space-y-3">
         <div>
           <FieldTitle title="Distribute Winners Pot between Share Baskets." />
-          <Typography variant="body-md" className="mt-1 mb-3">
-            Winners Pot: {winnerPotShare}% of Total Fund
+          <Typography variant="body-md" className="mt-1 mb-3" asChild>
+            <div>
+              Winners Pot: {winnerPotShare}% of Total Fund{' '}
+              <Typography asChild variant="body-sm" className="ml-1">
+                <span>{`(${100 - filledSharePercent}% remaining)`}</span>
+              </Typography>
+            </div>
           </Typography>
         </div>
         <Progress variant="box" value={filledSharePercent} max={100} />
@@ -72,34 +77,34 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
           {detailsItems.map((item, index) => (
             <div
               key={item.id}
-              className="flex items-center bg-gray-5 text-gray-5-foreground rounded-md px-1.5 py-0.5 gap-2"
+              className="flex items-center bg-gray-5 text-gray-5-foreground rounded-md px-1.5 py-1 gap-2"
             >
               <div className="flex items-center gap-0.5">
                 <Input
                   type="number"
                   min={0}
-                  size="xs"
-                  className="w-7 sm:w-8 text-center"
+                  size="sm"
+                  className="w-9 sm:w-10 pl-0 pr-0 sm:pl-0 sm:pr-0 text-center"
                   {...register(`details.${index}.count`, {
                     setValueAs: (v) => (v === '' ? undefined : Number(v)),
                     onChange: () => trigger('details')
                   })}
                 />
-                <span>X</span>
+                <span className="ml-0.5">X</span>
               </div>
               <div className="flex items-center gap-0.5">
                 <Input
                   type="number"
                   min={0}
                   max={100}
-                  size="xs"
-                  className="w-7 sm:w-8 text-center"
+                  size="sm"
+                  className="w-9 sm:w-10 pl-0 pr-0 sm:pl-0 sm:pr-0 text-center"
                   {...register(`details.${index}.percent`, {
                     setValueAs: (v) => (v === '' ? undefined : Number(v)),
                     onChange: () => trigger('details')
                   })}
                 />
-                <span>%</span>
+                <span className="ml-0.5">%</span>
               </div>
               <Button variant="plain" size="icon-xs" onClick={() => remove(index)} type="button">
                 <Trash className="size-5" />

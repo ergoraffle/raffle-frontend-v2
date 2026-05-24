@@ -1,13 +1,16 @@
 'use client';
 
-import type { BasketGift, GetTokens200ItemsItem } from '@ergo-raffle/client';
+import type {
+  GetRaffleRaffleIdBasket200ItemsItemGiftsItem,
+  GetTokens200ItemsItem
+} from '@ergo-raffle/client';
 import { Verified } from '@ergo-raffle/icons';
 import { Typography } from '@ergo-raffle/ui-kit';
 
 import { getDecimalString } from '@/lib';
 
 export type GiftItemProps = {
-  gift: BasketGift;
+  gift: GetRaffleRaffleIdBasket200ItemsItemGiftsItem;
   giftToken?: GetTokens200ItemsItem;
 };
 

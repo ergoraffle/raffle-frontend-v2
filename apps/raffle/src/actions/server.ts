@@ -4,8 +4,10 @@ import {
   getActivity,
   getInfo,
   getInfoBlockchain,
+  getInfoTags,
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
+  getRaffleRaffleIdBasketWinnerIndexTransactions,
   getTokens,
   getTokensBridgeable,
   getTokensSearch,
@@ -39,6 +41,11 @@ export const requestUnisat = async <T>(path: string): Promise<T> => {
   return response.data;
 };
 
+const getTagsBase: typeof getInfoTags = async (params) => {
+  if (!params?.query?.length || params.query.length < 3) return [];
+  return await getInfoTags(params);
+};
+
 export const getRaffleSafe = wrap(getRaffleRaffleId, 'getRaffleRaffleId');
 export const getRaffleBasketsSafe = wrap(getRaffleRaffleIdBasket, 'getRaffleRaffleIdBasket');
 export const getInfoBlockchainSafe = wrap(getInfoBlockchain, 'getInfoBlockchain');
@@ -48,3 +55,8 @@ export const postDonationSafe = wrap(postApiDonation, 'postDonation');
 export const getInfoSafe = wrap(getInfo, 'getInfo');
 export const getTokensSafe = wrap(getTokensBase, 'getTokensBase');
 export const getTokensSearchSafe = wrap(getTokensSearchBase, 'getTokensSearchBase');
+export const getRaffleWinnerBasketTransactionsSafe = wrap(
+  getRaffleRaffleIdBasketWinnerIndexTransactions,
+  'getRaffleRaffleIdBasketWinnerIndexTransactions'
+);
+export const getTagsSafe = wrap(getTagsBase, 'getTagsBase');

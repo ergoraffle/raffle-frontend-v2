@@ -6,50 +6,6 @@
  * OpenAPI spec version: 0.0.0
  */
 import { httpClient } from './httpMain';
-export interface BasketGift {
-  tokenId: string;
-  amount: number;
-}
-
-export type WinnerBasketDetailResponseType =
-  (typeof WinnerBasketDetailResponseType)[keyof typeof WinnerBasketDetailResponseType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const WinnerBasketDetailResponseType = {
-  empty: 'empty',
-  shared: 'shared'
-} as const;
-
-export interface WinnerBasketDetailResponse {
-  index?: number;
-  type: WinnerBasketDetailResponseType;
-  tokenId: string;
-  tokenName: string;
-  sharePercent?: number;
-  shareAmount?: number;
-  gifts: BasketGift[];
-  transactions: BasketTransaction[];
-}
-
-export type BasketTransactionType =
-  (typeof BasketTransactionType)[keyof typeof BasketTransactionType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const BasketTransactionType = {
-  asset_unwrap: 'asset_unwrap',
-  ticket_won: 'ticket_won',
-  asset_added: 'asset_added'
-} as const;
-
-export interface BasketTransaction {
-  id: string;
-  type: BasketTransactionType;
-  amount: number;
-  wallet: string;
-  address: string;
-  createdAt: string;
-}
-
 export type GetInfoVersion200 = {
   version: string;
 };
@@ -258,6 +214,51 @@ export type GetRaffleRaffleIdBasket200 = {
   total: number;
 };
 
+export type GetRaffleRaffleIdBasketWinnerIndexTransactionsParams = {
+  offset?: number;
+  limit?: number;
+};
+
+export type GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemType =
+  (typeof GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemType)[keyof typeof GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemType = {
+  creation: 'creation',
+  donation: 'donation',
+  gift: 'gift',
+  ticket_redeem: 'ticket_redeem',
+  gift_return: 'gift_return'
+} as const;
+
+export type GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemStatus =
+  (typeof GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemStatus)[keyof typeof GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemStatus = {
+  success: 'success',
+  failed: 'failed',
+  pending: 'pending'
+} as const;
+
+export type GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem = {
+  address: string;
+  raffleId: string;
+  type: GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemType;
+  ticketCount?: number;
+  winnerIndex?: number;
+  txId: string;
+  raffleName?: string;
+  height: number;
+  timestamp?: number;
+  status: GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItemStatus;
+};
+
+export type GetRaffleRaffleIdBasketWinnerIndexTransactions200 = {
+  items: GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem[];
+  total: number;
+};
+
 export type GetActivityParams = {
   address?: string;
   raffleId?: string;
@@ -311,6 +312,7 @@ export type GetActivity200ItemsItem = {
   raffleId: string;
   type: GetActivity200ItemsItemType;
   ticketCount?: number;
+  winnerIndex?: number;
   txId: string;
   raffleName?: string;
   height: number;
@@ -403,6 +405,20 @@ export const getRaffleRaffleIdBasket = (raffleId: string, params?: GetRaffleRaff
   });
 
 /**
+ * Transaction for specific winner
+ */
+export const getRaffleRaffleIdBasketWinnerIndexTransactions = (
+  raffleId: string,
+  winnerIndex: number,
+  params?: GetRaffleRaffleIdBasketWinnerIndexTransactionsParams
+) =>
+  httpClient<GetRaffleRaffleIdBasketWinnerIndexTransactions200>({
+    url: `/raffle/${raffleId}/basket/${winnerIndex}/transactions`,
+    method: 'GET',
+    params
+  });
+
+/**
  * Returns a paginated list of user activities
  */
 export const getActivity = (params?: GetActivityParams) =>
@@ -420,15 +436,6 @@ export const getTokens = (params: GetTokensParams) =>
 export const getTokensSearch = (params: GetTokensSearchParams) =>
   httpClient<GetTokensSearch200>({ url: `/tokens/search`, method: 'GET', params });
 
-/**
- * @summary Get details of a winner basket
- */
-export const getRafflesRaffleIdBasketBasketId = (raffleId: string, basketId: number) =>
-  httpClient<WinnerBasketDetailResponse>({
-    url: `/raffles/${raffleId}/basket/${basketId}`,
-    method: 'GET'
-  });
-
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
@@ -441,9 +448,9 @@ export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getR
 export type GetRaffleRaffleIdBasketResult = NonNullable<
   Awaited<ReturnType<typeof getRaffleRaffleIdBasket>>
 >;
+export type GetRaffleRaffleIdBasketWinnerIndexTransactionsResult = NonNullable<
+  Awaited<ReturnType<typeof getRaffleRaffleIdBasketWinnerIndexTransactions>>
+>;
 export type GetActivityResult = NonNullable<Awaited<ReturnType<typeof getActivity>>>;
 export type GetTokensResult = NonNullable<Awaited<ReturnType<typeof getTokens>>>;
 export type GetTokensSearchResult = NonNullable<Awaited<ReturnType<typeof getTokensSearch>>>;
-export type GetRafflesRaffleIdBasketBasketIdResult = NonNullable<
-  Awaited<ReturnType<typeof getRafflesRaffleIdBasketBasketId>>
->;
