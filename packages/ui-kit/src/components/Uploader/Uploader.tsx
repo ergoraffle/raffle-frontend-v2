@@ -49,13 +49,13 @@ export const Uploader = ({
               <div className=" rounded-xlg overflow-hidden relative bg-gray-4 text-gray-4-foreground w-full h-full">
                 <Thumbnail file={file as UppyFile<Meta, Body>} images={!!file.data?.size} />
                 <div
-                  className={`absolute left-0 right-0 bottom-0 space-x-2 bg-black-3 px-2  flex ${isFirst ? 'justify-end' : 'justify-between'} items-center`}
+                  className={`absolute left-0 right-0 bottom-0 space-x-2 bg-black-3 p-2 gap-1 flex ${isFirst ? 'justify-end' : 'justify-between'} items-center`}
                 >
                   {!isFirst && (
                     <Tooltip content="Mark as cover">
                       <Button
-                        variant="plain"
-                        size="icon"
+                        variant="white"
+                        size="icon-sm"
                         type="button"
                         onClick={() => moveFileToFirst(file.id)}
                       >
@@ -67,8 +67,8 @@ export const Uploader = ({
                     <Tooltip content="Edit">
                       <Button
                         disabled={isFileActionsDisabled || uploading}
-                        variant="plain"
-                        size="icon"
+                        variant="white"
+                        size="icon-sm"
                         type="button"
                         onClick={() => edit(file.id)}
                       >
@@ -78,8 +78,8 @@ export const Uploader = ({
                     <Tooltip content="Remove">
                       <Button
                         disabled={isFileActionsDisabled || uploading}
-                        variant="plain"
-                        size="icon"
+                        variant="white"
+                        size="icon-sm"
                         type="button"
                         onClick={() => instance.removeFile(file.id)}
                       >

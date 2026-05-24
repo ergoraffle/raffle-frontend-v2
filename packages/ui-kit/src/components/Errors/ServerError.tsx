@@ -20,7 +20,9 @@ export const ServerError = ({ code = 500 }: ServerError) => {
             className="-mb-5 sm:-mb-10"
           />
           <Typography variant="display-md">{code}</Typography>
-          <Typography variant="heading-3">Something went wrong on our end</Typography>
+          <Typography variant="heading-3" className="text-center">
+            Something went wrong on our end
+          </Typography>
           <Typography variant="body-lg" className="max-w-84 text-center">
             The server failed to process this request. Please retry in a moment.
           </Typography>
