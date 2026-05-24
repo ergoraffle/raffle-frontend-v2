@@ -9,7 +9,7 @@ import type {
   GetRaffleRaffleId200,
   GetTokensBridgeable200 as TokensBridgeableResponse
 } from '@ergo-raffle/client';
-import { Bitcoin, Ergo, Right } from '@ergo-raffle/icons';
+import { Bitcoin, BitcoinRunes, Ergo, Right } from '@ergo-raffle/icons';
 import {
   Button,
   Card,
@@ -364,7 +364,9 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 onClick={() => selectNetwork('ergo')}
               >
                 <div className="flex items-center gap-2">
-                  <Ergo className="size-6" />
+                  <div className="flex items-center justify-center w-12">
+                    <Ergo className="size-6" />
+                  </div>
                   Ergo{' '}
                   {!!isLoading && (
                     <>
@@ -384,8 +386,11 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
                 onClick={() => selectNetwork('bitcoin')}
               >
                 <div className="flex items-center gap-2">
-                  <Bitcoin className="size-6" />
-                  Bitcoin{' '}
+                  <div className="flex items-center justify-center w-12">
+                    <Bitcoin className="size-6" />
+                    <BitcoinRunes className="size-6 -ml-2" />
+                  </div>
+                  Bitcoin And Runes{' '}
                   {!!isLoading && (
                     <>
                       <Spinner className="ml-2 mr-1 size-4" />

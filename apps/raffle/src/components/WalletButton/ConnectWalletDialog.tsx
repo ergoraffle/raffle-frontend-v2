@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import {
   Dialog,
   DialogContent,
@@ -15,9 +17,10 @@ import {
 export type ConnectWalletDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  title?: string;
+  title?: string | ReactNode;
   description?: string;
   children?: React.ReactNode;
+  dialogMinWidth?: string;
 };
 
 export const ConnectWalletDialog = ({
@@ -25,7 +28,8 @@ export const ConnectWalletDialog = ({
   onOpenChange,
   title,
   description,
-  children
+  children,
+  dialogMinWidth
 }: ConnectWalletDialogProps) => {
   const { isMobile } = useBreakpoint();
   return isMobile ? (
@@ -40,7 +44,7 @@ export const ConnectWalletDialog = ({
     </Sheet>
   ) : (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-xl">
+      <DialogContent className={dialogMinWidth || 'min-w-xl'}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {!!description && <DialogDescription>{description}</DialogDescription>}
