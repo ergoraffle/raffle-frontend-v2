@@ -25,8 +25,9 @@
   --text-2xl: 22px;
   --text-3xl: 24px;
   --text-5xl: 28px;
-  --text-6xl: 38px;
-  --text-7xl: 72px;
+  --text-9xl: 38px;
+  --text-13xl: 48px;
+  --text-23xl: 72px;
 
   /* Line Height */
   --line-height: normal;
@@ -63,7 +64,11 @@
   }
 
   .typo-display-md {
-    @apply font-fraunces font-normal text-6xl sm:text-7xl;
+    @apply font-fraunces font-normal text-9xl sm:text-23xl;
+  }
+
+  .typo-display-sm {
+    @apply font-fraunces font-normal text-5xl sm:text-13xl;
   }
 
   .typo-body-sm {

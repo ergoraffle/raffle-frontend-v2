@@ -13,6 +13,7 @@ export const typographyVariants = cva('', {
       'heading-3': 'typo-heading-3',
       'heading-4': 'typo-heading-4',
       'heading-5': 'typo-heading-5',
+      'display-sm': 'typo-display-sm',
       'display-md': 'typo-display-md',
       'body-sm': 'typo-body-sm',
       'body-md': 'typo-body-md',

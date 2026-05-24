@@ -7,6 +7,8 @@ import {
   DialogTitle,
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
@@ -33,7 +35,10 @@ export const RaffleAddGiftDialog = ({
 
   return isMobile ? (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title="Which Basket do you want to add Gift to?">
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Which Basket do you want to add Gift to?</SheetTitle>
+        </SheetHeader>
         <RaffleAddGiftForm
           initialBasketNumber={initialBasketNumber}
           basketsCount={basketsCount}

@@ -11,7 +11,7 @@ export type RaffleDetailsIconBoxProps = {
 };
 
 export const RaffleDetailsIconBox = ({ loading, raffle }: RaffleDetailsIconBoxProps) => (
-  <Card padding="lg">
+  <Card padding="lg" shadow>
     <CardContent className="flex sm:py-2 sm:px-5.5 text-center">
       <div className="flex flex-col items-center gap-1 flex-1">
         <SandClock className="size-13" />

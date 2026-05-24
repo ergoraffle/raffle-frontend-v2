@@ -16,7 +16,7 @@ export const WalletButton = () => {
       <Button
         disabled={!!wallet.connecting}
         variant="outline-soft"
-        onClick={() => wallet.openDialog()}
+        onClick={() => wallet.openDialog(['Nautilus'])}
       >
         <WalletIcon className="hidden lg:inline-flex" />
         {!!wallet.connecting && (

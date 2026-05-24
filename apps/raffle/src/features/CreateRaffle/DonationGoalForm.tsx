@@ -114,39 +114,41 @@ export const DonationGoalForm = ({
           </Field>
         </div>
       </div>
-      <Field>
-        <FieldTitle title="How many Token to collect?" />
-        <Input
-          variant="bordered"
-          className="max-w-205"
-          aria-invalid={!!errors.count}
-          {...register('count', { valueAsNumber: true })}
-          type="number"
-          min={0}
-        />
-        {!!errors.count && <FieldError>{errors.count.message}</FieldError>}
-      </Field>
-      <Field>
-        <FieldTitle title="Set each Ticket’s Price." />
-        <div className="flex items-center gap-x-5">
+      <div className="flex flex-col sm:flex-row gap-x-2 gap-y-3">
+        <Field className="flex-1">
+          <FieldTitle title="How many Token to collect?" />
           <Input
             variant="bordered"
-            step="any"
-            aria-invalid={!!errors.amount}
-            {...register('amount', { valueAsNumber: true })}
-            className="max-w-205 grow"
+            className="max-w-205"
+            aria-invalid={!!errors.count}
+            {...register('count', { valueAsNumber: true })}
             type="number"
             min={0}
           />
-        </div>
-        {!!errors.amount && <FieldError>{errors.amount.message}</FieldError>}
-      </Field>
+          {!!errors.count && <FieldError>{errors.count.message}</FieldError>}
+        </Field>
+        <Field className="flex-1">
+          <FieldTitle title="Set each Ticket’s Price." />
+          <div className="flex items-center gap-x-5">
+            <Input
+              variant="bordered"
+              step="any"
+              aria-invalid={!!errors.amount}
+              {...register('amount', { valueAsNumber: true })}
+              className="max-w-205 grow"
+              type="number"
+              min={0}
+            />
+          </div>
+          {!!errors.amount && <FieldError>{errors.amount.message}</FieldError>}
+        </Field>
+      </div>
       <Field>
         <FieldTitle title="Set an address for the Mission’s Fund." />
         <Input
           variant="bordered"
           {...register('address')}
-          className="max-w-125"
+          className="lg:max-w-1/2"
           aria-invalid={!!errors.address}
         />
         {!!errors.address && <FieldError>{errors.address.message}</FieldError>}

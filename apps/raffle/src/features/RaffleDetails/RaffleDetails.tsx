@@ -7,7 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Typography
+  Typography,
+  WorkingOnIt
 } from '@ergo-raffle/ui-kit';
 
 import { RaiseProgress } from '@/features/RaiseProgress';
@@ -64,7 +65,7 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
       <RaffleDetailsDescription raffle={raffle} />
       <RaffleWinnerBaskets raffle={raffle} />
       <div className="flex flex-col lg:flex-row gap-9.5">
-        <Card className="flex-1">
+        <Card className="flex-1 lg:flex-3 xl:flex-1" shadow>
           <CardHeader>
             <CardTitle>Activity</CardTitle>
             <CardDescription>Timeline of events</CardDescription>
@@ -73,11 +74,14 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <RaffleActivity raffleId={raffleId} />
           </CardContent>
         </Card>
-        <Card className="flex-1">
+        <Card className="flex-1 sm:flex-2 xl:flex-1 justify-stretch" shadow>
           <CardHeader>
             <CardTitle>Social Activity</CardTitle>
             <CardDescription>See related tweets on X</CardDescription>
           </CardHeader>
+          <CardContent className="grow py-2 flex flex-col justify-center">
+            <WorkingOnIt />
+          </CardContent>
         </Card>
       </div>
     </div>

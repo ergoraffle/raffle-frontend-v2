@@ -93,11 +93,7 @@ export const MultiSelectCombobox = ({
       </div>
       <ComboboxContent anchor={anchorRef}>
         {searchable ? (
-          <ComboboxInput
-            placeholder={`Search ${placeholder}`}
-            value={query}
-            onChange={(e) => onQueryChange?.(e.target.value)}
-          />
+          <ComboboxInput value={query} onChange={(e) => onQueryChange?.(e.target.value)} />
         ) : null}
         {!isLoading && !(!onQueryChange || (!!onQueryChange && !query)) && (
           <ComboboxEmpty>

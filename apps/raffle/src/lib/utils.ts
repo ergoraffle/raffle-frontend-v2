@@ -23,21 +23,14 @@ export const formatDateTime = (date: string | Date | number) => {
   const today = new Date();
 
   const isToday = d.toDateString() === today.toDateString();
+  const isThisYear = d.getFullYear() === today.getFullYear();
 
-  if (isToday) {
-    return d.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-  }
+  if (isToday) return 'Today';
 
   return d.toLocaleString('en-US', {
+    ...(isThisYear ? {} : { year: 'numeric' }),
     month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
+    day: 'numeric'
   });
 };
 

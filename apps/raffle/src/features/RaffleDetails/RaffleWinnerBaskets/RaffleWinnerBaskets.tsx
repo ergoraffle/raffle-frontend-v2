@@ -98,7 +98,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
   };
 
   return (
-    <Card>
+    <Card shadow>
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           Winner Baskets

@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 
 import { Close } from '@ergo-raffle/icons';
 import { Dialog as SheetPrimitive } from 'radix-ui';
@@ -45,14 +45,12 @@ const SheetOverlay = ({ className, ...props }: SheetOverlayProps) => (
 export type SheetContentProps = ComponentProps<typeof SheetPrimitive.Content> & {
   side?: 'right' | 'bottom';
   showCloseButton?: boolean;
-  title?: ReactNode;
 };
 export const SheetContent = ({
   className,
   children,
   side = 'bottom',
   showCloseButton = true,
-  title,
   ...props
 }: SheetContentProps) => (
   <SheetPortal>
@@ -61,32 +59,31 @@ export const SheetContent = ({
       data-slot="sheet-content"
       data-side={side}
       className={cn(
-        'bg-white-2 data-[side=bottom]:bg-white-1 p-4 data-open:animate-in data-closed:animate-out data-[side=right]:data-closed:slide-out-to-right-10 data-[side=right]:data-open:slide-in-from-right-10 data-closed:fade-out-0 data-open:fade-in-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=bottom]:rounded-t-md data-[side=bottom]:data-open:slide-in-from-bottom-10 fixed z-110 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg transition duration-200 ease-in-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:sm:max-w-sm data-[side=bottom]:max-h-[90vh] group/content bg-blur',
+        'bg-white-2 data-[side=bottom]:bg-white-1 p-4 data-open:animate-in data-closed:animate-out data-[side=right]:data-closed:slide-out-to-right-10 data-[side=right]:data-open:slide-in-from-right-10 data-closed:fade-out-0 data-open:fade-in-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=bottom]:rounded-t-md data-[side=bottom]:data-open:slide-in-from-bottom-10 fixed z-110 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg transition duration-200 ease-in-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:sm:max-w-sm data-[side=bottom]:max-h-[90vh] group/content bg-blur not-has-data-[slot=sheet-header]:has-data-[slot=sheet-close]:pt-12',
         className
       )}
       {...props}
     >
-      {title || showCloseButton ? (
-        <SheetHeader>
-          {title ? <SheetTitle>{title}</SheetTitle> : null}
-          {showCloseButton ? (
-            <SheetClose asChild>
-              <Button variant="ghost" size="icon-sm">
-                <Close className="size-5" />
-                <span className="sr-only">Close</span>
-              </Button>
-            </SheetClose>
-          ) : null}
-        </SheetHeader>
-      ) : null}
+      {!!showCloseButton && (
+        <SheetClose asChild>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className={`absolute top-4 sm:top-2 ${side === 'right' ? 'left-4 sm:left-2' : 'right-4 sm:right-2'} z-110`}
+          >
+            <Close className="size-5" />
+            <span className="sr-only">Close</span>
+          </Button>
+        </SheetClose>
+      )}
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>
 );
 
-type SheetTitleProps = ComponentProps<typeof SheetPrimitive.Title>;
+export type SheetTitleProps = ComponentProps<typeof SheetPrimitive.Title>;
 
-const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
+export const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
   <SheetPrimitive.Title
     data-slot="sheet-title"
     className="group-data-[side=right]/content:text-right pr-6 grow group-data-[side=right]/content:pl-6 group-data-[side=right]/content:pr-0 typo-heading-4"
@@ -94,9 +91,9 @@ const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
   />
 );
 
-type SheetHeaderProps = ComponentProps<'div'>;
+export type SheetHeaderProps = ComponentProps<'div'>;
 
-const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
+export const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
   <div
     data-slot="sheet-header"
     className={cn(
@@ -106,6 +103,17 @@ const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
     {...props}
   />
 );
+
+export type SheetDescriptionProps = ComponentProps<typeof SheetPrimitive.Description>;
+
+export const SheetDescription = ({ className, ...props }: SheetDescriptionProps) => (
+  <SheetPrimitive.Description
+    data-slot="sheet-description"
+    className={cn('typo-subtitle-md text-gray-1', className)}
+    {...props}
+  />
+);
+
 export type SheetFooterProps = ComponentProps<'div'>;
 
 export const SheetFooter = ({ className, ...props }: SheetFooterProps) => (
