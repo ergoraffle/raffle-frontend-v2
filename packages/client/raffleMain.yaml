@@ -457,6 +457,88 @@ paths:
                 required:
                   - items
                   - total
+  /raffle/{raffleId}/basket/{winnerIndex}/transactions:
+    get:
+      tags:
+        - Raffle
+      description: Transaction for specific winner
+      parameters:
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: path
+          name: raffleId
+          required: true
+        - schema:
+            type: number
+          in: path
+          name: winnerIndex
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        raffleId:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - creation
+                            - donation
+                            - gift
+                            - ticket_redeem
+                            - gift_return
+                        ticketCount:
+                          type: integer
+                          format: int64
+                        winnerIndex:
+                          type: number
+                        txId:
+                          type: string
+                        raffleName:
+                          type: string
+                        height:
+                          type: number
+                        timestamp:
+                          type: number
+                        status:
+                          type: string
+                          enum:
+                            - success
+                            - failed
+                            - pending
+                      required:
+                        - address
+                        - raffleId
+                        - type
+                        - txId
+                        - height
+                        - status
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
   /activity:
     get:
       tags:
@@ -529,6 +611,8 @@ paths:
                         ticketCount:
                           type: integer
                           format: int64
+                        winnerIndex:
+                          type: number
                         txId:
                           type: string
                         raffleName:
@@ -653,109 +737,3 @@ paths:
                 required:
                   - items
                   - total
-
-  /raffles/{raffleId}/basket/{basketId}:
-    get:
-      summary: Get details of a winner basket
-      parameters:
-        - in: path
-          name: raffleId
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: basketId
-          required: true
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Winner basket details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WinnerBasketDetailResponse'
-        '404':
-          description: Basket not found
-  
-components:
-  schemas:
-    
-
-    #######################
-    # Basket Gift
-    #######################
-    BasketGift:
-      type: object
-      properties:
-        tokenId:
-          type: string
-        amount:
-          type: integer
-          format: int64
-      required:
-        - tokenId
-        - amount
-    
-    #######################
-    # Winner Basket Detail
-    #######################
-    WinnerBasketDetailResponse:
-      type: object
-      properties:
-        index:
-          type: number
-        type:
-          type: string
-          enum: [empty, shared]
-        tokenId:
-          type: string
-        tokenName:
-          type: string
-        sharePercent:
-          type: number
-          format: float
-        shareAmount:
-          type: number
-        gifts:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasketGift'
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasketTransaction'
-      required:
-        - basketId
-        - type
-        - gifts
-        - transactions
-        - tokenId
-        - tokenName
-
-    BasketTransaction:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum: [asset_unwrap, ticket_won, asset_added]
-        amount:
-          type: number
-        wallet:
-          type: string
-        address:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-      required:
-        - id
-        - type
-        - amount
-        - wallet
-        - address
-        - createdAt
-
-    

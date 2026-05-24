@@ -17,6 +17,7 @@ import {
 
 import { useRafflesQuery } from '@/hooks';
 
+import { TagsFilter } from './TagsFilter';
 import { TokensFilter } from './TokensFilter';
 
 const statusFilterItems: { value: GetRaffle200ItemsItemStatus; label: string }[] = [
@@ -115,6 +116,10 @@ export const RafflesFilters = () => {
             placeholder="Status"
             closeOnChange
             className="flex-1 lg:flex-auto"
+          />
+          <TagsFilter
+            value={typeof params.tags === 'string' ? [params.tags] : (params.tags ?? [])}
+            onChange={(values) => setParam('tags', values)}
           />
           <TokensFilter
             value={

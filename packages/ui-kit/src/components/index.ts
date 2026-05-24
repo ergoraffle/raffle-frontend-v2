@@ -1,4 +1,3 @@
-export * from './AspectRatio';
 export * from './Badge';
 export * from './BasketStatus';
 export * from './Button';

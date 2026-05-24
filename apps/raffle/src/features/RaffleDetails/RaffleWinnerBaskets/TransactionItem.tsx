@@ -1,31 +1,33 @@
 'use client';
 
-import type { BasketTransaction } from '@ergo-raffle/client';
+import type { GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem } from '@ergo-raffle/client';
 import { Identifier, Typography } from '@ergo-raffle/ui-kit';
 
-import { formatDateTime } from '@/lib/utils';
+import { basketTransactionRenderMap } from '@/features/basketTransactionRenderMap';
+import { formatDateTime, getTxURL } from '@/lib';
 
 export type TransactionItemProps = {
-  transaction: BasketTransaction;
+  transaction: GetRaffleRaffleIdBasketWinnerIndexTransactions200ItemsItem;
 };
 
-export const TransactionItem = ({ transaction }: TransactionItemProps) => (
-  <div className="flex items-center py-1.5 px-2 rounded-sm bg-white-1 justify-between gap-x-3.75">
-    <div className="flex-2 px-2 py-3 bg-secondary-5 text-secondary-5-foreground rounded-sm">
-      {transaction.type === 'asset_unwrap'
-        ? `${transaction.amount} Asset Unwrap`
-        : `Ticket ${transaction.amount} won`}
+export const TransactionItem = ({ transaction }: TransactionItemProps) => {
+  const config = basketTransactionRenderMap[transaction.type];
+  return (
+    <div className="flex items-center py-1.5 px-2 rounded-sm bg-white-1 justify-between gap-x-3.75 flex-wrap">
+      <div className="flex-2 px-2 py-3 bg-secondary-5 text-secondary-1 rounded-sm text-center">
+        {config?.text(transaction)}
+      </div>
+      <div className="max-w-25 text-secondary-1">
+        <span className="block text-nowrap overflow-hidden text-ellipsis">
+          {config?.direction} {transaction.address}
+        </span>
+      </div>
+      <div className="max-w-42">
+        <Identifier value={transaction.txId} href={getTxURL(transaction.txId)} size="lg" />
+      </div>
+      <Typography variant="subtitle-md" className="text-gray-2 text-right grow">
+        {!!transaction.timestamp && formatDateTime(transaction.timestamp * 1000)}
+      </Typography>
     </div>
-    <div className="max-w-25 text-secondary-1">
-      <span className="block text-nowrap overflow-hidden text-ellipsis">
-        {transaction.type === 'asset_unwrap' ? `to` : `by`} {transaction.wallet}
-      </span>
-    </div>
-    <div className="max-w-42">
-      <Identifier value={transaction.address} href={transaction.address} />
-    </div>
-    <Typography variant="subtitle-md" className="text-gray-2 text-right grow">
-      {transaction.createdAt ? formatDateTime(transaction.createdAt) : null}
-    </Typography>
-  </div>
-);
+  );
+};

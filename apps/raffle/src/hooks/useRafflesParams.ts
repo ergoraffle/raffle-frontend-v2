@@ -31,6 +31,7 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
   const tokenIds = searchParams.getAll('tokenIds');
   const ids = searchParams.getAll('ids');
   const pined = searchParams.get('pined') === 'true';
+  const tags = searchParams.getAll('tags');
 
   const offset = (page - 1) * perPage;
 
@@ -107,7 +108,8 @@ export const useRafflesQuery = (defaults?: { page?: number; perPage?: number }) 
     status: status.length ? status : undefined,
     tokenIds: tokenIds.length ? tokenIds : undefined,
     ids: ids.length ? ids : undefined,
-    text: text || undefined
+    text: text || undefined,
+    tags: tags.length ? tags : undefined
   };
 
   return {

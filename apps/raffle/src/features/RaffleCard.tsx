@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { type GetRaffle200ItemsItem, GetRaffle200ItemsItemStatus } from '@ergo-raffle/client';
 import { GiftPlus, SandClock } from '@ergo-raffle/icons';
 import {
-  AspectRatio,
   Badge,
   Card,
   CardAction,
@@ -37,16 +36,14 @@ export const RaffleCard = ({ raffle, deadline, loading }: RafflesContentProps) =
   >
     <Card className="relative grow w-full" hover>
       <CardImageWrapper loading={loading}>
-        <AspectRatio ratio={1.75 / 1}>
-          <Image
-            src={raffle?.picture || '/illustrations/imagePlaceholderIllustration.svg'}
-            priority
-            alt={raffle?.name || 'Raffle'}
-            className={`w-full rounded-tl-md rounded-tr-md ${raffle?.picture ? 'object-cover' : 'object-contain object-center'}`}
-            fill
-            sizes="(max-width: 768px) 100vw,(max-width: 1024px) 50vw,33vw"
-          />
-        </AspectRatio>
+        <Image
+          src={raffle?.picture || '/illustrations/imagePlaceholderIllustration.svg'}
+          priority
+          alt={raffle?.name || 'Raffle'}
+          className={`w-full rounded-tl-md rounded-tr-md ${raffle?.picture ? 'object-cover' : 'object-contain object-center'}`}
+          fill
+          sizes="(max-width: 768px) 100vw,(max-width: 1024px) 50vw,33vw"
+        />
       </CardImageWrapper>
       <CardHeader>
         <CardTitle loading={loading} className="line-clamp-2">

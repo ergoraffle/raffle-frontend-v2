@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+import { AspectRatio, type AspectRatioProps } from './AspectRatio';
 import { Skeleton } from './Skeleton';
 
 export const cardVariants = cva(
@@ -98,17 +99,28 @@ export const CardContent = ({ className, ...props }: CardContentProps) => (
     {...props}
   />
 );
-export type CardImageWrapperProps = ComponentProps<'div'> & { loading?: boolean };
+export type CardImageWrapperProps = AspectRatioProps & { loading?: boolean };
 
-export const CardImageWrapper = ({ className, loading, ...props }: CardImageWrapperProps) =>
+export const CardImageWrapper = ({
+  className,
+  loading,
+  children,
+  ...props
+}: CardImageWrapperProps) =>
   loading ? (
     <Skeleton className="h-41.75 sm:h-55.75 w-full rounded-none" data-slot="card-image-wrapper" />
   ) : (
-    <div
-      className={cn('relative w-full bg-gray-3', className)}
+    <AspectRatio
+      ratio={1.75 / 1}
       data-slot="card-image-wrapper"
       {...props}
-    />
+      className={cn(
+        'bg-gray-5 dark:bg-white-1 w-full relative overflow-hidden before:absolute before:right-0 before:-top-30 before:bg-primary-3 dark:before:opacity-80 before:blur-[100px] before:w-60 before:h-60 after:absolute after:-left-10 after:-bottom-30 after:bg-primary-3 dark:after:opacity-80 after:blur-[90px] after:w-50 after:h-50',
+        className
+      )}
+    >
+      {children}
+    </AspectRatio>
   );
 
 export type CardFooterProps = ComponentProps<'div'>;
