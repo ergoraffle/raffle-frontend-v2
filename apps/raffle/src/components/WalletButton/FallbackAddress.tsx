@@ -8,6 +8,9 @@ import { WalletError } from '@ergo-raffle/base-wallet';
 import { Clipboard, Download } from '@ergo-raffle/icons';
 import {
   Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   cn,
   Field,
   FieldError,
@@ -115,7 +118,7 @@ export const FallbackAddress = () => {
         valid wallet address before completing the donut tasks. You can obtain one through any of
         the options below.
       </Typography>
-      <div className="flex items-center gap-4">
+      <div className="items-center gap-4 hidden md:flex">
         {options.map((option, index) => (
           // biome-ignore lint/a11y: using div as button intentionally
           <div
@@ -140,9 +143,42 @@ export const FallbackAddress = () => {
           </div>
         ))}
       </div>
-      <div className="bg-gray-5 text-gray-5-foreground rounded-md p-4">
-        <Typography variant="body-sm">{options[selectedOptionIndex].content}</Typography>
+      <div className="bg-gray-5 text-gray-5-foreground rounded-md p-4 hidden md:block">
+        <Typography variant="body-sm" asChild>
+          {options[selectedOptionIndex].content}
+        </Typography>
       </div>
+      <div className="md:hidden space-y-2">
+        {options.map((option, index) => (
+          <Collapsible
+            key={option.title}
+            open={selectedOptionIndex === index}
+            onOpenChange={(open) => {
+              setSelectedOptionIndex(open ? index : -1);
+            }}
+          >
+            <CollapsibleTrigger asChild>
+              <div
+                className={cn(
+                  'flex-1 rounded-md border border-primary-1 text-black-2 p-4 relative',
+                  selectedOptionIndex === index
+                    ? 'bg-primary-5  before:absolute before:border-primary-1 before:left-1/2 before:-translate-x-1/2 before:-bottom-1.5  before:border-r-12 before:border-t-12 before:-rotate-135 before:border-l-transparent before:border-r-transparent before:border-t-black'
+                    : ''
+                )}
+              >
+                <Typography variant="heading-5">{option.title}</Typography>
+                <Typography variant="subtitle-md">{option.description}</Typography>
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="bg-gray-5 text-gray-5-foreground rounded-md p-4 mt-2">
+              <Typography variant="body-sm" asChild>
+                {option.content}
+              </Typography>
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
+      </div>
+
       <Field>
         <FieldLabel>Fallback Address</FieldLabel>
         <InputGroup>
