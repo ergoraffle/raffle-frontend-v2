@@ -3,6 +3,7 @@
 import {
   Button,
   Field,
+  FieldAlert,
   FieldError,
   FieldLabel,
   Input,
@@ -94,6 +95,9 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
       </Field>
       <Field>
         <FieldTitle title="Add up to 4 Photos" />
+        <Typography variant="subtitle-lg" className="mb-3">
+          Maximum file size: 512 KB
+        </Typography>
         <Uploader {...uploader} />
       </Field>
       <Field>
@@ -117,6 +121,11 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
           )}
         </div>
         {!!errors.deadline && <FieldError>{errors.deadline.message}</FieldError>}
+        {deadline > 21600 && (
+          <FieldAlert>
+            The selected deadline is more than one month away. Make sure this is what you intended.
+          </FieldAlert>
+        )}
       </Field>
       <div className="flex items-center justify-end">
         <Button

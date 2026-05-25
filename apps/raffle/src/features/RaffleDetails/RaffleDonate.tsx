@@ -291,12 +291,12 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         </Collapsible>
       )}
       <div
-        className={`hidden sm:block absolute bottom-0 left-0 z-9 h-48.5 w-full transition-all transition-duration-300 ${openCollapsible ? 'opacity-0' : 'opacity-100'}`}
+        className={`hidden sm:block absolute left-0 z-9 ${raffle.status === 'active' ? 'bottom-0' : 'bottom-1/2 -mb-24'} h-48.5 w-full transition-all transition-duration-300 ${openCollapsible ? 'opacity-0' : 'opacity-100'}`}
       >
         <Image
           src="/illustrations/raffleDonateIllustration.svg"
           alt="Donate"
-          className={`object-contain object-bottom`}
+          className="object-contain object-bottom"
           fill
           sizes="33vw"
         />
