@@ -26,6 +26,7 @@ import { validateAddress } from '@fleet-sdk/core';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { useDonate } from '@/hooks';
+import { paperWallet } from '@/lib';
 
 export const RaffleDonateFallbackAddressForm = () => {
   const { isSubmitting, siteKey, setRecaptcha, submitDonation } = useDonate();
@@ -33,6 +34,11 @@ export const RaffleDonateFallbackAddressForm = () => {
   const [address, setAddress] = useState<string>();
   const [hasError, setHasError] = useState<boolean>();
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
+
+  const onPaperWalletClick = async () => {
+    const address = await paperWallet();
+    setAddress(address);
+  };
 
   const options = [
     {
@@ -51,7 +57,6 @@ export const RaffleDonateFallbackAddressForm = () => {
     {
       title: 'Paper Wallet',
       description: 'Generate a paper wallet using an external tool.',
-      //TODO: replace with actual content when feature is implemented
       content: (
         <>
           Follow this{' '}
@@ -61,20 +66,19 @@ export const RaffleDonateFallbackAddressForm = () => {
             className="text-primary-1 hover:underline"
           >
             external link
-          </Link>
-          . Create a wallet.
+          </Link>{' '}
+          to create a paper wallet.
         </>
       )
     },
     {
       title: 'Instant Paper Wallet',
       description: 'We generate a paper wallet for you directly on this site.',
-      //TODO: replace with actual content when feature is implemented
       content: (
         <div className="flex justify-between items-center">
-          sample content for instant paper wallet.
+          Click to generate and download paper wallet.
           <Tooltip content="Download paper wallet">
-            <Button variant="primary-soft" size="icon">
+            <Button variant="primary-soft" size="icon" onClick={onPaperWalletClick}>
               <Download />
             </Button>
           </Tooltip>
