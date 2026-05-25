@@ -26,7 +26,9 @@ export const RaffleDonateFallbackAddressDialog = () => {
         <SheetHeader>
           <SheetTitle>Fallback Address</SheetTitle>
         </SheetHeader>
-        <RaffleDonateFallbackAddressForm />
+        <div className="-mx-4 no-scrollbar max-h-[80vh] overflow-y-auto px-4">
+          <RaffleDonateFallbackAddressForm />
+        </div>
       </SheetContent>
     </Sheet>
   ) : (
@@ -35,7 +37,9 @@ export const RaffleDonateFallbackAddressDialog = () => {
         <DialogHeader>
           <DialogTitle>Fallback Address</DialogTitle>
         </DialogHeader>
-        <RaffleDonateFallbackAddressForm />
+        <div className="-mx-4 no-scrollbar max-h-[80vh] overflow-y-auto px-4">
+          <RaffleDonateFallbackAddressForm />
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -6,14 +6,22 @@ import { Card, CardContent, Identifier, Skeleton, Typography } from '@ergo-raffl
 import { activityRenderMap } from '@/features/activityRenderMap';
 import { formatDateTime } from '@/lib';
 
-export type RaffleActivityItemProps = { activity?: GetActivity200ItemsItem; loading?: boolean };
+export type RaffleActivityItemProps = {
+  activity?: GetActivity200ItemsItem;
+  loading?: boolean;
+  isUserAddress?: boolean;
+};
 
-export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProps) => {
+export const RaffleActivityItem = ({
+  activity,
+  loading,
+  isUserAddress
+}: RaffleActivityItemProps) => {
   const config = activity ? activityRenderMap[activity.type] : undefined;
 
   return (
     <div className="flex items-stretch space-x-2">
-      <Card padding="xs" className="sm:flex-2">
+      <Card padding="xs" className={`sm:flex-2 ${isUserAddress ? 'bg-secondary-6' : ''}`}>
         <CardContent className="flex items-center space-x-1 my-auto">
           {loading ? (
             <>
@@ -30,7 +38,7 @@ export const RaffleActivityItem = ({ activity, loading }: RaffleActivityItemProp
           )}
         </CardContent>
       </Card>
-      <Card padding="xs" className="grow sm:flex-4">
+      <Card padding="xs" className={`grow sm:flex-4 ${isUserAddress ? 'bg-secondary-6' : ''}`}>
         <CardContent className="flex items-center justify-between space-x-1 text-gray-2 my-auto">
           <div className="max-w-40 xl:max-w-70">
             {loading ? (

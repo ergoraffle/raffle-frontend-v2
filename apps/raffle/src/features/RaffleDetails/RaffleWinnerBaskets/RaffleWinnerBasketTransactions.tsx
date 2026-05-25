@@ -6,6 +6,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  Empty,
   Skeleton,
   Typography
 } from '@ergo-raffle/ui-kit';
@@ -41,11 +42,19 @@ export const RaffleWinnerBasketTransactions = ({
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent className="px-3 space-y-2 pb-2">
-            <div className="max-h-32 overflow-y-auto scrollbar-hide space-y-2">
-              {transactions.items.map((transaction) => (
-                <TransactionItem transaction={transaction} key={transaction.timestamp} />
-              ))}
-            </div>
+            {transactions.items.length ? (
+              <div className="max-h-32 overflow-y-auto scrollbar-hide space-y-2">
+                {transactions.items.map((transaction) => (
+                  <TransactionItem transaction={transaction} key={transaction.timestamp} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white-1 text-white-1-foreground px-2 py-1.5 rounded-sm">
+                <Empty>
+                  <Typography variant="heading-3">No matching results found.</Typography>
+                </Empty>
+              </div>
+            )}
           </CollapsibleContent>
         </Collapsible>
       ) : null}

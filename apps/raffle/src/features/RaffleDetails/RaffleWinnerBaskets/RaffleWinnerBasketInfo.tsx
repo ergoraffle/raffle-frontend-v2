@@ -9,6 +9,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  Empty,
   Skeleton,
   Typography
 } from '@ergo-raffle/ui-kit';
@@ -66,12 +67,22 @@ export const RaffleWinnerBasketInfo = ({
               </CollapsibleTrigger>
               <CollapsibleContent className="px-3 pb-2">
                 <div className="bg-white-1 text-white-1-foreground px-2 py-1.5 rounded-sm">
-                  {basket.gifts.map((gift, index) => {
-                    const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
-                    return (
-                      <GiftItem gift={gift} key={`${index}-${gift.amount}`} giftToken={giftToken} />
-                    );
-                  })}
+                  {basket.gifts.length ? (
+                    basket.gifts.map((gift, index) => {
+                      const giftToken = giftTokens?.find((t) => t.id === gift.tokenId);
+                      return (
+                        <GiftItem
+                          gift={gift}
+                          key={`${index}-${gift.amount}`}
+                          giftToken={giftToken}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Empty>
+                      <Typography variant="heading-3">No matching results found.</Typography>
+                    </Empty>
+                  )}
                 </div>
               </CollapsibleContent>
             </Collapsible>
