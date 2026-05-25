@@ -94,14 +94,7 @@ export const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
 export type SheetHeaderProps = ComponentProps<'div'>;
 
 export const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
-  <div
-    data-slot="sheet-header"
-    className={cn(
-      'gap-2 flex items-center flex-row-reverse group-data-[side=right]/content:flex-row has-data-[slot=sheet-title]:justify-between has-data-[slot=sheet-title]:flex-row has-data-[slot=sheet-title]:group-data-[side=right]/content:flex-row-reverse',
-      className
-    )}
-    {...props}
-  />
+  <div data-slot="sheet-header" className={cn('space-y-2', className)} {...props} />
 );
 
 export type SheetDescriptionProps = ComponentProps<typeof SheetPrimitive.Description>;
