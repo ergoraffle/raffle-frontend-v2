@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,7 +31,6 @@ import {
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 import { zodResolver } from '@hookform/resolvers/zod';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 
 import { getInfo, getTokensBridgeable } from '@/actions';
@@ -47,6 +46,7 @@ import {
 
 import { type RaffleDonateForm, raffleDonateSchema } from '../schemas';
 import { donateRaffle } from '../services';
+import { RaffleDonateFallbackAddressDialog } from './RaffleDonateFallbackAddressDialog';
 import { RaffleDonateMessage } from './RaffleDonateMessage';
 
 export type RaffleDonateProps = {
@@ -67,8 +67,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
   const [siteKey, setSiteKey] = useState<string>();
   const [recaptcha, setRecaptcha] = useState<string>();
   const [network, setNetwork] = useState<'ergo' | 'bitcoin'>();
-
-  const needCaptcha = useMemo(() => wallet.selected?.name === 'Xverse', [wallet.selected]);
+  const [isFallbackDialogOpen, setIsFallbackDialogOpen] = useState<boolean>(false);
 
   const {
     register,
@@ -126,21 +125,23 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
       .then(async (walletInstance) => {
         if (!walletInstance) {
           await wallet.closeDialog();
-          setIsOpen(false);
           setNetwork(undefined);
         }
         if (walletInstance?.name === 'Nautilus') {
           setIsOpen(false);
           setTimeout(() => submit(walletInstance), 0);
         }
+        if (walletInstance?.name === 'Xverse') {
+          setIsFallbackDialogOpen(true);
+        }
       })
       .finally(() => {
-        setIsOpen(true);
+        setIsOpen(false);
       });
   };
 
   const submit = useCallback(
-    async (walletInstance?: WalletInstance) => {
+    async (walletInstance?: WalletInstance, address?: string) => {
       try {
         setIsOpen(false);
 
@@ -152,7 +153,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
             tickets: getValues().tickets,
             recaptcha,
             isBridgeable: bridgeableData?.bridgeable,
-            ergoAddress: wallet.ergoAddress
+            ergoAddress: address
           },
           walletInstance || wallet.selected
         );
@@ -176,6 +177,8 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         setDonateTransactionId(txId);
 
         resetForm();
+
+        setIsFallbackDialogOpen(false);
       } catch (error) {
         toast.error('Failed to donate raffle. Please try again later.', { errorDetails: error });
       } finally {
@@ -301,42 +304,19 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
           sizes="33vw"
         />
       </div>
+      <RaffleDonateFallbackAddressDialog
+        isSubmitting={isSubmitting}
+        open={isFallbackDialogOpen}
+        siteKey={siteKey || ''}
+        onCaptchaChange={(token) => setRecaptcha(token || undefined)}
+        onOpenChange={setIsFallbackDialogOpen}
+        onSubmit={(params) => submit(undefined, params.address)}
+      />
       <Dialog open={!wallet.open && isOpen} onOpenChange={(open) => !open && setIsOpen(false)}>
         <DialogContent className="min-w-xl">
           <DialogHeader>
             <DialogTitle>Buying {getValues('tickets')} Ticket</DialogTitle>
           </DialogHeader>
-
-          {needCaptcha && !!network && (
-            <>
-              {!!isLoading && (
-                <div className="flex items-center justify-center">
-                  <Spinner className="ml-2 mr-1 size-4" />
-                  <Typography asChild variant="subtitle-sm" className="text-gray-2">
-                    <span>loading...</span>
-                  </Typography>
-                </div>
-              )}
-              {!isLoading && (
-                <>
-                  <Typography variant="body-lg" className="mb-1">
-                    Please complete the reCAPTCHA to proceed with the purchase.
-                  </Typography>
-                  <ReCAPTCHA
-                    sitekey={siteKey || ''}
-                    onChange={(token) => setRecaptcha(token || undefined)}
-                  />
-                </>
-              )}
-              <Button
-                disabled={isLoading || isSubmitting || !recaptcha}
-                type="button"
-                onClick={() => submit()}
-              >
-                submit
-              </Button>
-            </>
-          )}
           {!network && (
             <>
               <div>
