@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import { createContext, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { NautilusWallet } from '@ergo-raffle/nautilus-wallet';
 import type { XverseWallet } from '@ergo-raffle/xverse-wallet';
@@ -31,17 +23,7 @@ export type WalletContextValue = {
   ensureConnected(name: 'Xverse'): XverseWallet;
 };
 
-const WalletContext = createContext<WalletContextValue | null>(null);
-
-export const useWallet = () => {
-  const context = useContext(WalletContext);
-
-  if (context === null) {
-    throw new Error('useWallet must be used within WalletProvider');
-  }
-
-  return context;
-};
+export const WalletContext = createContext<WalletContextValue | null>(null);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
