@@ -36,7 +36,7 @@ export const RaffleWinnerBasketTransactions = ({
       ) : transactions ? (
         <Collapsible className="rounded-sm data-[state=open]:bg-gray-5">
           <CollapsibleTrigger asChild>
-            <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0">
+            <div className="flex justify-between  border border-gray-5 rounded-sm p-3 group data-[state=open]:border-0 cursor-pointer hover:border-gray-4">
               <Typography variant="body-lg">Transactions</Typography>
               <Right className="size-5 group-data-[state=open]:rotate-90" />
             </div>

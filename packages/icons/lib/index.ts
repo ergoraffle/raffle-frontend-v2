@@ -1,3 +1,4 @@
+export { default as AlertTriangle } from './alert-triangle.svg?react';
 export { default as AlignCenter } from './align-center.svg?react';
 export { default as AlignJustified } from './align-justified.svg?react';
 export { default as AlignLeft } from './align-left.svg?react';

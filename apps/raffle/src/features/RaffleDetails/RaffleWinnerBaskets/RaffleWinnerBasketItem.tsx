@@ -114,7 +114,7 @@ export const RaffleWinnerBasketItem = ({
                               >
                                 {giftToken ? (
                                   <>
-                                    {`${getDecimalString(gift.amount, giftToken.decimals)}X `}
+                                    {`${getDecimalString(gift.amount, giftToken.decimals)} `}
                                     {giftToken.name || (
                                       <div className="max-w-20">
                                         <Identifier value={gift.tokenId} />

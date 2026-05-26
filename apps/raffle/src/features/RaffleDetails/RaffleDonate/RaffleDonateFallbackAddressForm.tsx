@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 
 import Link from 'next/link';
 
-import { Clipboard, Download } from '@ergo-raffle/icons';
+import { Check, Clipboard, Download } from '@ergo-raffle/icons';
 import {
   Button,
   Collapsible,
@@ -77,7 +77,7 @@ export const RaffleDonateFallbackAddressForm = () => {
       description: 'We generate a paper wallet for you directly on this site.',
       content: (
         <div className="flex justify-between items-center">
-          Click to generate and download paper wallet.
+          Click to generate and download new paper wallet.
           <Tooltip content="Download paper wallet">
             <Button variant="primary-soft" size="icon" onClick={onPaperWalletClick}>
               <Download />
@@ -114,6 +114,9 @@ export const RaffleDonateFallbackAddressForm = () => {
   return (
     <div className="space-y-4">
       <Typography variant="body-md" className="text-gray-2">
+        <b className="text-success flex items-center">
+          <Check className="size-5 mr-1" /> Connected to bitcoin
+        </b>
         To ensure you can receive funds in case of an error or return transaction, please provide a
         valid wallet address before completing the donut tasks. You can obtain one through any of
         the options below.

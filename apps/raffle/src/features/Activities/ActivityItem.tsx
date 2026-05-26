@@ -15,7 +15,7 @@ export const ActivityItem = ({ activity, loading }: ActivityItemProps) => {
         {loading ? (
           <Skeleton className="size-10 rounded-full" />
         ) : (
-          <div className="rounded-full bg-gray-5 size-10 flex items-center justify-center">
+          <div className="rounded-full bg-gray-5 size-10 min-w-10 flex items-center justify-center">
             {config?.icon}
           </div>
         )}
@@ -23,7 +23,9 @@ export const ActivityItem = ({ activity, loading }: ActivityItemProps) => {
           {loading ? (
             <Skeleton className="h-2 w-20 sm:w-50 mb-2" />
           ) : (
-            <Typography variant="heading-5">{config?.text(activity)}</Typography>
+            <Typography variant="heading-5" className="text-nowrap overflow-hidden text-ellipsis">
+              {config?.text(activity)}
+            </Typography>
           )}
           <div className="flex justify-between">
             {loading ? (

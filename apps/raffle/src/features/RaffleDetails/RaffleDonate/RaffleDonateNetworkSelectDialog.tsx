@@ -10,6 +10,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  toast,
   useBreakpoint
 } from '@ergo-raffle/ui-kit';
 
@@ -43,7 +44,13 @@ export const RaffleDonateNetworkSelectDialog = ({
       </SheetContent>
     </Sheet>
   ) : (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        toast.error('ddd');
+        onOpenChange(v);
+      }}
+    >
       <DialogContent className="min-w-xl">
         <DialogHeader>
           <DialogTitle>Buying {ticketCount} Ticket</DialogTitle>

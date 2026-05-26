@@ -79,7 +79,7 @@ export const RaffleDonateForm = ({ raffle }: RaffleDonateFormProps) => {
                   <div>
                     <FieldLabel htmlFor="checkout-terms" className="whitespace-nowrap">
                       I Agree to the{' '}
-                      <Link href="/terms" className="underline whitespace-nowrap">
+                      <Link href="/terms" className="underline whitespace-nowrap" target="_blank">
                         Terms of Use
                       </Link>
                     </FieldLabel>

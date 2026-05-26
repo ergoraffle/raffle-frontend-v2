@@ -31,7 +31,10 @@ export const RaffleActivityItem = ({
           ) : (
             <>
               {config?.icon}
-              <Typography variant="body-md" className="hidden sm:block whitespace-nowrap">
+              <Typography
+                variant="body-md"
+                className="hidden sm:block text-nowrap overflow-hidden text-ellipsis"
+              >
                 {config?.shortText(activity)}
               </Typography>
             </>
