@@ -31,6 +31,7 @@ import { paperWallet } from '@/lib';
 export const RaffleDonateFallbackAddressForm = () => {
   const { isSubmitting, siteKey, setRecaptcha, submitDonation } = useDonate();
 
+  const [captchaLoading, setCaptchaLoading] = useState<boolean>(true);
   const [address, setAddress] = useState<string>();
   const [hasError, setHasError] = useState<boolean>();
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
@@ -195,17 +196,22 @@ export const RaffleDonateFallbackAddressForm = () => {
         {!!hasError && <FieldError>Address is not valid</FieldError>}
       </Field>
       <div className="flex items-center justify-center h-20">
-        <ReCAPTCHA sitekey={siteKey ?? ''} onChange={(token) => setRecaptcha(token || '')} />
+        <ReCAPTCHA
+          sitekey={siteKey ?? ''}
+          onChange={(token) => setRecaptcha(token || '')}
+          onExpired={() => setRecaptcha('')}
+          asyncScriptOnLoad={() => setCaptchaLoading(false)}
+        />
       </div>
       <div className="flex items-center justify-center mt-4">
         <Button
-          disabled={!address || isSubmitting}
+          disabled={!address || isSubmitting || captchaLoading}
           type="button"
           className="w-full lg:w-120"
           onClick={handleClick}
           variant="primary"
         >
-          {!!isSubmitting && <Spinner />} Submit
+          {!!(isSubmitting || captchaLoading) && <Spinner />} Submit
         </Button>
       </div>
     </div>
