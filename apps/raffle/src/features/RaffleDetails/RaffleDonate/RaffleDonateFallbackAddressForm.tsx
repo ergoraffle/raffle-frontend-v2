@@ -45,20 +45,20 @@ export const RaffleDonateFallbackAddressForm = () => {
       title: 'External Wallet',
       description: 'Use an external Ergo wallet like Nautilus to create your own wallet.',
       content: (
-        <>
+        <div>
           Follow this{' '}
           <Link href="/" target="_blank" className="text-primary-1 hover:underline">
             external link
           </Link>
           . Create a wallet, copy your wallet address, and paste it into the following input field.
-        </>
+        </div>
       )
     },
     {
       title: 'Paper Wallet',
       description: 'Generate a paper wallet using an external tool.',
       content: (
-        <>
+        <div>
           Follow this{' '}
           <Link
             href="https://ergopaperwallet.org/"
@@ -68,7 +68,7 @@ export const RaffleDonateFallbackAddressForm = () => {
             external link
           </Link>{' '}
           to create a paper wallet.
-        </>
+        </div>
       )
     },
     {
