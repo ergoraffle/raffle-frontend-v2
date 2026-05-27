@@ -14,7 +14,7 @@ import {
 } from '@ergo-raffle/ui-kit';
 
 import { WalletDialog } from '@/components';
-import { WalletProvider } from '@/hooks';
+import { WalletProvider } from '@/providers';
 
 const Anchor: AnchorComponent = (props) => <Link {...props} />;
 const ImageComponent: ImageComponentType = (props) => <Image {...props} />;

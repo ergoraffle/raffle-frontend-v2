@@ -12,7 +12,7 @@ import { Typography } from './Typography';
 
 export const Toaster = ({ ...props }: ToasterProps) => (
   <Sonner
-    className="toaster group"
+    className="toaster group pointer-events-none"
     offset={100}
     position="top-right"
     style={{ zIndex: 140 }}
@@ -101,7 +101,7 @@ export const CustomToast = ({
   };
 
   return (
-    <div className={cn(toastVariants({ variant }))}>
+    <div className={cn(toastVariants({ variant }), 'pointer-events-auto')}>
       <div className="flex items-center gap-3 grow">
         {icon ?? defaultIcons[variant || 'info']}
         <div className="grow">
@@ -125,7 +125,11 @@ export const CustomToast = ({
           </Tooltip>
         )}
         <Button
-          onClick={() => sonnerToast.dismiss(id)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            sonnerToast.dismiss(id);
+          }}
           size="icon-xs"
           variant="plain"
           type="button"

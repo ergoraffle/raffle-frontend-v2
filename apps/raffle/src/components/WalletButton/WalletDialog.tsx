@@ -7,23 +7,17 @@ import { useWallet } from '@/hooks';
 import { Agreement } from './Agreement';
 import { ChooseWallet } from './ChooseWallet';
 import { ConnectWalletDialog } from './ConnectWalletDialog';
-import { ErgoWalletAddress } from './ErgoWalletAddress';
 
 export const WalletDialog = () => {
   const wallet = useWallet();
 
-  const state = useMemo<'agreement' | 'wallet' | 'ergoAddress'>(() => {
+  const state = useMemo<'agreement' | 'wallet'>(() => {
     if (!wallet.agreed) return 'agreement';
-
-    if (wallet.candidate === 'Nautilus') return 'wallet';
-
-    if (wallet.candidate) return 'ergoAddress';
-
     return 'wallet';
   }, [wallet]);
 
   const steps: Record<
-    'agreement' | 'wallet' | 'ergoAddress',
+    'agreement' | 'wallet',
     { component: React.ReactNode; title: string; description?: string }
   > = {
     agreement: {
@@ -34,10 +28,6 @@ export const WalletDialog = () => {
       component: <ChooseWallet />,
       title: 'Connect Wallet',
       description: 'Choose how you want to connect.'
-    },
-    ergoAddress: {
-      component: <ErgoWalletAddress />,
-      title: 'Connect via Ergopay'
     }
   };
 

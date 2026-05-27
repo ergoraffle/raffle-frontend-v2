@@ -9,8 +9,8 @@ import {
 } from '@ergo-raffle/proxy-transactions';
 
 import { getInfoBlockchain, getRaffle, postDonation } from '@/actions';
-import type { WalletContextValue } from '@/hooks';
 import { getNonDecimalString, type WalletInstance } from '@/lib';
+import type { WalletContextValue } from '@/providers';
 
 import type { RaffleForm } from './schemas';
 

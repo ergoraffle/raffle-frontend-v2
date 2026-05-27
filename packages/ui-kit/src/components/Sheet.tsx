@@ -62,6 +62,12 @@ export const SheetContent = ({
         'bg-white-2 data-[side=bottom]:bg-white-1 p-4 data-open:animate-in data-closed:animate-out data-[side=right]:data-closed:slide-out-to-right-10 data-[side=right]:data-open:slide-in-from-right-10 data-closed:fade-out-0 data-open:fade-in-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=bottom]:rounded-t-md data-[side=bottom]:data-open:slide-in-from-bottom-10 fixed z-110 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg transition duration-200 ease-in-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:sm:max-w-sm data-[side=bottom]:max-h-[90vh] group/content bg-blur not-has-data-[slot=sheet-header]:has-data-[slot=sheet-close]:pt-12',
         className
       )}
+      onPointerDownOutside={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('[data-sonner-toaster]')) {
+          e.preventDefault();
+        }
+      }}
       {...props}
     >
       {!!showCloseButton && (
@@ -94,14 +100,7 @@ export const SheetTitle = ({ className, ...props }: SheetTitleProps) => (
 export type SheetHeaderProps = ComponentProps<'div'>;
 
 export const SheetHeader = ({ className, ...props }: SheetHeaderProps) => (
-  <div
-    data-slot="sheet-header"
-    className={cn(
-      'gap-2 flex items-center flex-row-reverse group-data-[side=right]/content:flex-row has-data-[slot=sheet-title]:justify-between has-data-[slot=sheet-title]:flex-row has-data-[slot=sheet-title]:group-data-[side=right]/content:flex-row-reverse',
-      className
-    )}
-    {...props}
-  />
+  <div data-slot="sheet-header" className={cn('space-y-2', className)} {...props} />
 );
 
 export type SheetDescriptionProps = ComponentProps<typeof SheetPrimitive.Description>;

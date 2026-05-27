@@ -42,7 +42,13 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
             </Empty>
           </div>
         ) : (
-          data?.items?.map((item) => <RaffleActivityItem key={item.txId} activity={item} />)
+          data?.items?.map((item) => (
+            <RaffleActivityItem
+              key={item.txId}
+              activity={item}
+              isUserAddress={walletAddress === item.address}
+            />
+          ))
         )}
       </div>
       {!isLoading && data?.items && data.total ? (

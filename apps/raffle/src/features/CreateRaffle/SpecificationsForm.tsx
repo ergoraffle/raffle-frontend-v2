@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertTriangle } from '@ergo-raffle/icons';
 import {
   Button,
   Field,
@@ -54,6 +55,8 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
 
   const deadline = watch('deadline');
 
+  const hasMoreThanAMonthDeadline = deadline > 21600;
+
   return (
     <div className="space-y-8">
       <Field>
@@ -105,7 +108,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
         <div className="flex items-center gap-x-5">
           <Input
             variant="bordered"
-            className="max-w-205 grow"
+            className="md:max-w-70 grow"
             type="number"
             min={0}
             aria-invalid={!!errors.deadline}
@@ -115,15 +118,24 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
             })}
           />
           {!!deadline && (
-            <Typography variant="subtitle-lg" className="text-gray-2 whitespace-nowrap">
+            <Typography
+              variant="subtitle-lg"
+              className={`whitespace-nowrap ${hasMoreThanAMonthDeadline ? 'text-alert' : 'text-gray-2'}`}
+            >
               ≈ {formatDuration(deadline * 2)}
             </Typography>
           )}
         </div>
         {!!errors.deadline && <FieldError>{errors.deadline.message}</FieldError>}
-        {deadline > 21600 && (
-          <FieldAlert>
-            The selected deadline is more than one month away. Make sure this is what you intended.
+        {hasMoreThanAMonthDeadline && (
+          <FieldAlert className="flex items-center gap-2">
+            <AlertTriangle className="size-5" />
+            <Typography variant="body-lg" asChild>
+              <span>
+                The selected deadline is more than one month away. Make sure this is what you
+                intended.
+              </span>
+            </Typography>
           </FieldAlert>
         )}
       </Field>
