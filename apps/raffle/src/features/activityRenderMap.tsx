@@ -15,31 +15,31 @@ export const activityRenderMap: Record<
   }
 > = {
   creation: {
-    icon: <Spark className="size-6" />,
+    icon: <Spark className="size-6 min-w-6" />,
     shortText: () => 'Raffle created',
     text: () => 'Raffle created'
   },
 
   donation: {
-    icon: <Ticket className="size-6" />,
+    icon: <Ticket className="size-6 min-w-6" />,
     shortText: (activity?: GetActivity200ItemsItem) =>
       `${activity?.ticketCount ?? ''} Ticket bought`,
     text: (activity?: GetActivity200ItemsItem) => `${activity?.ticketCount ?? ''} Ticket bought`
   },
   gift: {
-    icon: <Gift className="size-6" />,
+    icon: <Gift className="size-6 min-w-6" />,
     shortText: () => 'added gift',
     text: (activity?: GetActivity200ItemsItem) =>
       `added gift to “${activity?.raffleName ?? ''}” Raffle`
   },
   gift_return: {
-    icon: <Gift className="size-6" />,
+    icon: <Gift className="size-6 min-w-6" />,
     shortText: () => 'gift return',
     text: (activity?: GetActivity200ItemsItem) =>
       `Gift returned from “${activity?.raffleName ?? ''}” Raffle`
   },
   ticket_redeem: {
-    icon: <BasketStatus className="size-6" />,
+    icon: <BasketStatus className="size-6 min-w-6" />,
     shortText: () => 'raising money',
     text: (activity?: GetActivity200ItemsItem) =>
       `“raising money for ${activity?.raffleName ?? ''}” Raffle`

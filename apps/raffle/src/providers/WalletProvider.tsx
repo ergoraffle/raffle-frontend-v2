@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import { createContext, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { NautilusWallet } from '@ergo-raffle/nautilus-wallet';
 import type { XverseWallet } from '@ergo-raffle/xverse-wallet';
@@ -22,10 +14,6 @@ export type WalletContextValue = {
   selected?: WalletInstance;
   connecting?: boolean;
   agreed?: boolean;
-  ergoAddress?: string;
-  candidate?: WalletName;
-  setCandidate: (candidate: WalletName | undefined) => void;
-  setErgoAddress: (ergoAddress: string | undefined) => void;
   connect: (name: WalletName | undefined) => Promise<void>;
   openDialog: (names?: WalletName[]) => Promise<WalletInstance | undefined>;
   closeDialog: () => Promise<void>;
@@ -35,17 +23,7 @@ export type WalletContextValue = {
   ensureConnected(name: 'Xverse'): XverseWallet;
 };
 
-const WalletContext = createContext<WalletContextValue | null>(null);
-
-export const useWallet = () => {
-  const context = useContext(WalletContext);
-
-  if (context === null) {
-    throw new Error('useWallet must be used within WalletProvider');
-  }
-
-  return context;
-};
+export const WalletContext = createContext<WalletContextValue | null>(null);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -56,8 +34,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const [addresses, setAddresses] = useState<Record<string, string>>();
   const [connecting, setConnecting] = useState<boolean>();
-  const [ergoAddress, setErgoAddress] = useState<string>();
-  const [candidate, setCandidate] = useState<WalletName>();
   const [agreed, setAgreed] = useState<boolean>();
   const [selected, setSelected] = useState<WalletInstance>();
   const [wallets, setWallets] = useState<WalletInstance[]>(walletInstances);
@@ -172,19 +148,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!open) {
-      setCandidate(undefined);
-    }
-  }, [open]);
-
   const value = useMemo(
     () => ({
       open,
-      candidate,
-      setCandidate,
-      ergoAddress,
-      setErgoAddress,
       addresses,
       agreed,
       connecting,
@@ -199,12 +165,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     [
       open,
       addresses,
-      candidate,
       agreed,
       agree,
       connecting,
       selected,
-      ergoAddress,
       connect,
       openDialog,
       ensureConnected,

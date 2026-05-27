@@ -6,7 +6,7 @@ import { useFramework } from '@/providers';
 
 import { Button } from './Button';
 import { Logo } from './Logo';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './Sheet';
+import { Sheet, SheetContent, SheetTrigger } from './Sheet';
 import { ThemeToggle } from './ThemeToggle';
 import { Typography } from './Typography';
 
@@ -98,9 +98,6 @@ export const Header = ({
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <SheetHeader>
-                <SheetTitle>Menu</SheetTitle>
-              </SheetHeader>
               <div className="mt-28 space-y-6">
                 <ThemeToggle />
                 <div className="no-scrollbar overflow-y-auto">

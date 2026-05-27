@@ -35,7 +35,10 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
   const winnerPotShare = watch('winnerPotShare', 0);
 
   const details = watch('details');
-  const filledSharePercent = details.reduce((sum, item) => sum + item.percent * item.count, 0);
+  const filledSharePercent = details.reduce(
+    (sum, item) => sum + (Number(item.percent) || 0) * (Number(item.count) || 0),
+    0
+  );
 
   const {
     fields: detailsItems,

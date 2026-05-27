@@ -30,6 +30,8 @@
     "@hookform/resolvers": "^5.2.2",
     "@sentry/nextjs": "^10.32.1",
     "axios": "^1.16.0",
+    "bip32": "^2.0.6",
+    "bip39": "^3.0.4",
     "dompurify": "^3.4.1",
     "marked": "^18.0.3",
     "next": "^15.5.12",

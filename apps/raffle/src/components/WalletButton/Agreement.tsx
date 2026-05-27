@@ -10,7 +10,7 @@ export const Agreement = () => {
     <>
       <Typography>
         By continuing I agree to the terms of{' '}
-        <Link href="/" className="underline hover:text-secondary-1">
+        <Link href="/terms" className="underline hover:text-secondary-1" target="_blank">
           privacy and policy
         </Link>
         .
