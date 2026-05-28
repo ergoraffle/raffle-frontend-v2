@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import type { GetRaffleRaffleIdBasket200ItemsItem } from '@ergo-raffle/client';
 import { Right } from '@ergo-raffle/icons';
 import {
@@ -25,9 +27,16 @@ export const RaffleWinnerBasketTransactions = ({
   basket,
   raffle
 }: RaffleWinnerBasketInfoDialogProps) => {
+  const params = useMemo(
+    () => ({
+      limit: 100
+    }),
+    []
+  );
   const { data: transactions, isLoading } = useFetchWinnerBasketTransactions(
     raffle.id,
-    basket.index
+    basket.index,
+    params
   );
   return (
     <div className="space-y-3">

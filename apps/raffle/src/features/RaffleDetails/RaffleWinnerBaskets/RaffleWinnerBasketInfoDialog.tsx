@@ -120,7 +120,7 @@ export const RaffleWinnerBasketInfoDialog = ({
     </Sheet>
   ) : (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:min-w-125 lg:min-w-3xl">
+      <DialogContent className="md:min-w-[90vw] lg:min-w-3xl">
         <DialogHeader>
           <DialogTitle asChild>
             <div className="w-full">

@@ -79,7 +79,7 @@ export const ComboboxContent = ({
         data-slot="combobox-content"
         data-chips={!!anchor}
         className={cn(
-          'py-2.5 bg-gray-4 dark:bg-white-1 dark:shadow-2 mt-2 text-gray-4-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 overflow-hidden rounded-lg shadow-md duration-100 *:data-[slot=input-group]:shadow-none data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2 group/combobox-content relative max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width)',
+          'py-2.5 bg-gray-4 dark:bg-background dark:text-foreground dark:shadow-2 mt-2 text-gray-4-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 overflow-hidden rounded-lg shadow-md duration-100 *:data-[slot=input-group]:shadow-none data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2 group/combobox-content relative max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width)',
           className
         )}
         {...props}
@@ -94,7 +94,7 @@ export const ComboboxList = ({ className, ...props }: ComboboxListProps) => (
   <ComboboxPrimitive.List
     data-slot="combobox-list"
     className={cn(
-      'no-scrollbar max-h-[min(calc(--spacing(72)---spacing(9)),calc(var(--available-height)---spacing(9)))] scroll-py-1 p-1 data-empty:p-0 overflow-y-auto overscroll-contain',
+      'no-scrollbar max-h-[min(calc(--spacing(72)---spacing(9)),calc(var(--available-height)---spacing(9)))] scroll-py-1 py-1 px-2 data-empty:p-0 overflow-y-auto overscroll-contain',
       className
     )}
     {...props}
@@ -107,7 +107,7 @@ export const ComboboxItem = ({ className, children, ...props }: ComboboxItemProp
   <ComboboxPrimitive.Item
     data-slot="combobox-item"
     className={cn(
-      "gap-2 py-2 px-2.5 typo-subtitle-lg [&_svg:not([class*='size-'])]:size-4 relative flex w-full justify-between cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+      "gap-2 py-2 px-2.5 typo-subtitle-lg [&_svg:not([class*='size-'])]:size-4 relative flex w-full rounded-md justify-between cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:bg-gray-5 hover:text-gray-5-foreground",
       className
     )}
     {...props}
