@@ -24,7 +24,7 @@ export const RaffleDonateFallbackAddressDialog = () => {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Fallback Address</SheetTitle>
+          <SheetTitle>Ergo Address</SheetTitle>
         </SheetHeader>
         <div className="-mx-4 no-scrollbar max-h-[80vh] overflow-y-auto px-4">
           <RaffleDonateFallbackAddressForm />
@@ -35,7 +35,7 @@ export const RaffleDonateFallbackAddressDialog = () => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="min-w-[90vw] lg:min-w-4xl">
         <DialogHeader>
-          <DialogTitle>Fallback Address</DialogTitle>
+          <DialogTitle>Ergo Address</DialogTitle>
         </DialogHeader>
         <div className="-mx-4 no-scrollbar max-h-[80vh] overflow-y-auto px-4">
           <RaffleDonateFallbackAddressForm />

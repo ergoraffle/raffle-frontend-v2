@@ -44,19 +44,24 @@ export const RaffleDonateFallbackAddressForm = () => {
   const options = [
     {
       title: 'External Wallet',
+      subTitle: 'Recommended',
       description: 'Use an external Ergo wallet like Nautilus to create your own wallet.',
       content: (
         <div>
-          Follow this{' '}
-          <Link href="/" target="_blank" className="text-primary-1 hover:underline">
-            external link
+          <Link
+            href="https://ergoplatform.org/en/get-erg/#Wallets"
+            target="_blank"
+            className="text-primary-1 hover:underline"
+          >
+            Create a wallet via this external link
           </Link>
-          . Create a wallet, copy your wallet address, and paste it into the following input field.
+          , copy your address, and paste it into the input field below.
         </div>
       )
     },
     {
       title: 'Paper Wallet',
+      subTitle: 'Quick and safe',
       description: 'Generate a paper wallet using an external tool.',
       content: (
         <div>
@@ -74,6 +79,7 @@ export const RaffleDonateFallbackAddressForm = () => {
     },
     {
       title: 'Instant Paper Wallet',
+      subTitle: 'Instant',
       description: 'We generate a paper wallet for you directly on this site.',
       content: (
         <div className="flex justify-between items-center">
@@ -113,13 +119,12 @@ export const RaffleDonateFallbackAddressForm = () => {
 
   return (
     <div className="space-y-4">
+      <Typography variant="body-button" className="text-success flex items-center mb-2">
+        <Check className="size-5 mr-1" /> Connected to Bitcoin
+      </Typography>
       <Typography variant="body-md" className="text-gray-2">
-        <b className="text-success flex items-center">
-          <Check className="size-5 mr-1" /> Connected to bitcoin
-        </b>
-        To ensure you can receive funds in case of an error or return transaction, please provide a
-        valid wallet address before completing the donut tasks. You can obtain one through any of
-        the options below.
+        Please add an Ergo wallet address to secure your refunds and rewards before finishing your
+        donation. Select an option below to create or connect one.
       </Typography>
       <div className="items-stretch gap-4 hidden md:flex">
         {options.map((option, index) => (
@@ -142,6 +147,9 @@ export const RaffleDonateFallbackAddressForm = () => {
             )}
           >
             <Typography variant="heading-5">{option.title}</Typography>
+            <Typography variant="body-sm" className="text-gray-2">
+              {option.subTitle}
+            </Typography>
             <Typography variant="subtitle-md">{option.description}</Typography>
           </div>
         ))}
@@ -170,6 +178,7 @@ export const RaffleDonateFallbackAddressForm = () => {
                 )}
               >
                 <Typography variant="heading-5">{option.title}</Typography>
+                <Typography variant="subtitle-sm">{option.subTitle}</Typography>
                 <Typography variant="subtitle-md">{option.description}</Typography>
               </div>
             </CollapsibleTrigger>
@@ -183,7 +192,7 @@ export const RaffleDonateFallbackAddressForm = () => {
       </div>
 
       <Field>
-        <FieldLabel>Fallback Address</FieldLabel>
+        <FieldLabel>Ergo Address</FieldLabel>
         <InputGroup variant="bordered">
           <InputGroupInput
             value={address}

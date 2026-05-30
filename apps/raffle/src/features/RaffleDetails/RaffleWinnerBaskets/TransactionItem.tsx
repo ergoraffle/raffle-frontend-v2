@@ -22,7 +22,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
           {config?.direction} {transaction.address}
         </span>
       </div>
-      <div className="max-w-42">
+      <div className="max-w-42 hidden sm:block">
         <Identifier value={transaction.txId} href={getTxURL(transaction.txId)} size="lg" />
       </div>
       <Typography variant="subtitle-md" className="text-gray-2 text-right grow">
