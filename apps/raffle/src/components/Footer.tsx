@@ -8,31 +8,23 @@ export const Footer = () => {
     () => [
       {
         text: 'Github',
-        href: '/raffles'
+        href: 'https://github.com/ergoraffle'
       },
       {
-        text: '6th link',
-        href: '/6th-link'
-      },
-      {
-        text: 'About/Contact',
-        href: '/about'
-      },
-      {
-        text: 'Github',
-        href: '/'
-      },
-      {
-        text: 'Github',
-        href: '/github'
+        text: 'Raffle V1',
+        href: 'https://ergoraffle.com'
       },
       {
         text: 'Whitepaper',
-        href: '/whitepaper'
+        href: 'https://github.com/ergoraffle/raffle-v2/blob/dev/packages/contracts/README.md'
       },
       {
-        text: 'Fourth link',
-        href: '/fourth-link'
+        text: 'Support',
+        href: 'https://discord.gg/hn97ZCrk5f'
+      },
+      {
+        text: 'Contact',
+        href: 'mailto:raffle@rosen.tech'
       }
     ],
     []
@@ -41,15 +33,15 @@ export const Footer = () => {
   const socialLinks = useMemo(
     () => [
       {
-        href: '/x',
+        href: 'https://x.com/ergo_platform',
         icon: <X />
       },
       {
-        href: '/discord',
+        href: 'https://discord.gg/hn97ZCrk5f',
         icon: <Discord />
       },
       {
-        href: '/telegram',
+        href: 'https://t.me/ergoraffle',
         icon: <Telegram />
       }
     ],

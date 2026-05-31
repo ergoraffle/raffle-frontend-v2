@@ -13,7 +13,7 @@ export const Header = () => {
     () => [
       { text: 'All raffles', href: '/raffles' },
       { text: 'FAQ', href: '/faq' },
-      { text: 'About/Contact', href: '/' }
+      { text: 'About', href: '/about' }
     ],
     []
   );

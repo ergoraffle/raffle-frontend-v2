@@ -37,6 +37,7 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
                     <Link
                       href={link.href}
                       className="hover:text-primary-1 transition-all duration-300"
+                      target="_blank"
                     >
                       {link.text}
                     </Link>
@@ -48,9 +49,9 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
           <ul className="flex items-center justify-center gap-4 mt-2 lg:mt-6">
             {socialLinks.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className="[&_>svg]:size-6">
+                <Link href={link.href} className="[&_>svg]:size-6" target="_blank">
                   {link.icon}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
