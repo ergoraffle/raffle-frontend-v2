@@ -65,6 +65,7 @@ export { default as Wallet } from './wallet.svg?react';
 export { default as X } from './x.svg?react';
 export { default as ZoomIn } from './zoom-in.svg?react';
 export { default as ZoomOut } from './zoom-out.svg?react';
+export { default as ZoomScan } from './zoom-scan.svg?react';
 export const TOKENS = {
   erg: new URL(/* @vite-ignore */ 'tokens/erg.svg', import.meta.url).href
 } as const;

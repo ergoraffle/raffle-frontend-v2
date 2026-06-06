@@ -7,12 +7,6 @@ import {
   CardAction,
   CardContent,
   CardImageWrapper,
-  Carousel,
-  CarouselContent,
-  CarouselDots,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   Identifier,
   Skeleton,
   Typography
@@ -21,6 +15,7 @@ import {
 import { getAddressUrl } from '@/lib';
 
 import { raffleStatusMap } from '../raffleStatusRenderMap';
+import { RaffleDetailsImageCarousel } from './RaffleDetailsImageCarousel';
 import { RaffleVoteCard } from './RaffleVoteCard';
 import type { RaffleDetailView } from './raffleToViewModel';
 
@@ -45,31 +40,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
         />
       </CardImageWrapper>
     ) : (
-      <Carousel>
-        <CarouselContent>
-          {raffle.pictures.map((picture) => (
-            <CarouselItem key={picture}>
-              <CardImageWrapper>
-                <Image
-                  src={picture}
-                  priority
-                  alt={raffle.name}
-                  className="w-full object-cover rounded-tl-md rounded-tr-md"
-                  fill
-                  sizes="(max-width: 1024px) 100vw,33vw"
-                />
-              </CardImageWrapper>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        {raffle.pictures.length > 1 ? (
-          <>
-            <CarouselNext />
-            <CarouselPrevious />
-            <CarouselDots />
-          </>
-        ) : null}
-      </Carousel>
+      <RaffleDetailsImageCarousel pictures={raffle.pictures} placeholder={raffle.name} />
     )}
     {!loading && raffle?.status && raffle?.status !== GetRaffle200ItemsItemStatus.active && (
       <CardAction>
