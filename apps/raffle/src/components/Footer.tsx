@@ -1,15 +1,11 @@
 import { useMemo } from 'react';
 
-import { Discord, Telegram, X } from '@ergo-raffle/icons';
+import { Discord, Github, Telegram, X } from '@ergo-raffle/icons';
 import { Footer as FooterPrimitive } from '@ergo-raffle/ui-kit';
 
 export const Footer = () => {
   const links = useMemo(
     () => [
-      {
-        text: 'Github',
-        href: 'https://github.com/ergoraffle'
-      },
       {
         text: 'Raffle V1',
         href: 'https://ergoraffle.com'
@@ -32,6 +28,10 @@ export const Footer = () => {
 
   const socialLinks = useMemo(
     () => [
+      {
+        href: 'https://github.com/ergoraffle',
+        icon: <Github />
+      },
       {
         href: 'https://x.com/ergo_platform',
         icon: <X />
