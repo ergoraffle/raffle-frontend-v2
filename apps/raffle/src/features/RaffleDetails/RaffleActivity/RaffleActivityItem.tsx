@@ -10,17 +10,23 @@ export type RaffleActivityItemProps = {
   activity?: GetActivity200ItemsItem;
   loading?: boolean;
   isUserAddress?: boolean;
+  onClick?: () => void;
 };
 
 export const RaffleActivityItem = ({
   activity,
   loading,
-  isUserAddress
+  isUserAddress,
+  onClick
 }: RaffleActivityItemProps) => {
   const config = activity ? activityRenderMap[activity.type] : undefined;
 
   return (
-    <div className="flex items-stretch space-x-2">
+    // biome-ignore lint/a11y: using div as button intentionally
+    <div
+      className="flex items-stretch space-x-2 cursor-pointer hover:px-2 transition-all"
+      onClick={onClick}
+    >
       <Card padding="xs" className={`sm:flex-2 ${isUserAddress ? 'bg-secondary-6' : ''}`}>
         <CardContent className="flex items-center space-x-1 my-auto">
           {loading ? (

@@ -4,13 +4,17 @@ import { Card, CardContent, Skeleton, Typography } from '@ergo-raffle/ui-kit';
 import { activityRenderMap, activityStatusRenderMap } from '@/features/activityRenderMap';
 import { formatDateTime } from '@/lib';
 
-export type ActivityItemProps = { activity?: GetActivity200ItemsItem; loading?: boolean };
+export type ActivityItemProps = {
+  activity?: GetActivity200ItemsItem;
+  loading?: boolean;
+  onClick?: () => void;
+};
 
-export const ActivityItem = ({ activity, loading }: ActivityItemProps) => {
+export const ActivityItem = ({ activity, loading, onClick }: ActivityItemProps) => {
   const config = activity ? activityRenderMap[activity.type] : undefined;
 
   return (
-    <Card padding="xs">
+    <Card padding="xs" onClick={onClick} className="cursor-pointer hover:mx-3 transition-all">
       <CardContent className="flex items-center space-x-3 my-auto">
         {loading ? (
           <Skeleton className="size-10 rounded-full" />

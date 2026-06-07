@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, Empty, Typography } from '@er
 
 import { ActivityFilers } from './ActivitiesFilters';
 import { ActivitiesPagination } from './ActivitiesPagination';
-import { ActivityItem } from './ActivityItem';
+import { ActivityList } from './ActivityList';
 
 type ActivityProps = {
   params?: GetActivityParams;
@@ -29,11 +29,7 @@ export const Activities = async ({ params, address }: ActivityProps) => {
             </Empty>
           </div>
         ) : (
-          <div className="space-y-3">
-            {items.map((activity) => (
-              <ActivityItem activity={activity} key={activity.txId} />
-            ))}
-          </div>
+          <ActivityList activities={items} />
         )}
         {!!total && <ActivitiesPagination total={total} />}
       </CardContent>

@@ -1,7 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Empty, Pagination, Typography } from '@ergo-raffle/ui-kit';
 
+import { ActivityDetailsDialog } from '@/features/Activities/ActivityDetailsDialog';
 import { useActivityParams, useFetchActivity } from '@/hooks';
 
 import { RaffleActivityFilters } from './RaffleActivityFilters';
@@ -20,6 +23,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
     walletAddress
   } = useActivityParams({ raffleId });
   const { data, isLoading } = useFetchActivity(params);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 
   return (
     <>
@@ -47,6 +51,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
               key={item.txId}
               activity={item}
               isUserAddress={walletAddress === item.address}
+              onClick={() => setDetailsDialogOpen(true)}
             />
           ))
         )}
@@ -63,6 +68,7 @@ export const RaffleActivity = ({ raffleId }: RaffleActivityProps) => {
           className="mt-4"
         />
       ) : null}
+      <ActivityDetailsDialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} />
     </>
   );
 };
