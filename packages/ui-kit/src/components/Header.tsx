@@ -66,7 +66,7 @@ export const Header = ({
             className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-1"
             asChild
           >
-            <span>Beta</span>
+            <span>Testnet</span>
           </Typography>
         </div>
         <ul className="items-center gap-x-10 hidden lg:flex">

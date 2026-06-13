@@ -99,7 +99,7 @@ export const RaffleDetailsImageCard = ({ loading, raffle }: RaffleDetailsImageCa
         <CardContent className="flex flex-col">
           <div className="flex items-center justify-between text-black-1">
             <Typography variant="heading-5" asChild>
-              <span>Service fee</span>
+              <span>Protocol fee</span>
             </Typography>
             {loading ? (
               <Skeleton className="h-2 w-10" />

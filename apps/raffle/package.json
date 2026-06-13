@@ -29,6 +29,7 @@
     "@fleet-sdk/core": "^0.12.0",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/nextjs": "^10.32.1",
+    "@vercel/functions": "^3.7.1",
     "axios": "^1.16.0",
     "bip32": "^2.0.6",
     "bip39": "^3.0.4",

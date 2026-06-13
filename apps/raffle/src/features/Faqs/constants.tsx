@@ -20,10 +20,10 @@ export const tabs: Tabs[] = [
           <>
             <p>
               There are three types of fees within Raffles. A Raffle creation fee, a Raffle donation
-              fee, and a service fee. The first two fees are just network transaction fees; we do
+              fee, and a protocol fee. The first two fees are just network transaction fees; we do
               not charge any more for the service than facilitating the Raffle creation and
               donation. Currently, 5% of the total raised money by a successful Raffle is paid as a
-              service fee.
+              protocol fee.
             </p>
             <p>
               It is worth mentioning that the service is fully decentralized; anyone can join the
