@@ -1,0 +1,64 @@
+/* Tailwind v4 imports */
+@import "./colors.css";
+@import "./typography.css";
+@import "../components/Uploader/uploader.css";
+@import "./textEditor.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================
+   Design Tokens
+========================= */
+@theme {
+  /* Shadows */
+  --shadow-*: initial;
+  --shadow-1: 0px 17px 27px 17px var(--color-black-4);
+  --shadow-2: 0px 4px 24px 8px var(--color-black-4);
+  --shadow-3: 0px 0px 9px 4px var(--color-primary-5);
+  --shadow-4: 0px 1px 3px 1px var(--color-black-1) / 15;
+  --shadow-5: 0px 1px 3px 1px oklch(0.3063 0.1961 272.74 / 25%);
+  --shadow-6: 0px 4px 8px 0px var(--color-black-4);
+
+  /* Radius */
+  --radius-*: initial;
+  --radius-xs: 2pt;
+  --radius-sm: 4pt;
+  --radius-base: 6pt;
+  --radius-md: 8pt;
+  --radius-lg: 12pt;
+  --radius-xlg: 16pt;
+  --radius-2xlg: 20pt;
+  --radius-3xlg: 24pt;
+  --radius-full: 100%;
+}
+body {
+  @apply font-poppins leading-none bg-background text-foreground;
+}
+
+@layer utilities {
+  .bg-blur {
+    @apply backdrop-blur-[27px];
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE, Old Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Chrome, Safari, Edge */
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* Firefox */
+  .no-spinner {
+    -moz-appearance: textfield;
+  }
+}
+
+@utility container {
+  @apply mx-auto px-4;
+}

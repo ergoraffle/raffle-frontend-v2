@@ -1,0 +1,124 @@
+import { TRANSACTIONS_STORAGE_KEY } from '@/constants';
+
+export const toQueryString = (params: Record<string, unknown>): string => {
+  const cleanedParams = structuredClone(params);
+  const searchParams = new URLSearchParams();
+
+  Object.entries(cleanedParams).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      searchParams.append(key, value.map(String).join(','));
+      return;
+    }
+
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      searchParams.append(key, String(value));
+    }
+  });
+
+  return searchParams.toString();
+};
+
+export const formatDateTime = (date: string | Date | number) => {
+  const d = new Date(date);
+  const today = new Date();
+
+  const isToday = d.toDateString() === today.toDateString();
+  const isThisYear = d.getFullYear() === today.getFullYear();
+
+  if (isToday) return 'Today';
+
+  return d.toLocaleString('en-US', {
+    ...(isThisYear ? {} : { year: 'numeric' }),
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+export const formatDuration = (minutes: number) => {
+  const units = [
+    { label: 'year', value: 60 * 24 * 365 },
+    { label: 'month', value: 60 * 24 * 30 },
+    { label: 'week', value: 60 * 24 * 7 },
+    { label: 'day', value: 60 * 24 },
+    { label: 'hour', value: 60 },
+    { label: 'minute', value: 1 }
+  ];
+
+  for (const unit of units) {
+    const amount = Math.floor(minutes / unit.value);
+    if (amount >= 1) {
+      return `${amount} ${unit.label}${amount > 1 ? 's' : ''}`;
+    }
+  }
+
+  return '0 minutes';
+};
+
+export const getDecimalString = (
+  value?: bigint | number | string,
+  decimals?: number,
+  truncateLength?: number
+): string => {
+  const valueString = (value ?? 0).toString();
+
+  const safeDecimals = decimals ?? 0;
+
+  if (!safeDecimals) return valueString;
+
+  const untrimmedResult =
+    valueString.length > safeDecimals
+      ? `${valueString.slice(0, -safeDecimals)}.${valueString.slice(-safeDecimals)}`
+      : `0.${valueString.padStart(safeDecimals, '0')}`;
+
+  const preciseResult = untrimmedResult.replace(/0+$/, '').replace(/\.$/, '') || '0';
+
+  return preciseResult.replace(
+    /\.(.*)/,
+    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`
+  );
+};
+
+export const getNonDecimalString = (value: string, decimals: number) => {
+  if (!decimals) return value;
+
+  const decimalPointIndex = value.indexOf('.');
+
+  // if there is no fractional part, just add enough zeros at the end
+  if (decimalPointIndex === -1) {
+    return `${value}${'0'.repeat(decimals)}`;
+  }
+
+  // otherwise shift decimal point to the right and add enough zeros at the end
+  const fractionalPartLength = value.length - decimalPointIndex - 1;
+
+  return `${value.slice(0, decimalPointIndex)}${value.slice(
+    decimalPointIndex + 1,
+    decimalPointIndex + 1 + decimals
+  )}${fractionalPartLength <= decimals ? '0'.repeat(decimals - fractionalPartLength) : ''}`.replace(
+    /^0+(\d+)/,
+    '$1'
+  );
+};
+
+export const getAddressUrl = (address?: string): string | undefined => {
+  if (!address) return;
+  return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/addresses/${address}`;
+};
+
+export const getTxURL = (tx?: string): string | undefined => {
+  if (!tx) return;
+  return `${process.env.NEXT_PUBLIC_ERGO_EXPLORER}/transactions/${tx}`;
+};
+
+export const getTxURLForRunes = (tx?: string): string | undefined => {
+  if (!tx) return;
+  return `https://uniscan.cc/tx/${tx}`;
+};
+
+export const saveTransactionId = (value: string) => {
+  const stored = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
+  let items: string[] = stored ? JSON.parse(stored) : [];
+  if (!Array.isArray(items)) items = [];
+  items.push(value);
+  localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(items));
+};

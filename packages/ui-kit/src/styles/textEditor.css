@@ -1,0 +1,50 @@
+.styled-text-preview h1 {
+  @apply font-medium text-lg sm:text-5xl;
+}
+.styled-text-preview h2 {
+  @apply font-medium text-md sm:text-3xl;
+}
+.styled-text-preview h3 {
+  @apply font-medium text-sm sm:text-xl;
+}
+.styled-text-preview h4 {
+  @apply font-medium text-xs sm:text-lg;
+}
+.styled-text-preview h5 {
+  @apply font-medium text-xs sm:text-md;
+}
+.ql-wrapper .ql-editor {
+  @apply min-h-50 focus-visible:outline-0 } .ql-editor li[data-list="bullet"], .styled-text-preview li[data-list="bullet"], .styled-text-preview ul li { @apply list-disc;
+}
+.ql-editor li[data-list="ordered"],
+.styled-text-preview li[data-list="ordered"] {
+  @apply list-decimal;
+}
+.ql-wrapper .ql-editor ul,
+.styled-text-preview ul {
+  @apply pl-5;
+}
+.ql-wrapper .ql-editor ol,
+.styled-text-preview ol {
+  @apply pl-5;
+}
+.ql-wrapper .ql-editor .ql-align-center,
+.styled-text-preview .ql-align-center {
+  @apply text-center;
+}
+.ql-wrapper .ql-editor .ql-align-justify,
+.styled-text-preview .ql-align-justify {
+  @apply text-justify;
+}
+.ql-wrapper .ql-editor .ql-align-left,
+.styled-text-preview .ql-align-left {
+  @apply text-left;
+}
+.ql-wrapper .ql-editor .ql-align-right,
+.styled-text-preview .ql-align-right {
+  @apply text-right;
+}
+.ql-wrapper .ql-editor p,
+.styled-text-preview p {
+  @apply focus-visible:outline-0;
+}

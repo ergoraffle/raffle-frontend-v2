@@ -1,0 +1,21 @@
+image: $GITLAB_CI_IMAGE
+
+default:
+  interruptible: true
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE =~ /push/'
+      when: always
+    - when: never
+
+include:
+  - component: $CI_SERVER_FQDN/${ROOT_COMPONENT}
+
+    inputs:
+      build_cache_paths:
+        - 'node_modules'
+        - '**/node_modules'
+        - '**/dist'
+        - 'packages/icons/lib/index.ts'
+      enable_ci_child: true

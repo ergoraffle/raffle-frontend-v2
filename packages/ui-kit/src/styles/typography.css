@@ -1,0 +1,109 @@
+@theme {
+  /* Font Families */
+  --font-*: initial;
+  --font-fraunces: "Fraunces", serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-karla: "Karla", sans-serif;
+
+  /* Font Weight */
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Size */
+  --text-*: initial;
+  --text-3xs: 11px;
+  --text-2xs: 12px;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 22px;
+  --text-3xl: 24px;
+  --text-5xl: 28px;
+  --text-9xl: 38px;
+  --text-13xl: 48px;
+  --text-23xl: 72px;
+
+  /* Line Height */
+  --line-height: normal;
+  --text-xs--line-height: normal;
+  --text-sm--line-height: normal;
+  --text-md--line-height: normal;
+  --text-lg--line-height: normal;
+  --text-xl--line-height: normal;
+  --text-2xl--line-height: normal;
+  --text-3xl--line-height: normal;
+  --text-5xl--line-height: normal;
+  --text-7xl--line-height: normal;
+}
+
+@layer utilities {
+  .typo-heading-1 {
+    @apply font-medium text-lg sm:text-5xl;
+  }
+
+  .typo-heading-2 {
+    @apply font-medium text-md sm:text-3xl;
+  }
+
+  .typo-heading-3 {
+    @apply font-medium text-sm sm:text-2xl;
+  }
+
+  .typo-heading-4 {
+    @apply font-medium text-sm sm:text-xl;
+  }
+
+  .typo-heading-5 {
+    @apply font-normal text-xs sm:text-lg;
+  }
+
+  .typo-display-md {
+    @apply font-fraunces font-normal text-9xl sm:text-23xl;
+  }
+
+  .typo-display-sm {
+    @apply font-fraunces font-normal text-5xl sm:text-13xl;
+  }
+
+  .typo-body-sm {
+    @apply font-light text-xs sm:text-md;
+  }
+
+  .typo-body-md {
+    @apply font-normal text-xs sm:text-md;
+  }
+
+  .typo-body-lg {
+    @apply font-karla font-normal text-lg leading-6;
+  }
+
+  .typo-body-button {
+    @apply font-medium text-md sm:text-lg;
+  }
+
+  .typo-body-button-bold {
+    @apply font-semibold text-md sm:text-2xl;
+  }
+
+  .typo-subtitle-sm {
+    @apply font-karla font-normal text-3xs sm:text-xs;
+  }
+
+  .typo-subtitle-md {
+    @apply font-karla font-normal text-2xs sm:text-sm;
+  }
+
+  .typo-subtitle-lg {
+    @apply font-karla font-medium text-md;
+  }
+
+  .typo-subtitle-xl {
+    @apply font-karla font-normal text-lg;
+  }
+}

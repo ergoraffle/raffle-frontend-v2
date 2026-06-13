@@ -1,0 +1,65 @@
+{
+  "name": "@ergo-raffle/ui-kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./index.css": "./src/styles/index.css"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "rollup -c",
+    "clean": "rimraf dist",
+    "dev": "tsc -p tsconfig.json",
+    "lint": "biome check --write && npm run prettify",
+    "lint:check": "biome check && npm run prettify:check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.2.0",
+    "@ergo-raffle/icons": "^0.0.0",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@uppy/core": "^5.2.0",
+    "@uppy/image-editor": "^4.2.0",
+    "@uppy/react": "^5.2.0",
+    "@uppy/tus": "^5.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "next-themes": "^0.4.6",
+    "quill": "^2.0.3",
+    "radix-ui": "^1.4.3",
+    "rollup-plugin-node-externals": "^8.1.2",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/postcss": "^4.1.18",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

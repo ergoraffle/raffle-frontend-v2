@@ -1,0 +1,739 @@
+openapi: 3.1.0
+info:
+  title: Ergo Raffle API
+  description: API for Ergo Raffle operations
+  version: 0.0.0
+paths:
+  /info/version:
+    get:
+      tags:
+        - Info
+      description: Returns service version
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                required:
+                  - version
+  /info/blockchain:
+    get:
+      tags:
+        - Info
+      description: Returns service blockchain related information
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fee:
+                    type: object
+                    properties:
+                      tx:
+                        type: integer
+                        format: int64
+                      service:
+                        type: number
+                      implementer:
+                        type: number
+                      creation:
+                        type: integer
+                        format: int64
+                    required:
+                      - tx
+                      - service
+                      - implementer
+                      - creation
+                  height:
+                    type: number
+                required:
+                  - fee
+                  - height
+        "500":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+  /info/tags:
+    get:
+      tags:
+        - Info
+      description: Search over tags
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: query
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /raffle:
+    get:
+      tags:
+        - Raffle
+      description: Returns a list of raffles
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: text
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+          in: query
+          name: tokenIds
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+          in: query
+          name: tags
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+              - type: string
+          in: query
+          name: ids
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                  enum:
+                    - active
+                    - failed
+                    - successful
+              - type: string
+                enum:
+                  - active
+                  - failed
+                  - successful
+          in: query
+          name: status
+        - schema:
+            type: string
+            enum:
+              - height
+              - deadline
+            default: height
+          in: query
+          name: order
+        - schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: DESC
+          in: query
+          name: direction
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            maximum: 100
+            default: 10
+          in: query
+          name: limit
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        token:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            decimals:
+                              type: number
+                              default: 0
+                            isVerified:
+                              type: boolean
+                          required:
+                            - id
+                            - decimals
+                            - isVerified
+                        winnersCount:
+                          type: number
+                        giftCount:
+                          type: number
+                        tags:
+                          type: array
+                          items:
+                            type: string
+                        deadline:
+                          type: number
+                        amount:
+                          type: object
+                          properties:
+                            goal:
+                              type: integer
+                              format: int64
+                            raised:
+                              type: integer
+                              format: int64
+                          required:
+                            - goal
+                            - raised
+                        ticketPrice:
+                          type: integer
+                          format: int64
+                        status:
+                          type: string
+                          enum:
+                            - active
+                            - failed
+                            - successful
+                        picture:
+                          type: string
+                      required:
+                        - id
+                        - name
+                        - description
+                        - token
+                        - winnersCount
+                        - giftCount
+                        - deadline
+                        - amount
+                        - ticketPrice
+                        - status
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
+  /raffle/{raffleId}:
+    get:
+      tags:
+        - Raffle
+      description: Returns a single raffle by ID
+      parameters:
+        - schema:
+            type: string
+          in: path
+          name: raffleId
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  token:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      decimals:
+                        type: number
+                        default: 0
+                      isVerified:
+                        type: boolean
+                    required:
+                      - id
+                      - decimals
+                      - isVerified
+                  winnersCount:
+                    type: number
+                  giftCount:
+                    type: number
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                  deadline:
+                    type: number
+                  amount:
+                    type: object
+                    properties:
+                      goal:
+                        type: integer
+                        format: int64
+                      raised:
+                        type: integer
+                        format: int64
+                    required:
+                      - goal
+                      - raised
+                  ticketPrice:
+                    type: integer
+                    format: int64
+                  status:
+                    type: string
+                    enum:
+                      - active
+                      - failed
+                      - successful
+                  pictures:
+                    type: array
+                    items:
+                      type: string
+                  addresses:
+                    type: object
+                    properties:
+                      project:
+                        type: string
+                      implementer:
+                        type: string
+                      service:
+                        type: string
+                    required:
+                      - project
+                      - implementer
+                      - service
+                  share:
+                    type: object
+                    properties:
+                      winner:
+                        type: number
+                      implementer:
+                        type: number
+                      service:
+                        type: number
+                    required:
+                      - winner
+                      - implementer
+                      - service
+                  backerCount:
+                    type: number
+                required:
+                  - id
+                  - name
+                  - description
+                  - token
+                  - winnersCount
+                  - giftCount
+                  - deadline
+                  - amount
+                  - ticketPrice
+                  - status
+                  - pictures
+                  - addresses
+                  - share
+                  - backerCount
+        "404":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+  /raffle/{raffleId}/basket:
+    get:
+      tags:
+        - Raffle
+      description: Returns a list of baskets on specified raffle
+      parameters:
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            maximum: 100
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: share
+        - schema:
+            type: string
+            enum:
+              - non-empty
+              - empty
+          in: query
+          name: gift
+        - schema:
+            type: number
+          in: query
+          name: index
+        - schema:
+            type: string
+          in: path
+          name: raffleId
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        index:
+                          type: number
+                        share:
+                          type: number
+                        gifts:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              tokenId:
+                                type: string
+                              amount:
+                                type: integer
+                                format: int64
+                            required:
+                              - tokenId
+                              - amount
+                      required:
+                        - index
+                        - share
+                        - gifts
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
+  /raffle/{raffleId}/basket/{winnerIndex}/transactions:
+    get:
+      tags:
+        - Raffle
+      description: Transaction for specific winner
+      parameters:
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: path
+          name: raffleId
+          required: true
+        - schema:
+            type: number
+          in: path
+          name: winnerIndex
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        raffleId:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - creation
+                            - donation
+                            - gift
+                            - ticket_redeem
+                            - gift_return
+                        ticketCount:
+                          type: integer
+                          format: int64
+                        winnerIndex:
+                          type: number
+                        txId:
+                          type: string
+                        raffleName:
+                          type: string
+                        height:
+                          type: number
+                        timestamp:
+                          type: number
+                        status:
+                          type: string
+                          enum:
+                            - success
+                            - failed
+                            - pending
+                      required:
+                        - address
+                        - raffleId
+                        - type
+                        - txId
+                        - height
+                        - status
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
+  /activity:
+    get:
+      tags:
+        - Activity
+      description: Returns a paginated list of user activities
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+        - schema:
+            type: string
+          in: query
+          name: raffleId
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                  enum:
+                    - creation
+                    - donation
+                    - gift
+                    - ticket_redeem
+                    - gift_return
+              - type: string
+                enum:
+                  - creation
+                  - donation
+                  - gift
+                  - ticket_redeem
+                  - gift_return
+          in: query
+          name: types
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            default: 10
+          in: query
+          name: limit
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        raffleId:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - creation
+                            - donation
+                            - gift
+                            - ticket_redeem
+                            - gift_return
+                        ticketCount:
+                          type: integer
+                          format: int64
+                        winnerIndex:
+                          type: number
+                        txId:
+                          type: string
+                        raffleName:
+                          type: string
+                        height:
+                          type: number
+                        timestamp:
+                          type: number
+                        status:
+                          type: string
+                          enum:
+                            - success
+                            - failed
+                            - pending
+                      required:
+                        - address
+                        - raffleId
+                        - type
+                        - txId
+                        - height
+                        - status
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
+  /tokens:
+    get:
+      tags:
+        - Token
+      description: Returns token information for given token IDs
+      parameters:
+        - schema:
+            anyOf:
+              - type: array
+                items:
+                  type: string
+                maxItems: 100
+              - type: string
+          in: query
+          name: tokenIds
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        decimals:
+                          type: number
+                          default: 0
+                        isVerified:
+                          type: boolean
+                      required:
+                        - id
+                        - decimals
+                        - isVerified
+                required:
+                  - items
+  /tokens/search:
+    get:
+      tags:
+        - Token
+      description: Returns token information for given query
+      parameters:
+        - schema:
+            type: string
+            minLength: 2
+          in: query
+          name: query
+          required: true
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            maximum: 100
+            default: 10
+          in: query
+          name: limit
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        decimals:
+                          type: number
+                          default: 0
+                        isVerified:
+                          type: boolean
+                      required:
+                        - id
+                        - decimals
+                        - isVerified
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total

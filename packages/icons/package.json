@@ -1,0 +1,41 @@
+{
+  "name": "@ergo-raffle/icons",
+  "version": "0.0.0",
+  "private": "true",
+  "description": "A react icon set, used in Raffle app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/raffle.git"
+  },
+  "license": "MIT",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ./generate.js && tsc && vite build && npm run lint",
+    "clean": "rimraf dist && rimraf tsconfig.build.tsbuildinfo",
+    "lint": "biome check --write && npm run prettify",
+    "lint:check": "biome check && npm run prettify:check",
+    "prettify": "biome format --write",
+    "prettify:check": "biome format",
+    "type-check": "npm run generate && tsc --noEmit"
+  },
+  "devDependencies": {
+    "glob": "^13.0.0",
+    "vite": "^7.3.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-static-copy": "^3.2.0",
+    "vite-plugin-svgr": "^4.5.0"
+  },
+  "peerDependencies": {
+    "react": "^19"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

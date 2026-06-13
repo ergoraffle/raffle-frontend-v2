@@ -1,0 +1,41 @@
+{
+  "name": "ergo-raffle",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/raffle.git"
+  },
+  "license": "MIT",
+  "author": "Rosen Team",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "wallets/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces",
+    "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
+    "prepare": "husky install",
+    "prettify": "npm run prettify --workspaces",
+    "prettify:check": "npm run prettify:check --workspaces",
+    "type-check": "npm run type-check --workspaces"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "@changesets/cli": "^2.29.8",
+    "@rosen-bridge/changeset-formatter": "^2.0.1",
+    "@types/node": "^22.18.0",
+    "husky": "^9.1.7",
+    "knip": "^5.80.0",
+    "lint-staged": "^16.2.7",
+    "rimraf": "^6.1.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

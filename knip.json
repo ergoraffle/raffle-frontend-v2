@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "workspaces": {
+    "packages/*": {
+      "entry": ["{lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
+    },
+    "apps/*": {
+      "entry": ["{app,lib,src}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"]
+    }
+  },
+  "rollup": {
+    "entry": ["packages/ui-kit/rollup.config.{js,cjs,mjs,ts}"]
+  },
+  "ignoreBinaries": ["rollup"],
+  "ignore": ["**/node_modules/", "**/dist/", "**/.next/", "apps/raffle/src/app/globals.css"],
+  "ignoreDependencies": ["tailwindcss", "@tailwindcss/cli"]
+}
