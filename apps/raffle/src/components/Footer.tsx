@@ -21,6 +21,10 @@ export const Footer = () => {
       {
         text: 'Contact',
         href: 'mailto:raffle@rosen.tech'
+      },
+      {
+        text: 'Privacy Notice',
+        href: '/privacy-notice'
       }
     ],
     []

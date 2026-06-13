@@ -136,7 +136,7 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
           </Typography>
         </div>
         <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
-          <Typography variant="body-button">Service fee:</Typography>
+          <Typography variant="body-button">Protocol fee:</Typography>
           <Typography variant="body-lg" className="text-gray-1">
             {serviceFee ?? 0}%
           </Typography>
