@@ -44,12 +44,12 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
   }
 
   // Organizer UTXO boxes the selector may spend
-  const feeBoxes = (await walletInstance.getBoxes()).values();
+  const boxes = await walletInstance.getBoxes();
 
   // Current chain height
   const chainHeight = Math.max(
     infoBlockchainData.height,
-    ...Array.from(feeBoxes).map((walletUtxo) => walletUtxo.creationHeight)
+    ...boxes.map((walletUtxo) => walletUtxo.creationHeight)
   );
 
   // organizer address is the wallet address that is creating the raffle and will receive the change
@@ -110,7 +110,7 @@ export const createRaffle = async (data: RaffleForm, wallet: WalletContextValue)
 
   let builder = new CreationProxyTxBuilder()
     .setChainHeight(chainHeight)
-    .setFeeBoxes(feeBoxes)
+    .setFeeBoxes(boxes.values())
     .setOrganizerAddress(organizerAddress)
     .setImplementerAddress(implementerAddress)
     .setExpirationHeight(expirationHeight)
@@ -150,7 +150,7 @@ export const donateRaffle = async (
   walletInstance?: WalletInstance
 ) => {
   if (!walletInstance) {
-    throw new Error('Must be connected to a wallet.');
+    throw new Error('You must connect a wallet.');
   }
 
   const raffle = await getRaffleData(raffleId);
@@ -190,7 +190,7 @@ export const donateRaffle = async (
   const chainHeight = infoBlockchainData.height;
 
   // Donator UTXO boxes the selector may spend for value, tokens, and fee
-  const feeBoxes = (await walletInstance.getBoxes()).values();
+  const boxes = await walletInstance.getBoxes();
 
   // Donator Ergo address (also receives change)
   const donatorAddress = (await walletInstance.getAddresses()).main; // user address
@@ -210,7 +210,7 @@ export const donateRaffle = async (
 
   let builder = new DonationProxyTxBuilder()
     .setChainHeight(chainHeight)
-    .setFeeBoxes(feeBoxes)
+    .setFeeBoxes(boxes.values())
     .setDonatorAddress(donatorAddress)
     .setTicketCount(BigInt(data.tickets))
     .setExpirationHeight(expirationHeight)
@@ -251,7 +251,7 @@ export const addGiftRaffle = async (
   const chainHeight = infoBlockchainData.height; // current height should be fetched from the info api
 
   // Gift giver UTXO boxes the selector may spend
-  const feeBoxes = (await walletInstance.getBoxes()).values(); // box iterator from wallet
+  const boxes = await walletInstance.getBoxes();
 
   // Gift giver address (change output)
   const giftGiverAddress = (await walletInstance.getAddresses()).main; // gift giver address (user wallet address)
@@ -276,7 +276,7 @@ export const addGiftRaffle = async (
 
   let builder = new AddGiftProxyTxBuilder()
     .setChainHeight(chainHeight)
-    .setFeeBoxes(feeBoxes)
+    .setFeeBoxes(boxes.values())
     .setGiftGiverAddress(giftGiverAddress)
     .setWinnerIndex(winnerIndex)
     .setGiftValue(giftValue)

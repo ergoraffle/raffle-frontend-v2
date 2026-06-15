@@ -46,7 +46,7 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
     <Card shadow>
       <CardHeader>
         <CardTitle>Description:</CardTitle>
-        <CardDescription>A very short Description.</CardDescription>
+        <CardDescription>Add a short description for your raffle.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Skeleton className="h-3 w-full" />
@@ -61,7 +61,7 @@ export const RaffleDetailsDescription = ({ raffle, loading }: RaffleDetailsDescr
     <Card shadow>
       <CardHeader>
         <CardTitle>Description:</CardTitle>
-        <CardDescription>A very short Description.</CardDescription>
+        <CardDescription>Add a short description for your raffle.</CardDescription>
       </CardHeader>
       <CardContent>
         <StyledTextPreview

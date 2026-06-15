@@ -58,7 +58,9 @@ export const Footer = ({ links, socialLinks }: FooterProps) => {
         </div>
       </div>
       <Typography variant="subtitle-lg" asChild>
-        <div className="p-3.5 lg:p-6 text-center text-black-2">CopyRight © ErgoRaffle</div>
+        <div className="p-3.5 lg:p-6 text-center text-black-2">
+          Copyright © {new Date().getFullYear()} ErgoRaffle
+        </div>
       </Typography>
     </footer>
   );

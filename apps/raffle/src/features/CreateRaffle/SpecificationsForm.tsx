@@ -72,7 +72,7 @@ export const SpecificationsForm = ({ handleNext }: SpecificationsFormProps) => {
       <Field>
         <FieldTitle title="Add a Description for your Raffle" />
         <Typography variant="subtitle-lg" className="mb-3">
-          A sample text saying only the first 200 words will be used for CEO.
+          Only the first 200 words are used for SEO previews.
         </Typography>
         <TextEditor
           className="max-w-205"

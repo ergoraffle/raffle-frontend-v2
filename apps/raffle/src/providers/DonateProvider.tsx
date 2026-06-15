@@ -37,6 +37,10 @@ export type DonateContextValue = {
   setIsSelectNetworkDialogOpen: (value: boolean) => void;
   isFallbackDialogOpen: boolean;
   setIsFallbackDialogOpen: (value: boolean) => void;
+  agreementDialogOpen: boolean;
+  setAgreementDialogOpen: (value: boolean) => void;
+  agreementChecked: boolean;
+  setAgreementChecked: (value: boolean) => void;
 };
 
 export type DonateProviderProps = {
@@ -60,6 +64,8 @@ export const DonateProvider = ({ children, raffle }: DonateProviderProps) => {
   const [recaptcha, setRecaptcha] = useState<string>();
   const [network, setNetwork] = useState<'ergo' | 'bitcoin'>();
   const [isFallbackDialogOpen, setIsFallbackDialogOpen] = useState<boolean>(false);
+  const [agreementDialogOpen, setAgreementDialogOpen] = useState<boolean>(false);
+  const [agreementChecked, setAgreementChecked] = useState<boolean>(false);
 
   const donateForm = useForm<RaffleDonateForm>({
     resolver: zodResolver(raffleDonateSchema),
@@ -117,7 +123,7 @@ export const DonateProvider = ({ children, raffle }: DonateProviderProps) => {
           setTimeout(() => submitDonation(walletInstance), 0);
         }
         if (walletInstance?.name === 'Xverse') {
-          setIsFallbackDialogOpen(true);
+          setAgreementDialogOpen(true);
         }
       })
       .finally(() => {
@@ -203,7 +209,11 @@ export const DonateProvider = ({ children, raffle }: DonateProviderProps) => {
     isSelectNetworkDialogOpen: !wallet.open && isSelectNetworkDialogOpen,
     setIsSelectNetworkDialogOpen: (open) => !open && setIsSelectNetworkDialogOpen(false),
     isFallbackDialogOpen,
-    setIsFallbackDialogOpen
+    setIsFallbackDialogOpen,
+    agreementDialogOpen,
+    setAgreementDialogOpen,
+    agreementChecked,
+    setAgreementChecked
   };
 
   return <DonateContext.Provider value={value}>{children}</DonateContext.Provider>;

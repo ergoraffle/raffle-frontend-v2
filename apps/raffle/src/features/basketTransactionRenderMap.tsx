@@ -22,7 +22,7 @@ export const basketTransactionRenderMap: Record<
   },
   gift: {
     direction: 'by',
-    text: () => `Added gift`
+    text: () => `Gift added`
   },
   gift_return: {
     direction: 'to',
