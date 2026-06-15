@@ -17,8 +17,8 @@ const FaqPage = () => (
         Discord
       </Link>{' '}
       or{' '}
-      <Link href="email:email@gmail.com" className="underline hover:text-secondary-1">
-        email@gmail.com
+      <Link href="mailto:raffle@rosen.tech" className="underline hover:text-secondary-1">
+        raffle@rosen.tech
       </Link>
     </Typography>
   </div>

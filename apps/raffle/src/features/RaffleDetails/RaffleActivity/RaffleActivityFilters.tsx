@@ -21,7 +21,7 @@ export const RaffleActivityFilters = ({
 }: RaffleActivityFilersProps) => (
   <div>
     <div className="flex">
-      <Tooltip content="Must be connected to a wallet" disabled={hasWalletAddress}>
+      <Tooltip content="You must connect a wallet." disabled={hasWalletAddress}>
         <Field orientation="horizontal">
           <Switch
             disabled={isLoading || !hasWalletAddress}

@@ -158,7 +158,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                   Basket
                 </Typography>
                 <Typography className="px-4 flex-2" variant="body-lg">
-                  Share of Winners pot
+                  Share of Winners Pot
                 </Typography>
                 <Typography className="px-4 flex-7" variant="body-lg">
                   Additional Gifts
@@ -189,7 +189,7 @@ export const RaffleWinnerBaskets = ({ raffle }: RaffleWinnerBasketsProps) => {
                     Basket
                   </Typography>
                   <Typography className="px-4 flex-2" variant="body-lg">
-                    Share of Winners pot
+                    Share of Winners Pot
                   </Typography>
                   <Typography className="px-4 flex-7" variant="body-lg">
                     Additional Gifts

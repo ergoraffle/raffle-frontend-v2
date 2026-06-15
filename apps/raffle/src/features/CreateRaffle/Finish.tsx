@@ -203,10 +203,14 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
           <div>
             <FieldLabel>
               I have read and agree to the{' '}
-              <Link href="/terms" className="underline hover:text-secondary-1" target="_blank">
-                terms
-              </Link>{' '}
-              outlined in the Ergo Raffle User Agreement.
+              <Link
+                href="/privacy-notice"
+                className="underline hover:text-secondary-1"
+                target="_blank"
+              >
+                Privacy Policy
+              </Link>
+              .
             </FieldLabel>
             {!!errors.terms && <FieldError>{errors.terms.message}</FieldError>}
           </div>

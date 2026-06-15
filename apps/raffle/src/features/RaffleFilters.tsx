@@ -59,7 +59,7 @@ export const RafflesFilters = () => {
     ALL = 'All',
     ACTIVE = 'Active',
     HISTORY = 'History',
-    PINED = 'Pined'
+    PINED = 'Pinned'
   }
 
   const getTabValue = () => {

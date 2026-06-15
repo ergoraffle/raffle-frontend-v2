@@ -116,7 +116,7 @@ export const DonationGoalForm = ({
       </div>
       <div className="flex flex-col sm:flex-row gap-x-2 gap-y-3">
         <Field className="flex-1">
-          <FieldTitle title="How many Token to collect?" />
+          <FieldTitle title="How many tokens to collect?" />
           <Input
             variant="bordered"
             className="max-w-205"
