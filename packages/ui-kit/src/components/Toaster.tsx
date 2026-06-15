@@ -118,7 +118,7 @@ export const CustomToast = ({
 
       <div className="flex items-center gap-0.5">
         {isError && detailsStrings.length > 0 && (
-          <Tooltip content="Copy With Details">
+          <Tooltip content="Copy with details">
             <Button onClick={handleCopy} size="icon-xs" variant="plain" type="button">
               <Clipboard className="size-5" />
             </Button>

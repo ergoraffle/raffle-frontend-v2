@@ -54,7 +54,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
       <div>
         <Typography variant="heading-2">Create Baskets.</Typography>
         <Typography variant="body-md">
-          Each winner gets a basket. It can hold part of the raffle share, gifts, both or none.
+          Each winner gets a basket. It can hold part of the raffle share, gifts, both, or none.
         </Typography>
       </div>
       <div className="space-y-3">
@@ -149,7 +149,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
               <BasketStatus className="size-6" />
             </InputGroupAddon>
             <InputGroupAddon align="inline-end">
-              <Tooltip content="These baskets do NOT include any share of the raffle, but anyone can add gifts to them during the Raffle.">
+              <Tooltip content="These baskets do NOT include any share of the raffle, but anyone can add gifts to them during the raffle.">
                 <Info className="size-6" />
               </Tooltip>
             </InputGroupAddon>

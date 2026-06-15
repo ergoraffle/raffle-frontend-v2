@@ -103,7 +103,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (!selected) {
-        throw new Error(`No wallet is connected`);
+        throw new Error(`No wallet is connected.`);
       }
 
       // biome-ignore lint/suspicious/noExplicitAny: make this better

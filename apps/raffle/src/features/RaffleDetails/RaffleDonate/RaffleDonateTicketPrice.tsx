@@ -15,7 +15,7 @@ export const RaffleDonateTicketPrice = ({ ticketCount, raffle }: RaffleDonateTic
       to proceed?
     </Typography>
     <Typography variant="body-sm">
-      Price per ticket:{' '}
+      Ticket price:{' '}
       <Typography variant="body-md" asChild>
         <span>{`${getDecimalString(raffle.ticketPrice, raffle.token.decimals)} ${raffle.token.name}`}</span>
       </Typography>

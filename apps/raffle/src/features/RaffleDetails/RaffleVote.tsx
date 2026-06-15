@@ -41,8 +41,7 @@ export const RaffleVote = ({ raffleTitle }: RaffleVoteProps) => {
               <SheetTitle>“{raffleTitle}” Raffle</SheetTitle>
             </SheetHeader>
             <Typography className="lg:max-w-md m-auto">
-              Vote this Raffle, some text: vote based on this and that, only vote up if you really
-              trust the author, vote down to report spam.
+              Upvote raffles you trust. Downvote to report spam.
             </Typography>
             <SheetFooter className="flex-row">
               <Button variant="error" className="flex-1">
@@ -64,8 +63,7 @@ export const RaffleVote = ({ raffleTitle }: RaffleVoteProps) => {
                 <DialogTitle>“{raffleTitle}” Raffle</DialogTitle>
               </DialogHeader>
               <Typography className="lg:max-w-md m-auto">
-                Vote this Raffle, some text: vote based on this and that, only vote up if you really
-                trust the author, vote down to report spam.
+                Upvote raffles you trust. Downvote to report spam.
               </Typography>
             </Card>
             <DialogFooter className="flex-row">

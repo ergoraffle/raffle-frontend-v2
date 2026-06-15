@@ -154,7 +154,7 @@ export const RaffleAddGiftForm = ({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
       <div className="flex items-end space-x-2">
         <Field>
-          <FieldLabel>Basket's Number</FieldLabel>
+          <FieldLabel>Number of baskets</FieldLabel>
           <InputGroup variant="bordered">
             <InputGroupInput
               min={1}
@@ -176,7 +176,7 @@ export const RaffleAddGiftForm = ({
         </Button>
       </div>
       <div className="mt-2">
-        <Typography variant="heading-5">Choose the Asset(s)</Typography>
+        <Typography variant="heading-5">Choose assets</Typography>
         <Typography variant="heading-5" className="text-gray-2">
           They will all be added to Basket #{watch('winnerIndex')} as one Gift
         </Typography>

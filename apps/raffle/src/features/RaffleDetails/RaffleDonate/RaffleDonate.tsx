@@ -9,6 +9,7 @@ import { Button, Collapsible, CollapsibleContent, useBreakpoint } from '@ergo-ra
 
 import { DonateProvider } from '@/providers';
 
+import { AgreementDialog } from './AgreementDialog';
 import { RaffleDonateFallbackAddressDialog } from './RaffleDonateFallbackAddressDialog';
 import { RaffleDonateForm } from './RaffleDonateForm';
 import { RaffleDonateNetworkSelectDialog } from './RaffleDonateNetworkSelectDialog';
@@ -62,6 +63,7 @@ export const RaffleDonate = ({ raffle }: RaffleDonateProps) => {
         </div>
         <RaffleDonateFallbackAddressDialog />
         <RaffleDonateNetworkSelectDialog raffle={raffle} />
+        <AgreementDialog />
       </div>
     </DonateProvider>
   );
