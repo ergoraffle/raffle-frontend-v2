@@ -98,11 +98,15 @@ export const RaffleSocial = ({ raffleId }: RaffleSocialProps) => {
         />
       ) : null}
 
-      {hasPosts && !isLoading ? (
-        <Typography variant="body-sm" className="text-xs text-gray-1">
-          Posts are from third parties on X and are not endorsed or verified by ErgoRaffle.
-        </Typography>
-      ) : null}
+      {/*
+        Compliance disclaimer — rendered unconditionally so it is present in
+        every state (loading / empty / error / populated). The empty state is
+        the common case for a fresh raffle, and content rules require posts be
+        labelled third-party / not endorsed / not verified at all times.
+      */}
+      <Typography variant="body-sm" className="text-xs text-gray-1">
+        Posts are from third parties on X and are not endorsed or verified by ErgoRaffle.
+      </Typography>
     </div>
   );
 };
