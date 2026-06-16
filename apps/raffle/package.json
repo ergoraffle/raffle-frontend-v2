@@ -23,7 +23,7 @@
     "@ergo-raffle/client": "^0.0.0",
     "@ergo-raffle/icons": "^0.0.0",
     "@ergo-raffle/nautilus-wallet": "^0.0.0",
-    "@ergo-raffle/proxy-transactions": "^0.0.1-41ef9473",
+    "@ergo-raffle/proxy-transactions": "0.0.1-41ef9473",
     "@ergo-raffle/ui-kit": "^0.0.0",
     "@ergo-raffle/xverse-wallet": "^0.0.0",
     "@fleet-sdk/core": "^0.12.0",
