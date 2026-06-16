@@ -14,7 +14,8 @@ const INTENT_TEXT = `Check out this raffle on @${ERGORAFFLE_X_HANDLE}!`;
  * Builds the one-tap X compose ("intent") URL, pre-filled so the post is always
  * correctly formed for discovery: the `@ergoraffle` mention lives in the text
  * and the raffle URL is passed as `url`. The poller buckets the post by that
- * URL and requires the mention — so a user never has to assemble anything.
+ * raffle URL (the identifier); the mention is an extra discovery prong, not
+ * required — so a user never has to assemble anything.
  *
  * @param raffleUrl - The canonical raffle page URL (this page's own URL).
  * @returns A fully-qualified `https://x.com/intent/tweet?...` link.

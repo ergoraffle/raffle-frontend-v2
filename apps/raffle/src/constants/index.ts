@@ -2,14 +2,15 @@ export const PINED_RAFFLES_STORAGE_KEY = 'pinned_raffles';
 export const TRANSACTIONS_STORAGE_KEY = 'transactions';
 
 /**
- * The X.com (Twitter) account whose mentions ErgoRaffle polls for social posts.
+ * The X.com (Twitter) account associated with ErgoRaffle's social posts.
  * Used to build the pre-filled "Post on X" intent link in the RaffleSocial
  * "how to post" manual, where it is embedded as the `@mention` directly in the
- * compose `text` (the reliable discovery path — the poller requires the mention
- * to be present, and a text mention survives better than a `via` attribution).
- * Bare handle, no leading "@".
+ * compose `text` (preferred over a `via` attribution — a text mention survives
+ * better and is one of the poller's two discovery prongs). Bare handle, no
+ * leading "@".
  *
- * Keep in sync with the backend poller's `social.handle` config: a post must
- * tag this account *and* include the raffle link to be discovered.
+ * Keep in sync with the backend poller's `social.handle` config. Note discovery
+ * is "mention OR raffle-URL": the raffle link is the identifier and is what's
+ * required; tagging this account is an additional discovery prong, not mandatory.
  */
 export const ERGORAFFLE_X_HANDLE = 'ergoraffle';
