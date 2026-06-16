@@ -18,6 +18,7 @@
     "clean": "npm run clean --workspaces",
     "lint": "npm run lint --workspaces",
     "lint:check": "npm run lint:check --workspaces",
+    "postinstall": "cd apps/raffle && bash scripts/postinstall.sh",
     "prepare": "husky install",
     "prettify": "npm run prettify --workspaces",
     "prettify:check": "npm run prettify:check --workspaces",
