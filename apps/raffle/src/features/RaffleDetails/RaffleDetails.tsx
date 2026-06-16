@@ -7,8 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Typography,
-  WorkingOnIt
+  Typography
 } from '@ergo-raffle/ui-kit';
 
 import { RaiseProgress } from '@/features/RaiseProgress';
@@ -20,6 +19,7 @@ import { RaffleDetailsImageCard } from './RaffleDetailsImageCard';
 import { RaffleDonate } from './RaffleDonate';
 import { RafflePinButton } from './RafflePinButton';
 import { RaffleShareButton } from './RaffleShareButton';
+import { RaffleSocial } from './RaffleSocial';
 import { RaffleWinnerBaskets } from './RaffleWinnerBaskets';
 import { raffleToViewModel } from './raffleToViewModel';
 
@@ -79,8 +79,8 @@ export const RaffleDetails = async ({ raffleId }: RaffleDetailsProps) => {
             <CardTitle>Social Activity</CardTitle>
             <CardDescription>See related tweets on X</CardDescription>
           </CardHeader>
-          <CardContent className="grow py-2 flex flex-col justify-center">
-            <WorkingOnIt />
+          <CardContent className="grow py-2">
+            <RaffleSocial raffleId={raffleId} />
           </CardContent>
         </Card>
       </div>

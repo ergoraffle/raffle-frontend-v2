@@ -214,6 +214,26 @@ export type GetRaffleRaffleIdBasket200 = {
   total: number;
 };
 
+export type GetRaffleRaffleIdSocialParams = {
+  offset?: number;
+  /**
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type GetRaffleRaffleIdSocial200ItemsItem = {
+  tweetId: string;
+  authorHandle: string;
+  createdAt: string;
+  url: string;
+};
+
+export type GetRaffleRaffleIdSocial200 = {
+  items: GetRaffleRaffleIdSocial200ItemsItem[];
+  total: number;
+};
+
 export type GetRaffleRaffleIdBasketWinnerIndexTransactionsParams = {
   offset?: number;
   limit?: number;
@@ -405,6 +425,16 @@ export const getRaffleRaffleIdBasket = (raffleId: string, params?: GetRaffleRaff
   });
 
 /**
+ * Returns social posts (X.com mentions) for the specified raffle
+ */
+export const getRaffleRaffleIdSocial = (raffleId: string, params?: GetRaffleRaffleIdSocialParams) =>
+  httpClient<GetRaffleRaffleIdSocial200>({
+    url: `/raffle/${raffleId}/social`,
+    method: 'GET',
+    params
+  });
+
+/**
  * Transaction for specific winner
  */
 export const getRaffleRaffleIdBasketWinnerIndexTransactions = (
@@ -447,6 +477,9 @@ export type GetRaffleResult = NonNullable<Awaited<ReturnType<typeof getRaffle>>>
 export type GetRaffleRaffleIdResult = NonNullable<Awaited<ReturnType<typeof getRaffleRaffleId>>>;
 export type GetRaffleRaffleIdBasketResult = NonNullable<
   Awaited<ReturnType<typeof getRaffleRaffleIdBasket>>
+>;
+export type GetRaffleRaffleIdSocialResult = NonNullable<
+  Awaited<ReturnType<typeof getRaffleRaffleIdSocial>>
 >;
 export type GetRaffleRaffleIdBasketWinnerIndexTransactionsResult = NonNullable<
   Awaited<ReturnType<typeof getRaffleRaffleIdBasketWinnerIndexTransactions>>

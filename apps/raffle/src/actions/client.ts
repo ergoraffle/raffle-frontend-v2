@@ -9,6 +9,7 @@ import {
   getRaffleBasketsSafe,
   getRaffleSafe,
   getRaffleWinnerBasketTransactionsSafe,
+  getSocialSafe,
   getTagsSafe,
   getTokensBridgeableSafe,
   getTokensSafe,
@@ -27,3 +28,4 @@ export const getTokens = unwrap(getTokensSafe);
 export const getTokensSearch = unwrap(getTokensSearchSafe);
 export const getRaffleWinnerBasketTransactions = unwrap(getRaffleWinnerBasketTransactionsSafe);
 export const getTags = unwrap(getTagsSafe);
+export const getSocial = unwrap(getSocialSafe);

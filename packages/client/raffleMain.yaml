@@ -457,6 +457,59 @@ paths:
                 required:
                   - items
                   - total
+  /raffle/{raffleId}/social:
+    get:
+      tags:
+        - Raffle
+      description: Returns social posts (X.com mentions) for the specified raffle
+      parameters:
+        - schema:
+            type: number
+            default: 0
+          in: query
+          name: offset
+        - schema:
+            type: number
+            maximum: 100
+            default: 10
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: path
+          name: raffleId
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tweetId:
+                          type: string
+                        authorHandle:
+                          type: string
+                        createdAt:
+                          type: string
+                        url:
+                          type: string
+                      required:
+                        - tweetId
+                        - authorHandle
+                        - createdAt
+                        - url
+                  total:
+                    type: number
+                required:
+                  - items
+                  - total
   /raffle/{raffleId}/basket/{winnerIndex}/transactions:
     get:
       tags:

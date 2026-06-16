@@ -8,6 +8,7 @@ import {
   getRaffleRaffleId,
   getRaffleRaffleIdBasket,
   getRaffleRaffleIdBasketWinnerIndexTransactions,
+  getRaffleRaffleIdSocial,
   getTokens,
   getTokensBridgeable,
   getTokensSearch,
@@ -60,3 +61,4 @@ export const getRaffleWinnerBasketTransactionsSafe = wrap(
   'getRaffleRaffleIdBasketWinnerIndexTransactions'
 );
 export const getTagsSafe = wrap(getTagsBase, 'getTagsBase');
+export const getSocialSafe = wrap(getRaffleRaffleIdSocial, 'getRaffleRaffleIdSocial');

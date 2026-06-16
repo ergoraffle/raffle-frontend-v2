@@ -2,6 +2,7 @@ export * from './useActivityParams';
 export * from './useDebounceString';
 export * from './useDonate';
 export * from './useFetchActivity';
+export * from './useFetchSocial';
 export * from './useFetchTags';
 export * from './useFetchTokensSearch';
 export * from './useFetchWinnerBaskets';
