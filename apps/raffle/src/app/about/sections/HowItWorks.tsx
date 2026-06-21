@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { BitcoinRunes, HandCoin, Ticket } from '@ergo-raffle/icons';
 import { Card, CardContent, Typography } from '@ergo-raffle/ui-kit';
 
@@ -90,8 +92,15 @@ export const HowItWorks = () => (
         <div className="flex items-start gap-3 rounded-md bg-secondary-6 p-5 text-secondary-6-foreground">
           <BitcoinRunes className="size-7 shrink-0 text-secondary-1" />
           <Typography variant="body-md">
-            Donate with Bitcoin or Runes too — they arrive as Rosen Bridge–wrapped rsBTC / rsRunes,
-            no manual bridging. Live on testnet and mainnet.
+            Donate with Bitcoin or Runes too — they arrive as{' '}
+            <Link
+              className="underline hover:text-primary-1"
+              href="https://app.rosen.tech"
+              target="_blank"
+            >
+              Rosen Bridge
+            </Link>
+            –wrapped rsBTC / rsRunes, no manual bridging. Live on testnet and mainnet.
           </Typography>
         </div>
       </div>

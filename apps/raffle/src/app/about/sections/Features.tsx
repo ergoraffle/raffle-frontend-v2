@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import {
   BitcoinRunes,
   Dice,
@@ -41,7 +43,19 @@ const FEATURES = [
     id: 'btc-runes',
     icon: <BitcoinRunes className="size-7" />,
     title: 'BTC & Runes',
-    description: 'Donate cross-chain via the Rosen Bridge proxy.'
+    description: (
+      <>
+        Donate cross-chain via the{' '}
+        <Link
+          className="underline hover:text-primary-1"
+          href="https://app.rosen.tech"
+          target="_blank"
+        >
+          Rosen Bridge
+        </Link>{' '}
+        proxy.
+      </>
+    )
   },
   {
     id: 'self-custody',
