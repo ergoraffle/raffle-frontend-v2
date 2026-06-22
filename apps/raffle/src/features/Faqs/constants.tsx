@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import type { FaqItemType } from './FaqItem';
 
 export type Tabs = {
@@ -366,9 +368,16 @@ export const tabs: Tabs[] = [
         answer: (
           <p>
             Raffles themselves are always <b>created and settled on Ergo</b>, but you can{' '}
-            <b>donate with Bitcoin or Runes</b>. They reach the raffle as their Rosen Bridge–wrapped
-            equivalents on Ergo (<b>rsBTC</b> / <b>rsRunes</b>), which the contracts treat like any
-            other Ergo asset. This is <b>live on both the testnet beta and mainnet</b>.
+            <b>donate with Bitcoin or Runes</b>. They reach the raffle as their{' '}
+            <Link
+              className="underline hover:text-primary-1"
+              href="https://app.rosen.tech"
+              target="_blank"
+            >
+              Rosen Bridge
+            </Link>
+            –wrapped equivalents on Ergo (<b>rsBTC</b> / <b>rsRunes</b>), which the contracts treat
+            like any other Ergo asset. This is <b>live on both the testnet beta and mainnet</b>.
           </p>
         )
       },
@@ -385,10 +394,17 @@ export const tabs: Tabs[] = [
               </li>
               <li>
                 <b>You only hold native BTC / Runes (and may not use Ergo at all)</b> — use our
-                centralized proxy, built in collaboration with <b>Rosen Bridge</b>. The proxy gives
-                you a Bitcoin address; you send BTC or Runes straight from a Bitcoin wallet such as{' '}
-                <b>Xverse</b>, and the proxy handles bridging and the donation for you. You{' '}
-                <b>don't</b> have to bridge anything yourself.
+                centralized proxy, built in collaboration with{' '}
+                <Link
+                  className="underline hover:text-primary-1"
+                  href="https://app.rosen.tech"
+                  target="_blank"
+                >
+                  Rosen Bridge
+                </Link>
+                . The proxy gives you a Bitcoin address; you send BTC or Runes straight from a
+                Bitcoin wallet such as <b>Xverse</b>, and the proxy handles bridging and the
+                donation for you. You <b>don't</b> have to bridge anything yourself.
               </li>
             </ul>
             <p>
@@ -405,7 +421,15 @@ export const tabs: Tabs[] = [
           <p>
             Refunds and winnings are always sent to the <b>Ergo address you provided</b>, as the
             wrapped asset (<b>rsBTC / rsRunes</b>). You can then bridge them back to native
-            BTC/Runes through Rosen Bridge yourself if you wish.
+            BTC/Runes through{' '}
+            <Link
+              className="underline hover:text-primary-1"
+              href="https://app.rosen.tech"
+              target="_blank"
+            >
+              Rosen Bridge
+            </Link>{' '}
+            yourself if you wish.
           </p>
         )
       },
@@ -415,8 +439,19 @@ export const tabs: Tabs[] = [
         answer: (
           <p>
             There's a small <b>proxy fee</b> for the convenience of the centralized BTC-direct
-            route. There is <b>no additional Rosen Bridge fee</b> on top of it. Donating
-            rsBTC/rsRunes directly on Ergo avoids the proxy fee entirely.
+            route. There is{' '}
+            <b>
+              no additional{' '}
+              <Link
+                className="underline hover:text-primary-1"
+                href="https://app.rosen.tech"
+                target="_blank"
+              >
+                Rosen Bridge
+              </Link>{' '}
+              fee
+            </b>{' '}
+            on top of it. Donating rsBTC/rsRunes directly on Ergo avoids the proxy fee entirely.
           </p>
         )
       }

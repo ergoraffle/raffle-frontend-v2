@@ -147,37 +147,39 @@ export const Finish = ({ handleBack, infoBlockchain }: FinishProps) => {
           Baskets
         </Typography>
         <div>
-          <div className="not-last:border-b border-b-black-4 space-y-3 py-3">
-            <div className="flex justify-between items-center">
-              <Typography variant="body-button" className="flex items-center gap-2">
-                <BasketStatus filled className="size-7" /> Share baskets:
-              </Typography>
-              <Typography variant="body-lg" className="text-gray-1">
-                {data.details.length}
-              </Typography>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              {data.details.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center bg-gray-5 text-gray-5-foreground rounded-sm px-1.25 py-1 gap-2"
-                >
-                  <div className="flex items-center gap-1">
-                    <div className="bg-white-1 text-white-2-foreground px-0.5 py-px rounded-xs text-center size-7">
-                      {item.count}
+          {!!data.winnerPotShare && (
+            <div className="not-last:border-b border-b-black-4 space-y-3 py-3">
+              <div className="flex justify-between items-center">
+                <Typography variant="body-button" className="flex items-center gap-2">
+                  <BasketStatus filled className="size-7" /> Share baskets:
+                </Typography>
+                <Typography variant="body-lg" className="text-gray-1">
+                  {data.details.length}
+                </Typography>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {data.details.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center bg-gray-5 text-gray-5-foreground rounded-sm px-1.25 py-1 gap-2"
+                  >
+                    <div className="flex items-center gap-1">
+                      <div className="bg-white-1 text-white-2-foreground px-0.5 py-px rounded-xs text-center size-7">
+                        {item.count}
+                      </div>
+                      X
                     </div>
-                    X
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="bg-white-1 text-white-2-foreground py-0.5 px-px rounded-xs text-center size-7">
-                      {item.percent}
+                    <div className="flex items-center gap-1">
+                      <div className="bg-white-1 text-white-2-foreground py-0.5 px-px rounded-xs text-center size-7">
+                        {item.percent}
+                      </div>
+                      %
                     </div>
-                    %
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="flex justify-between not-last:border-b border-b-black-4 py-3">
             <Typography variant="body-button" className="flex items-center gap-2">
               <BasketStatus className="size-7" /> Empty baskets:
