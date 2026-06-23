@@ -37,7 +37,7 @@ export const Footer = () => {
         icon: <Github />
       },
       {
-        href: 'https://x.com/ergo_platform',
+        href: 'https://x.com/ErgoRaffle',
         icon: <X />
       },
       {

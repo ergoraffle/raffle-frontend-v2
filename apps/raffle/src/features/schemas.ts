@@ -59,48 +59,19 @@ const raffleDonationGoalSchema = (serviceFee?: number) =>
       .min(0, 'Cannot be less than 0')
       .max(100, 'Cannot be more than 100')
   });
+
 const raffleBasketsSchema = z.object({
   emptyBaskets: z.number({ message: 'Cannot be empty' }),
-  details: z
-    .array(
-      z.object({
-        id: z.string({ message: 'Cannot be empty' }),
-        count: z.number({ message: 'Cannot be empty' }).min(1, 'Cannot be less than 1'),
-        percent: z
-          .number({ message: 'Cannot be empty' })
-          .min(0, 'Cannot be less than 0')
-          .max(100, 'Cannot be more than 100')
-      })
-    )
-    .min(1, 'At least one detail is required')
-    .superRefine((items, ctx) => {
-      if (items.length === 0) return;
-
-      if (items.some((i) => i.percent > 100)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Percents cannot be more than 100',
-          path: []
-        });
-      }
-      if (items.some((i) => i.count === 0)) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Count cannot be less than 1',
-          path: []
-        });
-      }
-
-      const total = items.reduce((sum, item) => sum + item.percent * item.count, 0);
-
-      if (total !== 100) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Sum of percentages must equal 100',
-          path: []
-        });
-      }
+  details: z.array(
+    z.object({
+      id: z.string({ message: 'Cannot be empty' }),
+      count: z.number({ message: 'Cannot be empty' }).min(1, 'Cannot be less than 1'),
+      percent: z
+        .number({ message: 'Cannot be empty' })
+        .min(0, 'Cannot be less than 0')
+        .max(100, 'Cannot be more than 100')
     })
+  )
 });
 
 const raffleAgreementSchema = z.object({
@@ -122,7 +93,48 @@ export const createRaffleSchema = (serviceFee?: number) =>
   raffleAgreementSchema
     .and(raffleSpecificationsSchema)
     .and(raffleDonationGoalSchema(serviceFee))
-    .and(raffleBasketsSchema);
+    .and(raffleBasketsSchema)
+    .superRefine((data, ctx) => {
+      if (data.winnerPotShare === 0) return;
+
+      const items = data.details ?? [];
+
+      if (items.length === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'At least one detail is required',
+          path: ['details']
+        });
+
+        return;
+      }
+
+      if (items.some((i) => i.percent > 100)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Percents cannot be more than 100',
+          path: ['details']
+        });
+      }
+
+      if (items.some((i) => i.count === 0)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Count cannot be less than 1',
+          path: ['details']
+        });
+      }
+
+      const total = items.reduce((sum, item) => sum + item.percent * item.count, 0);
+
+      if (total !== 100) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Sum of percentages must equal 100',
+          path: ['details']
+        });
+      }
+    });
 
 export const addGiftSchema = z.object({
   winnerIndex: z.number({ message: 'Cannot be empty' }),

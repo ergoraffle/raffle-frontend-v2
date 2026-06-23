@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Info, Plus, Trash } from '@ergo-raffle/icons';
 import {
   BasketStatus,
@@ -29,7 +31,9 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     register,
     watch,
     control,
-    trigger
+    trigger,
+    resetField,
+    clearErrors
   } = useFormContext<RaffleBasketsForm & RaffleDonationGoalForm>();
 
   const winnerPotShare = watch('winnerPotShare', 0);
@@ -49,6 +53,13 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
     name: 'details'
   });
 
+  useEffect(() => {
+    if (winnerPotShare === 0) {
+      resetField('details');
+      clearErrors('details');
+    }
+  }, [winnerPotShare, clearErrors, resetField]);
+
   return (
     <div className="space-y-8">
       <div>
@@ -63,9 +74,11 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
           <Typography variant="body-md" className="mt-1 mb-3" asChild>
             <div>
               Winners Pot: {winnerPotShare}% of Total Fund{' '}
-              <Typography asChild variant="body-sm" className="ml-1">
-                <span>{`(${100 - filledSharePercent}% remaining)`}</span>
-              </Typography>
+              {winnerPotShare && (
+                <Typography asChild variant="body-sm" className="ml-1">
+                  <span>{`(${100 - filledSharePercent}% remaining)`}</span>
+                </Typography>
+              )}
             </div>
           </Typography>
         </div>
@@ -115,6 +128,7 @@ export const BasketsForm = ({ handleNext, handleBack }: BasketsFormProps) => {
             </div>
           ))}
           <Button
+            disabled={!winnerPotShare}
             variant="plain"
             size="icon-xs"
             onClick={() =>

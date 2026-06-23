@@ -31,7 +31,7 @@ export const RaffleDonateNetworkSelect = () => {
     <button
       key={option.value}
       className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50 cursor-pointer border border-transparent hover:border-gray-4"
-      disabled={isLoading || !bridgeableData}
+      disabled={isLoading || !bridgeableData?.bridgeable}
       type="button"
       onClick={() => selectNetwork(option.value as Network)}
     >
