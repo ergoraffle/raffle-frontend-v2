@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { Bitcoin, BitcoinRunes, Ergo, Right } from '@ergo-raffle/icons';
 import { Spinner, Typography } from '@ergo-raffle/ui-kit';
 
@@ -9,29 +11,34 @@ import type { Network } from '@/providers';
 export const RaffleDonateNetworkSelect = () => {
   const { selectNetwork, bridgeableData, isLoading } = useDonate();
 
-  const networkOptions = [
-    {
-      label: 'Ergo',
-      value: 'ergo',
-      icon: <Ergo className="size-6" />
-    },
-    {
-      label: 'Bitcoin And Runes',
-      value: 'bitcoin',
-      icon: (
-        <>
-          <Bitcoin className="size-6" />
-          <BitcoinRunes className="size-6 -ml-2" />
-        </>
-      )
-    }
-  ];
+  const networkOptions = useMemo(
+    () => [
+      {
+        label: 'Ergo',
+        value: 'ergo',
+        disabled: false,
+        icon: <Ergo className="size-6" />
+      },
+      {
+        label: 'Bitcoin And Runes',
+        value: 'bitcoin',
+        disabled: !bridgeableData?.bridgeable,
+        icon: (
+          <>
+            <Bitcoin className="size-6" />
+            <BitcoinRunes className="size-6 -ml-2" />
+          </>
+        )
+      }
+    ],
+    [bridgeableData]
+  );
 
   return networkOptions.map((option) => (
     <button
       key={option.value}
       className="flex items-center justify-between bg-gray-5 rounded-md p-2.5 disabled:opacity-50 cursor-pointer border border-transparent hover:border-gray-4"
-      disabled={isLoading || !bridgeableData}
+      disabled={isLoading || !bridgeableData || option.disabled}
       type="button"
       onClick={() => selectNetwork(option.value as Network)}
     >
