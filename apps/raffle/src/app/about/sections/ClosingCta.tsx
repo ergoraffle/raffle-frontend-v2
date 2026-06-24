@@ -16,7 +16,7 @@ export const ClosingCta = () => (
         <div className="relative mx-auto h-28 w-full max-w-md sm:h-36">
           <Image
             src="/illustrations/createRaffleIllustration.svg"
-            alt="Creating a raffle on ErgoRaffle"
+            alt="Creating a raffle on Rafflora"
             fill
             className="object-contain"
             sizes="(max-width: 768px) 100vw, 448px"
@@ -42,8 +42,8 @@ export const ClosingCta = () => (
         </div>
 
         <Typography variant="body-sm" className="text-gray-1">
-          ErgoRaffle is a decentralized dApp. It performs no identity, eligibility, or legality
-          checks — you are responsible for compliance in your own jurisdiction. Not legal advice.
+          Rafflora is a decentralized dApp. It performs no identity, eligibility, or legality checks
+          — you are responsible for compliance in your own jurisdiction. Not legal advice.
         </Typography>
       </div>
     </CardContent>

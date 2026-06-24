@@ -1,4 +1,4 @@
-# Privacy Notice — ErgoRaffle V2
+# Privacy Notice — Rafflora
 
 **Last Updated:** June 13, 2026
 **Version:** 1.1.0
@@ -12,9 +12,9 @@
 - **Don't put personal or sensitive information into raffle content;** it becomes public.
 - For questions about off-chain interface data, contact **raffle@rosen.tech**.
 
-This Privacy Notice explains how data is handled when you use the ErgoRaffle V2 interface (the **"Interface"**) at ergoraffle.com and interact with the ErgoRaffle V2 smart contracts on the Ergo Blockchain (the **"Protocol"**). It should be read together with the ErgoRaffle V2 Terms of Service (v1.1.0).
+This Privacy Notice explains how data is handled when you use the Rafflora interface (the **"Interface"**) at ergoraffle.com and interact with the Rafflora smart contracts on the Ergo Blockchain (the **"Protocol"**). It should be read together with the Rafflora Terms of Service (v1.1.0).
 
-ErgoRaffle V2 is free, open-source, non-custodial software. There are no user accounts, and the contributors who publish the code do not build identity profiles or sell your personal data. For the limited off-chain technical data processed by the official Interface, the party operating ergoraffle.com acts as a data controller (see Section 10).
+Rafflora is free, open-source, non-custodial software. There are no user accounts, and the contributors who publish the code do not build identity profiles or sell your personal data. For the limited off-chain technical data processed by the official Interface, the party operating ergoraffle.com acts as a data controller (see Section 10).
 
 
 
@@ -72,7 +72,7 @@ If you use cross-chain payment paths, your transactions are also recorded on tho
 
 ## 6. Third-Party Services
 
-The Interface relies on independent third parties — for example, your wallet provider, public Ergo nodes and explorers, hosting/CDN providers, **Sentry** (error monitoring), **Google reCAPTCHA** (bot protection), any support platform we adopt (for example, Telegram or Discord), and any cross-chain watchers. Each operates under its own privacy practices, which the ErgoRaffle V2 contributors neither control nor are responsible for. Review their policies directly.
+The Interface relies on independent third parties — for example, your wallet provider, public Ergo nodes and explorers, hosting/CDN providers, **Sentry** (error monitoring), **Google reCAPTCHA** (bot protection), any support platform we adopt (for example, Telegram or Discord), and any cross-chain watchers. Each operates under its own privacy practices, which the Rafflora contributors neither control nor are responsible for. Review their policies directly.
 
 
 
@@ -92,13 +92,13 @@ The Interface does not use advertising or marketing trackers and does not sell d
 
 ## 9. Children
 
-The Protocol and Interface are not intended for anyone under 18, or the age of majority in their jurisdiction. Do not use ErgoRaffle V2 if you are below that age.
+The Protocol and Interface are not intended for anyone under 18, or the age of majority in their jurisdiction. Do not use Rafflora if you are below that age.
 
 
 
 ## 10. Who Is Responsible (Controller Status)
 
-* **Public on-chain data (Section 2).** No one is a data controller of the public blockchain — it is permanent and outside anyone's control. Consistent with the Terms of Service, ErgoRaffle V2 is published as free, open-source software and autonomous smart contracts, and the contributors do not operate the Protocol as a service.
+* **Public on-chain data (Section 2).** No one is a data controller of the public blockchain — it is permanent and outside anyone's control. Consistent with the Terms of Service, Rafflora is published as free, open-source software and autonomous smart contracts, and the contributors do not operate the Protocol as a service.
 * **Off-chain interface data (Section 3).** For the limited off-chain technical data processed by the official Interface (hosting/CDN logs, Sentry, reCAPTCHA, and support requests), the party operating ergoraffle.com acts as a **data controller** for that narrow processing and is responsible for it as described in this Notice.
 * All use, and all consequences of public on-chain disclosure, remain the sole responsibility of the User who transacts.
 
@@ -117,4 +117,4 @@ This Notice may be updated by posting a revised version to the Interface or the 
 
 
 
-*ErgoRaffle V2 is free, open-source, non-custodial software. This Notice is not legal advice.*
+*Rafflora is free, open-source, non-custodial software. This Notice is not legal advice.*

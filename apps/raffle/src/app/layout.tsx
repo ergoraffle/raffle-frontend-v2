@@ -12,8 +12,8 @@ import { AppProviders } from './(providers)';
 import { fraunces, karla, poppins } from './fonts';
 
 export const metadata: Metadata = {
-  title: 'Ergo Raffle',
-  description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
+  title: 'Rafflora',
+  description: 'Rafflora is a crowdfunding system based on ergo contracts'
 };
 
 export const revalidate = 30;

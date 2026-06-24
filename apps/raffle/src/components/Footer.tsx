@@ -45,7 +45,7 @@ export const Footer = () => {
         icon: <Discord />
       },
       {
-        href: 'https://t.me/ergoraffle',
+        href: 'https://t.me/rafflora',
         icon: <Telegram />
       }
     ],

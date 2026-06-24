@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
-  title: Ergo Raffle API
-  description: API for Ergo Raffle operations
+  title: Rafflora API
+  description: API for Rafflora operations
   version: 0.0.0
 paths:
   /api/donation:
