@@ -20,7 +20,7 @@ const contactItems = [
   {
     title: 'X',
     icon: <X className="size-8" />,
-    link: { text: 'Join the community', href: 'https://x.com/ErgoRaffle' }
+    link: { text: 'Join the community', href: 'https://x.com/Rafflora_dapp' }
   },
   {
     title: 'Telegram',
