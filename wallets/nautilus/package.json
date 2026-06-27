@@ -2,7 +2,7 @@
   "name": "@ergo-raffle/nautilus-wallet",
   "version": "0.0.0",
   "private": true,
-  "description": "This is a private package utilized within Ergo Raffle UI app",
+  "description": "This is a private package utilized within Rafflora UI app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/raffle.git"

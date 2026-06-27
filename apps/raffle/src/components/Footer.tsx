@@ -8,7 +8,7 @@ export const Footer = () => {
     () => [
       {
         text: 'Raffle V1',
-        href: 'https://ergoraffle.com'
+        href: 'https://rafflora.com'
       },
       {
         text: 'Whitepaper',
@@ -45,7 +45,7 @@ export const Footer = () => {
         icon: <Discord />
       },
       {
-        href: 'https://t.me/ergoraffle',
+        href: 'https://t.me/rafflora',
         icon: <Telegram />
       }
     ],

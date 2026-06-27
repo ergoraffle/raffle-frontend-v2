@@ -34,13 +34,13 @@ export const About = () => (
               Decentralized crowdfunding on Ergo
             </Typography>
             <Typography variant="display-md" asChild>
-              <h1 className={`mt-5 ${GRADIENT_TEXT}`}>What is ErgoRaffle?</h1>
+              <h1 className={`mt-5 ${GRADIENT_TEXT}`}>What is Rafflora?</h1>
             </Typography>
             <Typography variant="subtitle-xl" className="mt-4 text-gray-1">
               Crowdfunding with a built-in, provably-fair lottery — all on Ergo.
             </Typography>
             <Typography variant="body-sm" className="mt-1 text-gray-1">
-              v2 runs on testnet today. v1 is live on mainnet at ergoraffle.com.
+              v2 runs on testnet today. v1 is live on mainnet at rafflora.com.
             </Typography>
           </div>
         </div>

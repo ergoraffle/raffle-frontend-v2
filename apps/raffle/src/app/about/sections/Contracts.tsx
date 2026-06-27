@@ -12,7 +12,7 @@ const tokenClass = (word: string): string => {
 
 const BUILTINS = new Set(['SELF', 'INPUTS', 'OUTPUTS', 'HEIGHT', 'blake2b256']);
 
-const CODE = `// ErgoRaffle V2 — Ticket contract (excerpt)
+const CODE = `// Rafflora — Ticket contract (excerpt)
 // Refunds are enforced on-chain, by the contract itself.
 
 val ticketPrice = SELF.R5[Coll[Long]].get(2)

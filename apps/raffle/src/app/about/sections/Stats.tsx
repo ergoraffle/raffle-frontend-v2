@@ -17,7 +17,7 @@ export const Stats = () => (
       <div className="my-7 mx-auto max-w-5xl space-y-6">
         <div className="space-y-1 text-center">
           <Typography variant="heading-2" asChild>
-            <h2>ErgoRaffle by the numbers</h2>
+            <h2>Rafflora by the numbers</h2>
           </Typography>
           <Typography variant="subtitle-lg" className="text-gray-1">
             Real results from ErgoRaffle v1 on Ergo mainnet.

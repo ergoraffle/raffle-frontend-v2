@@ -1,21 +1,21 @@
-# Terms of Service — ErgoRaffle V2
+# Terms of Service — Rafflora
 
 **Last Updated:** June 13, 2026
 **Version:** 1.1.0
 
 **In plain language (summary — not a substitute for the full Terms below):**
-- ErgoRaffle V2 is **free, open-source software** (released under the **MIT License**) running on the Ergo blockchain. Anyone can copy it and run their own version.
+- Rafflora is **free, open-source software** (released under the **MIT License**) running on the Ergo blockchain. Anyone can copy it and run their own version.
 - It is **non-custodial**: we never hold your funds. Your assets sit in smart contracts you interact with directly from your own wallet.
-- The official **ergoraffle.com deployment charges a protocol fee (currently 5% of the funds raised by a successful raffle)**. Paying it does **not** buy any warranty, guarantee, or support promise — everything is provided strictly **"as is."**
+- The official **rafflora.com deployment charges a protocol fee (currently 5% of the funds raised by a successful raffle)**. Paying it does **not** buy any warranty, guarantee, or support promise — everything is provided strictly **"as is."**
 - **You are fully responsible** for everything you do: creating a raffle, donating, adding a gift, refunds, and claims. Use it only if it's legal where you are.
 - **Refunds on a failed raffle are automatic.** If an automatic refund doesn't arrive, reach out through our official support channel.
 - Blockchain transactions are **permanent and cannot be reversed** by anyone, including us.
 - **A protocol token may be introduced in the future.** Nothing here is an offer of any token, or any promise of profit, fee share, or return.
 - **Disputes:** the Protocol is designed to sit outside any court's jurisdiction. If a court takes a case anyway, disputes go to individual arbitration in Singapore — no class actions.
 
-Welcome to ErgoRaffle V2 (the **"Platform"**). The Platform is a decentralized, non-custodial, smart-contract protocol deployed on the Ergo Blockchain that enables multi-winner raffles, multiple prize types, and dynamic gift donations.
+Welcome to Rafflora (the **"Platform"**). The Platform is a decentralized, non-custodial, smart-contract protocol deployed on the Ergo Blockchain that enables multi-winner raffles, multiple prize types, and dynamic gift donations.
 
-These Terms of Service (the **"Terms"**) form a binding agreement between you (**"you"**, **"your"**, or **"User"**) and the contributors who develop and maintain the ErgoRaffle V2 interface and open-source code (the **"Operators"**, **"we"**, **"us"**).
+These Terms of Service (the **"Terms"**) form a binding agreement between you (**"you"**, **"your"**, or **"User"**) and the contributors who develop and maintain the Rafflora interface and open-source code (the **"Operators"**, **"we"**, **"us"**).
 
 **By accessing the Platform, connecting a non-custodial wallet, or signing any on-chain transaction that creates a raffle, buys a ticket (donates), adds a gift, claims a refund, or claims funds or rewards, you confirm that you have read, understood, and agree to be bound by these Terms.** Where the Interface presents an "I agree" checkbox or equivalent at wallet connection, you accept these Terms by selecting it. If you do not agree, you must immediately stop using the Platform.
 
@@ -24,8 +24,8 @@ These Terms of Service (the **"Terms"**) form a binding agreement between you (*
 ## 1. Definitions
 
 * **Ergo Blockchain** — the public, decentralized Ergo network on which the protocol's smart contracts are deployed.
-* **Smart Contracts / Protocol** — the open-source contract set that governs all raffle logic, available at the [ErgoRaffle V2 repository](https://github.com/ErgoRaffle/raffle-v2) and its contracts package.
-* **Interface** — the web front-end at ergoraffle.com and any related client used to construct transactions for the Protocol.
+* **Smart Contracts / Protocol** — the open-source contract set that governs all raffle logic, available at the [Rafflora repository](https://github.com/ErgoRaffle/raffle-v2) and its contracts package.
+* **Interface** — the web front-end at rafflora.com and any related client used to construct transactions for the Protocol.
 * **Raffle Creator** — a User who creates a raffle and sets its parameters.
 * **Participant / Donor** — a User who buys tickets in (donates to) a raffle.
 * **Gift Donor** — a User who adds a gift (ERG, tokens, or NFTs) to one or more winning positions of an existing raffle.
@@ -42,8 +42,8 @@ These Terms of Service (the **"Terms"**) form a binding agreement between you (*
 * **No control over the Protocol.** Once deployed, the Smart Contracts execute autonomously. The Operators have no administrative key, backdoor, multi-signature override, or any other technical means to seize, freeze, reverse, redirect, or return assets, or to alter the outcome of any raffle.
 * **The only Operator capability is display-level.** The Operators' sole capability over the Platform is to include or exclude a raffle from the Interface's display. This is a presentation filter only; it does not stop, alter, freeze, censor, or otherwise affect any raffle on-chain, and any raffle remains fully accessible to anyone interacting directly with the smart contracts.
 * **Interface only.** We may modify, suspend, or discontinue the Interface at any time. Because the Protocol lives on-chain, raffles may remain operable directly through the contracts even if the Interface is unavailable. We do not guarantee continuous availability of the Interface.
-* **Open source and forkable.** The Protocol is public and independently verifiable. The smart-contract Protocol and the official Interface are both released under the **MIT License**: any person may copy, modify, and run their own independent deployment of the smart contracts and/or interface, subject to that license. Such independent deployments are operated by whoever runs them and are **not** us, not endorsed by us, and not our responsibility. These Terms concern the official deployment reachable at ergoraffle.com.
-* **Protocol fee.** The official ergoraffle.com deployment charges an automated, on-chain protocol fee on successful raffles (see Section 6). The fee is collected and distributed by the smart contracts; it does not make the contributors a custodian, broker, escrow, fiduciary, or guarantor, and does not create any warranty, support obligation, or liability. See Sections 11, 12, and 15.
+* **Open source and forkable.** The Protocol is public and independently verifiable. The smart-contract Protocol and the official Interface are both released under the **MIT License**: any person may copy, modify, and run their own independent deployment of the smart contracts and/or interface, subject to that license. Such independent deployments are operated by whoever runs them and are **not** us, not endorsed by us, and not our responsibility. These Terms concern the official deployment reachable at rafflora.com.
+* **Protocol fee.** The official rafflora.com deployment charges an automated, on-chain protocol fee on successful raffles (see Section 6). The fee is collected and distributed by the smart contracts; it does not make the contributors a custodian, broker, escrow, fiduciary, or guarantor, and does not create any warranty, support obligation, or liability. See Sections 11, 12, and 15.
 
 
 
@@ -95,15 +95,15 @@ Once any transaction under 5.1–5.3 is confirmed, the assets are locked in the 
 ### 5.6 Failed Raffle (Goal Not Met by Deadline)
 * If the goal is not met by the deadline, the raffle fails.
 * **Refunds are automatic.** The Protocol returns ticket contributions to Participants and gifts to Gift Donors, and handles the Creation Fee per Section 5.1, through the contracts' automated refund mechanism. No manual claim is normally required.
-* **If an automatic refund does not arrive,** you may contact us through the official support channel(s) published on ergoraffle.com. We will make reasonable, good-faith efforts to assist. Such support is provided as a courtesy only, on a best-effort basis, with no obligation, deadline, warranty, or liability, and does not give us any ability to override, bypass, or accelerate the on-chain contracts.
+* **If an automatic refund does not arrive,** you may contact us through the official support channel(s) published on rafflora.com. We will make reasonable, good-faith efforts to assist. Such support is provided as a courtesy only, on a best-effort basis, with no obligation, deadline, warranty, or liability, and does not give us any ability to override, bypass, or accelerate the on-chain contracts.
 * Refund timing and execution are determined solely by the Protocol and the state of the Ergo network.
 
 
 
 ## 6. Fees, Network Costs, and Taxes
 
-* **Protocol fee.** The official ergoraffle.com deployment applies a protocol fee, **currently 5%**, charged only on **successful** raffles as a share of the funds raised, and collected and distributed automatically by the smart contracts. The fee rate may change; the rate in effect for a raffle is the one encoded on-chain for that raffle. By transacting you agree to the applicable fee.
-* **Distribution of the protocol fee.** The protocol fee is distributed automatically by the smart contracts to **UI implementers** (parties who deploy or integrate an interface to the Protocol) and to the **ErgoRaffle development team**, as encoded in the contract parameters.
+* **Protocol fee.** The official rafflora.com deployment applies a protocol fee, **currently 5%**, charged only on **successful** raffles as a share of the funds raised, and collected and distributed automatically by the smart contracts. The fee rate may change; the rate in effect for a raffle is the one encoded on-chain for that raffle. By transacting you agree to the applicable fee.
+* **Distribution of the protocol fee.** The protocol fee is distributed automatically by the smart contracts to **UI implementers** (parties who deploy or integrate an interface to the Protocol) and to the **Rafflora development team**, as encoded in the contract parameters.
 * **Future token (informational; not an offer).** The Operators anticipate introducing a protocol token to which a portion of the protocol fee may in future be directed. Any such token, and any distribution to holders, **will be governed by separate token terms and risk disclosures published at that time.** Nothing in these Terms is an offer, solicitation, or promise to issue any token or to confer any right to fees, revenue, profit, or return, and you must not transact in reliance on any future token.
 * **Creation Fee.** The Creation Fee is a separate, small refundable deposit paid by the Raffle Creator as an anti-spam / anti-fraud measure, handled as described in Section 5.1 (refunded on success; collected by the protocol on failure). It is not the Protocol Fee.
 * **The fee buys no guarantee.** Notwithstanding any fee you pay, the Platform, Interface, and Protocol are provided strictly **"as is"** (Sections 11–12). The fee is not consideration for any warranty, guarantee, service level, uptime, support obligation, fiduciary duty, or assumption of liability, and does not entitle you to any refund of the fee itself.
@@ -176,14 +176,14 @@ You agree to indemnify, defend, and hold harmless the Operators and contributors
 
 ## 14. Privacy
 
-The Operators do not custody funds and do not require accounts. Blockchain transactions are public and permanent by nature; wallet addresses and on-chain activity are visible to anyone. Any limited data processed by the Interface is handled as described in the **ErgoRaffle V2 Privacy Notice (v1.1.0)**. You are responsible for protecting your own keys and wallet.
+The Operators do not custody funds and do not require accounts. Blockchain transactions are public and permanent by nature; wallet addresses and on-chain activity are visible to anyone. Any limited data processed by the Interface is handled as described in the **Rafflora Privacy Notice (v1.1.0)**. You are responsible for protecting your own keys and wallet.
 
 
 
 ## 15. Free Software, No Operator, and Sole User Responsibility
 
-* **Free, open-source software.** ErgoRaffle V2 is published as free, open-source software (under the MIT License) and as a set of autonomous smart contracts deployed on a permissionless, decentralized blockchain. The code is freely available, and any person may run their own independent deployment (Section 2).
-* **A fee does not change the "as is" nature.** The official ergoraffle.com deployment charges an automated on-chain protocol fee (Section 6) as a convenience for using the published interface and contracts. **This fee does not buy, and must not be understood as, any warranty, guarantee, service level, support commitment, or assumption of liability of any kind.** Everything remains provided "as is" and at the User's sole risk regardless of any fee paid.
+* **Free, open-source software.** Rafflora is published as free, open-source software (under the MIT License) and as a set of autonomous smart contracts deployed on a permissionless, decentralized blockchain. The code is freely available, and any person may run their own independent deployment (Section 2).
+* **A fee does not change the "as is" nature.** The official rafflora.com deployment charges an automated on-chain protocol fee (Section 6) as a convenience for using the published interface and contracts. **This fee does not buy, and must not be understood as, any warranty, guarantee, service level, support commitment, or assumption of liability of any kind.** Everything remains provided "as is" and at the User's sole risk regardless of any fee paid.
 * **Non-custodial; no intermediary role.** The contributors are not a custodian, escrow, broker, exchange, money-services business, or financial intermediary, and do not hold, control, or have access to User funds. The smart contracts run autonomously; once deployed, the contributors cannot stop, pause, censor, reverse, or alter the Protocol or any transaction or outcome.
 * **No submission to any jurisdiction.** The contributors do not, by publishing this software, submit to the jurisdiction of, or assume regulatory obligations under, the laws of any particular country or territory. The software is global and not directed at any specific jurisdiction.
 * **Sole user responsibility.** Every use of the software — creating a raffle, donating, adding a gift, claiming a refund, or claiming funds or rewards — is the sole and exclusive responsibility of the User who initiates it. By using the Protocol you accept full and exclusive accountability for your own use, for compliance with all laws that apply to you, and for all consequences of your actions. You agree that the contributors bear no responsibility or liability for how any person uses the software.
@@ -222,4 +222,4 @@ These Terms constitute the entire agreement between you and the Operators regard
 
 
 
-*ErgoRaffle V2 is open-source software. These Terms are not, and do not substitute for, legal advice for your jurisdiction.*
+*Rafflora is open-source software. These Terms are not, and do not substitute for, legal advice for your jurisdiction.*
