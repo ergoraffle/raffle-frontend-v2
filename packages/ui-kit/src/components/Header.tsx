@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { raffleInfo } from '@ergo-raffle/contracts';
 import { DotMenuVertical, Recent } from '@ergo-raffle/icons';
 
 import { useFramework } from '@/providers';
@@ -61,13 +62,15 @@ export const Header = ({
             <Logo className="h-12 hidden lg:flex" />
             <Logo className="h-9 lg:hidden" variant="icon" />
           </Link>
-          <Typography
-            variant="subtitle-sm"
-            className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-1"
-            asChild
-          >
-            <span>Testnet</span>
-          </Typography>
+          {raffleInfo.network === 'Testnet' && (
+            <Typography
+              variant="subtitle-sm"
+              className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-2"
+              asChild
+            >
+              <span>Testnet</span>
+            </Typography>
+          )}
         </div>
         <ul className="items-center gap-x-10 hidden lg:flex">
           {links.map((link) => (

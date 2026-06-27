@@ -1,6 +1,7 @@
 'use client';
 
-import { ErgoAddress } from '@fleet-sdk/core';
+import { raffleInfo } from '@ergo-raffle/contracts';
+import { ErgoAddress, Network } from '@fleet-sdk/core';
 import * as bip32 from 'bip32';
 import * as bip39 from 'bip39';
 
@@ -16,7 +17,10 @@ export const paperWallet = async () => {
 
   const change = bip32.fromSeed(buffer).derivePath(derivationPath);
   const index = change.derive(0);
-  const address = ErgoAddress.fromPublicKey(index.publicKey.toString('hex')).toString();
+  const address = ErgoAddress.fromPublicKey(
+    index.publicKey.toString('hex'),
+    raffleInfo.network === 'Mainnet' ? Network.Mainnet : Network.Testnet
+  ).toString();
 
   const blob = new Blob([`Mnemonic\n${mnemonicString}\n\nAddress\n${address}`], {
     type: 'text/plain'
