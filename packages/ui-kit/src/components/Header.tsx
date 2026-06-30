@@ -16,6 +16,7 @@ type Link = {
 };
 
 export type HeaderProps = {
+  testnet: boolean;
   links: Array<Link>;
   scrollThreshold?: number;
   connectWalletRender: () => React.ReactNode;
@@ -23,6 +24,7 @@ export type HeaderProps = {
 };
 
 export const Header = ({
+  testnet,
   links,
   scrollThreshold = 10,
   connectWalletRender,
@@ -61,13 +63,15 @@ export const Header = ({
             <Logo className="h-12 hidden lg:flex" />
             <Logo className="h-9 lg:hidden" variant="icon" />
           </Link>
-          <Typography
-            variant="subtitle-sm"
-            className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-1"
-            asChild
-          >
-            <span>Testnet</span>
-          </Typography>
+          {!!testnet && (
+            <Typography
+              variant="subtitle-sm"
+              className="text-primary-1 py-0.5 px-1 rounded-sm border border-primary-1 lg:mb-2"
+              asChild
+            >
+              <span>Testnet</span>
+            </Typography>
+          )}
         </div>
         <ul className="items-center gap-x-10 hidden lg:flex">
           {links.map((link) => (

@@ -2,6 +2,11 @@
 
 import { useMemo } from 'react';
 
+/**
+ * TODO: Find a better solution to detect mainnet and testnet insted of extract from the `@ergo-raffle/contracts package
+ * local:ergo/ergoraffle/raffle-frontend-v2#115
+ */
+import { raffleInfo } from '@ergo-raffle/contracts';
 import { Header as HeaderPrimitive } from '@ergo-raffle/ui-kit';
 
 import { WalletButton } from '@/components';
@@ -22,6 +27,7 @@ export const Header = () => {
 
   return (
     <HeaderPrimitive
+      testnet={raffleInfo.network === 'Testnet'}
       links={menuLinks}
       activityLink={activityLink}
       connectWalletRender={() => <WalletButton />}
