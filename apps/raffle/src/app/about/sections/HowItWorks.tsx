@@ -100,7 +100,7 @@ export const HowItWorks = () => (
             >
               Rosen Bridge
             </Link>
-            –wrapped rsBTC / rsRunes, no manual bridging. Live on testnet and mainnet.
+            –wrapped rsBTC / rsRunes, no manual bridging. Live on mainnet.
           </Typography>
         </div>
       </div>
