@@ -44,8 +44,8 @@ const AboutPage = () => (
             <div className="my-7 mx-auto max-w-5xl space-y-8">
               <div className="mx-auto max-w-3xl space-y-3 text-center">
                 <Typography variant="body-lg">
-                  We're the team behind ErgoRaffle — builders who believe fundraising should be as
-                  unstoppable as the chain it runs on. ErgoRaffle turns crowdfunding into a
+                  We're the team behind Rosen Raffle — builders who believe fundraising should be as
+                  unstoppable as the chain it runs on. Rosen Raffle turns crowdfunding into a
                   provably-fair, on-chain game: no custody, no middlemen, no off switch. It's our
                   take on what a decentralized dApp should be — open code on Ergo that just keeps
                   running, keeps paying out, and answers only to the people who use it. Win or lose,

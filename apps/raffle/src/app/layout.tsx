@@ -10,8 +10,8 @@ import { fraunces, karla, poppins } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Ergo Raffle',
-  description: 'Ergo raffle is a crowdfunding system based on ergo contracts'
+  title: 'Rosen Raffle',
+  description: 'Rosen Raffle is a crowdfunding system based on Ergo contracts'
 };
 
 export const revalidate = 30;

@@ -5,7 +5,7 @@
   "description": "A react icon set, used in Raffle app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rosen-bridge/raffle.git"
+    "url": "git+https://github.com/ergoraffle/raffle-frontend-v2.git"
   },
   "license": "MIT",
   "author": "Rosen Team",

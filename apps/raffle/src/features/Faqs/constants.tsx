@@ -20,11 +20,11 @@ export const tabs: Tabs[] = [
         question: 'What is a raffle?',
         answer: (
           <p>
-            A raffle on ErgoRaffle is a decentralized crowdfunding campaign with a built-in lottery.
-            Supporters buy tickets toward a funding goal; after the deadline, if the goal is
-            reached, one or more winners are drawn (probability proportional to tickets bought) and
-            receive a reward, while the creator/cause receives their share. It runs entirely through
-            smart contracts on the Ergo blockchain.
+            A raffle on Rosen Raffle is a decentralized crowdfunding campaign with a built-in
+            lottery. Supporters buy tickets toward a funding goal; after the deadline, if the goal
+            is reached, one or more winners are drawn (probability proportional to tickets bought)
+            and receive a reward, while the creator/cause receives their share. It runs entirely
+            through smart contracts on the Ergo blockchain.
           </p>
         )
       },
@@ -45,9 +45,9 @@ export const tabs: Tabs[] = [
         question: 'What wallets are supported?',
         answer: (
           <p>
-            ErgoRaffle v2 connects to <b>Nautilus</b> and <b>Xverse</b>. Connect your wallet through
+            Rosen Raffle connects to <b>Nautilus</b> and <b>Xverse</b>. Connect your wallet through
             the "Connect wallet" button to create raffles, buy tickets, add gifts, and claim prizes
-            or refunds. ErgoRaffle is non-custodial — it never holds your keys; every action is a
+            or refunds. Rosen Raffle is non-custodial — it never holds your keys; every action is a
             transaction you sign in your own wallet.
           </p>
         )
@@ -80,8 +80,8 @@ export const tabs: Tabs[] = [
         question: 'How is the winner chosen — is the draw fair?',
         answer: (
           <p>
-            The draw is deterministic and <b>publicly verifiable on-chain</b>, not run by the
-            ErgoRaffle team. When a successful raffle is drawn it pulls a random seed from an{' '}
+            The draw is deterministic and <b>publicly verifiable on-chain</b>, not run by the Rosen
+            Raffle team. When a successful raffle is drawn it pulls a random seed from an{' '}
             <b>on-chain randomness oracle box</b> (added as a data input and referenced by its box
             id, so it can't be swapped for a hand-picked value). The winning ticket index is then
             computed by a fixed formula — roughly{' '}
@@ -117,11 +117,11 @@ export const tabs: Tabs[] = [
       },
       {
         id: 8,
-        question: 'Is ErgoRaffle custodial — does it hold my money?',
+        question: 'Is Rosen Raffle custodial — does it hold my money?',
         answer: (
           <p>
-            No. ErgoRaffle is non-custodial and decentralized. Funds are locked in smart-contract
-            boxes on the Ergo blockchain, governed by the raffle's rules, not by the ErgoRaffle
+            No. Rosen Raffle is non-custodial and decentralized. Funds are locked in smart-contract
+            boxes on the Ergo blockchain, governed by the raffle's rules, not by the Rosen Raffle
             team. Advanced users can bypass the hosted UI entirely and interact with the contracts
             using raw scripts.
           </p>
@@ -133,8 +133,8 @@ export const tabs: Tabs[] = [
         answer: (
           <p>
             It is <b>your responsibility</b> to determine whether you may legally run or take part
-            in a raffle in your jurisdiction. ErgoRaffle is simply a decentralized blockchain dApp —
-            it has <b>no tools or measures to verify legality, identity, or eligibility</b>, and
+            in a raffle in your jurisdiction. Rosen Raffle is simply a decentralized blockchain dApp
+            — it has <b>no tools or measures to verify legality, identity, or eligibility</b>, and
             performs no such checks. Both creators and donors are liable for their own legal
             compliance. (Raffles are often classed as "prize competitions," but this is general
             information, not legal advice.)
@@ -153,8 +153,8 @@ export const tabs: Tabs[] = [
         question: 'Is this mainnet or testnet?',
         answer: (
           <p>
-            The current beta runs on <b>testnet</b> (testnet-beta.ergoraffle.com). You can test it
-            using <b>any token on testnet</b>, not only test ERG.
+            Rosen Raffle runs on <b>Ergo mainnet</b>, so tickets, gifts, prizes, and refunds all use
+            real assets.
           </p>
         )
       }
@@ -170,12 +170,12 @@ export const tabs: Tabs[] = [
         question: 'What are the fees in a Raffle?',
         answer: (
           <>
-            <p>There are three types of fees in ErgoRaffle v2:</p>
+            <p>There are three types of fees in Rosen Raffle:</p>
             <ul>
               <li>
                 <b>Protocol fee</b> — a percentage of the funds raised by a <i>successful</i> raffle
-                goes to the ErgoRaffle protocol. This is currently <b>5%</b> and is only ever taken
-                from raffles that reach their goal. Failed raffles pay no protocol fee.
+                goes to the Rosen Raffle protocol. This is currently <b>5%</b> and is only ever
+                taken from raffles that reach their goal. Failed raffles pay no protocol fee.
               </li>
               <li>
                 <b>Creation fee</b> — a one-time fee paid when you create a raffle, primarily as{' '}
@@ -193,10 +193,10 @@ export const tabs: Tabs[] = [
       },
       {
         id: 2,
-        question: "Can I use ErgoRaffle without paying the UI's proxy fee?",
+        question: "Can I use Rosen Raffle without paying the UI's proxy fee?",
         answer: (
           <p>
-            Yes. ErgoRaffle is decentralized — advanced users can interact with the contracts
+            Yes. Rosen Raffle is decentralized — advanced users can interact with the contracts
             directly using raw scripts to avoid the convenience (proxy) fee charged by the hosted
             UI.
           </p>
@@ -342,7 +342,7 @@ export const tabs: Tabs[] = [
       },
       {
         id: 3,
-        question: "How does ErgoRaffle handle each raffle's tickets?",
+        question: "How does Rosen Raffle handle each raffle's tickets?",
         answer: (
           <p>
             Every raffle mints its <b>own unique ticket token</b> when it starts. Buying a ticket
@@ -364,7 +364,7 @@ export const tabs: Tabs[] = [
       },
       {
         id: 5,
-        question: 'Can I use Bitcoin or Runes with ErgoRaffle?',
+        question: 'Can I use Bitcoin or Runes with Rosen Raffle?',
         answer: (
           <p>
             Raffles themselves are always <b>created and settled on Ergo</b>, but you can{' '}
@@ -377,7 +377,7 @@ export const tabs: Tabs[] = [
               Rosen Bridge
             </Link>
             –wrapped equivalents on Ergo (<b>rsBTC</b> / <b>rsRunes</b>), which the contracts treat
-            like any other Ergo asset. This is <b>live on both the testnet beta and mainnet</b>.
+            like any other Ergo asset. This is <b>live on mainnet</b>.
           </p>
         )
       },
